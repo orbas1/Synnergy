@@ -18,18 +18,17 @@
 package cli
 
 import (
-    "encoding/json"
-    "errors"
-    "fmt"
-    "strconv"
-    "strings"
-    "time"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+	"time"
 
-    "github.com/spf13/cobra"
-    "github.com/spf13/viper"
-    "github.com/sirupsen/logrus"
-    core "synnergy-network/core" // adjust if go.mod path differs
-
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	core "synnergy-network/core" // adjust if go.mod path differs
 )
 
 //---------------------------------------------------------------------

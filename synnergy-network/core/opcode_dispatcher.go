@@ -40,6 +40,7 @@ import (
 
 // OpContext is provided by the VM; it gives opcode handlers controlled access
 // to message meta-data, state-DB, gas-meter, logger, etc.
+
 type OpContext interface {
 	Call(string) error // unified façade (ledger/consensus/VM)
 	Gas(uint64) error  // deducts gas or returns an error if exhausted
@@ -50,6 +51,7 @@ type Opcode uint32
 
 // OpcodeFunc is the concrete implementation invoked by the VM.
 type OpcodeFunc func(ctx OpContext) error
+
 
 // opcodeTable holds the runtime mapping (populated once in init()).
 var (
@@ -117,19 +119,7 @@ var catalogue = []struct {
 	name string
 	op   Opcode
 }{
-	// AI (0x01)
-	{"InitAI", 0x010001},         // 00000001 00000000 00000001
-	{"AI", 0x010002},             // 00000001 00000000 00000010
-	{"PredictAnomaly", 0x010003}, // 00000001 00000000 00000011
-	{"OptimizeFees", 0x010004},
-	{"PublishModel", 0x010005},
-	{"FetchModel", 0x010006},
-	{"ListModel", 0x010007},
-	{"ValidateKYC_AI", 0x010008},
-	{"BuyModel", 0x010009},
-	{"RentModel", 0x01000A},
-	{"ReleaseEscrow", 0x01000B},
-	{"PredictVolume", 0x01000C},
+	// AI (0x01) – pending implementation
 
 	// AMM (0x02)
 	{"SwapExactIn", 0x020001},
@@ -611,7 +601,7 @@ func init() {
 }
 
 // Hex returns the canonical hexadecimal representation (upper-case, 6 digits).
-func (op Opcode) Hex() string { return fmt.Sprintf("0x%06X", op) }
+func (op Opcode) Hex() string { return fmt.Sprintf("0x%06X", uint32(op)) }
 
 // Bytes gives the 3-byte big-endian encoding used in VM bytecode streams.
 func (op Opcode) Bytes() []byte {
