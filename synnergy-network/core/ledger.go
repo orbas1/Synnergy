@@ -26,6 +26,7 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 
 	l := &Ledger{
 		Blocks:           []*Block{},
+		blockIndex:       make(map[Hash]*Block),
 		State:            make(map[string][]byte),
 		UTXO:             make(map[string]UTXO),
 		TxPool:           make(map[string]*Transaction),
@@ -189,6 +190,8 @@ func (l *Ledger) applyBlock(block *Block, persist bool) error {
 
 	// 2. Append to canonical chain
 	l.Blocks = append(l.Blocks, block)
+	h := block.Hash()
+	l.blockIndex[h] = block
 
 	// 3. Process each transaction
 	for _, tx := range block.Transactions {
@@ -359,6 +362,51 @@ func (l *Ledger) Snapshot() ([]byte, error) {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
 	return json.Marshal(l)
+}
+
+// HasBlock returns true if the ledger contains a block with the given hash.
+func (l *Ledger) HasBlock(h Hash) bool {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	_, ok := l.blockIndex[h]
+	return ok
+}
+
+// BlockByHash fetches a block by its hash.
+func (l *Ledger) BlockByHash(h Hash) (*Block, error) {
+	l.mu.RLock()
+	blk, ok := l.blockIndex[h]
+	l.mu.RUnlock()
+	if !ok {
+		return nil, fmt.Errorf("block %s not found", h.Hex())
+	}
+	return blk, nil
+}
+
+// ImportBlock appends a block to the chain and persists it.
+func (l *Ledger) ImportBlock(b *Block) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return l.applyBlock(b, true)
+}
+
+// DecodeBlockRLP decodes an RLP encoded block.
+func (l *Ledger) DecodeBlockRLP(data []byte) (*Block, error) {
+	var blk Block
+	if err := rlp.DecodeBytes(data, &blk); err != nil {
+		return nil, err
+	}
+	return &blk, nil
+}
+
+// LastHeight returns the height of the latest block.
+func (l *Ledger) LastHeight() uint64 {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	if len(l.Blocks) == 0 {
+		return 0
+	}
+	return l.Blocks[len(l.Blocks)-1].Header.Height
 }
 
 // MintToken adds the specified amount to a wallet's balance for a given token.

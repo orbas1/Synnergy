@@ -216,6 +216,69 @@ func closeDealHandler(cmd *cobra.Command, args []string) {
 	fmt.Println("✅ deal closed")
 }
 
+func getListingHandler(cmd *cobra.Command, args []string) {
+	id, _ := cmd.Flags().GetString("id")
+	if id == "" {
+		_ = cmd.Usage()
+		bail(errors.New("--id is required"))
+	}
+	listing, err := core.GetListing(id)
+	bail(err)
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	_ = enc.Encode(listing)
+}
+
+func listListingsHandler(cmd *cobra.Command, args []string) {
+	provHex, _ := cmd.Flags().GetString("provider")
+	var prov *core.Address
+	if provHex != "" {
+		a, err := parseAddress(provHex)
+		bail(err)
+		prov = &a
+	}
+	listings, err := core.ListListings(prov)
+	bail(err)
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	_ = enc.Encode(listings)
+}
+
+func getDealHandler(cmd *cobra.Command, args []string) {
+	id, _ := cmd.Flags().GetString("id")
+	if id == "" {
+		_ = cmd.Usage()
+		bail(errors.New("--id is required"))
+	}
+	deal, err := core.GetDeal(id)
+	bail(err)
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	_ = enc.Encode(deal)
+}
+
+func listDealsHandler(cmd *cobra.Command, args []string) {
+	provHex, _ := cmd.Flags().GetString("provider")
+	clientHex, _ := cmd.Flags().GetString("client")
+	var prov *core.Address
+	var client *core.Address
+	if provHex != "" {
+		a, err := parseAddress(provHex)
+		bail(err)
+		prov = &a
+	}
+	if clientHex != "" {
+		a, err := parseAddress(clientHex)
+		bail(err)
+		client = &a
+	}
+	deals, err := core.ListDeals(prov, client)
+	bail(err)
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	_ = enc.Encode(deals)
+}
+
 // ---------------------------------------------------------------------------
 // CLI definitions (TOP section)
 // ---------------------------------------------------------------------------
@@ -244,6 +307,18 @@ var listCreateCmd = &cobra.Command{
 	Run:   createListingHandler,
 }
 
+var listGetCmd = &cobra.Command{
+	Use:   "listing:get",
+	Short: "Get a storage listing by ID",
+	Run:   getListingHandler,
+}
+
+var listListCmd = &cobra.Command{
+	Use:   "listing:list",
+	Short: "List storage listings",
+	Run:   listListingsHandler,
+}
+
 var dealOpenCmd = &cobra.Command{
 	Use:   "deal:open",
 	Short: "Open a storage deal backed by escrow (client side)",
@@ -254,6 +329,18 @@ var dealCloseCmd = &cobra.Command{
 	Use:   "deal:close",
 	Short: "Close a storage deal and release escrow (provider side)",
 	Run:   closeDealHandler,
+}
+
+var dealGetCmd = &cobra.Command{
+	Use:   "deal:get",
+	Short: "Get storage deal details",
+	Run:   getDealHandler,
+}
+
+var dealListCmd = &cobra.Command{
+	Use:   "deal:list",
+	Short: "List storage deals",
+	Run:   listDealsHandler,
 }
 
 func init() {
@@ -276,6 +363,8 @@ func init() {
 	listCreateCmd.Flags().String("provider", "", "Provider address (hex) [required]")
 	listCreateCmd.Flags().String("price", "", "Price per GB in tokens [required]")
 	listCreateCmd.Flags().Int("capacity", 0, "Capacity in GB [required]")
+	listGetCmd.Flags().String("id", "", "Listing ID [required]")
+	listListCmd.Flags().String("provider", "", "Filter by provider (hex)")
 
 	// deal open flags
 	dealOpenCmd.Flags().String("listing", "", "Listing ID [required]")
@@ -284,13 +373,20 @@ func init() {
 
 	// deal close flags
 	dealCloseCmd.Flags().String("deal", "", "Deal ID [required]")
+	dealGetCmd.Flags().String("id", "", "Deal ID [required]")
+	dealListCmd.Flags().String("provider", "", "Filter by provider (hex)")
+	dealListCmd.Flags().String("client", "", "Filter by client (hex)")
 
 	// register sub‑commands
 	storageCmd.AddCommand(pinCmd)
 	storageCmd.AddCommand(getCmd)
 	storageCmd.AddCommand(listCreateCmd)
+	storageCmd.AddCommand(listGetCmd)
+	storageCmd.AddCommand(listListCmd)
 	storageCmd.AddCommand(dealOpenCmd)
 	storageCmd.AddCommand(dealCloseCmd)
+	storageCmd.AddCommand(dealGetCmd)
+	storageCmd.AddCommand(dealListCmd)
 }
 
 // ---------------------------------------------------------------------------

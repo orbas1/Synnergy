@@ -50,17 +50,15 @@ var gasTable = map[Opcode]uint64{
 	ReleaseEscrow:  12_000,
 	PredictVolume:  15_000,
 
-
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-	SwapExactIn:    4_500,
-	AddLiquidity:   5_000,
-	RemoveLiquidity:5_000,
-  Quote:          2_500,
-  AllPairs:       2_000,
-  InitPoolsFromFile: 6_000,
-
+	SwapExactIn:       4_500,
+	AddLiquidity:      5_000,
+	RemoveLiquidity:   5_000,
+	Quote:             2_500,
+	AllPairs:          2_000,
+	InitPoolsFromFile: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
@@ -106,7 +104,6 @@ var gasTable = map[Opcode]uint64{
 	Compliance_MonitorTx:  5_000,
 	Compliance_VerifyZKP:  12_000,
 
-
 	// ----------------------------------------------------------------------
 	// Consensus Core
 	// ----------------------------------------------------------------------
@@ -135,6 +132,7 @@ var gasTable = map[Opcode]uint64{
 	InitContracts: 15_000,
 	CompileWASM:   45_000,
 	Invoke:        7_000,
+	Deploy:        25_000,
 
 	// ----------------------------------------------------------------------
 	// Cross-Chain
@@ -230,13 +228,18 @@ var gasTable = map[Opcode]uint64{
 	CreatePool: 10_000,
 	Swap:       4_500,
 	// AddLiquidity & RemoveLiquidity already defined above
+	Pool:  1_500,
+	Pools: 2_000,
 
 	// ----------------------------------------------------------------------
 	// Loan-Pool
 	// ----------------------------------------------------------------------
-	NewLoanPool: 20_000,
-	Submit:      3_000,
-	Disburse:    8_000,
+	NewLoanPool:   20_000,
+	Submit:        3_000,
+	Disburse:      8_000,
+	GetProposal:   1_000,
+	ListProposals: 1_500,
+	Redistribute:  5_000,
 	// Vote  & Tick already priced
 	// RandomElectorate / IsAuthority already priced
 
@@ -251,6 +254,8 @@ var gasTable = map[Opcode]uint64{
 	Peers:           400,
 	NewDialer:       2_000,
 	Dial:            2_000,
+	SetBroadcaster:  500,
+	GlobalBroadcast: 1_000,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------
@@ -259,16 +264,21 @@ var gasTable = map[Opcode]uint64{
 	NewReplicator:  12_000,
 	ReplicateBlock: 30_000,
 	RequestMissing: 4_000,
+	Synchronize:    25_000,
 	Stop:           3_000,
 	// Hash & Start already priced
 
 	// ----------------------------------------------------------------------
 	// Roll-ups
 	// ----------------------------------------------------------------------
-	NewAggregator:    15_000,
-	SubmitBatch:      10_000,
-	SubmitFraudProof: 30_000,
-	FinalizeBatch:    10_000,
+	NewAggregator:     15_000,
+	SubmitBatch:       10_000,
+	SubmitFraudProof:  30_000,
+	FinalizeBatch:     10_000,
+	BatchHeader:       500,
+	BatchState:        300,
+	BatchTransactions: 1_000,
+	ListBatches:       2_000,
 
 	// ----------------------------------------------------------------------
 	// Security / Cryptography
@@ -280,6 +290,11 @@ var gasTable = map[Opcode]uint64{
 	Encrypt:           1_500,
 	Decrypt:           1_500,
 	NewTLSConfig:      5_000,
+	DilithiumKeypair:  6_000,
+	DilithiumSign:     5_000,
+	DilithiumVerify:   5_000,
+	PredictRisk:       2_000,
+	AnomalyScore:      2_000,
 
 	// ----------------------------------------------------------------------
 	// Sharding
@@ -291,6 +306,9 @@ var gasTable = map[Opcode]uint64{
 	Send:                2_000,
 	PullReceipts:        3_000,
 	Reshard:             30_000,
+	GossipTx:            5_000,
+	RebalanceShards:     8_000,
+	VerticalPartition:   2_000,
 	// Broadcast already priced
 
 	// ----------------------------------------------------------------------
@@ -303,6 +321,9 @@ var gasTable = map[Opcode]uint64{
 	VerifyWithdraw:     4_000,
 	VerifyAggregateSig: 8_000,
 	VerifyMerkleProof:  1_200,
+	GetSidechainMeta:   1_000,
+	ListSidechains:     1_200,
+	GetSidechainHeader: 1_000,
 	// Deposit already priced
 
 	// ----------------------------------------------------------------------
@@ -315,6 +336,8 @@ var gasTable = map[Opcode]uint64{
 	InitiateClose:        3_000,
 	Challenge:            4_000,
 	Finalize:             5_000,
+	GetChannel:           800,
+	ListChannels:         1_200,
 
 	// ----------------------------------------------------------------------
 	// Storage / Marketplace
@@ -326,6 +349,10 @@ var gasTable = map[Opcode]uint64{
 	Create:        8_000, // generic create (non-AMM/non-contract)
 	CloseDeal:     5_000,
 	Release:       2_000,
+	GetListing:    1_000,
+	ListListings:  1_000,
+	GetDeal:       1_000,
+	ListDeals:     1_000,
 	// Pin & Retrieve already priced
 
 	// ----------------------------------------------------------------------
@@ -387,32 +414,37 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Token Utilities
 	// ----------------------------------------------------------------------
-	ID:              400,
-	Meta:            400,
-	Allowance:       400,
-	Approve:         800,
-	Add:             600,
-	Sub:             600,
-	Get:             400,
-	transfer:        2_100, // lower-case ERC20 compatibility
-	Calculate:       800,
-	RegisterToken:   8_000,
-	NewBalanceTable: 5_000,
-	Set:             600,
-	RefundGas:       100,
-	PopUint32:       300,
-	PopAddress:      300,
-	PopUint64:       300,
-	PushBool:        300,
-	Push:            300,
-	Len:             200,
+	ID:                400,
+	Meta:              400,
+	Allowance:         400,
+	Approve:           800,
+	Add:               600,
+	Sub:               600,
+	Get:               400,
+	transfer:          2_100, // lower-case ERC20 compatibility
+	Calculate:         800,
+	RegisterToken:     8_000,
+	NewBalanceTable:   5_000,
+	Set:               600,
+	RefundGas:         100,
+	PopUint32:         300,
+	PopAddress:        300,
+	PopUint64:         300,
+	PushBool:          300,
+	Push:              300,
+	Len:               200,
+	InitTokens:        8_000,
+	GetRegistryTokens: 400,
 
 	// ----------------------------------------------------------------------
 	// Transactions
 	// ----------------------------------------------------------------------
-	VerifySig:  3_500,
-	ValidateTx: 5_000,
-	NewTxPool:  12_000,
+	VerifySig:      3_500,
+	ValidateTx:     5_000,
+	NewTxPool:      12_000,
+	AddTx:          6_000,
+	PickTxs:        1_500,
+	TxPoolSnapshot: 800,
 	// Sign already priced
 
 	// ----------------------------------------------------------------------

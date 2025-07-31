@@ -341,6 +341,7 @@ type ContractMetadata struct {
 type Ledger struct {
 	mu               sync.RWMutex
 	Blocks           []*Block
+	blockIndex       map[Hash]*Block
 	State            map[string][]byte
 	UTXO             map[string]UTXO
 	TxPool           map[string]*Transaction
@@ -432,6 +433,7 @@ type Replicator struct {
 	pm      PeerManager
 	closing chan struct{}
 	wg      sync.WaitGroup
+	rangeCh chan []*Block
 }
 
 //---------------------------------------------------------------------
@@ -481,6 +483,7 @@ type ShardCoordinator struct {
 	net     Broadcaster
 	mu      sync.RWMutex
 	leaders map[ShardID]Address
+	metrics map[ShardID]*ShardMetrics
 }
 
 //---------------------------------------------------------------------
@@ -695,6 +698,7 @@ type ReplicationConfig struct {
 	PeerThreshold  int           `yaml:"peer_threshold"`
 	Fanout         uint          // √N gossip fan-out
 	RequestTimeout time.Duration // per-block fetch timeout
+	SyncBatchSize  uint64        // number of blocks per sync request
 }
 
 // -----------------------------------------------------------------------------

@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -200,6 +200,7 @@ var catalogue = []struct {
 	{"InitContracts", 0x080001},
 	{"CompileWASM", 0x080002},
 	{"Invoke", 0x080003},
+	{"Deploy", 0x080004},
 
 	// Cross-Chain (0x09)
 	{"RegisterBridge", 0x090001},
@@ -284,6 +285,8 @@ var catalogue = []struct {
 	{"Liquidity_AddLiquidity", 0x0F0004},
 	{"Liquidity_Swap", 0x0F0005},
 	{"Liquidity_RemoveLiquidity", 0x0F0006},
+	{"Liquidity_Pool", 0x0F0007},
+	{"Liquidity_Pools", 0x0F0008},
 
 	// Loanpool (0x10)
 	{"Loanpool_RandomElectorate", 0x100001},
@@ -294,6 +297,9 @@ var catalogue = []struct {
 	{"Loanpool_Vote", 0x100006},
 	{"Disburse", 0x100007},
 	{"Loanpool_Tick", 0x100008},
+	{"Loanpool_GetProposal", 0x100009},
+	{"Loanpool_ListProposals", 0x10000A},
+	{"Loanpool_Redistribute", 0x10000B},
 
 	// Network (0x11)
 	{"NewNode", 0x110001},
@@ -306,6 +312,8 @@ var catalogue = []struct {
 	{"Peers", 0x110008},
 	{"NewDialer", 0x110009},
 	{"Dial", 0x11000A},
+	{"SetBroadcaster", 0x11000B},
+	{"GlobalBroadcast", 0x11000C},
 
 	// Replication (0x12)
 	{"NewReplicator", 0x120001},
@@ -314,12 +322,17 @@ var catalogue = []struct {
 	{"RequestMissing", 0x120004},
 	{"Replication_Start", 0x120005},
 	{"Stop", 0x120006},
+	{"Synchronize", 0x120007},
 
 	// Rollups (0x13)
 	{"NewAggregator", 0x130001},
 	{"SubmitBatch", 0x130002},
 	{"SubmitFraudProof", 0x130003},
 	{"FinalizeBatch", 0x130004},
+	{"BatchHeader", 0x130005},
+	{"BatchState", 0x130006},
+	{"BatchTransactions", 0x130007},
+	{"ListBatches", 0x130008},
 
 	// Security (0x14)
 	{"Security_Sign", 0x140001},
@@ -331,6 +344,11 @@ var catalogue = []struct {
 	{"Encrypt", 0x140007},
 	{"Decrypt", 0x140008},
 	{"NewTLSConfig", 0x140009},
+	{"DilithiumKeypair", 0x14000A},
+	{"DilithiumSign", 0x14000B},
+	{"DilithiumVerify", 0x14000C},
+	{"PredictRisk", 0x14000D},
+	{"AnomalyScore", 0x14000E},
 
 	// Sharding (0x15)
 	{"NewShardCoordinator", 0x150001},
@@ -341,6 +359,9 @@ var catalogue = []struct {
 	{"Send", 0x150006},
 	{"PullReceipts", 0x150007},
 	{"Reshard", 0x150008},
+	{"GossipTx", 0x150009},
+	{"RebalanceShards", 0x15000A},
+	{"VerticalPartition", 0x15000B},
 
 	// Sidechains (0x16)
 	{"InitSidechains", 0x160001},
@@ -351,6 +372,9 @@ var catalogue = []struct {
 	{"VerifyWithdraw", 0x160006},
 	{"VerifyAggregateSig", 0x160007},
 	{"VerifyMerkleProof", 0x160008},
+	{"GetSidechainMeta", 0x160009},
+	{"ListSidechains", 0x16000A},
+	{"GetSidechainHeader", 0x16000B},
 
 	// StateChannel (0x17)
 	{"InitStateChannels", 0x170001},
@@ -360,6 +384,8 @@ var catalogue = []struct {
 	{"InitiateClose", 0x170005},
 	{"Challenge", 0x170006},
 	{"Finalize", 0x170007},
+	{"GetChannel", 0x170008},
+	{"ListChannels", 0x170009},
 
 	// Storage (0x18)
 	{"NewStorage", 0x180001},
@@ -371,6 +397,10 @@ var catalogue = []struct {
 	{"Storage_Create", 0x180007},
 	{"CloseDeal", 0x180008},
 	{"Release", 0x180009},
+	{"GetListing", 0x18000A},
+	{"ListListings", 0x18000B},
+	{"GetDeal", 0x18000C},
+	{"ListDeals", 0x18000D},
 
 	// Tokens (0x19)
 	{"ID", 0x190001},
@@ -398,12 +428,17 @@ var catalogue = []struct {
 	{"PushBool", 0x190017},
 	{"Push", 0x190018},
 	{"Len_Tokens", 0x190019},
+	{"InitTokens", 0x19001A},
+	{"GetRegistryTokens", 0x19001B},
 
 	// Transactions (0x1A)
 	{"Tx_Sign", 0x1A0001},
 	{"VerifySig", 0x1A0002},
 	{"ValidateTx", 0x1A0003},
 	{"NewTxPool", 0x1A0004},
+	{"AddTx", 0x1A0005},
+	{"PickTxs", 0x1A0006},
+	{"TxPoolSnapshot", 0x1A0007},
 
 	// Utilities (0x1B) – EVM-compatible arithmetic & crypto
 	{"Short", 0x1B0001},

@@ -26,8 +26,10 @@ func main() {
 	rootCmd.AddCommand(
 		cli.AICmd,
 		cli.AMMCmd,
+		cli.PoolsCmd,
 		cli.AuthCmd,
 		cli.CharityCmd,
+		cli.LoanCmd,
 		cli.ComplianceCmd,
 		cli.CrossChainCmd,
 		cli.DataCmd,

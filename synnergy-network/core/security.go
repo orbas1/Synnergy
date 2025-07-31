@@ -2,31 +2,38 @@
 // Package core – shared security primitives for the Synnergy Network stack.
 //
 // Exposes:
-//   • Sign / Verify      – Ed25519 (wallets) + BLS12-381 (validators).
-//   • BLS aggregation    – multi-sig / threshold helpers.
-//   • XChaCha20-Poly1305 – authenticated encryption.
-//   • ComputeMerkleRoot – Bitcoin-style double-SHA256 Merkle tree.
-//   • TLS loader         – hardened TLS 1.3 config for node-to-node gRPC.
+//   - Sign / Verify      – Ed25519 (wallets) + BLS12-381 (validators).
+//   - BLS aggregation    – multi-sig / threshold helpers.
+//   - XChaCha20-Poly1305 – authenticated encryption.
+//   - ComputeMerkleRoot – Bitcoin-style double-SHA256 Merkle tree.
+//   - TLS loader         – hardened TLS 1.3 config for node-to-node gRPC.
 //
 // All crypto comes from Go 1.22 std-lib or herumi BLS (battle-tested).
 package core
 
 import (
+	"bufio"
 	"bytes"
+	"crypto"
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"os"
 	"sort"
+	"sync"
+	"time"
 
+	mode3 "github.com/cloudflare/circl/sign/dilithium/mode3"
 	bls "github.com/herumi/bls-eth-go-binary/bls"
-    
+
 	"golang.org/x/crypto/chacha20poly1305"
 )
 
@@ -59,8 +66,8 @@ const (
 	AlgoBLS
 )
 
-// Sign signs msg with priv.  
-// - For Ed25519: priv must be ed25519.PrivateKey.  
+// Sign signs msg with priv.
+// - For Ed25519: priv must be ed25519.PrivateKey.
 // - For BLS:     priv must be *bls.SecretKey.
 func Sign(algo KeyAlgo, priv interface{}, msg []byte) ([]byte, error) {
 	switch algo {
@@ -209,6 +216,7 @@ func gfMul(a, b byte) byte {
 	}
 	return p
 }
+
 // Multiplicative inverse in GF(2⁸) using the extended Euclidean algorithm.
 func gfInv(a byte) byte {
 	if a == 0 {
@@ -250,7 +258,7 @@ func polyDiv(a, b byte) byte {
 
 // Encrypt returns nonce || ciphertext || tag using XChaCha20-Poly1305.
 func Encrypt(key, plaintext, aad []byte) ([]byte, error) {
-	if len(key) != chacha20poly1305.KeySize {          // ← use KeySize
+	if len(key) != chacha20poly1305.KeySize { // ← use KeySize
 		return nil, errors.New("key must be 32 bytes")
 	}
 	aead, err := chacha20poly1305.NewX(key)
@@ -269,7 +277,7 @@ func Encrypt(key, plaintext, aad []byte) ([]byte, error) {
 
 // Decrypt verifies and opens a blob produced by Encrypt.
 func Decrypt(key, blob, aad []byte) ([]byte, error) {
-	if len(key) != chacha20poly1305.KeySize {          // ← use KeySize
+	if len(key) != chacha20poly1305.KeySize { // ← use KeySize
 		return nil, errors.New("key must be 32 bytes")
 	}
 	minLen := chacha20poly1305.NonceSizeX + chacha20poly1305.Overhead
@@ -284,7 +292,6 @@ func Decrypt(key, blob, aad []byte) ([]byte, error) {
 	}
 	return aead.Open(nil, nonce, ciphertext, aad)
 }
-
 
 //---------------------------------------------------------------------
 // Merkle root (double-SHA256, canonical ordering)
@@ -354,4 +361,179 @@ func NewTLSConfig(certPath, keyPath string, requireClientCert bool) (*tls.Config
 		cfg.ClientAuth = tls.RequireAndVerifyClientCert
 	}
 	return cfg, nil
+}
+
+// ---------------------------------------------------------------------
+// Audit Trail & Predictive Security
+// ---------------------------------------------------------------------
+
+// AuditEvent represents a single immutable audit log entry.
+type AuditEvent struct {
+	Timestamp int64             `json:"ts"`
+	Event     string            `json:"evt"`
+	Meta      map[string]string `json:"meta,omitempty"`
+	Hash      []byte            `json:"hash"`
+}
+
+// AuditTrail manages write-once audit logs with optional ledger anchoring.
+type AuditTrail struct {
+	mu     sync.Mutex
+	file   *os.File
+	ledger StateRW
+}
+
+// NewAuditTrail creates or opens an append-only log file. If ledger is non-nil
+// each entry hash is also stored on-chain for tamper evidence.
+func NewAuditTrail(path string, ledger StateRW) (*AuditTrail, error) {
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
+	if err != nil {
+		return nil, err
+	}
+	return &AuditTrail{file: f, ledger: ledger}, nil
+}
+
+// Log writes an audit entry to disk and records its hash in the ledger.
+func (a *AuditTrail) Log(event string, meta map[string]string) error {
+	if a == nil || a.file == nil {
+		return errors.New("audit trail not initialised")
+	}
+	ev := AuditEvent{Timestamp: time.Now().Unix(), Event: event, Meta: meta}
+	raw, err := json.Marshal(ev)
+	if err != nil {
+		return err
+	}
+	h := sha256.Sum256(raw)
+	ev.Hash = h[:]
+	blob, _ := json.Marshal(ev)
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if _, err := a.file.Write(append(blob, '\n')); err != nil {
+		return err
+	}
+	if a.ledger != nil {
+		key := append([]byte("audit:"), h[:]...)
+		if err := a.ledger.SetState(key, h[:]); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Report reads all audit entries from the log file.
+func (a *AuditTrail) Report() ([]AuditEvent, error) {
+	if a == nil || a.file == nil {
+		return nil, errors.New("audit trail not initialised")
+	}
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if _, err := a.file.Seek(0, 0); err != nil {
+		return nil, err
+	}
+	var out []AuditEvent
+	sc := bufio.NewScanner(a.file)
+	for sc.Scan() {
+		var ev AuditEvent
+		if err := json.Unmarshal(sc.Bytes(), &ev); err == nil {
+			out = append(out, ev)
+		}
+	}
+	if err := sc.Err(); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Close closes the underlying log file.
+func (a *AuditTrail) Close() error {
+	if a == nil || a.file == nil {
+		return nil
+	}
+	return a.file.Close()
+}
+
+// AnomalyDetector calculates streaming mean/variance for z-score detection.
+type AnomalyDetector struct {
+	mu    sync.RWMutex
+	mean  float64
+	m2    float64
+	count int
+}
+
+// NewAnomalyDetector returns a new detector.
+func NewAnomalyDetector() *AnomalyDetector { return &AnomalyDetector{} }
+
+// Update incorporates a new observation.
+func (ad *AnomalyDetector) Update(v float64) {
+	ad.mu.Lock()
+	defer ad.mu.Unlock()
+	ad.count++
+	delta := v - ad.mean
+	ad.mean += delta / float64(ad.count)
+	ad.m2 += delta * (v - ad.mean)
+}
+
+// Score returns the absolute z-score for a value. If insufficient data is
+// available the score is zero.
+func (ad *AnomalyDetector) Score(v float64) float64 {
+	ad.mu.RLock()
+	mean, m2, n := ad.mean, ad.m2, ad.count
+	ad.mu.RUnlock()
+	if n < 2 {
+		return 0
+	}
+	variance := m2 / float64(n-1)
+	if variance == 0 {
+		if v == mean {
+			return 0
+		}
+		return math.Inf(1)
+	}
+	return math.Abs((v - mean) / math.Sqrt(variance))
+}
+
+// PredictRisk returns a moving average of the last window values, useful for
+// simple trend-based security scoring.
+func PredictRisk(values []float64, window int) float64 {
+	if len(values) == 0 {
+		return 0
+	}
+	if window <= 0 || window > len(values) {
+		window = len(values)
+	}
+	sum := 0.0
+	for _, v := range values[len(values)-window:] {
+		sum += v
+	}
+	return sum / float64(window)
+}
+
+// ---------------------------------------------------------------------
+// Quantum-Resistant Cryptography (Dilithium3)
+// ---------------------------------------------------------------------
+
+// DilithiumKeypair generates a Dilithium3 key pair.
+func DilithiumKeypair() (pub, priv []byte, err error) {
+	pk, sk, err := mode3.GenerateKey(rand.Reader)
+	if err != nil {
+		return nil, nil, err
+	}
+	return pk.Bytes(), sk.Bytes(), nil
+}
+
+// DilithiumSign signs msg with a packed Dilithium3 private key.
+func DilithiumSign(priv, msg []byte) ([]byte, error) {
+	var sk mode3.PrivateKey
+	if err := sk.UnmarshalBinary(priv); err != nil {
+		return nil, err
+	}
+	return sk.Sign(rand.Reader, msg, crypto.Hash(0))
+}
+
+// DilithiumVerify verifies a signature produced by DilithiumSign.
+func DilithiumVerify(pub, msg, sig []byte) (bool, error) {
+	var pk mode3.PublicKey
+	if err := pk.UnmarshalBinary(pub); err != nil {
+		return false, err
+	}
+	return mode3.Verify(&pk, msg, sig), nil
 }
