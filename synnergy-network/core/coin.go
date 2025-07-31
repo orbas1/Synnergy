@@ -138,5 +138,11 @@ func (c *Coin) TotalSupply() uint64 {
 
 // BalanceOf returns the Synthron token balance for the given address.
 func (c *Coin) BalanceOf(address []byte) uint64 {
-	return c.ledger.BalanceOf(address)
+	var addr Address
+	if len(address) >= len(addr) {
+		copy(addr[:], address[:len(addr)])
+	} else {
+		copy(addr[len(addr)-len(address):], address)
+	}
+	return c.ledger.BalanceOf(addr)
 }

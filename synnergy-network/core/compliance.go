@@ -22,7 +22,6 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -331,6 +330,9 @@ func (c *ComplianceEngine) AuditTrail(addr Address) ([]AuditEntry, error) {
 			return nil, err
 		}
 		out = append(out, e)
+	}
+	if ierr, ok := it.(interface{ Error() error }); ok {
+		return out, ierr.Error()
 	}
 	return out, nil
 }
