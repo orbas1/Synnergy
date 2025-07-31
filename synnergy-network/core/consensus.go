@@ -12,8 +12,9 @@ package core
 //     30 % PoS validators (weighted equally per endorsed sub‑block),
 //     40 % LoanPool treasury.
 //
-// Build graph dependencies: ledger (state), network (peer IO), security (crypto
-// signatures), txpool (pending txs), authority (staking, roles).
+// Build graph dependencies: ledger (state), network (peer IO), security
+// (crypto signatures), txpool (pending txs), authority (staking, roles). The
+// engine now validates sub-blocks using both PoH and aggregated PoS votes.
 //
 
 import (
@@ -77,6 +78,7 @@ type authorityAdapter interface {
 	ValidatorPubKey(role string) []byte
 	StakeOf(pubKey []byte) uint64
 	LoanPoolAddress() Address
+	ListAuthorities(activeOnly bool) ([]AuthorityNode, error)
 }
 
 //---------------------------------------------------------------------
@@ -266,6 +268,12 @@ func (sc *SynnergyConsensus) collectSubHeaders() []SubBlockHeader {
 
 	var headers []SubBlockHeader
 	for _, sb := range subBlocks {
+		if err := sc.ValidatePoH(&sb); err != nil {
+			continue
+		}
+		if err := sc.ValidatePoS(&sb); err != nil {
+			continue
+		}
 		headers = append(headers, sb.Header)
 	}
 
@@ -290,8 +298,38 @@ func (sc *SynnergyConsensus) ValidatePoH(sb *SubBlock) error {
 	return nil
 }
 
-//---------------------------------------------------------------------
-// PoS validation helper (aggregates BLS votes etc.) omitted for brevity.
+// ---------------------------------------------------------------------
+// ValidatePoS checks that a sub-block has been endorsed by a super-majority of
+// active PoS validators. Votes are stored in the ledger using the
+// RecordPoSVote opcode and keyed by the SHA256 hash of the header hash. The
+// current implementation counts simple vote entries without BLS aggregation.
+// A vote threshold of two-thirds of active validators is required.
+func (sc *SynnergyConsensus) ValidatePoS(sb *SubBlock) error {
+	validators, err := sc.auth.ListAuthorities(true)
+	if err != nil {
+		return err
+	}
+	total := len(validators)
+	if total == 0 {
+		return errors.New("no active PoS validators")
+	}
+
+	h := sha256.Sum256(sb.Header.Hash())
+	prefix := []byte(fmt.Sprintf("vote:%x", h))
+	it := sc.ledger.PrefixIterator(prefix)
+	votes := 0
+	for it.Next() {
+		votes++
+	}
+	if it.Error() != nil {
+		return it.Error()
+	}
+	if votes*3 < total*2 {
+		return fmt.Errorf("insufficient PoS votes %d/%d", votes, total)
+	}
+	return nil
+}
+
 //---------------------------------------------------------------------
 
 //---------------------------------------------------------------------

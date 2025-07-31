@@ -3,6 +3,7 @@ package core
 import (
 	"errors"
 	"fmt"
+	"math/big"
 	"sync"
 	"testing"
 )
@@ -149,7 +150,6 @@ func TestCoin_Mint(t *testing.T) {
 	}
 }
 
-
 /*
 	--------------------------------------------------------------------
 	Compile-time assertions – guard against interface drift.
@@ -190,11 +190,18 @@ func TestLedger_MintToken_ZeroAmount(t *testing.T) {
 	}
 }
 
+func TestBlockRewardAt_Halving(t *testing.T) {
+	r1 := BlockRewardAt(0)
+	r2 := BlockRewardAt(RewardHalvingPeriod)
+	expected := new(big.Int).Rsh(r1, 1)
+	if expected.Cmp(r2) != 0 {
+		t.Fatalf("halving mismatch: got %v want %v", r2, expected)
+	}
+}
+
 /*
 	--------------------------------------------------------------------
 	JSON round-trip utility (not used by tests but ensures the helper
 	functions above aren’t elided by the compiler).
 	--------------------------------------------------------------------
 */
-
-
