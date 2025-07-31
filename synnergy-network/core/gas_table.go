@@ -104,6 +104,7 @@ var gasTable = map[Opcode]uint64{
 	Compliance_LogAudit:   2_000,
 	Compliance_AuditTrail: 3_000,
 	Compliance_MonitorTx:  5_000,
+	Compliance_VerifyZKP:  12_000,
 
 
 	// ----------------------------------------------------------------------

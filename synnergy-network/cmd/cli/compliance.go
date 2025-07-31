@@ -17,20 +17,19 @@
 package cli
 
 import (
-    "encoding/hex"
-    "encoding/json"
-    "errors"
-    "fmt"
-    "io/ioutil"
-    "strconv"
-    "strings"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
 
-    "github.com/spf13/cobra"
-    "github.com/spf13/viper"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
-    core "synnergy-network/core" // update if go.mod root differs
+	core "github.com/synnergy-network/core" // update if go.mod root differs
 
-)
 
 //---------------------------------------------------------------------
 // Middleware – executed for every ~compliance command
@@ -75,7 +74,7 @@ func ensureComplianceInitialised(cmd *cobra.Command, _ []string) error {
 type ComplianceController struct{}
 
 func (c *ComplianceController) Validate(docPath string) error {
-	raw, err := ioutil.ReadFile(docPath)
+	raw, err := os.ReadFile(docPath)
 	if err != nil {
 		return fmt.Errorf("read doc: %w", err)
 	}
@@ -103,7 +102,7 @@ func (c *ComplianceController) Audit(addr core.Address) ([]core.AuditEntry, erro
 }
 
 func (c *ComplianceController) Monitor(txPath string, threshold float64) (float32, error) {
-	raw, err := ioutil.ReadFile(txPath)
+	raw, err := os.ReadFile(txPath)
 	if err != nil {
 		return 0, fmt.Errorf("read tx: %w", err)
 	}
@@ -113,6 +112,23 @@ func (c *ComplianceController) Monitor(txPath string, threshold float64) (float3
 	}
 	score, err := core.Compliance().MonitorTransaction(&tx, float32(threshold))
 	return score, err
+}
+
+func (c *ComplianceController) VerifyZKP(blobPath, commitmentHex, proofHex string) (bool, error) {
+	blob, err := os.ReadFile(blobPath)
+	if err != nil {
+		return false, fmt.Errorf("read blob: %w", err)
+	}
+	commitment, err := hex.DecodeString(commitmentHex)
+	if err != nil {
+		return false, fmt.Errorf("decode commitment: %w", err)
+	}
+	proof, err := hex.DecodeString(proofHex)
+	if err != nil {
+		return false, fmt.Errorf("decode proof: %w", err)
+	}
+	return core.Compliance().VerifyZKProof(blob, commitment, proof)
+
 }
 
 //---------------------------------------------------------------------
@@ -226,6 +242,25 @@ var monitorCmd = &cobra.Command{
 	},
 }
 
+var verifyZKPCmd = &cobra.Command{
+	Use:   "verifyzkp <blob.bin> <commitmentHex> <proofHex>",
+	Short: "Verify a KZG-based zero-knowledge proof",
+	Args:  cobra.ExactArgs(3),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctrl := &ComplianceController{}
+		ok, err := ctrl.VerifyZKP(args[0], args[1], args[2])
+		if err != nil {
+			return err
+		}
+		if ok {
+			fmt.Println("proof valid")
+		} else {
+			fmt.Println("proof invalid")
+		}
+		return nil
+	},
+}
+
 //---------------------------------------------------------------------
 // Consolidation & export
 //---------------------------------------------------------------------
@@ -237,6 +272,8 @@ func init() {
 	complianceCmd.AddCommand(riskCmd)
 	complianceCmd.AddCommand(auditCmd)
 	complianceCmd.AddCommand(monitorCmd)
+	complianceCmd.AddCommand(verifyZKPCmd)
+
 }
 
 // Export for root‑CLI integration

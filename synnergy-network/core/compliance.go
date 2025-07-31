@@ -29,9 +29,11 @@ import (
 	"io"
 	"math/big"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
+	gokzg4844 "github.com/crate-crypto/go-kzg-4844"
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 )
 
@@ -253,6 +255,47 @@ func (c *ComplianceEngine) LoadDecrypted(key, aesKey []byte) ([]byte, error) {
 	}
 	return DecryptAES(aesKey, enc)
 }
+
+// VerifyZKProof validates a KZG proof for a given blob commitment.
+// It returns true if the proof is valid under the EIP-4844 scheme.
+func (c *ComplianceEngine) VerifyZKProof(blob, commitment, proof []byte) (bool, error) {
+	if len(blob) != gokzg4844.ScalarsPerBlob*gokzg4844.SerializedScalarSize {
+		return false, errors.New("invalid blob size")
+	}
+	if len(commitment) != gokzg4844.CompressedG1Size || len(proof) != gokzg4844.CompressedG1Size {
+		return false, errors.New("invalid commitment or proof size")
+	}
+
+	var b gokzg4844.Blob
+	copy(b[:], blob)
+	var cmt gokzg4844.KZGCommitment
+	copy(cmt[:], commitment)
+	var pf gokzg4844.KZGProof
+	copy(pf[:], proof)
+
+	ctx, err := gokzg4844.NewContext4096Secure()
+	if err != nil {
+		return false, err
+	}
+	err = ctx.VerifyBlobKZGProof(&b, cmt, pf)
+	return err == nil, err
+}
+
+// MaskSensitiveFields replaces the values of selected keys in the map with
+// asterisks of the same length.  The original map is not modified.
+func MaskSensitiveFields(data map[string]string, fields []string) map[string]string {
+	out := make(map[string]string, len(data))
+	for k, v := range data {
+		out[k] = v
+	}
+	for _, f := range fields {
+		if val, ok := out[f]; ok {
+			out[f] = strings.Repeat("*", len(val))
+		}
+	}
+	return out
+}
+
 
 // FetchLegalDoc retrieves a legal document from the provided URL.
 func FetchLegalDoc(url string) (LegalDoc, error) {
