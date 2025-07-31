@@ -53,7 +53,7 @@ func initMiddleware(cmd *cobra.Command, args []string) {
 // Controller helpers
 //-------------------------------------------------------------------------
 
-func parseAddress(hexStr string) (core.Address, error) {
+func parseChannelAddress(hexStr string) (core.Address, error) {
 	var a core.Address
 	b, err := hex.DecodeString(hexStr)
 	if err != nil || len(b) != len(a) {
@@ -93,20 +93,20 @@ func openChannelHandler(cmd *cobra.Command, args []string) {
 	amountBStr, _ := cmd.Flags().GetString("amountB")
 	nonce, _ := cmd.Flags().GetUint64("nonce")
 
-	a, err := parseAddress(aHex)
-	bail(err)
-	b, err := parseAddress(bHex)
-	bail(err)
+	a, err := parseChannelAddress(aHex)
+	channelBail(err)
+	b, err := parseChannelAddress(bHex)
+	channelBail(err)
 	t, err := parseTokenID(tokHex)
-	bail(err)
+	channelBail(err)
 
 	amountA, err := strconv.ParseUint(amountAStr, 10, 64)
-	bail(err)
+	channelBail(err)
 	amountB, err := strconv.ParseUint(amountBStr, 10, 64)
-	bail(err)
+	channelBail(err)
 
 	id, err := engine.OpenChannel(a, b, t, amountA, amountB, nonce)
-	bail(err)
+	channelBail(err)
 
 	fmt.Printf("✅ Channel opened: %x\n", id)
 }
@@ -121,7 +121,7 @@ func initiateCloseHandler(cmd *cobra.Command, args []string) {
 	if err := json.Unmarshal([]byte(stateJSON), &ss); err != nil {
 		log.Fatalf("invalid state JSON: %v", err)
 	}
-	bail(engine.InitiateClose(ss))
+	channelBail(engine.InitiateClose(ss))
 	fmt.Println("🛑 Close initiated")
 }
 
@@ -135,7 +135,7 @@ func challengeHandler(cmd *cobra.Command, args []string) {
 	if err := json.Unmarshal([]byte(stateJSON), &ss); err != nil {
 		log.Fatalf("invalid state JSON: %v", err)
 	}
-	bail(engine.Challenge(ss))
+	channelBail(engine.Challenge(ss))
 	fmt.Println("⚔️  Challenge submitted")
 }
 
@@ -146,13 +146,13 @@ func finalizeHandler(cmd *cobra.Command, args []string) {
 		log.Fatalf("--channel id is required")
 	}
 	idBytes, err := hex.DecodeString(cidHex)
-	bail(err)
+	channelBail(err)
 	if len(idBytes) != 32 {
 		log.Fatalf("channel id must be 32‑byte hex")
 	}
 	var id core.ChannelID
 	copy(id[:], idBytes)
-	bail(engine.Finalize(id))
+	channelBail(engine.Finalize(id))
 	fmt.Println("✅ Channel finalized")
 }
 
@@ -163,7 +163,7 @@ func statusHandler(cmd *cobra.Command, args []string) {
 		log.Fatalf("--channel id is required")
 	}
 	idBytes, err := hex.DecodeString(cidHex)
-	bail(err)
+	channelBail(err)
 	if len(idBytes) != 32 {
 		log.Fatalf("channel id must be 32-byte hex")
 	}
@@ -171,14 +171,14 @@ func statusHandler(cmd *cobra.Command, args []string) {
 	copy(id[:], idBytes)
 
 	ch, err := engine.GetChannel(id)
-	bail(err)
+	channelBail(err)
 	b, _ := json.MarshalIndent(ch, "", "  ")
 	fmt.Println(string(b))
 }
 
 func listHandler(cmd *cobra.Command, args []string) {
 	chans, err := engine.ListChannels()
-	bail(err)
+	channelBail(err)
 	b, _ := json.MarshalIndent(chans, "", "  ")
 	fmt.Println(string(b))
 }
@@ -187,7 +187,7 @@ func listHandler(cmd *cobra.Command, args []string) {
 // bail helper
 //-------------------------------------------------------------------------
 
-func bail(err error) {
+func channelBail(err error) {
 	if err != nil {
 		log.Fatalf("❌ %v", err)
 	}
@@ -215,25 +215,25 @@ var closeCmd = &cobra.Command{
 	Run:   initiateCloseHandler,
 }
 
-var challengeCmd = &cobra.Command{
+var channelChallengeCmd = &cobra.Command{
 	Use:   "challenge",
 	Short: "Challenge a close with a higher‑nonce state",
 	Run:   challengeHandler,
 }
 
-var finalizeCmd = &cobra.Command{
+var channelFinalizeCmd = &cobra.Command{
 	Use:   "finalize",
 	Short: "Finalize and settle an expired channel",
 	Run:   finalizeHandler,
 }
 
-var statusCmd = &cobra.Command{
+var channelStatusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Show current state of a channel",
 	Run:   statusHandler,
 }
 
-var listCmd = &cobra.Command{
+var channelListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all open channels",
 	Run:   listHandler,
@@ -257,19 +257,19 @@ func init() {
 
 	// initiate close & challenge flags
 	closeCmd.Flags().String("state", "", "Signed state JSON blob [required]")
-	challengeCmd.Flags().String("state", "", "Signed state JSON blob [required]")
+	channelChallengeCmd.Flags().String("state", "", "Signed state JSON blob [required]")
 
 	// finalize flags
-	finalizeCmd.Flags().String("channel", "", "ChannelID in hex (32 bytes) [required]")
-	statusCmd.Flags().String("channel", "", "ChannelID in hex (32 bytes) [required]")
+	channelFinalizeCmd.Flags().String("channel", "", "ChannelID in hex (32 bytes) [required]")
+	channelStatusCmd.Flags().String("channel", "", "ChannelID in hex (32 bytes) [required]")
 
 	// Sub‑command registration
 	channelCmd.AddCommand(openCmd)
 	channelCmd.AddCommand(closeCmd)
-	channelCmd.AddCommand(challengeCmd)
-	channelCmd.AddCommand(finalizeCmd)
-	channelCmd.AddCommand(statusCmd)
-	channelCmd.AddCommand(listCmd)
+	channelCmd.AddCommand(channelChallengeCmd)
+	channelCmd.AddCommand(channelFinalizeCmd)
+	channelCmd.AddCommand(channelStatusCmd)
+	channelCmd.AddCommand(channelListCmd)
 }
 
 //-------------------------------------------------------------------------

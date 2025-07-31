@@ -159,7 +159,7 @@ var charityCmd = &cobra.Command{
 }
 
 // register -------------------------------------------------------------------
-var registerCmd = &cobra.Command{
+var charityRegisterCmd = &cobra.Command{
 	Use:   "register <addr> <category> <name>",
 	Short: "Register a charity (must occur ≥30 days before cycle end)",
 	Args:  cobra.MinimumNArgs(3),
@@ -177,7 +177,7 @@ var registerCmd = &cobra.Command{
 }
 
 // vote -----------------------------------------------------------------------
-var voteCmd = &cobra.Command{
+var charityVoteCmd = &cobra.Command{
 	Use:   "vote <voterAddr> <charityAddr>",
 	Short: "Cast a vote (ID‑token holders only) during last 15d of cycle",
 	Args:  cobra.ExactArgs(2),
@@ -269,8 +269,8 @@ var winnersCmd = &cobra.Command{
 //---------------------------------------------------------------------
 
 func init() {
-	charityCmd.AddCommand(registerCmd)
-	charityCmd.AddCommand(voteCmd)
+	charityCmd.AddCommand(charityRegisterCmd)
+	charityCmd.AddCommand(charityVoteCmd)
 	charityCmd.AddCommand(tickCmd)
 	charityCmd.AddCommand(registrationCmd)
 	charityCmd.AddCommand(winnersCmd)

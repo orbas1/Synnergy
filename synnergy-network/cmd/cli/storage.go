@@ -83,7 +83,7 @@ func initStorageMiddleware(cmd *cobra.Command, args []string) {
 // Controller helpers
 // ---------------------------------------------------------------------------
 
-func parseAddress(hexStr string) (core.Address, error) {
+func parseStorageAddress(hexStr string) (core.Address, error) {
 	var a core.Address
 	b, err := hex.DecodeString(hexStr)
 	if err != nil || len(b) != len(a) {
@@ -93,7 +93,7 @@ func parseAddress(hexStr string) (core.Address, error) {
 	return a, nil
 }
 
-func bail(err error) {
+func storageBail(err error) {
 	if err != nil {
 		log.Fatalf("❌ %v", err)
 	}
@@ -109,23 +109,23 @@ func pinHandler(cmd *cobra.Command, args []string) {
 
 	if file == "" {
 		_ = cmd.Usage()
-		bail(errors.New("--file is required"))
+		storageBail(errors.New("--file is required"))
 	}
 	if payerHex == "" {
 		_ = cmd.Usage()
-		bail(errors.New("--payer is required"))
+		storageBail(errors.New("--payer is required"))
 	}
 
 	data, err := os.ReadFile(file)
-	bail(err)
-	payer, err := parseAddress(payerHex)
-	bail(err)
+	storageBail(err)
+	payer, err := parseStorageAddress(payerHex)
+	storageBail(err)
 
 	ctx, cancel := context.WithTimeout(cmd.Context(), time.Duration(storageFlags.timeoutSec)*time.Second)
 	defer cancel()
 
 	cid, size, err := storage.Pin(ctx, data, payer)
-	bail(err)
+	storageBail(err)
 	fmt.Printf("✅ pinned %s (%.2f KB)\n", cid, float64(size)/1024)
 }
 
@@ -135,21 +135,21 @@ func getHandler(cmd *cobra.Command, args []string) {
 
 	if cidStr == "" {
 		_ = cmd.Usage()
-		bail(errors.New("--cid is required"))
+		storageBail(errors.New("--cid is required"))
 	}
 
 	ctx, cancel := context.WithTimeout(cmd.Context(), time.Duration(storageFlags.timeoutSec)*time.Second)
 	defer cancel()
 
 	data, err := storage.Retrieve(ctx, cidStr)
-	bail(err)
+	storageBail(err)
 
 	if outPath == "-" || outPath == "" {
 		_, _ = io.Copy(os.Stdout, bytes.NewReader(data))
 		return
 	}
 	if err := os.WriteFile(outPath, data, 0o644); err != nil {
-		bail(err)
+		storageBail(err)
 	}
 	fmt.Printf("✅ wrote %d bytes to %s\n", len(data), outPath)
 }
@@ -165,20 +165,20 @@ func createListingHandler(cmd *cobra.Command, args []string) {
 
 	if providerHex == "" || priceStr == "" || capacity == 0 {
 		_ = cmd.Usage()
-		bail(errors.New("--provider, --price and --capacity are required"))
+		storageBail(errors.New("--provider, --price and --capacity are required"))
 	}
 
-	provider, err := parseAddress(providerHex)
-	bail(err)
+	provider, err := parseStorageAddress(providerHex)
+	storageBail(err)
 	price, err := strconv.ParseUint(priceStr, 10, 64)
-	bail(err)
+	storageBail(err)
 
 	listing := &core.StorageListing{
 		Provider:   provider,
 		PricePerGB: price,
 		CapacityGB: capacity,
 	}
-	bail(core.CreateListing(listing))
+	storageBail(core.CreateListing(listing))
 	fmt.Printf("✅ listing created: %s\n", listing.ID)
 }
 
@@ -189,11 +189,11 @@ func openDealHandler(cmd *cobra.Command, args []string) {
 
 	if listingID == "" || clientHex == "" || durHours == 0 {
 		_ = cmd.Usage()
-		bail(errors.New("--listing, --client and --duration are required"))
+		storageBail(errors.New("--listing, --client and --duration are required"))
 	}
 
-	client, err := parseAddress(clientHex)
-	bail(err)
+	client, err := parseStorageAddress(clientHex)
+	storageBail(err)
 
 	deal := &core.StorageDeal{
 		ListingID: listingID,
@@ -201,7 +201,7 @@ func openDealHandler(cmd *cobra.Command, args []string) {
 		Duration:  time.Duration(durHours) * time.Hour,
 	}
 	esc, err := core.OpenDeal(deal)
-	bail(err)
+	storageBail(err)
 	fmt.Printf("✅ deal opened: %s  escrow=%s\n", deal.ID, esc.ID)
 }
 
@@ -209,10 +209,10 @@ func closeDealHandler(cmd *cobra.Command, args []string) {
 	dealID, _ := cmd.Flags().GetString("deal")
 	if dealID == "" {
 		_ = cmd.Usage()
-		bail(errors.New("--deal is required"))
+		storageBail(errors.New("--deal is required"))
 	}
 	ctx := &core.Context{} // assuming a Core tx context implementation
-	bail(core.CloseDeal(ctx, dealID))
+	storageBail(core.CloseDeal(ctx, dealID))
 	fmt.Println("✅ deal closed")
 }
 
@@ -220,10 +220,10 @@ func getListingHandler(cmd *cobra.Command, args []string) {
 	id, _ := cmd.Flags().GetString("id")
 	if id == "" {
 		_ = cmd.Usage()
-		bail(errors.New("--id is required"))
+		storageBail(errors.New("--id is required"))
 	}
 	listing, err := core.GetListing(id)
-	bail(err)
+	storageBail(err)
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	_ = enc.Encode(listing)
@@ -233,12 +233,12 @@ func listListingsHandler(cmd *cobra.Command, args []string) {
 	provHex, _ := cmd.Flags().GetString("provider")
 	var prov *core.Address
 	if provHex != "" {
-		a, err := parseAddress(provHex)
-		bail(err)
+		a, err := parseStorageAddress(provHex)
+		storageBail(err)
 		prov = &a
 	}
 	listings, err := core.ListListings(prov)
-	bail(err)
+	storageBail(err)
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	_ = enc.Encode(listings)
@@ -248,10 +248,10 @@ func getDealHandler(cmd *cobra.Command, args []string) {
 	id, _ := cmd.Flags().GetString("id")
 	if id == "" {
 		_ = cmd.Usage()
-		bail(errors.New("--id is required"))
+		storageBail(errors.New("--id is required"))
 	}
 	deal, err := core.GetDeal(id)
-	bail(err)
+	storageBail(err)
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	_ = enc.Encode(deal)
@@ -263,17 +263,17 @@ func listDealsHandler(cmd *cobra.Command, args []string) {
 	var prov *core.Address
 	var client *core.Address
 	if provHex != "" {
-		a, err := parseAddress(provHex)
-		bail(err)
+		a, err := parseStorageAddress(provHex)
+		storageBail(err)
 		prov = &a
 	}
 	if clientHex != "" {
-		a, err := parseAddress(clientHex)
-		bail(err)
+		a, err := parseStorageAddress(clientHex)
+		storageBail(err)
 		client = &a
 	}
 	deals, err := core.ListDeals(prov, client)
-	bail(err)
+	storageBail(err)
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	_ = enc.Encode(deals)
@@ -295,7 +295,7 @@ var pinCmd = &cobra.Command{
 	Run:   pinHandler,
 }
 
-var getCmd = &cobra.Command{
+var storageGetCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Retrieve data by CID (cache → gateway)",
 	Run:   getHandler,
@@ -356,8 +356,8 @@ func init() {
 	pinCmd.Flags().String("payer", "", "Address paying storage rent (hex) [required]")
 
 	// get flags
-	getCmd.Flags().String("cid", "", "Content identifier to fetch [required]")
-	getCmd.Flags().String("out", "-", "Output file or '-' for STDOUT")
+	storageGetCmd.Flags().String("cid", "", "Content identifier to fetch [required]")
+	storageGetCmd.Flags().String("out", "-", "Output file or '-' for STDOUT")
 
 	// listing flags
 	listCreateCmd.Flags().String("provider", "", "Provider address (hex) [required]")
@@ -379,7 +379,7 @@ func init() {
 
 	// register sub‑commands
 	storageCmd.AddCommand(pinCmd)
-	storageCmd.AddCommand(getCmd)
+	storageCmd.AddCommand(storageGetCmd)
 	storageCmd.AddCommand(listCreateCmd)
 	storageCmd.AddCommand(listGetCmd)
 	storageCmd.AddCommand(listListCmd)

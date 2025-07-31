@@ -152,7 +152,7 @@ var aiCmd = &cobra.Command{
 }
 
 // predict --------------------------------------------------------------------
-var predictCmd = &cobra.Command{
+var aiPredictCmd = &cobra.Command{
 	Use:   "predict [tx.json]",
 	Short: "Predict fraud probability for a transaction",
 	Args:  cobra.ExactArgs(1),
@@ -234,7 +234,7 @@ var fetchCmd = &cobra.Command{
 }
 
 // list -----------------------------------------------------------------------
-var listCmd = &cobra.Command{
+var aiListCmd = &cobra.Command{
 	Use:   "list [price] [cid]",
 	Short: "Create a marketplace listing for a model",
 	Args:  cobra.ExactArgs(2),
@@ -317,12 +317,12 @@ func init() {
 	publishCmd.Flags().Uint16("royalty", 0, "royalty basis points (max 1000 = 10%)")
 
 	// attach sub‑routes
-	aiCmd.AddCommand(predictCmd)
+	aiCmd.AddCommand(aiPredictCmd)
 	aiCmd.AddCommand(optimiseCmd)
 	aiCmd.AddCommand(volumeCmd)
 	aiCmd.AddCommand(publishCmd)
 	aiCmd.AddCommand(fetchCmd)
-	aiCmd.AddCommand(listCmd)
+	aiCmd.AddCommand(aiListCmd)
 	aiCmd.AddCommand(buyCmd)
 	aiCmd.AddCommand(rentCmd)
 	aiCmd.AddCommand(releaseCmd)

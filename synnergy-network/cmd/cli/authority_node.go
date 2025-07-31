@@ -132,7 +132,7 @@ var authCmd = &cobra.Command{
 }
 
 // register -------------------------------------------------------------------
-var registerCmd = &cobra.Command{
+var authRegisterCmd = &cobra.Command{
 	Use:   "register <addr> <role>",
 	Short: "Submit a new authority‑node candidate for a role",
 	Args:  cobra.ExactArgs(2),
@@ -148,7 +148,7 @@ var registerCmd = &cobra.Command{
 }
 
 // vote -----------------------------------------------------------------------
-var voteCmd = &cobra.Command{
+var authVoteCmd = &cobra.Command{
 	Use:   "vote <voterAddr> <candidateAddr>",
 	Short: "Cast a vote for a candidate (deduped and role‑weighted)",
 	Args:  cobra.ExactArgs(2),
@@ -199,7 +199,7 @@ var isCmd = &cobra.Command{
 }
 
 // info -----------------------------------------------------------------------
-var infoCmd = &cobra.Command{
+var authInfoCmd = &cobra.Command{
 	Use:   "info <addr>",
 	Short: "Show details for an authority node",
 	Args:  cobra.ExactArgs(1),
@@ -217,7 +217,7 @@ var infoCmd = &cobra.Command{
 }
 
 // list -----------------------------------------------------------------------
-var listCmd = &cobra.Command{
+var authListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List authority nodes",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -234,7 +234,7 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	listCmd.Flags().Bool("active", false, "only show active nodes")
+	authListCmd.Flags().Bool("active", false, "only show active nodes")
 }
 
 // deregister -------------------------------------------------------------
@@ -258,12 +258,12 @@ var deregCmd = &cobra.Command{
 //---------------------------------------------------------------------
 
 func init() {
-	authCmd.AddCommand(registerCmd)
-	authCmd.AddCommand(voteCmd)
+	authCmd.AddCommand(authRegisterCmd)
+	authCmd.AddCommand(authVoteCmd)
 	authCmd.AddCommand(electorateCmd)
 	authCmd.AddCommand(isCmd)
-	authCmd.AddCommand(infoCmd)
-	authCmd.AddCommand(listCmd)
+	authCmd.AddCommand(authInfoCmd)
+	authCmd.AddCommand(authListCmd)
 	authCmd.AddCommand(deregCmd)
 }
 

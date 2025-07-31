@@ -171,7 +171,7 @@ func metaRPC(ctx context.Context, id uint32) (map[string]any, error) {
 	return resp.Meta, nil
 }
 
-func listRPC(ctx context.Context) ([]map[string]any, error) {
+func sidechainListRPC(ctx context.Context) ([]map[string]any, error) {
 	cli, err := newSCClient(ctx)
 	if err != nil {
 		return nil, err
@@ -208,7 +208,7 @@ var scCmd = &cobra.Command{
 }
 
 // register --------------------------------------------------------------------
-var registerCmd = &cobra.Command{
+var sideRegisterCmd = &cobra.Command{
 	Use:   "register",
 	Short: "Register new side‑chain (governance only)",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -362,13 +362,13 @@ var metaCmd = &cobra.Command{
 }
 
 // list ------------------------------------------------------------------------
-var listCmd = &cobra.Command{
+var sideListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all registered side‑chains",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx, cancel := context.WithTimeout(cmd.Context(), 3*time.Second)
 		defer cancel()
-		list, err := listRPC(ctx)
+		list, err := sidechainListRPC(ctx)
 		if err != nil {
 			return err
 		}
@@ -401,10 +401,10 @@ func initSCConfig() {
 
 func init() {
 	// register flags
-	registerCmd.Flags().Uint32("id", 0, "side‑chain ID")
-	registerCmd.Flags().String("name", "", "human name")
-	registerCmd.Flags().Uint("threshold", 67, "BLS threshold percent")
-	registerCmd.Flags().String("validators", "", "comma‑separated BLS pubkeys hex")
+	sideRegisterCmd.Flags().Uint32("id", 0, "side‑chain ID")
+	sideRegisterCmd.Flags().String("name", "", "human name")
+	sideRegisterCmd.Flags().Uint("threshold", 67, "BLS threshold percent")
+	sideRegisterCmd.Flags().String("validators", "", "comma‑separated BLS pubkeys hex")
 
 	headerCmd.Flags().String("file", "", "path to header JSON file")
 	headerCmd.Flags().Uint32("chain", 0, "chainID")
@@ -424,13 +424,13 @@ func init() {
 	getHeaderCmd.Flags().Uint64("height", 0, "header height")
 
 	// route wiring
-	scCmd.AddCommand(registerCmd)
+	scCmd.AddCommand(sideRegisterCmd)
 	scCmd.AddCommand(headerCmd)
 	scCmd.AddCommand(depositCmd)
 	scCmd.AddCommand(withdrawCmd)
 	scCmd.AddCommand(getHeaderCmd)
 	scCmd.AddCommand(metaCmd)
-	scCmd.AddCommand(listCmd)
+	scCmd.AddCommand(sideListCmd)
 }
 
 // NewSidechainCommand exposes the consolidated CLI route.

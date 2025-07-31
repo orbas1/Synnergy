@@ -167,7 +167,7 @@ var repCmd = &cobra.Command{
 }
 
 // start -----------------------------------------------------------------------
-var startCmd = &cobra.Command{
+var repStartCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Launch replication goroutines (idempotent)",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -178,7 +178,7 @@ var startCmd = &cobra.Command{
 }
 
 // stop ------------------------------------------------------------------------
-var stopCmd = &cobra.Command{
+var repStopCmd = &cobra.Command{
 	Use:   "stop",
 	Short: "Stop replication goroutines gracefully",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -189,7 +189,7 @@ var stopCmd = &cobra.Command{
 }
 
 // status ----------------------------------------------------------------------
-var statusCmd = &cobra.Command{
+var repStatusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Show replication subsystem status",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -279,13 +279,13 @@ func initReplConfig() {
 
 func init() {
 	// flag binding for status output format
-	statusCmd.Flags().StringP("format", "f", "table", "output format: table|json")
-	_ = viper.BindPFlag("output.format", statusCmd.Flags().Lookup("format"))
+	repStatusCmd.Flags().StringP("format", "f", "table", "output format: table|json")
+	_ = viper.BindPFlag("output.format", repStatusCmd.Flags().Lookup("format"))
 
 	// sub‑command registration
-	repCmd.AddCommand(startCmd)
-	repCmd.AddCommand(stopCmd)
-	repCmd.AddCommand(statusCmd)
+	repCmd.AddCommand(repStartCmd)
+	repCmd.AddCommand(repStopCmd)
+	repCmd.AddCommand(repStatusCmd)
 	repCmd.AddCommand(replicateCmd)
 	repCmd.AddCommand(requestCmd)
 	repCmd.AddCommand(syncCmd)

@@ -230,7 +230,7 @@ var secCmd = &cobra.Command{
 }
 
 // sign ------------------------------------------------------------------------
-var signCmd = &cobra.Command{
+var secSignCmd = &cobra.Command{
 	Use:   "sign",
 	Short: "Sign a message (hex) with a private key (hex)",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -258,7 +258,7 @@ var signCmd = &cobra.Command{
 }
 
 // verify ----------------------------------------------------------------------
-var verifyCmd = &cobra.Command{
+var secVerifyCmd = &cobra.Command{
 	Use:   "verify",
 	Short: "Verify signature",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -486,15 +486,15 @@ func initSecConfig() {
 
 func init() {
 	// sign flags
-	signCmd.Flags().String("algo", "", "algo: ed25519|bls")
-	signCmd.Flags().String("key", "", "private key hex / compressed")
-	signCmd.Flags().String("msg", "", "message hex")
+	secSignCmd.Flags().String("algo", "", "algo: ed25519|bls")
+	secSignCmd.Flags().String("key", "", "private key hex / compressed")
+	secSignCmd.Flags().String("msg", "", "message hex")
 
 	// verify flags
-	verifyCmd.Flags().String("algo", "", "algo: ed25519|bls")
-	verifyCmd.Flags().String("pub", "", "public key hex / compressed")
-	verifyCmd.Flags().String("msg", "", "message hex")
-	verifyCmd.Flags().String("sig", "", "signature hex")
+	secVerifyCmd.Flags().String("algo", "", "algo: ed25519|bls")
+	secVerifyCmd.Flags().String("pub", "", "public key hex / compressed")
+	secVerifyCmd.Flags().String("msg", "", "message hex")
+	secVerifyCmd.Flags().String("sig", "", "signature hex")
 
 	// encrypt / decrypt flags
 	encCmd.Flags().String("key", "", "32‑byte key hex")
@@ -516,8 +516,8 @@ func init() {
 	anomalyCmd.Flags().Float64("value", 0, "value to score")
 
 	// register sub‑commands
-	secCmd.AddCommand(signCmd)
-	secCmd.AddCommand(verifyCmd)
+	secCmd.AddCommand(secSignCmd)
+	secCmd.AddCommand(secVerifyCmd)
 	secCmd.AddCommand(aggregateCmd)
 	secCmd.AddCommand(encCmd)
 	secCmd.AddCommand(decCmd)

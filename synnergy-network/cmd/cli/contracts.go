@@ -285,8 +285,8 @@ var invokeCmd = &cobra.Command{
 	},
 }
 
-var listCmd = &cobra.Command{Use: "list", Short: "List deployed contracts", Args: cobra.NoArgs, RunE: handleList}
-var infoCmd = &cobra.Command{Use: "info <address>", Short: "Show ricardian manifest", Args: cobra.ExactArgs(1), RunE: handleInfo}
+var contractsListCmd = &cobra.Command{Use: "list", Short: "List deployed contracts", Args: cobra.NoArgs, RunE: handleList}
+var contractsInfoCmd = &cobra.Command{Use: "info <address>", Short: "Show ricardian manifest", Args: cobra.ExactArgs(1), RunE: handleInfo}
 
 func init() {
 	deployCmd.Flags().String("wasm", "", "compiled wasm path")
@@ -297,7 +297,7 @@ func init() {
 	invokeCmd.Flags().String("args", "", "hex‑encoded arg bytes")
 	invokeCmd.Flags().Uint64("gas", 200_000, "gas limit")
 
-	contractsCmd.AddCommand(compileCmd, deployCmd, invokeCmd, listCmd, infoCmd)
+	contractsCmd.AddCommand(compileCmd, deployCmd, invokeCmd, contractsListCmd, contractsInfoCmd)
 }
 
 // ──────────────────────────────────────────────────────────────────────────────

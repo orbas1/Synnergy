@@ -318,7 +318,7 @@ var utxoCmd = &cobra.Command{
 }
 
 // pool ------------------------------------------------------------------------
-var poolCmd = &cobra.Command{
+var ledgerPoolCmd = &cobra.Command{
 	Use:   "pool",
 	Short: "List pending transactions in mem‑pool",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -414,9 +414,9 @@ func init() {
 	_ = viper.BindPFlag("output.format", blockCmd.Flags().Lookup("format"))
 
 	utxoCmd.Flags().Int("limit", 0, "max entries (0=all)")
-	poolCmd.Flags().Int("limit", 0, "max transactions (0=all)")
-	poolCmd.Flags().StringP("format", "f", "table", "output format: table|json")
-	_ = viper.BindPFlag("output.format", poolCmd.Flags().Lookup("format"))
+	ledgerPoolCmd.Flags().Int("limit", 0, "max transactions (0=all)")
+	ledgerPoolCmd.Flags().StringP("format", "f", "table", "output format: table|json")
+	_ = viper.BindPFlag("output.format", ledgerPoolCmd.Flags().Lookup("format"))
 
 	mintCmd.Flags().String("token", "", "token symbol or ID")
 	mintCmd.Flags().String("amount", "", "amount to mint")
@@ -429,7 +429,7 @@ func init() {
 	ledgerCmd.AddCommand(blockCmd)
 	ledgerCmd.AddCommand(balanceCmd)
 	ledgerCmd.AddCommand(utxoCmd)
-	ledgerCmd.AddCommand(poolCmd)
+	ledgerCmd.AddCommand(ledgerPoolCmd)
 	ledgerCmd.AddCommand(mintCmd)
 	ledgerCmd.AddCommand(transferCmd)
 }

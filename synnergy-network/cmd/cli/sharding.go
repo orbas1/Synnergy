@@ -274,7 +274,7 @@ var mapCmd = &cobra.Command{
 }
 
 // submit ----------------------------------------------------------------------
-var submitCmd = &cobra.Command{
+var shardSubmitCmd = &cobra.Command{
 	Use:   "submit [fromShard] [toShard] [txHash]",
 	Short: "Submit cross‑shard tx header (manual)",
 	Args:  cobra.ExactArgs(3),
@@ -390,7 +390,7 @@ func init() {
 
 	shardCmd.AddCommand(leaderCmd)
 	shardCmd.AddCommand(mapCmd)
-	shardCmd.AddCommand(submitCmd)
+	shardCmd.AddCommand(shardSubmitCmd)
 	shardCmd.AddCommand(pullCmd)
 	shardCmd.AddCommand(reshardCmd)
 	shardCmd.AddCommand(rebalanceCmd)
