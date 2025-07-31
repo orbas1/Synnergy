@@ -27,7 +27,7 @@ import (
     "github.com/wasmerio/wasmer-go/wasmer"
     "golang.org/x/time/rate"
 
-    "github.com/synnergy-network/core"
+    "synnergy-network/core"
 )
 
 // -----------------------------------------------------------------------------

@@ -3,27 +3,28 @@
 // Synnergy Network – Core ▸ Opcode Dispatcher
 // -------------------------------------------
 //
-//  • Every high-level function in the protocol is assigned a UNIQUE 24-bit
-//    opcode:  0xCCNNNN  →  CC = category (1 byte), NNNN = ordinal (2 bytes).
-//  • The dispatcher maps opcodes ➝ concrete handlers and enforces gas-pricing
-//    through core.GasCost() before execution.
-//  • All collisions or missing handlers are FATAL at start-up; nothing slips
-//    into production unnoticed.
+//   - Every high-level function in the protocol is assigned a UNIQUE 24-bit
+//     opcode:  0xCCNNNN  →  CC = category (1 byte), NNNN = ordinal (2 bytes).
 //
-//  ────────────────────────────────────────────────────────────────────────────
-//  AUTOMATED SECTION
-//  -----------------
-//  The table below is **generated** by `go generate ./...` (see the generator
-//  in `cmd/genopcodes`).  Edit ONLY if you know what you’re doing; otherwise
-//  add new function names to `generator/input/functions.yml` and re-run
-//  `go generate`.  The generator guarantees deterministic, collision-free
-//  opcodes and keeps this file lint-clean.
+//   - The dispatcher maps opcodes ➝ concrete handlers and enforces gas-pricing
+//     through core.GasCost() before execution.
 //
-//  Format per line:
-//      <FunctionName>  =  <24-bit-binary>  =  <HexOpcode>
+//   - All collisions or missing handlers are FATAL at start-up; nothing slips
+//     into production unnoticed.
 //
-//  NB: Tabs are significant – tools rely on them when parsing for audits.
+//     ────────────────────────────────────────────────────────────────────────────
+//     AUTOMATED SECTION
+//     -----------------
+//     The table below is **generated** by `go generate ./...` (see the generator
+//     in `cmd/genopcodes`).  Edit ONLY if you know what you’re doing; otherwise
+//     add new function names to `generator/input/functions.yml` and re-run
+//     `go generate`.  The generator guarantees deterministic, collision-free
+//     opcodes and keeps this file lint-clean.
 //
+//     Format per line:
+//     <FunctionName>  =  <24-bit-binary>  =  <HexOpcode>
+//
+//     NB: Tabs are significant – tools rely on them when parsing for audits.
 package core
 
 import (
@@ -94,32 +95,32 @@ func wrap(name string) OpcodeFunc {
 // ────────────────────────────────────────────────────────────────────────────
 //
 // Category map:
-//   0x01 AI                     0x0F Liquidity
-//   0x02 AMM                    0x10 Loanpool
-//   0x03 Authority              0x11 Network
-//   0x04 Charity                0x12 Replication
-//   0x05 Coin                   0x13 Rollups
-//   0x06 Compliance             0x14 Security
-//   0x07 Consensus              0x15 Sharding
-//   0x08 Contracts              0x16 Sidechains
-//   0x09 CrossChain             0x17 StateChannel
-//   0x0A Data                   0x18 Storage
-//   0x0B FaultTolerance         0x19 Tokens
-//   0x0C Governance             0x1A Transactions
-//   0x0D GreenTech              0x1B Utilities
-//   0x0E Ledger                 0x1C VirtualMachine
-//                               0x1D Wallet
+//
+//	0x01 AI                     0x0F Liquidity
+//	0x02 AMM                    0x10 Loanpool
+//	0x03 Authority              0x11 Network
+//	0x04 Charity                0x12 Replication
+//	0x05 Coin                   0x13 Rollups
+//	0x06 Compliance             0x14 Security
+//	0x07 Consensus              0x15 Sharding
+//	0x08 Contracts              0x16 Sidechains
+//	0x09 CrossChain             0x17 StateChannel
+//	0x0A Data                   0x18 Storage
+//	0x0B FaultTolerance         0x19 Tokens
+//	0x0C Governance             0x1A Transactions
+//	0x0D GreenTech              0x1B Utilities
+//	0x0E Ledger                 0x1C VirtualMachine
+//	                            0x1D Wallet
 //
 // Each binary code is shown as a 24-bit big-endian string.
-//
 var catalogue = []struct {
 	name string
 	op   Opcode
 }{
 	// AI (0x01)
-	{"InitAI", 0x010001},           // 00000001 00000000 00000001
-	{"AI", 0x010002},               // 00000001 00000000 00000010
-	{"PredictAnomaly", 0x010003},   // 00000001 00000000 00000011
+	{"InitAI", 0x010001},         // 00000001 00000000 00000001
+	{"AI", 0x010002},             // 00000001 00000000 00000010
+	{"PredictAnomaly", 0x010003}, // 00000001 00000000 00000011
 	{"OptimizeFees", 0x010004},
 	{"PublishModel", 0x010005},
 	{"FetchModel", 0x010006},
@@ -128,13 +129,15 @@ var catalogue = []struct {
 	{"BuyModel", 0x010009},
 	{"RentModel", 0x01000A},
 	{"ReleaseEscrow", 0x01000B},
+	{"PredictVolume", 0x01000C},
 
 	// AMM (0x02)
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-	{"Quote", 0x020004},
-	{"AllPairs", 0x020005},
+        {"Quote", 0x020004},
+        {"AllPairs", 0x020005},
+        {"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -142,6 +145,9 @@ var catalogue = []struct {
 	{"RegisterCandidate", 0x030003},
 	{"RandomElectorate", 0x030004},
 	{"IsAuthority", 0x030005},
+	{"GetAuthority", 0x030006},
+	{"ListAuthorities", 0x030007},
+	{"DeregisterAuthority", 0x030008},
 
 	// Charity (0x04)
 	{"NewCharityPool", 0x040001},
@@ -149,18 +155,25 @@ var catalogue = []struct {
 	{"Charity_Register", 0x040003},
 	{"Charity_Vote", 0x040004},
 	{"Charity_Tick", 0x040005},
+	{"Charity_GetRegistration", 0x040006},
+	{"Charity_Winners", 0x040007},
 
 	// Coin (0x05)
 	{"NewCoin", 0x050001},
 	{"Coin_Mint", 0x050002},
 	{"Coin_TotalSupply", 0x050003},
 	{"Coin_BalanceOf", 0x050004},
+	{"Coin_Transfer", 0x050005},
+	{"Coin_Burn", 0x050006},
 
 	// Compliance (0x06)
 	{"InitCompliance", 0x060001},
 	{"Compliance_ValidateKYC", 0x060002},
 	{"EraseData", 0x060003},
 	{"RecordFraudSignal", 0x060004},
+	{"Compliance_LogAudit", 0x060005},
+	{"Compliance_AuditTrail", 0x060006},
+	{"Compliance_MonitorTx", 0x060007},
 
 	// Consensus (0x07)
 	{"Pick", 0x070001},
@@ -179,6 +192,8 @@ var catalogue = []struct {
 	{"ValidatePoH", 0x07000E},
 	{"SealMainBlockPOW", 0x07000F},
 	{"DistributeRewards", 0x070010},
+	{"CalculateWeights", 0x070011},
+	{"ComputeThreshold", 0x070012},
 
 	// Contracts (0x08)
 	{"InitContracts", 0x080001},

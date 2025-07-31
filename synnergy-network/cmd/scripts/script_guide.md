@@ -42,3 +42,4 @@ The following bash scripts demonstrate how to invoke various CLI modules. Each a
 - `fault_check.sh` – capture a fault‑tolerance snapshot.
 - `state_channel_open.sh` – open a payment channel.
 - `storage_pin.sh` – pin a file in the storage subsystem.
+
