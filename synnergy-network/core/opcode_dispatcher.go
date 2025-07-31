@@ -351,6 +351,9 @@ var catalogue = []struct {
 	{"VerifyWithdraw", 0x160006},
 	{"VerifyAggregateSig", 0x160007},
 	{"VerifyMerkleProof", 0x160008},
+	{"GetSidechainMeta", 0x160009},
+	{"ListSidechains", 0x16000A},
+	{"GetSidechainHeader", 0x16000B},
 
 	// StateChannel (0x17)
 	{"InitStateChannels", 0x170001},

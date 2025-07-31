@@ -300,6 +300,9 @@ var gasTable = map[Opcode]uint64{
 	VerifyWithdraw:     4_000,
 	VerifyAggregateSig: 8_000,
 	VerifyMerkleProof:  1_200,
+	GetSidechainMeta:   1_000,
+	ListSidechains:     1_200,
+	GetSidechainHeader: 1_000,
 	// Deposit already priced
 
 	// ----------------------------------------------------------------------
