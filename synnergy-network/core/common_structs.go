@@ -218,7 +218,7 @@ type RicardianContract struct {
 
 type ContractRegistry struct {
 	*Registry
-	ledger StateRW
+	ledger *Ledger
 	vm     VM
 	mu     sync.RWMutex
 	byAddr map[Address]*SmartContract
