@@ -46,6 +46,8 @@ This file tracks compile errors between CLI commands and core modules of the Syn
 30. [ ] wallet.go
 
 ## Module Files
+All modules live under `synnergy-network/core`. For a short description of each
+file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module_guide.md).
 1. [ ] ai.go
 2. [ ] amm.go
 3. [ ] authority_nodes.go
