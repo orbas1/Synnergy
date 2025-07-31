@@ -7,21 +7,21 @@ import (
 	"time"
 )
 
-// mockLedger implements StateRW for testing authority nodes
+// authLedger implements StateRW for testing authority nodes
 
-type mockLedger struct {
+type authLedger struct {
 	states map[string][]byte
 	votes  map[string]bool
 }
 
-func (m *mockLedger) SetState(k, v []byte) {
+func (m *authLedger) SetState(k, v []byte) {
 	if m.states == nil {
 		m.states = make(map[string][]byte)
 	}
 	m.states[string(k)] = v
 }
 
-func (m *mockLedger) GetState(k []byte) ([]byte, error) {
+func (m *authLedger) GetState(k []byte) ([]byte, error) {
 	v, ok := m.states[string(k)]
 	if !ok {
 		return nil, nil
@@ -29,27 +29,27 @@ func (m *mockLedger) GetState(k []byte) ([]byte, error) {
 	return v, nil
 }
 
-func (m *mockLedger) HasState(k []byte) (bool, error) {
+func (m *authLedger) HasState(k []byte) (bool, error) {
 	_, ok := m.states[string(k)]
 	return ok, nil
 }
 
-func (m *mockLedger) PrefixIterator(prefix []byte) PrefixIterator {
+func (m *authLedger) PrefixIterator(prefix []byte) PrefixIterator {
 	items := make([]KV, 0)
 	for k, v := range m.states {
 		if len(k) >= len(prefix) && string(k[:len(prefix)]) == string(prefix) {
 			items = append(items, KV{k: []byte(k), v: v})
 		}
 	}
-	return &mockIterator{items: items}
+	return &authIterator{items: items}
 }
 
-type mockIterator struct {
+type authIterator struct {
 	items []KV
 	idx   int
 }
 
-func (m *mockIterator) Next() bool {
+func (m *authIterator) Next() bool {
 	if m.idx >= len(m.items) {
 		return false
 	}
@@ -57,11 +57,11 @@ func (m *mockIterator) Next() bool {
 	return true
 }
 
-func (m *mockIterator) Key() []byte   { return m.items[m.idx-1].k }
-func (m *mockIterator) Value() []byte { return m.items[m.idx-1].v }
+func (m *authIterator) Key() []byte   { return m.items[m.idx-1].k }
+func (m *authIterator) Value() []byte { return m.items[m.idx-1].v }
 
 func TestRegisterCandidate(t *testing.T) {
-	led := &mockLedger{}
+	led := &authLedger{}
 	as := NewAuthoritySet(nil, led)
 	addr := Address{0x01}
 
@@ -82,7 +82,7 @@ func TestRegisterCandidate(t *testing.T) {
 }
 
 func TestRecordVote(t *testing.T) {
-	led := &mockLedger{}
+	led := &authLedger{}
 	as := NewAuthoritySet(nil, led)
 
 	cand := Address{0xCA}
@@ -111,7 +111,7 @@ func TestRecordVote(t *testing.T) {
 }
 
 func TestRandomElectorate(t *testing.T) {
-	led := &mockLedger{}
+	led := &authLedger{}
 	as := NewAuthoritySet(nil, led)
 
 	addr := Address{0xDD}
@@ -129,7 +129,7 @@ func TestRandomElectorate(t *testing.T) {
 		t.Fatal("expected error on size <= 0")
 	}
 
-	as2 := NewAuthoritySet(nil, &mockLedger{})
+	as2 := NewAuthoritySet(nil, &authLedger{})
 	_, err = as2.RandomElectorate(1)
 	if err == nil {
 		t.Fatal("expected error on empty pool")
@@ -137,7 +137,7 @@ func TestRandomElectorate(t *testing.T) {
 }
 
 func TestIsAuthority(t *testing.T) {
-	led := &mockLedger{}
+	led := &authLedger{}
 	as := NewAuthoritySet(nil, led)
 	addr := Address{0x88}
 	n := AuthorityNode{Addr: addr, Role: CentralBankNode, Active: true}

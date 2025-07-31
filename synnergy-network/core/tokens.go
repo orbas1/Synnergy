@@ -440,23 +440,8 @@ func init() {
 //---------------------------------------------------------------------
 
 func registerTokenOpcodes() {
-	Register(0xB0, func(ctx *Context) error {
-		id := TokenID(ctx.Stack.PopUint32())
-		to := ctx.Stack.PopAddress()
-		amt := ctx.Stack.PopUint64()
-		from := ctx.TxOrigin
-		tok, ok := GetToken(id)
-		if !ok {
-			return ErrInvalidAsset
-		}
-		if err := tok.Transfer(from, to, amt); err != nil {
-			return err
-		}
-		ctx.StackRef().PushBool(true)
-		ctx.RefundGas(OpTokenTransfer)
-		return nil
-	})
-	// APPROVE 0xB1, ALLOWANCE 0xB2, BALANCEOF 0xB3 can be registered similarly.
+	Register(0xB0, wrap("Tokens_Transfer"))
+	// Additional token opcodes omitted for brevity.
 }
 
 func (ctx *Context) RefundGas(amount uint64) {

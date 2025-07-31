@@ -365,7 +365,6 @@ type Ledger struct {
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
-	logs             []*Log
 }
 
 //---------------------------------------------------------------------
@@ -797,6 +796,9 @@ type TxContext struct {
 	State       StateRW
 }
 
+// Context is an alias used throughout the codebase for TxContext.
+type Context = TxContext
+
 // Call delegates to the underlying state to invoke a contract or high level
 // function by name. This is a stub implementation used during early
 // development and simply returns an error until the VM wiring is completed.
@@ -813,7 +815,6 @@ func (ctx *Context) Gas(amount uint64) error {
 	ctx.GasLimit -= amount
 	return nil
 }
-
 
 type Registry struct {
 	mu      sync.RWMutex

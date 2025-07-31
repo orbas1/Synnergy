@@ -30,12 +30,9 @@ import "log"
 // production and will be revisited during audits.
 const DefaultGasCost uint64 = 100_000
 
-
 // gasTable maps every Opcode to its base gas cost.
 // Gas is charged **before** execution; refunds (e.g. for SELFDESTRUCT) are
 // handled by the VM’s gas-meter at commit-time.
-var gasTable = map[Opcode]uint64{}
-
 
 
 // gasNames holds the gas cost associated with each opcode name. During init()
@@ -623,7 +620,6 @@ func init() {
 		}
 	}
 }
-
 
 // GasCost returns the **base** gas cost for a single opcode.  Dynamic portions
 // (e.g. per-word fees, storage-touch refunds, call-stipends) are handled by the

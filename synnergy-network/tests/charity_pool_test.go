@@ -11,33 +11,33 @@ import (
 // Mock implementations
 // ------------------------------------------------------------
 
-type mockLedger struct {
+type charityLedger struct {
 	state     map[string][]byte
 	transfers []string // record "from->to:amt"
 	balances  map[string]uint64
 }
 
-func newMockLedger() *mockLedger {
-	return &mockLedger{state: make(map[string][]byte), balances: make(map[string]uint64)}
+func newCharityLedger() *charityLedger {
+	return &charityLedger{state: make(map[string][]byte), balances: make(map[string]uint64)}
 }
 
-func (m *mockLedger) SetState(k, v []byte) {
+func (m *charityLedger) SetState(k, v []byte) {
 	m.state[string(k)] = v
 }
 
-func (m *mockLedger) GetState(k []byte) ([]byte, error) {
+func (m *charityLedger) GetState(k []byte) ([]byte, error) {
 	if v, ok := m.state[string(k)]; ok {
 		return v, nil
 	}
 	return nil, nil
 }
 
-func (m *mockLedger) HasState(k []byte) (bool, error) {
+func (m *charityLedger) HasState(k []byte) (bool, error) {
 	_, ok := m.state[string(k)]
 	return ok, nil
 }
 
-func (m *mockLedger) PrefixIterator(pref []byte) PrefixIterator {
+func (m *charityLedger) PrefixIterator(pref []byte) PrefixIterator {
 	var items []KV
 	for k, v := range m.state {
 		if len(k) >= len(pref) && k[:len(pref)] == string(pref) {
@@ -47,7 +47,7 @@ func (m *mockLedger) PrefixIterator(pref []byte) PrefixIterator {
 	return &sliceIter{items: items}
 }
 
-func (m *mockLedger) Transfer(from, to Address, amount uint64) error {
+func (m *charityLedger) Transfer(from, to Address, amount uint64) error {
 	m.transfers = append(m.transfers, from.String()+"->"+to.String())
 	m.balances[to.String()] += amount
 	if amount == 0 {
@@ -56,7 +56,7 @@ func (m *mockLedger) Transfer(from, to Address, amount uint64) error {
 	return nil
 }
 
-func (m *mockLedger) BalanceOf(addr Address) uint64 {
+func (m *charityLedger) BalanceOf(addr Address) uint64 {
 	return m.balances[addr.String()]
 }
 
@@ -91,7 +91,7 @@ func (m mockElectorate) IsIDTokenHolder(a Address) bool { return m.holders[a] }
 // ------------------------------------------------------------
 
 func TestRegisterCharity(t *testing.T) {
-	led := newMockLedger()
+	led := newCharityLedger()
 	cp := NewCharityPool(nil, led, mockElectorate{}, time.Now().UTC())
 	addr := Address{0xAA}
 
@@ -122,7 +122,7 @@ func TestRegisterCharity(t *testing.T) {
 }
 
 func TestVoteLogic(t *testing.T) {
-	led := newMockLedger()
+	led := newCharityLedger()
 	voter := Address{0x01}
 	charity := Address{0x02}
 	elect := mockElectorate{holders: map[Address]bool{voter: true}}
@@ -158,7 +158,7 @@ func TestVoteLogic(t *testing.T) {
 var timeNow = time.Now
 
 func TestDailyPayout(t *testing.T) {
-	led := newMockLedger()
+	led := newCharityLedger()
 	elect := mockElectorate{}
 	genesis := time.Now().UTC().Add(-24 * time.Hour)
 	cp := NewCharityPool(nil, led, elect, genesis)
@@ -186,7 +186,7 @@ func TestDailyPayout(t *testing.T) {
 }
 
 func TestDeposit(t *testing.T) {
-	led := newMockLedger()
+	led := newCharityLedger()
 	cp := NewCharityPool(nil, led, mockElectorate{}, time.Now())
 	from := Address{0xDE}
 
