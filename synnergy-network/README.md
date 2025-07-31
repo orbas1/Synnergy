@@ -55,6 +55,13 @@ all modules from the core library. Highlights include:
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.
 
+## Configuration
+
+Runtime settings are defined using YAML files in `cmd/config/`.  The CLI loads
+`default.yaml` by default and merges any environment specific file if the
+`SYNN_ENV` environment variable is set (for example `SYNN_ENV=prod`).
+`bootstrap.yaml` provides a template for running a dedicated bootstrap node.
+
 ## Testing
 
 Unit tests are located in the `tests` directory. Run them using:

@@ -5,6 +5,9 @@ network:
   genesis_file: config/genesis.json
   rpc_enabled: true
   p2p_port: 30303
+  listen_addr: "/ip4/0.0.0.0/tcp/4001"
+  discovery_tag: synnergy-mesh
+  bootstrap_peers: []
 
 consensus:
   type: pos
