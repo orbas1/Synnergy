@@ -404,6 +404,8 @@ var catalogue = []struct {
 	{"PushBool", 0x190017},
 	{"Push", 0x190018},
 	{"Len_Tokens", 0x190019},
+	{"InitTokens", 0x19001A},
+	{"GetRegistryTokens", 0x19001B},
 
 	// Transactions (0x1A)
 	{"Tx_Sign", 0x1A0001},
