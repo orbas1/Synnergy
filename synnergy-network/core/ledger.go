@@ -351,10 +351,10 @@ func (l *Ledger) GetContract(address []byte) (*Contract, error) {
 }
 
 // BalanceOf returns token balance.
-func (l *Ledger) BalanceOf(address []byte) uint64 {
+func (l *Ledger) BalanceOf(addr Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
-	return l.TokenBalances[fmt.Sprintf("%x", address)]
+	return l.TokenBalances[fmt.Sprintf("%x", addr.Bytes())]
 }
 
 // Snapshot returns JSON state of ledger.
@@ -634,4 +634,12 @@ func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 	cost := uint64(bytes)
 	zero := Address{}
 	return l.Transfer(addr, zero, cost)
+}
+
+// AddLog appends a log entry to the ledger. This is a simplified
+// implementation used to satisfy the StateRW interface.
+func (l *Ledger) AddLog(log *Log) {
+	// In a full implementation this would persist logs so they can be
+	// queried later. For now we simply print them to stdout.
+	fmt.Printf("[LedgerLog] %+v\n", log)
 }

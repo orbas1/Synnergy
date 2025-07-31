@@ -144,8 +144,8 @@ you progress.
 22. [x] sharding.go
 23. [x] sidechain.go
 24. [x] state_channel.go
-25. [ ] storage.go
-26. [ ] tokens.go
+25. [x] storage.go
+26. [x] tokens.go
 27. [ ] transactions.go
 28. [ ] utility_functions.go
 29. [ ] virtual_machine.go
@@ -181,9 +181,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 25. [x] security.go
 26. [x] sharding.go
 27. [x] sidechains.go
-28. [ ] state_channel.go
-29. [ ] storage.go
-30. [ ] tokens.go
+28. [x] state_channel.go
+29. [x] storage.go
+30. [x] tokens.go
 31. [x] transactions.go
 32. [x] utility_functions.go
 33. [x] virtual_machine.go
