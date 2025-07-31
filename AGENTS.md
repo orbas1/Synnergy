@@ -129,6 +129,24 @@ you progress.
 7. [ ] consensus.go
 8. [ ] contracts.go
 9. [ ] cross_chain.go
+10. [ ] data.go
+11. [ ] fault_tolerance.go
+12. [ ] governance.go
+13. [ ] green_technology.go
+14. [ ] index.go
+15. [ ] ledger.go
+16. [ ] liquidity_pools.go
+17. [ ] loanpool.go
+18. [ ] network.go
+19. [ ] replication.go
+20. [ ] rollups.go
+21. [ ] security.go
+22. [ ] sharding.go
+23. [ ] sidechain.go
+24. [ ] state_channel.go
+25. [x] storage.go
+26. [x] tokens.go
+27. [x] transactions.go
 10. [x] data.go
 11. [x] fault_tolerance.go
 12. [x] governance.go
@@ -144,9 +162,9 @@ you progress.
 22. [x] sharding.go
 23. [x] sidechain.go
 24. [x] state_channel.go
-25. [ ] storage.go
-26. [ ] tokens.go
-27. [ ] transactions.go
+25. [x] storage.go
+26. [x] tokens.go
+27. [x] transactions.go
 28. [ ] utility_functions.go
 29. [ ] virtual_machine.go
 30. [ ] wallet.go
