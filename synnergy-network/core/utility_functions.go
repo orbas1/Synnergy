@@ -98,6 +98,9 @@ func opDIV(ctx *VMContext) error {
     return nil
 }
 
+// OpDIV is exported for opcode dispatch tables and simply delegates to opDIV.
+func OpDIV(ctx *VMContext) error { return opDIV(ctx) }
+
 // opSDIV implements signed division: if a == 0 push 0, else trunc(b / a) with sign.
 func opSDIV(ctx *VMContext) error {
     a := ctx.Stack.Pop()
@@ -972,7 +975,22 @@ func Burn(ctx *Context, asset AssetRef, from Address, amount uint64) error {
 		}
 		return token.Burn(from, amount) // ✅ fixed
 
-	default:
-		return fmt.Errorf("invalid asset kind")
-	}
+        default:
+                return fmt.Errorf("invalid asset kind")
+        }
+}
+
+// Utilities_Transfer exposes Transfer for opcode handlers.
+func Utilities_Transfer(ctx *Context, asset AssetRef, from, to Address, amount uint64) error {
+    return Transfer(ctx, asset, from, to, amount)
+}
+
+// Utilities_Mint wraps Mint for VM opcode dispatch.
+func Utilities_Mint(ctx *Context, asset AssetRef, to Address, amount uint64) error {
+    return Mint(ctx, asset, to, amount)
+}
+
+// Utilities_Burn wraps Burn for VM opcode dispatch.
+func Utilities_Burn(ctx *Context, asset AssetRef, from Address, amount uint64) error {
+    return Burn(ctx, asset, from, amount)
 }
