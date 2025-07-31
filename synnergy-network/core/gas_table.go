@@ -132,6 +132,7 @@ var gasTable = map[Opcode]uint64{
 	InitContracts: 15_000,
 	CompileWASM:   45_000,
 	Invoke:        7_000,
+	Deploy:        25_000,
 
 	// ----------------------------------------------------------------------
 	// Cross-Chain

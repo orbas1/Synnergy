@@ -200,6 +200,7 @@ var catalogue = []struct {
 	{"InitContracts", 0x080001},
 	{"CompileWASM", 0x080002},
 	{"Invoke", 0x080003},
+	{"Deploy", 0x080004},
 
 	// Cross-Chain (0x09)
 	{"RegisterBridge", 0x090001},
