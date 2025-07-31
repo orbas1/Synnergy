@@ -37,6 +37,7 @@ const DefaultGasCost uint64 = 100_000
 var gasTable = map[Opcode]uint64{}
 
 
+
 // gasNames holds the gas cost associated with each opcode name. During init()
 // these names are resolved to their Opcode values using the catalogue defined
 // in opcode_dispatcher.go.
