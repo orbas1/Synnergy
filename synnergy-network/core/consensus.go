@@ -436,6 +436,23 @@ func (sc *SynnergyConsensus) nextBlkHeightAtomic() uint64 {
 	return h
 }
 
+// SetWeightConfig atomically updates the weighting coefficients used when
+// calculating dynamic consensus weights. Callers should ensure values are
+// sensible (e.g. non-negative) prior to invoking this method.
+func (sc *SynnergyConsensus) SetWeightConfig(cfg WeightConfig) {
+	sc.mu.Lock()
+	sc.weightCfg = cfg
+	sc.mu.Unlock()
+}
+
+// WeightConfig returns the currently active weighting configuration.
+func (sc *SynnergyConsensus) WeightConfig() WeightConfig {
+	sc.mu.Lock()
+	defer sc.mu.Unlock()
+	return sc.weightCfg
+}
+
+
 //---------------------------------------------------------------------
 // Util
 //---------------------------------------------------------------------
@@ -491,6 +508,7 @@ func (sc *SynnergyConsensus) CalculateWeights(demand, stake float64) ConsensusWe
 	sc.weights = ConsensusWeights{PoW: pow, PoS: pos, PoH: poh}
 	return sc.weights
 }
+
 
 // ComputeThreshold returns the consensus switching threshold for the supplied
 // network metrics using the formula T = α(D/D_max) + β(S/S_max).

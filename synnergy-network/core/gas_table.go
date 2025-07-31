@@ -54,7 +54,6 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-
 	SwapExactIn:    4_500,
 	AddLiquidity:   5_000,
 	RemoveLiquidity:5_000,

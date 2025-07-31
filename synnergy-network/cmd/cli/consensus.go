@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"sync"
 	"syscall"
@@ -265,11 +266,82 @@ var weightsCmd = &cobra.Command{
 	},
 }
 
+var thresholdCmd = &cobra.Command{
+	Use:   "threshold [demand] [stake]",
+	Short: "Compute consensus switch threshold",
+	Args:  cobra.ExactArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		demand, err := strconv.ParseFloat(args[0], 64)
+		if err != nil {
+			return fmt.Errorf("invalid demand: %w", err)
+		}
+		stake, err := strconv.ParseFloat(args[1], 64)
+		if err != nil {
+			return fmt.Errorf("invalid stake: %w", err)
+		}
+		consensusMu.RLock()
+		c := consensus
+		consensusMu.RUnlock()
+		if c == nil {
+			return fmt.Errorf("consensus not initialised")
+		}
+		t := c.ComputeThreshold(demand, stake)
+		fmt.Fprintf(cmd.OutOrStdout(), "threshold: %.4f\n", t)
+		return nil
+	},
+}
+
+var setWeightCfgCmd = &cobra.Command{
+	Use:   "set-weight-config [alpha] [beta] [gamma] [dmax] [smax]",
+	Short: "Update dynamic weight coefficients",
+	Args:  cobra.ExactArgs(5),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		vals := make([]float64, 5)
+		for i, a := range args {
+			v, err := strconv.ParseFloat(a, 64)
+			if err != nil {
+				return fmt.Errorf("invalid arg %d: %w", i+1, err)
+			}
+			vals[i] = v
+		}
+		consensusMu.RLock()
+		c := consensus
+		consensusMu.RUnlock()
+		if c == nil {
+			return fmt.Errorf("consensus not initialised")
+		}
+		cfg := core.WeightConfig{Alpha: vals[0], Beta: vals[1], Gamma: vals[2], DMax: vals[3], SMax: vals[4]}
+		c.SetWeightConfig(cfg)
+		fmt.Fprintln(cmd.OutOrStdout(), "weight config updated")
+		return nil
+	},
+}
+
+var getWeightCfgCmd = &cobra.Command{
+	Use:   "get-weight-config",
+	Short: "Show current weight coefficients",
+	Args:  cobra.NoArgs,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		consensusMu.RLock()
+		c := consensus
+		consensusMu.RUnlock()
+		if c == nil {
+			return fmt.Errorf("consensus not initialised")
+		}
+		cfg := c.WeightConfig()
+		fmt.Fprintf(cmd.OutOrStdout(), "alpha: %.4f\nbeta: %.4f\ngamma: %.4f\ndmax: %.2f\nsmax: %.2f\n", cfg.Alpha, cfg.Beta, cfg.Gamma, cfg.DMax, cfg.SMax)
+		return nil
+	},
+}
+
 func init() {
 	consensusCmd.AddCommand(startCmd)
 	consensusCmd.AddCommand(stopCmd)
 	consensusCmd.AddCommand(infoCmd)
 	consensusCmd.AddCommand(weightsCmd)
+	consensusCmd.AddCommand(thresholdCmd)
+	consensusCmd.AddCommand(setWeightCfgCmd)
+	consensusCmd.AddCommand(getWeightCfgCmd)
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
