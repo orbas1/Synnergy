@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -320,6 +320,10 @@ var catalogue = []struct {
 	{"SubmitBatch", 0x130002},
 	{"SubmitFraudProof", 0x130003},
 	{"FinalizeBatch", 0x130004},
+	{"BatchHeader", 0x130005},
+	{"BatchState", 0x130006},
+	{"BatchTransactions", 0x130007},
+	{"ListBatches", 0x130008},
 
 	// Security (0x14)
 	{"Security_Sign", 0x140001},
