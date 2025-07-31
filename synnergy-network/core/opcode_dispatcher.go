@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -331,6 +331,11 @@ var catalogue = []struct {
 	{"Encrypt", 0x140007},
 	{"Decrypt", 0x140008},
 	{"NewTLSConfig", 0x140009},
+	{"DilithiumKeypair", 0x14000A},
+	{"DilithiumSign", 0x14000B},
+	{"DilithiumVerify", 0x14000C},
+	{"PredictRisk", 0x14000D},
+	{"AnomalyScore", 0x14000E},
 
 	// Sharding (0x15)
 	{"NewShardCoordinator", 0x150001},

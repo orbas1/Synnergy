@@ -50,17 +50,15 @@ var gasTable = map[Opcode]uint64{
 	ReleaseEscrow:  12_000,
 	PredictVolume:  15_000,
 
-
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-	SwapExactIn:    4_500,
-	AddLiquidity:   5_000,
-	RemoveLiquidity:5_000,
-  Quote:          2_500,
-  AllPairs:       2_000,
-  InitPoolsFromFile: 6_000,
-
+	SwapExactIn:       4_500,
+	AddLiquidity:      5_000,
+	RemoveLiquidity:   5_000,
+	Quote:             2_500,
+	AllPairs:          2_000,
+	InitPoolsFromFile: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
@@ -105,7 +103,6 @@ var gasTable = map[Opcode]uint64{
 	Compliance_AuditTrail: 3_000,
 	Compliance_MonitorTx:  5_000,
 	Compliance_VerifyZKP:  12_000,
-
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
@@ -280,6 +277,11 @@ var gasTable = map[Opcode]uint64{
 	Encrypt:           1_500,
 	Decrypt:           1_500,
 	NewTLSConfig:      5_000,
+	DilithiumKeypair:  6_000,
+	DilithiumSign:     5_000,
+	DilithiumVerify:   5_000,
+	PredictRisk:       2_000,
+	AnomalyScore:      2_000,
 
 	// ----------------------------------------------------------------------
 	// Sharding
