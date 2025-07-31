@@ -9,18 +9,18 @@
 // and leave sufficient head-room for future optimisation.
 //
 // IMPORTANT
-//   • The table MUST contain a unique entry for every opcode exported from the
+//   - The table MUST contain a unique entry for every opcode exported from the
 //     `core/opcodes` package (compile-time enforced).
-//   • Unknown / un‐priced opcodes fall back to `DefaultGasCost`, which is set
+//   - Unknown / un‐priced opcodes fall back to `DefaultGasCost`, which is set
 //     deliberately high and logged exactly once per missing opcode.
-//   • All reads from the table are fully concurrent-safe.
+//   - All reads from the table are fully concurrent-safe.
 //
 // NOTE
-//   The `Opcode` type and individual opcode constants are defined elsewhere in
-//   the core package-tree (see `core/opcodes/*.go`).  This file purposefully
-//   contains **no** duplicate keys; if a symbol appears in multiple subsystems
-//   it is listed **once** and its gas cost applies network-wide.
 //
+//	The `Opcode` type and individual opcode constants are defined elsewhere in
+//	the core package-tree (see `core/opcodes/*.go`).  This file purposefully
+//	contains **no** duplicate keys; if a symbol appears in multiple subsystems
+//	it is listed **once** and its gas cost applies network-wide.
 package core
 
 import "log"
@@ -37,17 +37,17 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// AI
 	// ----------------------------------------------------------------------
-	InitAI:          50_000,
-	AI:              40_000,
-	PredictAnomaly:  35_000,
-	OptimizeFees:    25_000,
-	PublishModel:    45_000,
-	FetchModel:      15_000,
-	ListModel:       8_000,
-	ValidateKYC:     1_000,
-	BuyModel:        30_000,
-	RentModel:       20_000,
-	ReleaseEscrow:   12_000,
+	InitAI:         50_000,
+	AI:             40_000,
+	PredictAnomaly: 35_000,
+	OptimizeFees:   25_000,
+	PublishModel:   45_000,
+	FetchModel:     15_000,
+	ListModel:      8_000,
+	ValidateKYC:    1_000,
+	BuyModel:       30_000,
+	RentModel:      20_000,
+	ReleaseEscrow:  12_000,
 
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
@@ -55,18 +55,22 @@ var gasTable = map[Opcode]uint64{
 	SwapExactIn:    4_500,
 	AddLiquidity:   5_000,
 	RemoveLiquidity:5_000,
-        Quote:          2_500,
-        AllPairs:       2_000,
-        InitPoolsFromFile: 6_000,
+  Quote:          2_500,
+  AllPairs:       2_000,
+  InitPoolsFromFile: 6_000,
+
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
 	// ----------------------------------------------------------------------
-	NewAuthoritySet: 20_000,
-	RecordVote:      3_000,
-	RegisterCandidate:8_000,
-	RandomElectorate: 4_000,
-	IsAuthority:       800,
+	NewAuthoritySet:     20_000,
+	RecordVote:          3_000,
+	RegisterCandidate:   8_000,
+	RandomElectorate:    4_000,
+	IsAuthority:         800,
+	GetAuthority:        1_000,
+	ListAuthorities:     2_000,
+	DeregisterAuthority: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Charity Pool
@@ -81,16 +85,16 @@ var gasTable = map[Opcode]uint64{
 	// Coin
 	// ----------------------------------------------------------------------
 	NewCoin:     12_000,
-	Mint:        2_100,  // shared with ledger & tokens
-	TotalSupply:   800,
-	BalanceOf:     400,
+	Mint:        2_100, // shared with ledger & tokens
+	TotalSupply: 800,
+	BalanceOf:   400,
 
 	// ----------------------------------------------------------------------
 	// Compliance
 	// ----------------------------------------------------------------------
-	InitCompliance:     8_000,
-	EraseData:          5_000,
-	RecordFraudSignal:  7_000,
+	InitCompliance:    8_000,
+	EraseData:         5_000,
+	RecordFraudSignal: 7_000,
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
@@ -100,44 +104,46 @@ var gasTable = map[Opcode]uint64{
 	Subscribe:             1_500,
 	Sign:                  3_000, // shared with Security & Tx
 	Verify:                3_500, // shared with Security & Tx
-	ValidatorPubKey:         800,
+	ValidatorPubKey:       800,
 	StakeOf:               1_000,
-	LoanPoolAddress:         800,
-	Hash:                    600, // shared with Replication
+	LoanPoolAddress:       800,
+	Hash:                  600, // shared with Replication
 	SerializeWithoutNonce: 1_200,
-	NewConsensus:         25_000,
-	Start:                5_000,
-	ProposeSubBlock:     15_000,
-	ValidatePoH:        20_000,
-	SealMainBlockPOW:   60_000,
-	DistributeRewards:  10_000,
+	NewConsensus:          25_000,
+	Start:                 5_000,
+	ProposeSubBlock:       15_000,
+	ValidatePoH:           20_000,
+	SealMainBlockPOW:      60_000,
+	DistributeRewards:     10_000,
+	CalculateWeights:      8_000,
+	ComputeThreshold:      6_000,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
 	// ----------------------------------------------------------------------
 	InitContracts: 15_000,
 	CompileWASM:   45_000,
-	Invoke:         7_000,
+	Invoke:        7_000,
 
 	// ----------------------------------------------------------------------
 	// Cross-Chain
 	// ----------------------------------------------------------------------
 	RegisterBridge: 20_000,
-	AssertRelayer:   5_000,
-	Iterator:        2_000,
+	AssertRelayer:  5_000,
+	Iterator:       2_000,
 	LockAndMint:    30_000,
 	BurnAndRelease: 30_000,
-	GetBridge:       1_000,
+	GetBridge:      1_000,
 
 	// ----------------------------------------------------------------------
 	// Data / Oracle / IPFS Integration
 	// ----------------------------------------------------------------------
-	RegisterNode:  10_000,
-	UploadAsset:   30_000,
+	RegisterNode:   10_000,
+	UploadAsset:    30_000,
 	Pin:            5_000, // shared with Storage
 	Retrieve:       4_000, // shared with Storage
 	RetrieveAsset:  4_000,
-	RegisterOracle:10_000,
+	RegisterOracle: 10_000,
 	PushFeed:       3_000,
 	QueryOracle:    3_000,
 
@@ -149,98 +155,98 @@ var gasTable = map[Opcode]uint64{
 	RemovePeer:       1_500,
 	Snapshot:         4_000,
 	Recon:            8_000,
-	Ping:               300,
-	SendPing:           300,
-	AwaitPong:          300,
+	Ping:             300,
+	SendPing:         300,
+	AwaitPong:        300,
 
 	// ----------------------------------------------------------------------
 	// Governance
 	// ----------------------------------------------------------------------
 	UpdateParam:     5_000,
-	ProposeChange:  10_000,
+	ProposeChange:   10_000,
 	VoteChange:      3_000,
 	EnactChange:     8_000,
-	SubmitProposal: 10_000,
-	BalanceOfAsset:    600,
+	SubmitProposal:  10_000,
+	BalanceOfAsset:  600,
 	CastVote:        3_000,
-	ExecuteProposal:15_000,
+	ExecuteProposal: 15_000,
 
 	// ----------------------------------------------------------------------
 	// Green Technology
 	// ----------------------------------------------------------------------
-	InitGreenTech: 8_000,
-	Green:         2_000,
-	RecordUsage:   3_000,
-	RecordOffset:  3_000,
-	Certify:       7_000,
-	CertificateOf:   500,
-	ShouldThrottle:  200,
+	InitGreenTech:  8_000,
+	Green:          2_000,
+	RecordUsage:    3_000,
+	RecordOffset:   3_000,
+	Certify:        7_000,
+	CertificateOf:  500,
+	ShouldThrottle: 200,
 
 	// ----------------------------------------------------------------------
 	// Ledger / UTXO / Account-Model
 	// ----------------------------------------------------------------------
-	NewLedger:            50_000,
-	GetPendingSubBlocks:   2_000,
-	LastBlockHash:           600,
-	AppendBlock:          50_000,
-	MintBig:               2_200,
-	EmitApproval:          1_200,
-	EmitTransfer:          1_200,
-	DeductGas:             2_100,
-	WithinBlock:           1_000,
-	IsIDTokenHolder:         400,
-	TokenBalance:            400,
-	AddBlock:             40_000,
-	GetBlock:              2_000,
-	GetUTXO:               1_500,
-	AddToPool:             1_000,
-	ListPool:                800,
-	GetContract:           1_000,
-	Snapshot:              3_000,
-	MintToken:             2_000,
-	LastSubBlockHeight:      500,
-	LastBlockHeight:         500,
-	RecordPoSVote:         3_000,
-	AppendSubBlock:        8_000,
-	Transfer:              2_100, // shared with VM & Tokens
-	Burn:                  2_100, // shared with VM & Tokens
+	NewLedger:           50_000,
+	GetPendingSubBlocks: 2_000,
+	LastBlockHash:       600,
+	AppendBlock:         50_000,
+	MintBig:             2_200,
+	EmitApproval:        1_200,
+	EmitTransfer:        1_200,
+	DeductGas:           2_100,
+	WithinBlock:         1_000,
+	IsIDTokenHolder:     400,
+	TokenBalance:        400,
+	AddBlock:            40_000,
+	GetBlock:            2_000,
+	GetUTXO:             1_500,
+	AddToPool:           1_000,
+	ListPool:            800,
+	GetContract:         1_000,
+	Snapshot:            3_000,
+	MintToken:           2_000,
+	LastSubBlockHeight:  500,
+	LastBlockHeight:     500,
+	RecordPoSVote:       3_000,
+	AppendSubBlock:      8_000,
+	Transfer:            2_100, // shared with VM & Tokens
+	Burn:                2_100, // shared with VM & Tokens
 
 	// ----------------------------------------------------------------------
 	// Liquidity Manager (high-level AMM façade)
 	// ----------------------------------------------------------------------
-	InitAMM:      8_000,
-	Manager:      1_000,
-	CreatePool:  10_000,
-	Swap:         4_500,
+	InitAMM:    8_000,
+	Manager:    1_000,
+	CreatePool: 10_000,
+	Swap:       4_500,
 	// AddLiquidity & RemoveLiquidity already defined above
 
 	// ----------------------------------------------------------------------
 	// Loan-Pool
 	// ----------------------------------------------------------------------
 	NewLoanPool: 20_000,
-	Submit:       3_000,
-	Disburse:     8_000,
+	Submit:      3_000,
+	Disburse:    8_000,
 	// Vote  & Tick already priced
 	// RandomElectorate / IsAuthority already priced
 
 	// ----------------------------------------------------------------------
 	// Networking
 	// ----------------------------------------------------------------------
-	NewNode:          18_000,
-	HandlePeerFound:   1_500,
-	DialSeed:          2_000,
-	ListenAndServe:    8_000,
-	Close:               500,
-	Peers:               400,
-	NewDialer:         2_000,
-	Dial:              2_000,
+	NewNode:         18_000,
+	HandlePeerFound: 1_500,
+	DialSeed:        2_000,
+	ListenAndServe:  8_000,
+	Close:           500,
+	Peers:           400,
+	NewDialer:       2_000,
+	Dial:            2_000,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------
 	// Replication / Data Availability
 	// ----------------------------------------------------------------------
-	NewReplicator: 12_000,
-	ReplicateBlock:30_000,
+	NewReplicator:  12_000,
+	ReplicateBlock: 30_000,
 	RequestMissing: 4_000,
 	Stop:           3_000,
 	// Hash & Start already priced
@@ -248,10 +254,10 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Roll-ups
 	// ----------------------------------------------------------------------
-	NewAggregator:     15_000,
-	SubmitBatch:       10_000,
-	SubmitFraudProof:  30_000,
-	FinalizeBatch:     10_000,
+	NewAggregator:    15_000,
+	SubmitBatch:      10_000,
+	SubmitFraudProof: 30_000,
+	FinalizeBatch:    10_000,
 
 	// ----------------------------------------------------------------------
 	// Security / Cryptography
@@ -267,48 +273,48 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Sharding
 	// ----------------------------------------------------------------------
-	NewShardCoordinator:20_000,
-	SetLeader:          1_000,
-	Leader:               800,
-	SubmitCrossShard:   15_000,
-	Send:               2_000,
-	PullReceipts:       3_000,
-	Reshard:           30_000,
+	NewShardCoordinator: 20_000,
+	SetLeader:           1_000,
+	Leader:              800,
+	SubmitCrossShard:    15_000,
+	Send:                2_000,
+	PullReceipts:        3_000,
+	Reshard:             30_000,
 	// Broadcast already priced
 
 	// ----------------------------------------------------------------------
 	// Side-chains
 	// ----------------------------------------------------------------------
-	InitSidechains:   12_000,
-	Sidechains:          600,
-	Register:          5_000,
-	SubmitHeader:      8_000,
-	VerifyWithdraw:    4_000,
-	VerifyAggregateSig:8_000,
-	VerifyMerkleProof: 1_200,
+	InitSidechains:     12_000,
+	Sidechains:         600,
+	Register:           5_000,
+	SubmitHeader:       8_000,
+	VerifyWithdraw:     4_000,
+	VerifyAggregateSig: 8_000,
+	VerifyMerkleProof:  1_200,
 	// Deposit already priced
 
 	// ----------------------------------------------------------------------
 	// State-Channels
 	// ----------------------------------------------------------------------
-	InitStateChannels:      8_000,
-	Channels:                 600,
-	OpenChannel:           10_000,
-	VerifyECDSASignature:   2_000,
-	InitiateClose:          3_000,
-	Challenge:              4_000,
-	Finalize:               5_000,
+	InitStateChannels:    8_000,
+	Channels:             600,
+	OpenChannel:          10_000,
+	VerifyECDSASignature: 2_000,
+	InitiateClose:        3_000,
+	Challenge:            4_000,
+	Finalize:             5_000,
 
 	// ----------------------------------------------------------------------
 	// Storage / Marketplace
 	// ----------------------------------------------------------------------
-	NewStorage:     12_000,
-	CreateListing:   8_000,
-	Exists:            400,
-	OpenDeal:        5_000,
-	Create:          8_000, // generic create (non-AMM/non-contract)
-	CloseDeal:       5_000,
-	Release:         2_000,
+	NewStorage:    12_000,
+	CreateListing: 8_000,
+	Exists:        400,
+	OpenDeal:      5_000,
+	Create:        8_000, // generic create (non-AMM/non-contract)
+	CloseDeal:     5_000,
+	Release:       2_000,
 	// Pin & Retrieve already priced
 
 	// ----------------------------------------------------------------------
@@ -371,30 +377,30 @@ var gasTable = map[Opcode]uint64{
 	// Token Utilities
 	// ----------------------------------------------------------------------
 	ID:              400,
-	Meta:             400,
-	Allowance:        400,
-	Approve:          800,
-	Add:              600,
-	Sub:              600,
-	Get:              400,
-	transfer:       2_100, // lower-case ERC20 compatibility
-	Calculate:        800,
-	RegisterToken:  8_000,
-	NewBalanceTable:5_000,
-	Set:              600,
-	RefundGas:        100,
-	PopUint32:        300,
-	PopAddress:       300,
-	PopUint64:        300,
-	PushBool:         300,
-	Push:             300,
-	Len:              200,
+	Meta:            400,
+	Allowance:       400,
+	Approve:         800,
+	Add:             600,
+	Sub:             600,
+	Get:             400,
+	transfer:        2_100, // lower-case ERC20 compatibility
+	Calculate:       800,
+	RegisterToken:   8_000,
+	NewBalanceTable: 5_000,
+	Set:             600,
+	RefundGas:       100,
+	PopUint32:       300,
+	PopAddress:      300,
+	PopUint64:       300,
+	PushBool:        300,
+	Push:            300,
+	Len:             200,
 
 	// ----------------------------------------------------------------------
 	// Transactions
 	// ----------------------------------------------------------------------
-	VerifySig:   3_500,
-	ValidateTx:  5_000,
+	VerifySig:  3_500,
+	ValidateTx: 5_000,
 	NewTxPool:  12_000,
 	// Sign already priced
 
@@ -404,89 +410,89 @@ var gasTable = map[Opcode]uint64{
 	//  micro-benchmarks – keep in mind that **all** word-size-dependent
 	//  corrections are applied at run-time by the VM).
 	// ----------------------------------------------------------------------
-	Short:              5,
-	BytesToAddress:     5,
-	Pop:                2,
-	opADD:              3,
-	opMUL:              5,
-	opSUB:              3,
-	OpDIV:              5,
-	opSDIV:             5,
-	opMOD:              5,
-	opSMOD:             5,
-	opADDMOD:           8,
-	opMULMOD:           8,
-	opEXP:             10,
-	opSIGNEXTEND:       5,
-	opLT:               3,
-	opGT:               3,
-	opSLT:              3,
-	opSGT:              3,
-	opEQ:               3,
-	opISZERO:           3,
-	opAND:              3,
-	opOR:               3,
-	opXOR:              3,
-	opNOT:              3,
-	opBYTE:             3,
-	opSHL:              3,
-	opSHR:              3,
-	opSAR:              3,
+	Short:            5,
+	BytesToAddress:   5,
+	Pop:              2,
+	opADD:            3,
+	opMUL:            5,
+	opSUB:            3,
+	OpDIV:            5,
+	opSDIV:           5,
+	opMOD:            5,
+	opSMOD:           5,
+	opADDMOD:         8,
+	opMULMOD:         8,
+	opEXP:            10,
+	opSIGNEXTEND:     5,
+	opLT:             3,
+	opGT:             3,
+	opSLT:            3,
+	opSGT:            3,
+	opEQ:             3,
+	opISZERO:         3,
+	opAND:            3,
+	opOR:             3,
+	opXOR:            3,
+	opNOT:            3,
+	opBYTE:           3,
+	opSHL:            3,
+	opSHR:            3,
+	opSAR:            3,
 	opECRECOVER:      700,
 	opEXTCODESIZE:    700,
 	opEXTCODECOPY:    700,
 	opEXTCODEHASH:    700,
-	opRETURNDATASIZE:   3,
+	opRETURNDATASIZE: 3,
 	opRETURNDATACOPY: 700,
-	opMLOAD:            3,
-	opMSTORE:           3,
-	opMSTORE8:          3,
-	opCALLDATALOAD:     3,
-	opCALLDATASIZE:     3,
+	opMLOAD:          3,
+	opMSTORE:         3,
+	opMSTORE8:        3,
+	opCALLDATALOAD:   3,
+	opCALLDATASIZE:   3,
 	opCALLDATACOPY:   700,
-	opCODESIZE:         3,
+	opCODESIZE:       3,
 	opCODECOPY:       700,
-	opJUMP:             8,
-	opJUMPI:           10,
-	opPC:               2,
-	opMSIZE:            2,
-	opGAS:              2,
-	opJUMPDEST:         1,
-	opSHA256:          60,
-	opKECCAK256:       30,
+	opJUMP:           8,
+	opJUMPI:          10,
+	opPC:             2,
+	opMSIZE:          2,
+	opGAS:            2,
+	opJUMPDEST:       1,
+	opSHA256:         60,
+	opKECCAK256:      30,
 	opRIPEMD160:      600,
-	opBLAKE2B256:      60,
-	opADDRESS:          2,
-	opCALLER:           2,
-	opORIGIN:           2,
-	opCALLVALUE:        2,
-	opGASPRICE:         2,
-	opNUMBER:           2,
-	opTIMESTAMP:        2,
-	opDIFFICULTY:       2,
-	opGASLIMIT:         2,
-	opCHAINID:          2,
-	opBLOCKHASH:       20,
+	opBLAKE2B256:     60,
+	opADDRESS:        2,
+	opCALLER:         2,
+	opORIGIN:         2,
+	opCALLVALUE:      2,
+	opGASPRICE:       2,
+	opNUMBER:         2,
+	opTIMESTAMP:      2,
+	opDIFFICULTY:     2,
+	opGASLIMIT:       2,
+	opCHAINID:        2,
+	opBLOCKHASH:      20,
 	opBALANCE:        400,
-	opSELFBALANCE:      5,
+	opSELFBALANCE:    5,
 	opLOG0:           375,
 	opLOG1:           750,
-	opLOG2:         1_125,
-	opLOG3:         1_500,
-	opLOG4:         1_875,
-	logN:           2_000,
-	opCREATE:      32_000,
+	opLOG2:           1_125,
+	opLOG3:           1_500,
+	opLOG4:           1_875,
+	logN:             2_000,
+	opCREATE:         32_000,
 	opCALL:           700,
 	opCALLCODE:       700,
 	opDELEGATECALL:   700,
 	opSTATICCALL:     700,
-	opRETURN:           0,
-	opREVERT:           0,
-	opSTOP:             0,
-	opSELFDESTRUCT: 5_000,
+	opRETURN:         0,
+	opREVERT:         0,
+	opSTOP:           0,
+	opSELFDESTRUCT:   5_000,
 
 	// Shared accounting ops
-	TransferVM:  2_100, // explicit VM variant (if separate constant exists)
+	TransferVM: 2_100, // explicit VM variant (if separate constant exists)
 
 	// ----------------------------------------------------------------------
 	// Virtual Machine Internals
@@ -494,28 +500,28 @@ var gasTable = map[Opcode]uint64{
 	BurnVM:            2_100,
 	BurnLP:            2_100,
 	MintLP:            2_100,
-	NewInMemory:         500,
-	CallCode:           700,
-	CallContract:       700,
-	StaticCallVM:       700,
-	GetBalance:         400,
-	GetTokenBalance:    400,
-	SetTokenBalance:    500,
-	GetTokenSupply:     500,
-	SetBalance:         500,
-	DelegateCall:       700,
-	GetToken:           400,
-	NewMemory:          500,
-	Read:                 3,
-	Write:                3,
-	LenVM:                3, // distinguish from token.Len if separate const
-	Call:               700,
-	SelectVM:         1_000,
-	CreateContract:  32_000,
+	NewInMemory:       500,
+	CallCode:          700,
+	CallContract:      700,
+	StaticCallVM:      700,
+	GetBalance:        400,
+	GetTokenBalance:   400,
+	SetTokenBalance:   500,
+	GetTokenSupply:    500,
+	SetBalance:        500,
+	DelegateCall:      700,
+	GetToken:          400,
+	NewMemory:         500,
+	Read:              3,
+	Write:             3,
+	LenVM:             3, // distinguish from token.Len if separate const
+	Call:              700,
+	SelectVM:          1_000,
+	CreateContract:    32_000,
 	AddLog:            375,
 	GetCode:           200,
 	GetCodeHash:       200,
-	MintTokenVM:     2_000,
+	MintTokenVM:       2_000,
 	PrefixIterator:    500,
 	NonceOf:           400,
 	GetState:          400,
@@ -523,26 +529,26 @@ var gasTable = map[Opcode]uint64{
 	HasState:          400,
 	DeleteState:       500,
 	NewGasMeter:       500,
-	SelfDestructVM:  5_000,
-	Remaining:           2,
-	Consume:             3,
-	ExecuteVM:        2_000,
+	SelfDestructVM:    5_000,
+	Remaining:         2,
+	Consume:           3,
+	ExecuteVM:         2_000,
 	NewSuperLightVM:   500,
 	NewLightVM:        800,
-	NewHeavyVM:      1_200,
-	ExecuteSuperLight:1_000,
-	ExecuteLight:    1_500,
-	ExecuteHeavy:    2_000,
+	NewHeavyVM:        1_200,
+	ExecuteSuperLight: 1_000,
+	ExecuteLight:      1_500,
+	ExecuteHeavy:      2_000,
 
 	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
-	NewRandomWallet:      10_000,
-	WalletFromMnemonic:    5_000,
-	NewHDWalletFromSeed:   6_000,
-	PrivateKey:              400,
-	NewAddress:              500,
-	SignTx:                3_000,
+	NewRandomWallet:     10_000,
+	WalletFromMnemonic:  5_000,
+	NewHDWalletFromSeed: 6_000,
+	PrivateKey:          400,
+	NewAddress:          500,
+	SignTx:              3_000,
 }
 
 // GasCost returns the **base** gas cost for a single opcode.  Dynamic portions
