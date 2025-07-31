@@ -27,6 +27,16 @@ import (
 	"time"
 )
 
+const (
+	PUSH Opcode = iota
+	ADD
+	STORE
+	LOAD
+	LOG
+	RET
+
+)
+
 //---------------------------------------------------------------------
 // Minimal state interface + in-memory implementation
 //---------------------------------------------------------------------
