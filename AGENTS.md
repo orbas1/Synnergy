@@ -144,9 +144,9 @@ you progress.
 22. [ ] sharding.go
 23. [ ] sidechain.go
 24. [ ] state_channel.go
-25. [ ] storage.go
-26. [ ] tokens.go
-27. [ ] transactions.go
+25. [x] storage.go
+26. [x] tokens.go
+27. [x] transactions.go
 28. [ ] utility_functions.go
 29. [ ] virtual_machine.go
 30. [ ] wallet.go
