@@ -1,17 +1,116 @@
-# Synnergy Compile Error Checklist
+# Synnergy Development Playbook
 
-This file tracks compile errors between CLI commands and core modules of the Synnergy network. Use it to coordinate fixes and keep progress organized.
+This document outlines the workflow for bringing the Synnergy blockchain to a
+fully operational state. It includes environment setup, error checking
+methodology and a multi‑stage checklist that divides work across twenty‑five
+phases.
+
+## Goals
+
+1. Fix all compile errors across CLI and core modules.
+2. Provide unit tests for each package and ensure `go test ./...` passes.
+3. Build the `synnergy` binary and launch a local node to confirm end‑to‑end
+   functionality.
 
 ## Setup
-1. Run `./setup_synn.sh` to install dependencies and build the CLI.
-2. Work from a clean git state before starting fixes.
+
+1. Execute `./setup_synn.sh` to install Go and project dependencies.
+2. Optionally run `./Synnergy.env.sh` to install extra tools and load variables
+   from `.env`.
+3. Use `go mod tidy` in `synnergy-network` to ensure module requirements are
+   recorded.
+4. Always start from a clean git state before applying fixes.
 
 ## Workflow
-1. Choose the next unchecked file from the checklist below (work on up to **three files at a time**).
-2. Open the file and resolve any compile errors.
-3. Run `go vet ./...` and `go build ./...` to verify.
-4. Mark the file as completed by checking the box in this document.
-5. Commit your changes referencing the files you fixed.
+
+1. Select the next unchecked file from the lists below. Work on **no more than
+   three files at a time** to keep diffs small.
+2. Fix compile and logic issues while keeping commits focused.
+3. Format code with `go fmt`.
+4. Run static analysis using `go vet ./...`.
+5. Build all packages with `go build ./...`.
+6. Execute unit tests using `go test ./...`.
+7. If dependencies are missing, run `go mod tidy` then re‑run the checks.
+8. When all checks pass, mark the file as completed in this document and commit
+   your changes.
+
+## Test File Checks
+
+Unit tests live under `synnergy-network/tests`. After modifying a module,
+run:
+
+```bash
+go test ./...
+```
+
+Use `go vet -tests` for additional static analysis of the tests. Watch for
+race conditions, failing assertions and resource leaks. All tests should pass
+before moving to the next stage.
+
+## Error Checking
+
+For every file ensure the following issues are addressed:
+
+1. **Syntax errors** – detected by `go build`.
+2. **Missing imports or modules** – run `go mod tidy` to update `go.sum`.
+3. **Lint warnings** – `go vet` flags suspicious code or misused formats.
+4. **Formatting** – run `go fmt` to apply standard Go style.
+5. **Unit tests** – `go test` must succeed.
+
+Only proceed when all tools report success.
+
+## Blockchain Usage
+
+Once the project builds, you can start a local node from the
+`synnergy-network` directory:
+
+```bash
+go build -o synnergy ./cmd/synnergy
+./synnergy ledger init --path ./ledger.db
+./synnergy network start
+```
+
+In another terminal create a wallet and mint tokens:
+
+```bash
+./synnergy wallet create --out wallet.json
+./synnergy coin mint $(jq -r .address wallet.json) 1000
+```
+
+See `cmd/cli/cli_guide.md` for further commands like contract deployment or
+transferring tokens.
+
+## 25 Stage Plan
+
+The tasks below break file fixes into twenty‑five stages. Update this list as
+you progress.
+
+1. **Stage 1** – CLI: `ai.go`, `amm.go`, `authority_node.go`.
+2. **Stage 2** – CLI: `charity_pool.go`, `coin.go`, `compliance.go`.
+3. **Stage 3** – CLI: `consensus.go`, `contracts.go`, `cross_chain.go`.
+4. **Stage 4** – CLI: `data.go`, `fault_tolerance.go`, `governance.go`.
+5. **Stage 5** – CLI: `green_technology.go`, `index.go`, `ledger.go`.
+6. **Stage 6** – CLI: `liquidity_pools.go`, `loanpool.go`, `network.go`.
+7. **Stage 7** – CLI: `replication.go`, `rollups.go`, `security.go`.
+8. **Stage 8** – CLI: `sharding.go`, `sidechain.go`, `state_channel.go`.
+9. **Stage 9** – CLI: `storage.go`, `tokens.go`, `transactions.go`.
+10. **Stage 10** – CLI: `utility_functions.go`, `virtual_machine.go`, `wallet.go`.
+11. **Stage 11** – Module: `ai.go`, `amm.go`, `authority_nodes.go`.
+12. **Stage 12** – Module: `charity_pool.go`, `coin.go`, `common_structs.go`.
+13. **Stage 13** – Module: `compliance.go`, `consensus.go`, `contracts.go`.
+14. **Stage 14** – Module: `contracts_opcodes.go`, `cross_chain.go`, `data.go`.
+15. **Stage 15** – Module: `fault_tolerance.go`, `gas_table.go`, `governance.go`.
+16. **Stage 16** – Module: `green_technology.go`, `ledger.go`, `ledger_test.go`.
+17. **Stage 17** – Module: `liquidity_pools.go`, `loanpool.go`, `network.go`.
+18. **Stage 18** – Module: `opcode_dispatcher.go`, `replication.go`, `rollups.go`.
+19. **Stage 19** – Module: `security.go`, `sharding.go`, `sidechains.go`.
+20. **Stage 20** – Module: `state_channel.go`, `storage.go`, `tokens.go`.
+21. **Stage 21** – Module: `transactions.go`, `utility_functions.go`,
+    `virtual_machine.go`.
+22. **Stage 22** – Module: `wallet.go` and review all preceding fixes.
+23. **Stage 23** – Run integration tests across CLI packages.
+24. **Stage 24** – Launch a local network and verify node start up.
+25. **Stage 25** – Final pass through documentation and ensure all tests pass.
 
 ## CLI Files
 1. [ ] ai.go
@@ -82,7 +181,7 @@ This file tracks compile errors between CLI commands and core modules of the Syn
 34. [ ] wallet.go
 
 ## Guidance
-- Always tackle files in numerical order. Start with the lowest numbered unchecked file and address compile errors.
-- Work on at most three files before committing your changes.
-- After verifying builds succeed, mark the corresponding boxes here.
-- Reference `setup_synn.sh` whenever setting up a new environment.
+- Always work through the stages in order.
+- Only modify up to three files before committing.
+- Mark checkboxes once builds and tests succeed.
+- Refer to `setup_synn.sh` whenever setting up a new environment.
