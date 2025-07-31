@@ -328,7 +328,7 @@ func (rm *RecoveryManager) Restore(path string) error {
 	if err := json.Unmarshal(data, &snap); err != nil {
 		return err
 	}
-	*rm.ledger = snap
+	rm.ledger = &snap
 	return nil
 }
 
