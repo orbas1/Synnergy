@@ -77,4 +77,5 @@ responsibilities and dependencies of that module.
 - **wallet.go** – HD wallet implementation with mnemonic generation and signing
   utilities.
 
+
 This list is intentionally brief.  For detailed behaviour, refer to the inline documentation and unit tests located in `synnergy-network/tests`.
