@@ -129,9 +129,9 @@ you progress.
 7. [ ] consensus.go
 8. [ ] contracts.go
 9. [ ] cross_chain.go
-10. [ ] data.go
-11. [ ] fault_tolerance.go
-12. [ ] governance.go
+10. [x] data.go
+11. [x] fault_tolerance.go
+12. [x] governance.go
 13. [x] green_technology.go
 14. [x] index.go
 15. [x] ledger.go
