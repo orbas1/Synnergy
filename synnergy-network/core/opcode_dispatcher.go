@@ -229,6 +229,12 @@ var catalogue = []struct {
 	{"Ping", 0x0B0006},
 	{"SendPing", 0x0B0007},
 	{"AwaitPong", 0x0B0008},
+	{"BackupSnapshot", 0x0B0009},
+	{"RestoreSnapshot", 0x0B000A},
+	{"VerifyBackup", 0x0B000B},
+	{"FailoverNode", 0x0B000C},
+	{"PredictFailure", 0x0B000D},
+	{"AdjustResources", 0x0B000E},
 
 	// Governance (0x0C)
 	{"UpdateParam", 0x0C0001},

@@ -167,6 +167,12 @@ var gasTable = map[Opcode]uint64{
 	Ping:             300,
 	SendPing:         300,
 	AwaitPong:        300,
+	BackupSnapshot:   10_000,
+	RestoreSnapshot:  12_000,
+	VerifyBackup:     6_000,
+	FailoverNode:     8_000,
+	PredictFailure:   1_000,
+	AdjustResources:  1_500,
 
 	// ----------------------------------------------------------------------
 	// Governance
