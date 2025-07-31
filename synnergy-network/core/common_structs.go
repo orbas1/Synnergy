@@ -365,7 +365,6 @@ type Ledger struct {
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
-	logs             []*Log
 }
 
 //---------------------------------------------------------------------
@@ -813,7 +812,6 @@ func (ctx *Context) Gas(amount uint64) error {
 	ctx.GasLimit -= amount
 	return nil
 }
-
 
 type Registry struct {
 	mu      sync.RWMutex
