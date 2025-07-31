@@ -17,19 +17,20 @@
 package cli
 
 import (
-    "context"
-    "encoding/json"
-    "errors"
-    "fmt"
-    "strconv"
-    "strings"
-    "time"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+	"time"
 
-    "github.com/spf13/cobra"
-    "github.com/spf13/viper"
-    "go.uber.org/zap"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 
-    core "synnergy-network/core" // adjust to your go.mod root
+	core "github.com/synnergy-network/core" // adjust to your go.mod root
+)
 
 
 //---------------------------------------------------------------------
