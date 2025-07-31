@@ -33,6 +33,7 @@ const DefaultGasCost uint64 = 100_000
 // gasTable maps every Opcode to its base gas cost.
 // Gas is charged **before** execution; refunds (e.g. for SELFDESTRUCT) are
 // handled by the VM’s gas-meter at commit-time.
+
 // gasNames holds the gas cost associated with each opcode name. During init()
 // these names are resolved to their Opcode values using the catalogue defined
 // in opcode_dispatcher.go.

@@ -9,6 +9,7 @@ package core
 
 import (
 	"context"
+	"fmt"
 	"math/big"
 	"net"
 	"net/http"
@@ -795,9 +796,23 @@ type Context struct {
 	State       StateRW
 }
 
-func (ctx *Context) StackRef() *Stack { return ctx.Stack }
+// Call delegates to the underlying state to invoke a contract or high level
+// function by name. This is a stub implementation used during early
+// development and simply returns an error until the VM wiring is completed.
+func (ctx *Context) Call(name string) error {
+	return fmt.Errorf("call %s not implemented", name)
+}
 
-func (ctx *Context) Origin() Address { return ctx.TxOrigin }
+// Gas deducts the given amount from the remaining gas limit and returns an
+// error if insufficient gas is available.
+func (ctx *Context) Gas(amount uint64) error {
+	if ctx.GasLimit < amount {
+		return fmt.Errorf("out of gas")
+	}
+	ctx.GasLimit -= amount
+	return nil
+}
+
 
 type Registry struct {
 	mu      sync.RWMutex

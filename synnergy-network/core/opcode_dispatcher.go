@@ -51,7 +51,8 @@ type OpContext interface {
 type Opcode uint32
 
 // OpcodeFunc is the concrete implementation invoked by the VM.
-type OpcodeFunc func(ctx OpContext) error
+type OpcodeFunc func(ctx *Context) error
+
 
 // opcodeTable holds the runtime mapping (populated once in init()).
 var (
@@ -72,7 +73,7 @@ func Register(op Opcode, fn OpcodeFunc) {
 }
 
 // Dispatch is called by the VM executor for every instruction.
-func Dispatch(ctx OpContext, op Opcode) error {
+func Dispatch(ctx *Context, op Opcode) error {
 	mu.RLock()
 	fn, ok := opcodeTable[op]
 	mu.RUnlock()
@@ -89,7 +90,7 @@ func Dispatch(ctx OpContext, op Opcode) error {
 
 // helper returns a closure that delegates the call to Context.Call(<name>).
 func wrap(name string) OpcodeFunc {
-	return func(ctx OpContext) error { return ctx.Call(name) }
+	return func(ctx *Context) error { return ctx.Call(name) }
 }
 
 // ────────────────────────────────────────────────────────────────────────────

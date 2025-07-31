@@ -440,19 +440,11 @@ func init() {
 //---------------------------------------------------------------------
 
 func registerTokenOpcodes() {
-	Register(0xB0, func(rawCtx OpContext) error {
-		ctx, ok := rawCtx.(interface {
-			StackRef() *Stack
-			Origin() Address
-			RefundGas(uint64)
-		})
-		if !ok {
-			return errors.New("invalid context type")
-		}
-		id := TokenID(ctx.StackRef().PopUint32())
-		to := ctx.StackRef().PopAddress()
-		amt := ctx.StackRef().PopUint64()
-		from := ctx.Origin()
+	Register(0xB0, func(ctx *Context) error {
+		id := TokenID(ctx.Stack.PopUint32())
+		to := ctx.Stack.PopAddress()
+		amt := ctx.Stack.PopUint64()
+		from := ctx.TxOrigin
 		tok, ok := GetToken(id)
 		if !ok {
 			return ErrInvalidAsset
