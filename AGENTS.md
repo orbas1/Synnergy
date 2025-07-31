@@ -97,7 +97,7 @@ you progress.
 3. **Stage 3** – CLI: `consensus.go`, `contracts.go`, `cross_chain.go`.
 4. **Stage 4** – CLI: `data.go`, `fault_tolerance.go`, `governance.go`.
 5. **Stage 5** – CLI: `green_technology.go`, `index.go`, `ledger.go`.
-6. **Stage 6** – CLI: `liquidity_pools.go`, `loanpool.go`, `network.go`.
+6. **Stage 6** – CLI: `liquidity_pools.go`, `loanpool.go`, `network.go`. ✅
 7. **Stage 7** – CLI: `replication.go`, `rollups.go`, `security.go`.
 8. **Stage 8** – CLI: `sharding.go`, `sidechain.go`, `state_channel.go`.
 9. **Stage 9** – CLI: `storage.go`, `tokens.go`, `transactions.go`.
@@ -150,9 +150,9 @@ you progress.
 13. [x] green_technology.go
 14. [x] index.go
 15. [x] ledger.go
-16. [ ] liquidity_pools.go
-17. [ ] loanpool.go
-18. [ ] network.go
+16. [x] liquidity_pools.go
+17. [x] loanpool.go
+18. [x] network.go
 19. [x] replication.go
 20. [x] rollups.go
 21. [x] security.go
