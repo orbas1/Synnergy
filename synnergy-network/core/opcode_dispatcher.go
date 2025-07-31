@@ -321,6 +321,10 @@ var catalogue = []struct {
 	{"SubmitBatch", 0x130002},
 	{"SubmitFraudProof", 0x130003},
 	{"FinalizeBatch", 0x130004},
+	{"BatchHeader", 0x130005},
+	{"BatchState", 0x130006},
+	{"BatchTransactions", 0x130007},
+	{"ListBatches", 0x130008},
 
 	// Security (0x14)
 	{"Security_Sign", 0x140001},

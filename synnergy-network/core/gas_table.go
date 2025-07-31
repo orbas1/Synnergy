@@ -263,10 +263,14 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Roll-ups
 	// ----------------------------------------------------------------------
-	NewAggregator:    15_000,
-	SubmitBatch:      10_000,
-	SubmitFraudProof: 30_000,
-	FinalizeBatch:    10_000,
+	NewAggregator:     15_000,
+	SubmitBatch:       10_000,
+	SubmitFraudProof:  30_000,
+	FinalizeBatch:     10_000,
+	BatchHeader:       500,
+	BatchState:        300,
+	BatchTransactions: 1_000,
+	ListBatches:       2_000,
 
 	// ----------------------------------------------------------------------
 	// Security / Cryptography
