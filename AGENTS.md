@@ -129,18 +129,18 @@ you progress.
 7. [ ] consensus.go
 8. [ ] contracts.go
 9. [ ] cross_chain.go
-10. [ ] data.go
-11. [ ] fault_tolerance.go
-12. [ ] governance.go
-13. [ ] green_technology.go
-14. [ ] index.go
-15. [ ] ledger.go
+10. [x] data.go
+11. [x] fault_tolerance.go
+12. [x] governance.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
 16. [x] liquidity_pools.go
 17. [x] loanpool.go
 18. [x] network.go
-19. [ ] replication.go
-20. [ ] rollups.go
-21. [ ] security.go
+19. [x] replication.go
+20. [x] rollups.go
+21. [x] security.go
 22. [ ] sharding.go
 23. [ ] sidechain.go
 24. [ ] state_channel.go
@@ -175,9 +175,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 19. [ ] liquidity_pools.go
 20. [ ] loanpool.go
 21. [ ] network.go
-22. [ ] opcode_dispatcher.go
-23. [ ] replication.go
-24. [ ] rollups.go
+22. [x] opcode_dispatcher.go
+23. [x] replication.go
+24. [x] rollups.go
 25. [ ] security.go
 26. [ ] sharding.go
 27. [ ] sidechains.go
