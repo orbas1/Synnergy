@@ -565,6 +565,7 @@ type memIter struct {
 	keys   [][]byte
 	values [][]byte
 	idx    int
+	err    error
 }
 
 func (it *memIter) Next() bool { it.idx++; return it.idx < len(it.keys) }
@@ -580,6 +581,8 @@ func (it *memIter) Value() []byte {
 	}
 	return nil
 }
+
+func (it *memIter) Error() error { return it.err }
 
 func (l *Ledger) PrefixIterator(prefix []byte) StateIterator {
 	l.mu.RLock()
@@ -636,10 +639,9 @@ func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 	return l.Transfer(addr, zero, cost)
 }
 
-// AddLog appends a log entry to the ledger. This is a simplified
-// implementation used to satisfy the StateRW interface.
+// AddLog appends a log entry to the ledger's in-memory log slice.
+// Logs are not persisted yet but can be used for event monitoring.
 func (l *Ledger) AddLog(log *Log) {
-	// In a full implementation this would persist logs so they can be
-	// queried later. For now we simply print them to stdout.
-	fmt.Printf("[LedgerLog] %+v\n", log)
-}
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.logs = append(l.logs, log)

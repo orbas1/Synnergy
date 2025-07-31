@@ -332,7 +332,7 @@ func (c *ComplianceEngine) AuditTrail(addr Address) ([]AuditEntry, error) {
 		}
 		out = append(out, e)
 	}
-	return out, it.Error()
+	return out, nil
 }
 
 // MonitorTransaction analyses a transaction for anomalies using the AI engine.

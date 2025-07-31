@@ -188,9 +188,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 13. [x] fault_tolerance.go
 14. [x] gas_table.go
 15. [x] governance.go
-16. [ ] green_technology.go
-17. [ ] ledger.go
-18. [ ] ledger_test.go
+16. [x] green_technology.go
+17. [x] ledger.go
+18. [x] ledger_test.go
 19. [x] liquidity_pools.go
 20. [x] loanpool.go
 21. [x] network.go

@@ -240,7 +240,8 @@ func (as *AuthoritySet) Deregister(addr Address) error {
 	}
 
 	// remove all votes for this candidate
-	prefix := append([]byte("authority:vote:"), hashFromAddress(addr)[:]...)
+	h := hashFromAddress(addr)
+	prefix := append([]byte("authority:vote:"), h[:]...)
 	iter := as.led.PrefixIterator(prefix)
 	for iter.Next() {
 		_ = as.led.DeleteState(iter.Key())
