@@ -22,7 +22,6 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -332,7 +331,7 @@ func (c *ComplianceEngine) AuditTrail(addr Address) ([]AuditEntry, error) {
 		}
 		out = append(out, e)
 	}
-	return out, it.Error()
+	return out, nil
 }
 
 // MonitorTransaction analyses a transaction for anomalies using the AI engine.

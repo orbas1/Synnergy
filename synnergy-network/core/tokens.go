@@ -169,7 +169,7 @@ type BaseToken struct {
 	balances  *BalanceTable
 	allowance sync.Map
 	lock      sync.RWMutex
-	ledger    Ledger
+	ledger    *Ledger
 	gas       GasCalculator
 }
 
@@ -313,7 +313,6 @@ func InitTokens(ledger *Ledger, vm VM, gas GasCalculator) {
 	r := getRegistry()
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	r.ledger = ledger
 	r.vm = vm
 	if ledger.tokens == nil {
 		ledger.tokens = make(map[TokenID]Token)
@@ -441,11 +440,19 @@ func init() {
 //---------------------------------------------------------------------
 
 func registerTokenOpcodes() {
-	Register(0xB0, func(ctx OpContext) error {
-		id := TokenID(ctx.Stack.PopUint32())
-		to := ctx.Stack.PopAddress()
-		amt := ctx.Stack.PopUint64()
-		from := ctx.TxOrigin
+	Register(0xB0, func(rawCtx OpContext) error {
+		ctx, ok := rawCtx.(interface {
+			StackRef() *Stack
+			Origin() Address
+			RefundGas(uint64)
+		})
+		if !ok {
+			return errors.New("invalid context type")
+		}
+		id := TokenID(ctx.StackRef().PopUint32())
+		to := ctx.StackRef().PopAddress()
+		amt := ctx.StackRef().PopUint64()
+		from := ctx.Origin()
 		tok, ok := GetToken(id)
 		if !ok {
 			return ErrInvalidAsset
@@ -453,7 +460,7 @@ func registerTokenOpcodes() {
 		if err := tok.Transfer(from, to, amt); err != nil {
 			return err
 		}
-		ctx.Stack.PushBool(true)
+		ctx.StackRef().PushBool(true)
 		ctx.RefundGas(OpTokenTransfer)
 		return nil
 	})

@@ -315,8 +315,8 @@ func (l *Ledger) GetUTXO(address []byte) []UTXO {
 func (l *Ledger) AddToPool(tx *Transaction) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	l.TxPool[fmt.Sprintf("%x", tx.ID)] = tx
-	logrus.Infof("Added transaction %x to pool", tx.ID)
+	l.TxPool[fmt.Sprintf("%x", tx.ID())] = tx
+	logrus.Infof("Added transaction %x to pool", tx.ID())
 }
 
 // ListPool lists pending transactions.

@@ -794,6 +794,10 @@ type Context struct {
 	State       StateRW
 }
 
+func (ctx *Context) StackRef() *Stack { return ctx.Stack }
+
+func (ctx *Context) Origin() Address { return ctx.TxOrigin }
+
 type Registry struct {
 	mu      sync.RWMutex
 	Entries map[string][]byte
