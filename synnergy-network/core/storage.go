@@ -10,26 +10,21 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
+	"github.com/ipfs/go-cid"
+	mh "github.com/multiformats/go-multihash"
+	logrus "github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
-    logrus "github.com/sirupsen/logrus"
-	"github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"
-	"go.uber.org/zap"
-	"github.com/google/uuid"
-
 )
-
-
 
 // -----------------------------------------------------------------------------
 // LRU on-disk cache implementation
 // -----------------------------------------------------------------------------
-
-
 
 const defaultCacheEntries = 10_000
 
@@ -95,7 +90,6 @@ func (l *diskLRU) get(cid string) ([]byte, bool) {
 // Storage struct
 // -----------------------------------------------------------------------------
 
-
 // NewStorage wires a Storage instance.
 func NewStorage(cfg *StorageConfig, lg *logrus.Logger, led MeteredState) (*Storage, error) {
 	if cfg == nil {
@@ -119,9 +113,6 @@ func NewStorage(cfg *StorageConfig, lg *logrus.Logger, led MeteredState) (*Stora
 	return s, nil
 }
 
-
-
-
 // -----------------------------------------------------------------------------
 // Public API — Pin & Retrieve
 // -----------------------------------------------------------------------------
@@ -134,7 +125,7 @@ func (s *Storage) Pin(ctx context.Context, data []byte, payer Address) (string, 
 		return "", 0, err
 	}
 	c := cid.NewCidV1(cid.Raw, encodedMH)
-    cidStr := c.String() // ← String() gives lower-case Base32-CIDv1
+	cidStr := c.String() // ← String() gives lower-case Base32-CIDv1
 
 	// Already cached?
 	if _, ok := s.cache.get(cidStr); ok {
@@ -183,8 +174,6 @@ func (s *Storage) Pin(ctx context.Context, data []byte, payer Address) (string, 
 	return cidStr, int64(len(data)), nil
 }
 
-
-
 // Retrieve returns data for CID (cache → gateway fallback).
 func (s *Storage) Retrieve(ctx context.Context, cidStr string) ([]byte, error) {
 	if b, ok := s.cache.get(cidStr); ok {
@@ -215,206 +204,273 @@ func (s *Storage) Retrieve(ctx context.Context, cidStr string) ([]byte, error) {
 	return data, nil
 }
 
-
 func (s *Storage) vmPin(data []byte, caller Address) (string, int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), s.cfg.GatewayTimeout)
 	defer cancel()
 	return s.Pin(ctx, data, caller)
 }
 
-
 // StorageListing represents a provider's storage offer
 type StorageListing struct {
-    ID          string           `json:"id"`
-    Provider    Address   `json:"provider"`
-    PricePerGB  uint64           `json:"price_per_gb"`
-    CapacityGB  int              `json:"capacity_gb"`
-    CreatedAt   time.Time        `json:"created_at"`
+	ID         string    `json:"id"`
+	Provider   Address   `json:"provider"`
+	PricePerGB uint64    `json:"price_per_gb"`
+	CapacityGB int       `json:"capacity_gb"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 // StorageDeal represents a client's purchase or rental deal
 type StorageDeal struct {
-    ID          string           `json:"id"`
-    ListingID   string           `json:"listing_id"`
-    Client      Address   `json:"client"`
-    Duration    time.Duration    `json:"duration"`
-    EscrowID    string           `json:"escrow_id"`
-    CreatedAt   time.Time        `json:"created_at"`
-    Closed      bool             `json:"closed"`
-    ClosedAt    *time.Time       `json:"closed_at,omitempty"`
+	ID        string        `json:"id"`
+	ListingID string        `json:"listing_id"`
+	Client    Address       `json:"client"`
+	Duration  time.Duration `json:"duration"`
+	EscrowID  string        `json:"escrow_id"`
+	CreatedAt time.Time     `json:"created_at"`
+	Closed    bool          `json:"closed"`
+	ClosedAt  *time.Time    `json:"closed_at,omitempty"`
 }
 
 // CreateListing registers a new storage offer
 func CreateListing(l *StorageListing) error {
-    logger := zap.L().Sugar()
-    // Validate provider identity
-    if !Exists(l.Provider) {
-        return ErrUnauthorized
-    }
-    if l.ID == "" {
-        l.ID = uuid.New().String()
-    }
-    l.CreatedAt = time.Now().UTC()
-    key := fmt.Sprintf("storage:listing:%s", l.ID)
+	logger := zap.L().Sugar()
+	// Validate provider identity
+	if !Exists(l.Provider) {
+		return ErrUnauthorized
+	}
+	if l.ID == "" {
+		l.ID = uuid.New().String()
+	}
+	l.CreatedAt = time.Now().UTC()
+	key := fmt.Sprintf("storage:listing:%s", l.ID)
 
-    raw, err := json.Marshal(l)
-    if err != nil {
-        logger.Errorf("marshal listing failed: %v", err)
-        return err
-    }
-    if err := CurrentStore().Set([]byte(key), raw); err != nil {
-        logger.Errorf("persist listing failed: %v", err)
-        return err
-    }
-    logger.Infof("Storage listing created: %s", l.ID)
-    return nil
+	raw, err := json.Marshal(l)
+	if err != nil {
+		logger.Errorf("marshal listing failed: %v", err)
+		return err
+	}
+	if err := CurrentStore().Set([]byte(key), raw); err != nil {
+		logger.Errorf("persist listing failed: %v", err)
+		return err
+	}
+	logger.Infof("Storage listing created: %s", l.ID)
+	return nil
 }
 
 func Exists(addr Address) bool {
-    key := []byte(fmt.Sprintf("identity:provider:%x", addr))
-    val, err := CurrentStore().Get(key)
-    return err == nil && val != nil
+	key := []byte(fmt.Sprintf("identity:provider:%x", addr))
+	val, err := CurrentStore().Get(key)
+	return err == nil && val != nil
 }
-
 
 // OpenDeal creates an escrow-backed storage deal
 func OpenDeal(d *StorageDeal) (*Escrow, error) {
-    logger := zap.L().Sugar()
-    // Validate client identity
-    if !Exists(d.Client) {
-        return nil, ErrUnauthorized
-    }
-    // Fetch listing
-    listKey := fmt.Sprintf("storage:listing:%s", d.ListingID)
-    rawList, err := CurrentStore().Get([]byte(listKey))
-    if err != nil {
-        return nil, ErrNotFound
-    }
-    var listing StorageListing
-    if err := json.Unmarshal(rawList, &listing); err != nil {
-        return nil, err
-    }
-    // Compute total price
-    price := listing.PricePerGB * uint64(listing.CapacityGB)
-    // Create escrow: client pays price to provider
-    esc, err := Create(listing.Provider, d.Client, price)
-    if err != nil {
-        logger.Errorf("escrow create failed: %v", err)
-        return nil, err
-    }
-    d.EscrowID = esc.ID
-    if d.ID == "" {
-        d.ID = uuid.New().String()
-    }
-    d.CreatedAt = time.Now().UTC()
-    dealKey := fmt.Sprintf("storage:deal:%s", d.ID)
-    rawDeal, err := json.Marshal(d)
-    if err != nil {
-        logger.Errorf("marshal deal failed: %v", err)
-        return nil, err
-    }
-    if err := CurrentStore().Set([]byte(dealKey), rawDeal); err != nil {
-        logger.Errorf("persist deal failed: %v", err)
-        return nil, err
-    }
-    logger.Infof("Storage deal opened: %s", d.ID)
-    return esc, nil
+	logger := zap.L().Sugar()
+	// Validate client identity
+	if !Exists(d.Client) {
+		return nil, ErrUnauthorized
+	}
+	// Fetch listing
+	listKey := fmt.Sprintf("storage:listing:%s", d.ListingID)
+	rawList, err := CurrentStore().Get([]byte(listKey))
+	if err != nil {
+		return nil, ErrNotFound
+	}
+	var listing StorageListing
+	if err := json.Unmarshal(rawList, &listing); err != nil {
+		return nil, err
+	}
+	// Compute total price
+	price := listing.PricePerGB * uint64(listing.CapacityGB)
+	// Create escrow: client pays price to provider
+	esc, err := Create(listing.Provider, d.Client, price)
+	if err != nil {
+		logger.Errorf("escrow create failed: %v", err)
+		return nil, err
+	}
+	d.EscrowID = esc.ID
+	if d.ID == "" {
+		d.ID = uuid.New().String()
+	}
+	d.CreatedAt = time.Now().UTC()
+	dealKey := fmt.Sprintf("storage:deal:%s", d.ID)
+	rawDeal, err := json.Marshal(d)
+	if err != nil {
+		logger.Errorf("marshal deal failed: %v", err)
+		return nil, err
+	}
+	if err := CurrentStore().Set([]byte(dealKey), rawDeal); err != nil {
+		logger.Errorf("persist deal failed: %v", err)
+		return nil, err
+	}
+	logger.Infof("Storage deal opened: %s", d.ID)
+	return esc, nil
 }
 
 func Create(provider, client Address, amount uint64) (*Escrow, error) {
-    esc := &Escrow{
-        ID:      uuid.New().String(),
-        Buyer:   client,
-        Seller:  provider,
-        Amount:  amount,
-        State:   "funded",
-    }
+	esc := &Escrow{
+		ID:     uuid.New().String(),
+		Buyer:  client,
+		Seller: provider,
+		Amount: amount,
+		State:  "funded",
+	}
 
-    escrowKey := fmt.Sprintf("escrow:%s", esc.ID)
-    data, _ := json.Marshal(esc)
+	escrowKey := fmt.Sprintf("escrow:%s", esc.ID)
+	data, _ := json.Marshal(esc)
 
-    if err := CurrentStore().Set([]byte(escrowKey), data); err != nil {
-        return nil, err
-    }
+	if err := CurrentStore().Set([]byte(escrowKey), data); err != nil {
+		return nil, err
+	}
 
-    // Optionally: transfer funds from client to module escrow account
-    escrowAccount := ModuleAddress("storage_escrow")
-    if err := Transfer(nil, AssetRef{Kind: AssetCoin}, client, escrowAccount, amount); err != nil {
-        return nil, err
-    }
+	// Optionally: transfer funds from client to module escrow account
+	escrowAccount := ModuleAddress("storage_escrow")
+	if err := Transfer(nil, AssetRef{Kind: AssetCoin}, client, escrowAccount, amount); err != nil {
+		return nil, err
+	}
 
-    return esc, nil
+	return esc, nil
 }
-
 
 func CloseDeal(ctx *Context, dealID string) error {
-    logger := zap.L().Sugar()
-    dealKey := fmt.Sprintf("storage:deal:%s", dealID)
-    raw, err := CurrentStore().Get([]byte(dealKey))
-    if err != nil {
-        return ErrNotFound
-    }
+	logger := zap.L().Sugar()
+	dealKey := fmt.Sprintf("storage:deal:%s", dealID)
+	raw, err := CurrentStore().Get([]byte(dealKey))
+	if err != nil {
+		return ErrNotFound
+	}
 
-    var d StorageDeal
-    if err := json.Unmarshal(raw, &d); err != nil {
-        return err
-    }
+	var d StorageDeal
+	if err := json.Unmarshal(raw, &d); err != nil {
+		return err
+	}
 
-    if d.Closed {
-        return ErrInvalidState
-    }
+	if d.Closed {
+		return ErrInvalidState
+	}
 
-    // Release escrow
-    if err := Release(ctx, d.EscrowID); err != nil {
-        logger.Errorf("escrow release failed: %v", err)
-        return err
-    }
+	// Release escrow
+	if err := Release(ctx, d.EscrowID); err != nil {
+		logger.Errorf("escrow release failed: %v", err)
+		return err
+	}
 
-    d.Closed = true
-    now := time.Now().UTC()
-    d.ClosedAt = &now
+	d.Closed = true
+	now := time.Now().UTC()
+	d.ClosedAt = &now
 
-    updated, err := json.Marshal(&d)
-    if err != nil {
-        return err
-    }
+	updated, err := json.Marshal(&d)
+	if err != nil {
+		return err
+	}
 
-    if err := CurrentStore().Set([]byte(dealKey), updated); err != nil {
-        logger.Errorf("persist deal update failed: %v", err)
-        return err
-    }
+	if err := CurrentStore().Set([]byte(dealKey), updated); err != nil {
+		logger.Errorf("persist deal update failed: %v", err)
+		return err
+	}
 
-    logger.Infof("Storage deal closed: %s", dealID)
-    return nil
+	logger.Infof("Storage deal closed: %s", dealID)
+	return nil
 }
 
-
 var (
-    ErrInvalidState   = errors.New("invalid deal state")
+	ErrInvalidState = errors.New("invalid deal state")
 )
 
 func Release(ctx *Context, escrowID string) error {
-    key := fmt.Sprintf("escrow:%s", escrowID)
-    raw, err := CurrentStore().Get([]byte(key))
-    if err != nil || raw == nil {
-        return fmt.Errorf("escrow not found")
-    }
+	key := fmt.Sprintf("escrow:%s", escrowID)
+	raw, err := CurrentStore().Get([]byte(key))
+	if err != nil || raw == nil {
+		return fmt.Errorf("escrow not found")
+	}
 
-    var esc Escrow
-    if err := json.Unmarshal(raw, &esc); err != nil {
-        return err
-    }
+	var esc Escrow
+	if err := json.Unmarshal(raw, &esc); err != nil {
+		return err
+	}
 
-    if esc.State != "funded" {
-        return ErrInvalidState
-    }
+	if esc.State != "funded" {
+		return ErrInvalidState
+	}
 
-    escrowAccount := ModuleAddress("storage_escrow")
-    if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, escrowAccount, esc.Seller, esc.Amount); err != nil {
-        return err
-    }
+	escrowAccount := ModuleAddress("storage_escrow")
+	if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, escrowAccount, esc.Seller, esc.Amount); err != nil {
+		return err
+	}
 
-    esc.State = "released"
-    updated, _ := json.Marshal(esc)
-    return CurrentStore().Set([]byte(key), updated)
+	esc.State = "released"
+	updated, _ := json.Marshal(esc)
+	return CurrentStore().Set([]byte(key), updated)
+}
+
+// GetListing fetches a storage listing by its ID.
+func GetListing(id string) (*StorageListing, error) {
+	key := fmt.Sprintf("storage:listing:%s", id)
+	raw, err := CurrentStore().Get([]byte(key))
+	if err != nil {
+		return nil, ErrNotFound
+	}
+	var l StorageListing
+	if err := json.Unmarshal(raw, &l); err != nil {
+		return nil, err
+	}
+	return &l, nil
+}
+
+// ListListings returns all storage listings. If provider is non-nil,
+// only listings for that provider are included.
+func ListListings(provider *Address) ([]StorageListing, error) {
+	iter := CurrentStore().Iterator([]byte("storage:listing:"), nil)
+	defer iter.Close()
+	var out []StorageListing
+	for iter.Next() {
+		var l StorageListing
+		if err := json.Unmarshal(iter.Value(), &l); err != nil {
+			continue
+		}
+		if provider != nil && l.Provider != *provider {
+			continue
+		}
+		out = append(out, l)
+	}
+	return out, iter.Error()
+}
+
+// GetDeal retrieves a storage deal by ID.
+func GetDeal(id string) (*StorageDeal, error) {
+	key := fmt.Sprintf("storage:deal:%s", id)
+	raw, err := CurrentStore().Get([]byte(key))
+	if err != nil {
+		return nil, ErrNotFound
+	}
+	var d StorageDeal
+	if err := json.Unmarshal(raw, &d); err != nil {
+		return nil, err
+	}
+	return &d, nil
+}
+
+// ListDeals returns storage deals. If client or provider are non-nil the
+// result is filtered accordingly.
+func ListDeals(provider, client *Address) ([]StorageDeal, error) {
+	iter := CurrentStore().Iterator([]byte("storage:deal:"), nil)
+	defer iter.Close()
+	var out []StorageDeal
+	for iter.Next() {
+		var d StorageDeal
+		if err := json.Unmarshal(iter.Value(), &d); err != nil {
+			continue
+		}
+		if client != nil && d.Client != *client {
+			continue
+		}
+		if provider != nil {
+			listing, err := GetListing(d.ListingID)
+			if err != nil || listing.Provider != *provider {
+				continue
+			}
+		}
+		out = append(out, d)
+	}
+	return out, iter.Error()
 }

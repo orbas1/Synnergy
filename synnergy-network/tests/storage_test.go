@@ -30,7 +30,7 @@ func (s *stubLedger) ChargeStorageRent(payer Address, amount int64) error {
 
 // dummy VM for syscall registration
 type dummyVM struct {
-	opcode byte
+	opcode  byte
 	handler interface{}
 }
 
@@ -89,7 +89,10 @@ func TestStorage_Pin_Retrieve(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/v0/add", func(w http.ResponseWriter, r *http.Request) {
 		// respond with matching JSON
-		var meta struct { Hash string; Size string }
+		var meta struct {
+			Hash string
+			Size string
+		}
 		cidStr, _ := func() (string, string) {
 			encodedMH, _ := mh.Sum(data, mh.SHA2_256, -1)
 			c := cid.NewCidV1(cid.Raw, encodedMH)
@@ -170,5 +173,27 @@ func TestRegisterVMOpcode(t *testing.T) {
 	}
 	if dvm.handler == nil {
 		t.Errorf("handler not set")
+	}
+}
+
+// Test listing create and retrieval helpers
+func TestStorage_Listings(t *testing.T) {
+	appStore = &InMemoryStore{data: make(map[string][]byte)}
+	prov := addrWithByte(0x01)
+	_ = appStore.Set([]byte(fmt.Sprintf("identity:provider:%x", prov)), []byte{1})
+
+	listing := &StorageListing{Provider: prov, PricePerGB: 10, CapacityGB: 5}
+	if err := CreateListing(listing); err != nil {
+		t.Fatalf("create listing: %v", err)
+	}
+
+	got, err := GetListing(listing.ID)
+	if err != nil || got.ID != listing.ID {
+		t.Fatalf("get listing failed: %v", err)
+	}
+
+	list, err := ListListings(&prov)
+	if err != nil || len(list) != 1 {
+		t.Fatalf("list listings failed: %v %v", err, list)
 	}
 }
