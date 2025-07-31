@@ -305,7 +305,7 @@ var throttleCmd = &cobra.Command{
 }
 
 // list ------------------------------------------------------------------------
-var listCmd = &cobra.Command{
+var greenListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List certificates for all validators",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -358,8 +358,8 @@ func init() {
 
 	offsetCmd.Flags().String("kg", "", "offset amount in kg CO₂e")
 
-	listCmd.Flags().StringP("format", "f", "table", "output format: table|json")
-	_ = viper.BindPFlag("output.format", listCmd.Flags().Lookup("format"))
+	greenListCmd.Flags().StringP("format", "f", "table", "output format: table|json")
+	_ = viper.BindPFlag("output.format", greenListCmd.Flags().Lookup("format"))
 
 	// Register sub‑commands
 	greenCmd.AddCommand(usageCmd)
@@ -367,7 +367,7 @@ func init() {
 	greenCmd.AddCommand(certifyCmd)
 	greenCmd.AddCommand(certCmd)
 	greenCmd.AddCommand(throttleCmd)
-	greenCmd.AddCommand(listCmd)
+	greenCmd.AddCommand(greenListCmd)
 }
 
 // NewGreenCommand exposes the consolidated green‑tech command tree.

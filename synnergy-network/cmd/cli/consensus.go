@@ -8,7 +8,7 @@ package cli
 // services from the synnergy‑network stack (network, security, txpool, authority).
 //
 // Environment requirements (add these to your .env or orchestration layer):
-//   • LEDGER_PATH           – path to Bolt/Badger ledger DB (shared with coin CLI).
+//   • LEDGER_PATH           – path to Bolt/Badger consensusLedger DB (shared with coin CLI).
 //   • KEYSTORE_PATH         – directory with node.key / validator.key PEM (sec svc).
 //   • P2P_PORT              – TCP port to listen for p2p (default 30333 if unset).
 //   • P2P_BOOTNODES         – comma‑separated multiaddr list of bootnodes.
@@ -45,12 +45,12 @@ import (
 // ──────────────────────────────────────────────────────────────────────────────
 
 var (
-	consensus   *core.SynnergyConsensus
-	consensusMu sync.RWMutex // guards consensus pointer & ctx
-	ctx         context.Context
-	cancelFn    context.CancelFunc
-	ledger      *core.Ledger
-	logger      = logrus.StandardLogger()
+	consensus       *core.SynnergyConsensus
+	consensusMu     sync.RWMutex // guards consensus pointer & ctx
+	ctx             context.Context
+	cancelFn        context.CancelFunc
+	consensusLedger *core.Ledger
+	consensusLogger = logrus.StandardLogger()
 )
 
 // stubSecurity implements core's securityAdapter with no-op methods.
@@ -60,7 +60,7 @@ func (stubSecurity) Sign(_ string, _ []byte) ([]byte, error) { return nil, nil }
 func (stubSecurity) Verify(_, _, _ []byte) bool              { return true }
 
 // initConsensusMiddleware loads configuration, initialises shared services
-// (ledger, p2p, security, txpool, authority) and constructs the consensus
+// (consensusLedger, p2p, security, txpool, authority) and constructs the consensus
 // engine. It is executed once per process via PersistentPreRunE.
 func initConsensusMiddleware(cmd *cobra.Command, _ []string) error {
 	var err error
@@ -77,17 +77,17 @@ func initConsensusMiddleware(cmd *cobra.Command, _ []string) error {
 	if err != nil {
 		return fmt.Errorf("invalid LOG_LEVEL %s: %w", lvlStr, err)
 	}
-	logger.SetLevel(lvl)
+	consensusLogger.SetLevel(lvl)
 
-	// 3. ledger (singleton)
+	// 3. consensusLedger (singleton)
 	lp := os.Getenv("LEDGER_PATH")
 	if lp == "" {
 		return fmt.Errorf("LEDGER_PATH not set")
 	}
-	if ledger == nil {
-		ledger, err = core.OpenLedger(lp)
+	if consensusLedger == nil {
+		consensusLedger, err = core.OpenLedger(lp)
 		if err != nil {
-			return fmt.Errorf("open ledger: %w", err)
+			return fmt.Errorf("open consensusLedger: %w", err)
 		}
 	}
 
@@ -118,15 +118,15 @@ func initConsensusMiddleware(cmd *cobra.Command, _ []string) error {
 	// 5. security (crypto keys & signatures)
 	secSvc := stubSecurity{}
 
-	// 6. transaction pool (bounded‑size mempool driven by ledger state)
-	authSvc := core.NewAuthoritySet(logger, ledger)
-	txPoolSvc := core.NewTxPool(nil, ledger, authSvc, nil, p2pSvc, 0)
+	// 6. transaction pool (bounded‑size mempool driven by consensusLedger state)
+	authSvc := core.NewAuthoritySet(consensusLogger, consensusLedger)
+	txPoolSvc := core.NewTxPool(nil, consensusLedger, authSvc, nil, p2pSvc, 0)
 
 	// 7. authority (staking / roles)
 	// authority service already created above
 
 	// 8. create consensus
-	cns, err := core.NewConsensus(logger, ledger, p2pSvc, secSvc, txPoolSvc, authSvc)
+	cns, err := core.NewConsensus(consensusLogger, consensusLedger, p2pSvc, secSvc, txPoolSvc, authSvc)
 	if err != nil {
 		return fmt.Errorf("new consensus: %w", err)
 	}
@@ -194,8 +194,8 @@ func infoConsensus(cmd *cobra.Command, _ []string) error {
 	running := ctx != nil
 	consensusMu.RUnlock()
 
-	lastBlk := ledger.LastBlockHeight()
-	lastSub := ledger.LastSubBlockHeight()
+	lastBlk := consensusLedger.LastBlockHeight()
+	lastSub := consensusLedger.LastSubBlockHeight()
 
 	fmt.Fprintf(cmd.OutOrStdout(), "running: %v\nsub‑block height: %d\nblock height:    %d\n", running, lastSub, lastBlk)
 	return nil
@@ -211,21 +211,21 @@ var consensusCmd = &cobra.Command{
 	PersistentPreRunE: initConsensusMiddleware,
 }
 
-var startCmd = &cobra.Command{
+var consensusStartCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Launch consensus loops (non‑blocking)",
 	Args:  cobra.NoArgs,
 	RunE:  startConsensus,
 }
 
-var stopCmd = &cobra.Command{
+var consensusStopCmd = &cobra.Command{
 	Use:   "stop",
 	Short: "Gracefully stop consensus loops",
 	Args:  cobra.NoArgs,
 	RunE:  stopConsensus,
 }
 
-var infoCmd = &cobra.Command{
+var consensusInfoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Show consensus height & running status",
 	Args:  cobra.NoArgs,
@@ -327,9 +327,9 @@ var getWeightCfgCmd = &cobra.Command{
 }
 
 func init() {
-	consensusCmd.AddCommand(startCmd)
-	consensusCmd.AddCommand(stopCmd)
-	consensusCmd.AddCommand(infoCmd)
+	consensusCmd.AddCommand(consensusStartCmd)
+	consensusCmd.AddCommand(consensusStopCmd)
+	consensusCmd.AddCommand(consensusInfoCmd)
 	consensusCmd.AddCommand(weightsCmd)
 	consensusCmd.AddCommand(thresholdCmd)
 	consensusCmd.AddCommand(setWeightCfgCmd)

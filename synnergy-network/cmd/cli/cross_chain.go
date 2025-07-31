@@ -94,7 +94,7 @@ var xchainCmd = &cobra.Command{
 }
 
 // register -------------------------------------------------------------------
-var registerCmd = &cobra.Command{
+var xchainRegisterCmd = &cobra.Command{
 	Use:   "register <source_chain> <target_chain> <relayer_addr>",
 	Short: "Register a new bridge configuration (whitelisted relayers only)",
 	Args:  cobra.ExactArgs(3),
@@ -113,7 +113,7 @@ var registerCmd = &cobra.Command{
 }
 
 // list -----------------------------------------------------------------------
-var listCmd = &cobra.Command{
+var xchainListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all registered bridges",
 	Args:  cobra.NoArgs,
@@ -130,7 +130,7 @@ var listCmd = &cobra.Command{
 }
 
 // get ------------------------------------------------------------------------
-var getCmd = &cobra.Command{
+var xchainGetCmd = &cobra.Command{
 	Use:   "get <bridge_id>",
 	Short: "Retrieve a bridge configuration by ID",
 	Args:  cobra.ExactArgs(1),
@@ -186,9 +186,9 @@ var revokeCmd = &cobra.Command{
 //---------------------------------------------------------------------
 
 func init() {
-	xchainCmd.AddCommand(registerCmd)
-	xchainCmd.AddCommand(listCmd)
-	xchainCmd.AddCommand(getCmd)
+	xchainCmd.AddCommand(xchainRegisterCmd)
+	xchainCmd.AddCommand(xchainListCmd)
+	xchainCmd.AddCommand(xchainGetCmd)
 	xchainCmd.AddCommand(authorizeCmd)
 	xchainCmd.AddCommand(revokeCmd)
 }

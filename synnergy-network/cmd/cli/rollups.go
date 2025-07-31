@@ -157,7 +157,7 @@ func infoRPC(ctx context.Context, batchID uint64) (*core.BatchHeader, core.Batch
 	return &resp.Header, resp.State, nil
 }
 
-func listRPC(ctx context.Context, limit int) ([]struct {
+func rollupsListRPC(ctx context.Context, limit int) ([]struct {
 	Header core.BatchHeader `json:"header"`
 	State  core.BatchState  `json:"state"`
 }, error) {
@@ -222,7 +222,7 @@ var rollCmd = &cobra.Command{
 }
 
 // submit ----------------------------------------------------------------------
-var submitCmd = &cobra.Command{
+var rollupsSubmitCmd = &cobra.Command{
 	Use:   "submit",
 	Short: "Submit a new batch (reads tx hashes from flags or stdin)",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -279,7 +279,7 @@ func readHashes(r io.Reader) ([][]byte, error) {
 }
 
 // challenge -------------------------------------------------------------------
-var challengeCmd = &cobra.Command{
+var rollupsChallengeCmd = &cobra.Command{
 	Use:   "challenge [batchID] [txIdx] [proof‑hex…]",
 	Short: "Submit a fraud proof for a batch",
 	Args:  cobra.MinimumNArgs(3),
@@ -307,7 +307,7 @@ var challengeCmd = &cobra.Command{
 }
 
 // finalize --------------------------------------------------------------------
-var finalizeCmd = &cobra.Command{
+var rollupsFinalizeCmd = &cobra.Command{
 	Use:   "finalize [batchID]",
 	Short: "Finalize (or revert) a batch after challenge period",
 	Args:  cobra.ExactArgs(1),
@@ -323,7 +323,7 @@ var finalizeCmd = &cobra.Command{
 }
 
 // info ------------------------------------------------------------------------
-var infoCmd = &cobra.Command{
+var rollupsInfoCmd = &cobra.Command{
 	Use:   "info [batchID]",
 	Short: "Display batch header & state",
 	Args:  cobra.ExactArgs(1),
@@ -348,7 +348,7 @@ var infoCmd = &cobra.Command{
 }
 
 // list ------------------------------------------------------------------------
-var listCmd = &cobra.Command{
+var rollupsListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List recent batches",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -356,7 +356,7 @@ var listCmd = &cobra.Command{
 		format := viper.GetString("output.format")
 		ctx, cancel := context.WithTimeout(cmd.Context(), 3*time.Second)
 		defer cancel()
-		list, err := listRPC(ctx, limit)
+		list, err := rollupsListRPC(ctx, limit)
 		if err != nil {
 			return err
 		}
@@ -421,20 +421,20 @@ func initRollConfig() {
 }
 
 func init() {
-	submitCmd.Flags().String("pre-root", "", "pre‑state root hex (optional)")
-	submitCmd.Flags().String("txs", "", "comma‑separated list of tx hashes (hex32); omit to read from stdin")
-	submitCmd.Flags().String("submitter", "", "submitter address hex")
+	rollupsSubmitCmd.Flags().String("pre-root", "", "pre‑state root hex (optional)")
+	rollupsSubmitCmd.Flags().String("txs", "", "comma‑separated list of tx hashes (hex32); omit to read from stdin")
+	rollupsSubmitCmd.Flags().String("submitter", "", "submitter address hex")
 
-	listCmd.Flags().Int("limit", 10, "max batches to list")
-	listCmd.Flags().StringP("format", "f", "table", "output format: table|json")
-	_ = viper.BindPFlag("output.format", listCmd.Flags().Lookup("format"))
+	rollupsListCmd.Flags().Int("limit", 10, "max batches to list")
+	rollupsListCmd.Flags().StringP("format", "f", "table", "output format: table|json")
+	_ = viper.BindPFlag("output.format", rollupsListCmd.Flags().Lookup("format"))
 
 	// Register sub‑commands
-	rollCmd.AddCommand(submitCmd)
-	rollCmd.AddCommand(challengeCmd)
-	rollCmd.AddCommand(finalizeCmd)
-	rollCmd.AddCommand(infoCmd)
-	rollCmd.AddCommand(listCmd)
+	rollCmd.AddCommand(rollupsSubmitCmd)
+	rollCmd.AddCommand(rollupsChallengeCmd)
+	rollCmd.AddCommand(rollupsFinalizeCmd)
+	rollCmd.AddCommand(rollupsInfoCmd)
+	rollCmd.AddCommand(rollupsListCmd)
 	rollCmd.AddCommand(txsCmd)
 }
 

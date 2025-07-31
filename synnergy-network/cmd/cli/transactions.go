@@ -5,7 +5,7 @@ package cli
 //
 // The CLI mirrors the structure of other modules (coin, consensus):
 //   • Primary command objects declared first for quick scanning.
-//   • Shared middleware initialises required services once (ledger, p2p, keys,
+//   • Shared middleware initialises required services once (txLedger, p2p, keys,
 //     authority, txpool, gas‑calculator).
 //   • Controllers implement the business logic for each route.
 //   • All routes are consolidated at the bottom and exported as `TransactionsCmd`.
@@ -53,8 +53,8 @@ import (
 var (
 	txPoolSvc *txpool.TxPool
 	secSvc    *security.Service
-	logger    = logrus.StandardLogger()
-	ledger    *core.Ledger
+	txLogger  = logrus.StandardLogger()
+	txLedger  *core.Ledger
 
 	// protects one‑time init within PersistentPreRunE
 	initOnce sync.Once
@@ -76,7 +76,7 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 			retErr = fmt.Errorf("invalid LOG_LEVEL: %w", err)
 			return
 		}
-		logger.SetLevel(lvl)
+		txLogger.SetLevel(lvl)
 
 		// 3. Ledger
 		lp := os.Getenv("LEDGER_PATH")
@@ -84,9 +84,9 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 			retErr = fmt.Errorf("LEDGER_PATH not set")
 			return
 		}
-		ledger, err = core.OpenLedger(lp)
+		txLedger, err = core.OpenLedger(lp)
 		if err != nil {
-			retErr = fmt.Errorf("open ledger: %w", err)
+			retErr = fmt.Errorf("open txLedger: %w", err)
 			return
 		}
 
@@ -98,7 +98,7 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 		p2pSvc, err := network.NewService(network.Config{
 			ListenAddr: fmt.Sprintf(":%s", port),
 			Bootnodes:  strings.Split(os.Getenv("P2P_BOOTNODES"), ","),
-			Logger:     logger,
+			Logger:     txLogger,
 		})
 		if err != nil {
 			retErr = fmt.Errorf("init p2p: %w", err)
@@ -123,7 +123,7 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 			retErr = fmt.Errorf("AUTH_DB_PATH not set")
 			return
 		}
-		authSvc, err := authority.New(authority.Config{DBPath: authDB, Ledger: ledger})
+		authSvc, err := authority.New(authority.Config{DBPath: authDB, Ledger: txLedger})
 		if err != nil {
 			retErr = fmt.Errorf("init authority: %w", err)
 			return
@@ -134,12 +134,12 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 
 		// 8. TxPool
 		txPoolSvc = txpool.New(txpool.Config{
-			Ledger:      ledger,
+			Ledger:      txLedger,
 			Authority:   authSvc,
 			GasCalc:     gasCalc,
 			Broadcaster: p2pSvc,
 			MaxPool:     50_000,
-			Logger:      logger,
+			Logger:      txLogger,
 		})
 
 		// background processor
@@ -152,7 +152,7 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 // Controller helpers
 // ──────────────────────────────────────────────────────────────────────────────
 
-type createFlags struct {
+type txCreateFlags struct {
 	to       string
 	value    uint64
 	gasLimit uint64
@@ -163,8 +163,8 @@ type createFlags struct {
 	output   string
 }
 
-func handleCreate(cmd *cobra.Command, _ []string) error {
-	flags := cmd.Context().Value("flags").(createFlags)
+func txHandleCreate(cmd *cobra.Command, _ []string) error {
+	flags := cmd.Context().Value("flags").(txCreateFlags)
 
 	var toAddr core.Address
 	if flags.to != "" {
@@ -216,14 +216,14 @@ func handleCreate(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-type signFlags struct {
+type txSignFlags struct {
 	input  string
 	output string
 	key    string
 }
 
-func handleSign(cmd *cobra.Command, _ []string) error {
-	flags := cmd.Context().Value("sflags").(signFlags)
+func txHandleSign(cmd *cobra.Command, _ []string) error {
+	flags := cmd.Context().Value("sflags").(txSignFlags)
 
 	raw, err := ioutil.ReadFile(flags.input)
 	if err != nil {
@@ -317,13 +317,13 @@ var txCmd = &cobra.Command{
 }
 
 // create
-var createCmd = &cobra.Command{
+var txCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Craft an unsigned transaction JSON",
 	Args:  cobra.NoArgs,
-	RunE:  handleCreate,
+	RunE:  txHandleCreate,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		cf := createFlags{}
+		cf := txCreateFlags{}
 		cf.to, _ = cmd.Flags().GetString("to")
 		cf.value, _ = cmd.Flags().GetUint64("value")
 		cf.gasLimit, _ = cmd.Flags().GetUint64("gas")
@@ -339,13 +339,13 @@ var createCmd = &cobra.Command{
 }
 
 // sign
-var signCmd = &cobra.Command{
+var txSignCmd = &cobra.Command{
 	Use:   "sign",
 	Short: "Sign a JSON transaction with a private key from keystore",
 	Args:  cobra.NoArgs,
-	RunE:  handleSign,
+	RunE:  txHandleSign,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		sf := signFlags{}
+		sf := txSignFlags{}
 		sf.input, _ = cmd.Flags().GetString("in")
 		sf.output, _ = cmd.Flags().GetString("out")
 		sf.key, _ = cmd.Flags().GetString("key")
@@ -356,7 +356,7 @@ var signCmd = &cobra.Command{
 }
 
 // verify
-var verifyCmd = &cobra.Command{
+var txVerifyCmd = &cobra.Command{
 	Use:   "verify",
 	Short: "Verify a signed transaction JSON",
 	Args:  cobra.NoArgs,
@@ -371,7 +371,7 @@ var verifyCmd = &cobra.Command{
 }
 
 // submit
-var submitCmd = &cobra.Command{
+var txSubmitCmd = &cobra.Command{
 	Use:   "submit",
 	Short: "Add a signed transaction to the mem‑pool & broadcast",
 	Args:  cobra.NoArgs,
@@ -386,7 +386,7 @@ var submitCmd = &cobra.Command{
 }
 
 // pool
-var poolCmd = &cobra.Command{
+var txPoolCmd = &cobra.Command{
 	Use:   "pool",
 	Short: "List pending pool transaction hashes",
 	Args:  cobra.NoArgs,
@@ -395,35 +395,35 @@ var poolCmd = &cobra.Command{
 
 func init() {
 	// create flags
-	createCmd.Flags().String("to", "", "hex recipient address (0x…)")
-	createCmd.Flags().Uint64("value", 0, "value in wei")
-	createCmd.Flags().Uint64("gas", 21_000, "gas limit")
-	createCmd.Flags().Uint64("price", 1, "gas price in wei")
-	createCmd.Flags().Uint64("nonce", 0, "transaction nonce")
-	createCmd.Flags().String("payload", "", "optional input data (hex/string)")
-	createCmd.Flags().String("type", "payment", "payment|call|reversal")
-	createCmd.Flags().String("out", "", "output file path (defaults to stdout)")
+	txCreateCmd.Flags().String("to", "", "hex recipient address (0x…)")
+	txCreateCmd.Flags().Uint64("value", 0, "value in wei")
+	txCreateCmd.Flags().Uint64("gas", 21_000, "gas limit")
+	txCreateCmd.Flags().Uint64("price", 1, "gas price in wei")
+	txCreateCmd.Flags().Uint64("nonce", 0, "transaction nonce")
+	txCreateCmd.Flags().String("payload", "", "optional input data (hex/string)")
+	txCreateCmd.Flags().String("type", "payment", "payment|call|reversal")
+	txCreateCmd.Flags().String("out", "", "output file path (defaults to stdout)")
 
 	// sign flags
-	signCmd.Flags().String("in", "", "input JSON file")
-	signCmd.MarkFlagRequired("in")
-	signCmd.Flags().String("out", "", "output file (defaults stdout)")
-	signCmd.Flags().String("key", "node", "keystore key alias")
+	txSignCmd.Flags().String("in", "", "input JSON file")
+	txSignCmd.MarkFlagRequired("in")
+	txSignCmd.Flags().String("out", "", "output file (defaults stdout)")
+	txSignCmd.Flags().String("key", "node", "keystore key alias")
 
 	// verify
-	verifyCmd.Flags().String("in", "", "input JSON file")
-	verifyCmd.MarkFlagRequired("in")
+	txVerifyCmd.Flags().String("in", "", "input JSON file")
+	txVerifyCmd.MarkFlagRequired("in")
 
 	// submit
-	submitCmd.Flags().String("in", "", "signed JSON file")
-	submitCmd.MarkFlagRequired("in")
+	txSubmitCmd.Flags().String("in", "", "signed JSON file")
+	txSubmitCmd.MarkFlagRequired("in")
 
 	// assemble tree
-	txCmd.AddCommand(createCmd)
-	txCmd.AddCommand(signCmd)
-	txCmd.AddCommand(verifyCmd)
-	txCmd.AddCommand(submitCmd)
-	txCmd.AddCommand(poolCmd)
+	txCmd.AddCommand(txCreateCmd)
+	txCmd.AddCommand(txSignCmd)
+	txCmd.AddCommand(txVerifyCmd)
+	txCmd.AddCommand(txSubmitCmd)
+	txCmd.AddCommand(txPoolCmd)
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
