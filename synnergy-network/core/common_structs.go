@@ -363,6 +363,7 @@ type Ledger struct {
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
+	logs             []*Log
 }
 
 //---------------------------------------------------------------------
@@ -793,6 +794,10 @@ type Context struct {
 	Memory      *Memory
 	State       StateRW
 }
+
+func (ctx *Context) StackRef() *Stack { return ctx.Stack }
+
+func (ctx *Context) Origin() Address { return ctx.TxOrigin }
 
 type Registry struct {
 	mu      sync.RWMutex
