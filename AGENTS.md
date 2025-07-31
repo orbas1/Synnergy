@@ -132,9 +132,9 @@ you progress.
 10. [ ] data.go
 11. [ ] fault_tolerance.go
 12. [ ] governance.go
-13. [ ] green_technology.go
-14. [ ] index.go
-15. [ ] ledger.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
 16. [ ] liquidity_pools.go
 17. [ ] loanpool.go
 18. [ ] network.go
