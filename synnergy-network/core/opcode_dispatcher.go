@@ -183,6 +183,8 @@ var catalogue = []struct {
 	{"ValidatePoH", 0x07000E},
 	{"SealMainBlockPOW", 0x07000F},
 	{"DistributeRewards", 0x070010},
+	{"CalculateWeights", 0x070011},
+	{"ComputeThreshold", 0x070012},
 
 	// Contracts (0x08)
 	{"InitContracts", 0x080001},

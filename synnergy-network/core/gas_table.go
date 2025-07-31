@@ -113,6 +113,8 @@ var gasTable = map[Opcode]uint64{
 	ValidatePoH:           20_000,
 	SealMainBlockPOW:      60_000,
 	DistributeRewards:     10_000,
+	CalculateWeights:      8_000,
+	ComputeThreshold:      6_000,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
