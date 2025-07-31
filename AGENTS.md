@@ -25,23 +25,30 @@ phases.
 
 1. Select the next unchecked file from the lists below. Work on **no more than
    three files at a time** to keep diffs small.
-2. Fix compile and logic issues while keeping commits focused.
-3. Format code with `go fmt`.
-4. Run static analysis using `go vet ./...`.
-5. Build all packages with `go build ./...`.
-6. Execute unit tests using `go test ./...`.
-7. If dependencies are missing, run `go mod tidy` then re‑run the checks.
-8. When all checks pass, mark the file as completed in this document and commit
+2. Check open PRs and this checklist to ensure no other agent is already
+   tackling the same stage. If a stage is taken, move to the next unchecked
+   group of files.
+3. Fix compile and logic issues while keeping commits focused.
+4. Format code with `go fmt` on the files you changed.
+5. Run `go vet` only on the packages containing your changes (for example
+   `go vet ./cmd/...`).
+6. Build those same packages with `go build`.
+7. Execute `go test` for the packages in your current stage rather than the
+   entire repository.
+8. If dependencies are missing, run `go mod tidy` then re‑run the checks.
+9. When all checks pass, mark the file as completed in this document and commit
    your changes.
 
 ## Test File Checks
 
 Unit tests live under `synnergy-network/tests`. After modifying a module,
-run:
+run `go test` only for that module's package path:
 
 ```bash
-go test ./...
+go test ./synnergy-network/core/<module>
 ```
+
+This keeps failures limited to your stage.
 
 Use `go vet -tests` for additional static analysis of the tests. Watch for
 race conditions, failing assertions and resource leaks. All tests should pass
