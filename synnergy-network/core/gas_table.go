@@ -52,11 +52,13 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-	SwapExactIn:     4_500,
-	AddLiquidity:    5_000,
-	RemoveLiquidity: 5_000,
-	Quote:           2_500,
-	AllPairs:        2_000,
+	SwapExactIn:    4_500,
+	AddLiquidity:   5_000,
+	RemoveLiquidity:5_000,
+  Quote:          2_500,
+  AllPairs:       2_000,
+  InitPoolsFromFile: 6_000,
+
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
