@@ -354,7 +354,7 @@ func (l *Ledger) GetContract(address []byte) (*Contract, error) {
 func (l *Ledger) BalanceOf(address Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
-	return l.TokenBalances[fmt.Sprintf("%x", addr.Bytes())]
+	return l.TokenBalances[fmt.Sprintf("%x", address.Bytes())]
 }
 
 // Snapshot returns JSON state of ledger.
