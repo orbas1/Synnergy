@@ -1,6 +1,5 @@
 package core
 
-
 import (
 	"encoding/json"
 	"fmt"
@@ -19,8 +18,6 @@ const Code = "SYNN"
 
 // GenesisAlloc is the amount to allocate in the genesis block via consensus.
 const GenesisAlloc uint64 = 10_000_000
-
-
 
 // NewCoin constructs a Coin manager backed by the given ledger.
 // It initializes totalMinted by summing existing balances, so that
@@ -82,6 +79,55 @@ func (c *Coin) Mint(to []byte, amount uint64) error {
 	return nil
 }
 
+// Transfer moves Synthron coins between two addresses via the underlying ledger.
+// It returns an error if the amount is zero or if the ledger reports failure.
+func (c *Coin) Transfer(from, to []byte, amount uint64) error {
+	if amount == 0 {
+		return fmt.Errorf("coin: transfer amount must be positive")
+	}
+
+	var src, dst Address
+	if len(from) != len(src) || len(to) != len(dst) {
+		return fmt.Errorf("coin: invalid address length")
+	}
+	copy(src[:], from)
+	copy(dst[:], to)
+
+	if err := c.ledger.Transfer(src, dst, amount); err != nil {
+		return fmt.Errorf("coin: ledger transfer error: %w", err)
+	}
+
+	logrus.Infof("coin: transferred %d %s from %x to %x", amount, Code, from, to)
+	return nil
+}
+
+// Burn destroys Synthron coins from the provided address and reduces total supply.
+// The ledger enforces sufficient balance; this method also updates the mint cap.
+func (c *Coin) Burn(from []byte, amount uint64) error {
+	if amount == 0 {
+		return fmt.Errorf("coin: burn amount must be positive")
+	}
+
+	var addr Address
+	if len(from) != len(addr) {
+		return fmt.Errorf("coin: invalid address length")
+	}
+	copy(addr[:], from)
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.totalMinted < amount {
+		return fmt.Errorf("coin: burn amount %d exceeds supply %d", amount, c.totalMinted)
+	}
+	if err := c.ledger.Burn(addr, amount); err != nil {
+		return fmt.Errorf("coin: ledger burn error: %w", err)
+	}
+
+	c.totalMinted -= amount
+	logrus.Infof("coin: burned %d %s from %x; total minted now %d", amount, Code, from, c.totalMinted)
+	return nil
+}
 
 // TotalSupply returns the total number of Synthron coins minted so far.
 func (c *Coin) TotalSupply() uint64 {

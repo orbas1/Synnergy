@@ -452,6 +452,7 @@ func (sc *SynnergyConsensus) WeightConfig() WeightConfig {
 	return sc.weightCfg
 }
 
+
 //---------------------------------------------------------------------
 // Util
 //---------------------------------------------------------------------
@@ -507,6 +508,7 @@ func (sc *SynnergyConsensus) CalculateWeights(demand, stake float64) ConsensusWe
 	sc.weights = ConsensusWeights{PoW: pow, PoS: pos, PoH: poh}
 	return sc.weights
 }
+
 
 // ComputeThreshold returns the consensus switching threshold for the supplied
 // network metrics using the formula T = α(D/D_max) + β(S/S_max).

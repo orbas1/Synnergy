@@ -28,7 +28,7 @@ import (
     "github.com/spf13/viper"
     "go.uber.org/zap"
 
-    core "github.com/synnergy-network/core" // adjust to your go.mod module path
+    core "synnergy-network/core" // adjust to your go.mod module path
 )
 
 //---------------------------------------------------------------------
@@ -85,6 +85,10 @@ func (c *AMMController) Quote(tokenIn core.TokenID, amtIn uint64, tokenOut core.
 
 func (c *AMMController) AllPairs() [][2]core.TokenID { return core.AllPairs() }
 
+func (c *AMMController) InitFromFile(path string) error {
+    return core.InitPoolsFromFile(path)
+}
+
 //---------------------------------------------------------------------
 // CLI command declarations
 //---------------------------------------------------------------------
@@ -93,6 +97,20 @@ var ammCmd = &cobra.Command{
     Use:               "amm",
     Short:             "Automated‑market‑maker utilities (swap, liquidity, quotes)",
     PersistentPreRunE: ensureAMMInitialised,
+}
+
+var initCmd = &cobra.Command{
+    Use:   "init <fixture-file>",
+    Short: "Initialise pools from a JSON fixture",
+    Args:  cobra.ExactArgs(1),
+    RunE: func(cmd *cobra.Command, args []string) error {
+        ctrl := &AMMController{}
+        if err := ctrl.InitFromFile(args[0]); err != nil {
+            return err
+        }
+        fmt.Printf("Pools initialised from %s\n", args[0])
+        return nil
+    },
 }
 
 // swap -----------------------------------------------------------------------
@@ -198,6 +216,7 @@ func init() {
     swapCmd.Flags().Int("max‑hops", 4, "maximum hops allowed in the route")
     quoteCmd.Flags().Int("max‑hops", 4, "maximum hops allowed in the route")
 
+    ammCmd.AddCommand(initCmd)
     ammCmd.AddCommand(swapCmd)
     ammCmd.AddCommand(addCmd)
     ammCmd.AddCommand(removeCmd)

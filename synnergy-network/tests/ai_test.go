@@ -41,6 +41,8 @@ type mockClient struct {
 	anomalyErr  error
 	feeResp     *TFResponse
 	feeErr      error
+	volumeResp  *TFResponse
+	volumeErr   error
 }
 
 func (m *mockClient) Anomaly(ctx context.Context, req *TFRequest) (*TFResponse, error) {
@@ -51,13 +53,17 @@ func (m *mockClient) FeeOpt(ctx context.Context, req *TFRequest) (*TFResponse, e
 	return m.feeResp, m.feeErr
 }
 
+func (m *mockClient) Volume(ctx context.Context, req *TFRequest) (*TFResponse, error) {
+	return m.volumeResp, m.volumeErr
+}
+
 // TestPredictAnomaly covers normal case, nil engine, and error case
 func TestPredictAnomaly(t *testing.T) {
 	from := Address{0x01}
 	creator := Address{0xAB}
 	modelCID := "model123"
 	modelHash := sha256.Sum256([]byte(modelCID))
-	
+
 	led := &mockLedger{}
 	client := &mockClient{
 		anomalyResp: &TFResponse{Score: 0.87, Result: []byte(modelCID)},
@@ -87,12 +93,12 @@ func TestPredictAnomaly(t *testing.T) {
 func TestOptimizeFees(t *testing.T) {
 	expected := uint64(42)
 	b, _ := json.Marshal(expected)
-	
+
 	client := &mockClient{
 		feeResp: &TFResponse{Result: b},
 	}
 	ei := &AIEngine{client: client}
-	
+
 	stats := []BlockStats{{GasUsed: 1000, GasLimit: 2000, Interval: time.Second}}
 	val, err := ei.OptimizeFees(stats)
 	if err != nil || val != expected {
@@ -130,5 +136,23 @@ func TestPublishModel(t *testing.T) {
 	_, err = ai.PublishModel("bad", creator, 5000)
 	if err == nil {
 		t.Fatal("expected error on high royalty")
+	}
+}
+
+func TestPredictVolume(t *testing.T) {
+	expected := uint64(99)
+	b, _ := json.Marshal(expected)
+	client := &mockClient{volumeResp: &TFResponse{Result: b}}
+	ai := &AIEngine{client: client}
+	vols := []TxVolume{{Timestamp: time.Now(), Count: 10}}
+	val, err := ai.PredictVolume(vols)
+	if err != nil || val != expected {
+		t.Fatalf("unexpected PredictVolume result: %v %v", val, err)
+	}
+	client.volumeErr = errors.New("fail")
+	client.volumeResp = nil
+	_, err = ai.PredictVolume(vols)
+	if err == nil {
+		t.Fatal("expected error from PredictVolume")
 	}
 }
