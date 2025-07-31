@@ -628,26 +628,49 @@ func (it *memIterator) Error() error {
 
 
 func (m *memState) Snapshot(fn func() error) error {
-    m.mu.RLock()
-    defer m.mu.RUnlock()
-    // Create a copy of the current state
-    dataCopy := make(map[string][]byte, len(m.data))
+    m.mu.Lock()
+    origData := make(map[string][]byte, len(m.data))
     for k, v := range m.data {
-        dataCopy[k] = append([]byte(nil), v...) // deep copy
+        origData[k] = append([]byte(nil), v...)
     }
-    balancesCopy := make(map[Address]uint64, len(m.balances))
+    origBalances := make(map[Address]uint64, len(m.balances))
     for k, v := range m.balances {
-        balancesCopy[k] = v
+        origBalances[k] = v
     }
-    // Call the provided function with the copied state
-    return fn()
+    origLP := make(map[Address]map[PoolID]uint64, len(m.lpBalances))
+    for a, pools := range m.lpBalances {
+        cp := make(map[PoolID]uint64, len(pools))
+        for id, amt := range pools { cp[id] = amt }
+        origLP[a] = cp
+    }
+    origContracts := make(map[Address][]byte, len(m.contracts))
+    for a, c := range m.contracts { origContracts[a] = append([]byte(nil), c...) }
+    origCodeHashes := make(map[Address]Hash, len(m.codeHashes))
+    for a, h := range m.codeHashes { origCodeHashes[a] = h }
+    origNonces := make(map[Address]uint64, len(m.nonces))
+    for a, n := range m.nonces { origNonces[a] = n }
+    origTokens := make(map[TokenID]Token, len(m.tokens))
+    for id, t := range m.tokens { origTokens[id] = t }
+    origLogs := append([]*Log(nil), m.logs...)
+    err := fn()
+    if err != nil {
+        m.data = origData
+        m.balances = origBalances
+        m.lpBalances = origLP
+        m.contracts = origContracts
+        m.codeHashes = origCodeHashes
+        m.nonces = origNonces
+        m.tokens = origTokens
+        m.logs = origLogs
+    }
+    m.mu.Unlock()
+    return err
 }
 
 func (m *memState) NonceOf(addr Address) uint64 {
     m.mu.RLock()
     defer m.mu.RUnlock()
-    // Nonce is not implemented in this simple state, returning 0
-    return 0
+    return m.nonces[addr]
 }
 
 func (m *memState) IsIDTokenHolder(addr Address) bool {
