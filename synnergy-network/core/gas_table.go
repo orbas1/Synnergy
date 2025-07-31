@@ -50,17 +50,15 @@ var gasTable = map[Opcode]uint64{
 	ReleaseEscrow:  12_000,
 	PredictVolume:  15_000,
 
-
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-	SwapExactIn:    4_500,
-	AddLiquidity:   5_000,
-	RemoveLiquidity:5_000,
-  Quote:          2_500,
-  AllPairs:       2_000,
-  InitPoolsFromFile: 6_000,
-
+	SwapExactIn:       4_500,
+	AddLiquidity:      5_000,
+	RemoveLiquidity:   5_000,
+	Quote:             2_500,
+	AllPairs:          2_000,
+	InitPoolsFromFile: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
@@ -105,7 +103,6 @@ var gasTable = map[Opcode]uint64{
 	Compliance_AuditTrail: 3_000,
 	Compliance_MonitorTx:  5_000,
 	Compliance_VerifyZKP:  12_000,
-
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
@@ -387,25 +384,27 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Token Utilities
 	// ----------------------------------------------------------------------
-	ID:              400,
-	Meta:            400,
-	Allowance:       400,
-	Approve:         800,
-	Add:             600,
-	Sub:             600,
-	Get:             400,
-	transfer:        2_100, // lower-case ERC20 compatibility
-	Calculate:       800,
-	RegisterToken:   8_000,
-	NewBalanceTable: 5_000,
-	Set:             600,
-	RefundGas:       100,
-	PopUint32:       300,
-	PopAddress:      300,
-	PopUint64:       300,
-	PushBool:        300,
-	Push:            300,
-	Len:             200,
+	ID:                400,
+	Meta:              400,
+	Allowance:         400,
+	Approve:           800,
+	Add:               600,
+	Sub:               600,
+	Get:               400,
+	transfer:          2_100, // lower-case ERC20 compatibility
+	Calculate:         800,
+	RegisterToken:     8_000,
+	NewBalanceTable:   5_000,
+	Set:               600,
+	RefundGas:         100,
+	PopUint32:         300,
+	PopAddress:        300,
+	PopUint64:         300,
+	PushBool:          300,
+	Push:              300,
+	Len:               200,
+	InitTokens:        8_000,
+	GetRegistryTokens: 400,
 
 	// ----------------------------------------------------------------------
 	// Transactions
