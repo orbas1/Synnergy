@@ -155,6 +155,9 @@ var gasTable = map[Opcode]uint64{
 	RegisterOracle: 10_000,
 	PushFeed:       3_000,
 	QueryOracle:    3_000,
+	ListCDNNodes:   3_000,
+	ListOracles:    3_000,
+	PushFeedSigned: 4_000,
 
 	// ----------------------------------------------------------------------
 	// Fault-Tolerance / Health-Checker

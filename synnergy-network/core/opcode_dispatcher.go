@@ -219,6 +219,9 @@ var catalogue = []struct {
 	{"RegisterOracle", 0x0A0006},
 	{"PushFeed", 0x0A0007},
 	{"QueryOracle", 0x0A0008},
+	{"ListCDNNodes", 0x0A0009},
+	{"ListOracles", 0x0A000A},
+	{"PushFeedSigned", 0x0A000B},
 
 	// Fault-Tolerance (0x0B)
 	{"NewHealthChecker", 0x0B0001},
