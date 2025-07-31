@@ -250,6 +250,7 @@ var catalogue = []struct {
 	{"Certify", 0x0D0005},
 	{"CertificateOf", 0x0D0006},
 	{"ShouldThrottle", 0x0D0007},
+	{"ListCertificates", 0x0D0008},
 
 	// Ledger (0x0E)
 	{"NewLedger", 0x0E0001},

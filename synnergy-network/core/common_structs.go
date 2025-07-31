@@ -279,6 +279,15 @@ type nodeSummary struct {
 	Cert    Certificate
 }
 
+// CertificateInfo provides a consumable view of a validator's sustainability
+// certificate and score. It is used by API callers and CLI tooling to present
+// network‑wide environmental metrics.
+type CertificateInfo struct {
+	Address Address     `json:"address"`
+	Score   float64     `json:"score"`
+	Cert    Certificate `json:"cert"`
+}
+
 type GreenTechEngine struct {
 	led StateRW
 	mu  sync.RWMutex
