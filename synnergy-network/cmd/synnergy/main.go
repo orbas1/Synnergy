@@ -28,6 +28,7 @@ func main() {
 		cli.AMMCmd,
 		cli.AuthCmd,
 		cli.CharityCmd,
+		cli.LoanCmd,
 		cli.ComplianceCmd,
 		cli.CrossChainCmd,
 		cli.DataCmd,

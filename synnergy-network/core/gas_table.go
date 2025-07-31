@@ -232,9 +232,12 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Loan-Pool
 	// ----------------------------------------------------------------------
-	NewLoanPool: 20_000,
-	Submit:      3_000,
-	Disburse:    8_000,
+	NewLoanPool:   20_000,
+	Submit:        3_000,
+	Disburse:      8_000,
+	GetProposal:   1_000,
+	ListProposals: 1_500,
+	Redistribute:  5_000,
 	// Vote  & Tick already priced
 	// RandomElectorate / IsAuthority already priced
 

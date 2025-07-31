@@ -19,16 +19,16 @@ package core
 // All critical paths logged; no placeholders.
 
 import (
-    "crypto/sha256"
-    "encoding/binary"
-    "encoding/json"
-    "errors"
-    "fmt"
-    "log"
-    "sync"
-    "time"
-    "encoding/hex"
-    "strings"
+	"crypto/sha256"
+	"encoding/binary"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"log"
+	"strings"
+	"sync"
+	"time"
 )
 
 //---------------------------------------------------------------------
@@ -38,28 +38,28 @@ import (
 type ProposalType uint8
 
 const (
-    EducationGrant ProposalType = iota + 1
-    HealthcareGrant
-    EmergencyGrant
-    StandardLoan
-    EcosystemGrant
+	EducationGrant ProposalType = iota + 1
+	HealthcareGrant
+	EmergencyGrant
+	StandardLoan
+	EcosystemGrant
 )
 
 func (pt ProposalType) String() string {
-    switch pt {
-    case EducationGrant:
-        return "EducationGrant"
-    case HealthcareGrant:
-        return "HealthcareGrant"
-    case EmergencyGrant:
-        return "EmergencyGrant"
-    case StandardLoan:
-        return "StandardLoan"
-    case EcosystemGrant:
-        return "EcosystemGrant"
-    default:
-        return "Unknown"
-    }
+	switch pt {
+	case EducationGrant:
+		return "EducationGrant"
+	case HealthcareGrant:
+		return "HealthcareGrant"
+	case EmergencyGrant:
+		return "EmergencyGrant"
+	case StandardLoan:
+		return "StandardLoan"
+	case EcosystemGrant:
+		return "EcosystemGrant"
+	default:
+		return "Unknown"
+	}
 }
 
 // Outcome status.
@@ -67,11 +67,11 @@ func (pt ProposalType) String() string {
 type ProposalStatus uint8
 
 const (
-    Active ProposalStatus = iota + 1
-    Passed
-    Rejected
-    Executed
-    Expired
+	Active ProposalStatus = iota + 1
+	Passed
+	Rejected
+	Executed
+	Expired
 )
 
 //---------------------------------------------------------------------
@@ -79,24 +79,24 @@ const (
 //---------------------------------------------------------------------
 
 type Proposal struct {
-    ID          Hash      `json:"id"`
-    Creator     Address   `json:"creator"`
-    Recipient   Address   `json:"recipient"`
-    Type        ProposalType     `json:"type"`
-    Amount      uint64           `json:"amount_wei"`
-    Description string           `json:"desc"`
+	ID          Hash         `json:"id"`
+	Creator     Address      `json:"creator"`
+	Recipient   Address      `json:"recipient"`
+	Type        ProposalType `json:"type"`
+	Amount      uint64       `json:"amount_wei"`
+	Description string       `json:"desc"`
 
-    // Vote buckets
-    AuthYes uint32 `json:"auth_yes"`
-    AuthNo  uint32 `json:"auth_no"`
-    PubYes  uint32 `json:"pub_yes"`
-    PubNo   uint32 `json:"pub_no"`
+	// Vote buckets
+	AuthYes uint32 `json:"auth_yes"`
+	AuthNo  uint32 `json:"auth_no"`
+	PubYes  uint32 `json:"pub_yes"`
+	PubNo   uint32 `json:"pub_no"`
 
-    ElectorateAuth []Address `json:"electorate_auth"`
-    Deadline       int64            `json:"deadline_unix"`
+	ElectorateAuth []Address `json:"electorate_auth"`
+	Deadline       int64     `json:"deadline_unix"`
 
-    Status     ProposalStatus `json:"status"`
-    ExecutedAt int64          `json:"exec_unix,omitempty"`
+	Status     ProposalStatus `json:"status"`
+	ExecutedAt int64          `json:"exec_unix,omitempty"`
 }
 
 func (p *Proposal) Marshal() []byte { b, _ := json.Marshal(p); return b }
@@ -106,8 +106,8 @@ func (p *Proposal) Marshal() []byte { b, _ := json.Marshal(p); return b }
 //---------------------------------------------------------------------
 
 type electorateSelector interface {
-    RandomElectorate(size int) ([]Address, error)
-    IsAuthority(addr Address) bool
+	RandomElectorate(size int) ([]Address, error)
+	IsAuthority(addr Address) bool
 }
 
 // ledger.StateRW must additionally expose IsIDTokenHolder for public vote check.
@@ -117,14 +117,14 @@ type electorateSelector interface {
 //---------------------------------------------------------------------
 
 type VoteRule struct {
-    EnableAuthVotes  bool `yaml:"enable_auth"`
-    EnablePublicVotes bool `yaml:"enable_public"`
+	EnableAuthVotes   bool `yaml:"enable_auth"`
+	EnablePublicVotes bool `yaml:"enable_public"`
 
-    AuthQuorum   int `yaml:"auth_quorum"`
-    AuthMajority int `yaml:"auth_majority"`   // percent
+	AuthQuorum   int `yaml:"auth_quorum"`
+	AuthMajority int `yaml:"auth_majority"` // percent
 
-    PubQuorum    int `yaml:"pub_quorum"`
-    PubMajority  int `yaml:"pub_majority"`    // percent
+	PubQuorum   int `yaml:"pub_quorum"`
+	PubMajority int `yaml:"pub_majority"` // percent
 }
 
 //---------------------------------------------------------------------
@@ -132,21 +132,22 @@ type VoteRule struct {
 //---------------------------------------------------------------------
 
 type LoanPool struct {
-    mu     sync.Mutex
-    logger *log.Logger
-    ledger StateRW
-    auth   electorateSelector
+	mu     sync.Mutex
+	logger *log.Logger
+	ledger StateRW
+	auth   electorateSelector
 
-    cfg struct {
-        ElectorateSize int           `yaml:"electorate_size"`
-        VotePeriod     time.Duration `yaml:"vote_period"`
-        SpamFee        uint64        `yaml:"spam_fee"`
-        RedistributeInterval time.Duration `yaml:"redistribute_interval"`
-        RedistributePerc     int           `yaml:"redistribute_perc"`
-        Rules map[ProposalType]VoteRule   `yaml:"rules"`
-    }
+	cfg struct {
+		ElectorateSize       int                       `yaml:"electorate_size"`
+		VotePeriod           time.Duration             `yaml:"vote_period"`
+		SpamFee              uint64                    `yaml:"spam_fee"`
+		RedistributeInterval time.Duration             `yaml:"redistribute_interval"`
+		RedistributePerc     int                       `yaml:"redistribute_perc"`
+		Rules                map[ProposalType]VoteRule `yaml:"rules"`
+	}
 
-    nextRand uint64
+	nextRand         uint64
+	lastRedistribute int64
 }
 
 // LoanPoolAccount constant (treasury).
@@ -160,21 +161,20 @@ func init() {
 	}
 }
 
-
 func NewLoanPool(lg *log.Logger, led StateRW, auth electorateSelector, cfgYAML *LoanPool) *LoanPool {
-    // cfgYAML is loaded elsewhere, cast values we need.
-    lp := &LoanPool{
-        logger: lg,
-        ledger: led,
-        auth:   auth,
-    }
-    lp.cfg.ElectorateSize = cfgYAML.cfg.ElectorateSize
-    lp.cfg.VotePeriod = cfgYAML.cfg.VotePeriod
-    lp.cfg.SpamFee = cfgYAML.cfg.SpamFee
-    lp.cfg.RedistributeInterval = cfgYAML.cfg.RedistributeInterval
-    lp.cfg.RedistributePerc = cfgYAML.cfg.RedistributePerc
-    lp.cfg.Rules = cfgYAML.cfg.Rules
-    return lp
+	// cfgYAML is loaded elsewhere, cast values we need.
+	lp := &LoanPool{
+		logger: lg,
+		ledger: led,
+		auth:   auth,
+	}
+	lp.cfg.ElectorateSize = cfgYAML.cfg.ElectorateSize
+	lp.cfg.VotePeriod = cfgYAML.cfg.VotePeriod
+	lp.cfg.SpamFee = cfgYAML.cfg.SpamFee
+	lp.cfg.RedistributeInterval = cfgYAML.cfg.RedistributeInterval
+	lp.cfg.RedistributePerc = cfgYAML.cfg.RedistributePerc
+	lp.cfg.Rules = cfgYAML.cfg.Rules
+	return lp
 }
 
 func StringToAddress(hexStr string) (Address, error) {
@@ -194,55 +194,60 @@ func StringToAddress(hexStr string) (Address, error) {
 	return addr, nil
 }
 
-
 //---------------------------------------------------------------------
 // Submit
 //---------------------------------------------------------------------
 
 func (h Hash) Hex() string {
-    return hex.EncodeToString(h[:])
+	return hex.EncodeToString(h[:])
 }
 
 var BurnAddress = Address{} // zeroed address [20]byte
 
-
 func (lp *LoanPool) Submit(creator, recipient Address, pType ProposalType, amount uint64, desc string) (Hash, error) {
-    if amount == 0 { return Hash{}, errors.New("amount zero") }
-    if len(desc) > 256 { return Hash{}, errors.New("description too long") }
+	if amount == 0 {
+		return Hash{}, errors.New("amount zero")
+	}
+	if len(desc) > 256 {
+		return Hash{}, errors.New("description too long")
+	}
 
-    // Anti‑spam fee
-    if err := lp.ledger.Transfer(creator, BurnAddress, lp.cfg.SpamFee); err != nil {
-        return Hash{}, fmt.Errorf("spam fee: %w", err)
-    }
+	// Anti‑spam fee
+	if err := lp.ledger.Transfer(creator, BurnAddress, lp.cfg.SpamFee); err != nil {
+		return Hash{}, fmt.Errorf("spam fee: %w", err)
+	}
 
-    // Electorate of authority nodes (only if rule requires)
-    var electorate []Address
-    if rule, ok := lp.cfg.Rules[pType]; ok && rule.EnableAuthVotes {
-        var err error
-        electorate, err = lp.auth.RandomElectorate(lp.cfg.ElectorateSize)
-        if err != nil { return Hash{}, err }
-    }
+	// Electorate of authority nodes (only if rule requires)
+	var electorate []Address
+	if rule, ok := lp.cfg.Rules[pType]; ok && rule.EnableAuthVotes {
+		var err error
+		electorate, err = lp.auth.RandomElectorate(lp.cfg.ElectorateSize)
+		if err != nil {
+			return Hash{}, err
+		}
+	}
 
-    lp.nextRand++
-    buf := make([]byte, 8)
-    binary.BigEndian.PutUint64(buf, lp.nextRand)
-    h := sha256.Sum256(append(append(creator.Bytes(), buf...), desc...))
-    var id Hash; copy(id[:], h[:])
+	lp.nextRand++
+	buf := make([]byte, 8)
+	binary.BigEndian.PutUint64(buf, lp.nextRand)
+	h := sha256.Sum256(append(append(creator.Bytes(), buf...), desc...))
+	var id Hash
+	copy(id[:], h[:])
 
-    prop := &Proposal{
-        ID:             id,
-        Creator:        creator,
-        Recipient:      recipient,
-        Type:           pType,
-        Amount:         amount,
-        Description:    desc,
-        ElectorateAuth: electorate,
-        Deadline:       time.Now().Add(lp.cfg.VotePeriod).Unix(),
-        Status:         Active,
-    }
-    lp.ledger.SetState(proposalKey(id), prop.Marshal())
-    lp.logger.Printf("proposal %s submitted type=%s amount=%d", id.Hex(), pType, amount)
-    return id, nil
+	prop := &Proposal{
+		ID:             id,
+		Creator:        creator,
+		Recipient:      recipient,
+		Type:           pType,
+		Amount:         amount,
+		Description:    desc,
+		ElectorateAuth: electorate,
+		Deadline:       time.Now().Add(lp.cfg.VotePeriod).Unix(),
+		Status:         Active,
+	}
+	lp.ledger.SetState(proposalKey(id), prop.Marshal())
+	lp.logger.Printf("proposal %s submitted type=%s amount=%d", id.Hex(), pType, amount)
+	return id, nil
 }
 
 //---------------------------------------------------------------------
@@ -250,67 +255,135 @@ func (lp *LoanPool) Submit(creator, recipient Address, pType ProposalType, amoun
 //---------------------------------------------------------------------
 
 func (lp *LoanPool) Vote(voter Address, id Hash, approve bool) error {
-    lp.mu.Lock(); defer lp.mu.Unlock()
+	lp.mu.Lock()
+	defer lp.mu.Unlock()
 
-    raw, err := lp.ledger.GetState(proposalKey(id))
-    if err != nil || len(raw) == 0 { return errors.New("proposal not found") }
-    var p Proposal
-    if err := json.Unmarshal(raw, &p); err != nil { return err }
-    if p.Status != Active { return errors.New("not active") }
+	raw, err := lp.ledger.GetState(proposalKey(id))
+	if err != nil || len(raw) == 0 {
+		return errors.New("proposal not found")
+	}
+	var p Proposal
+	if err := json.Unmarshal(raw, &p); err != nil {
+		return err
+	}
+	if p.Status != Active {
+		return errors.New("not active")
+	}
 
-    rule, ok := lp.cfg.Rules[p.Type]
-    if !ok { return errors.New("vote rule missing") }
+	rule, ok := lp.cfg.Rules[p.Type]
+	if !ok {
+		return errors.New("vote rule missing")
+	}
 
-    // Detect voter bucket.
-    isAuth := lp.auth.IsAuthority(voter)
-    isID := lp.ledger.IsIDTokenHolder(voter)
+	// Detect voter bucket.
+	isAuth := lp.auth.IsAuthority(voter)
+	isID := lp.ledger.IsIDTokenHolder(voter)
 
-    if isAuth && rule.EnableAuthVotes {
-        if !containsAddr(p.ElectorateAuth, voter) { return errors.New("voter not in electorate") }
-        if alreadyVoted(lp.ledger, id, voter) { return errors.New("duplicate vote") }
-        recordVote(lp.ledger, id, voter, approve)
-        if approve { p.AuthYes++ } else { p.AuthNo++ }
-    } else if !isAuth && isID && rule.EnablePublicVotes {
-        if alreadyVoted(lp.ledger, id, voter) { return errors.New("duplicate vote") }
-        recordVote(lp.ledger, id, voter, approve)
-        if approve { p.PubYes++ } else { p.PubNo++ }
-    } else {
-        return errors.New("voter not eligible for this proposal type")
-    }
+	if isAuth && rule.EnableAuthVotes {
+		if !containsAddr(p.ElectorateAuth, voter) {
+			return errors.New("voter not in electorate")
+		}
+		if alreadyVoted(lp.ledger, id, voter) {
+			return errors.New("duplicate vote")
+		}
+		recordVote(lp.ledger, id, voter, approve)
+		if approve {
+			p.AuthYes++
+		} else {
+			p.AuthNo++
+		}
+	} else if !isAuth && isID && rule.EnablePublicVotes {
+		if alreadyVoted(lp.ledger, id, voter) {
+			return errors.New("duplicate vote")
+		}
+		recordVote(lp.ledger, id, voter, approve)
+		if approve {
+			p.PubYes++
+		} else {
+			p.PubNo++
+		}
+	} else {
+		return errors.New("voter not eligible for this proposal type")
+	}
 
-    // Evaluate status after each vote.
-    if passed, rejected := evaluate(&p, rule); passed {
-        p.Status = Passed
-    } else if rejected {
-        p.Status = Rejected
-    }
+	// Evaluate status after each vote.
+	if passed, rejected := evaluate(&p, rule); passed {
+		p.Status = Passed
+	} else if rejected {
+		p.Status = Rejected
+	}
 
-    lp.ledger.SetState(proposalKey(id), p.Marshal())
-    return nil
+	lp.ledger.SetState(proposalKey(id), p.Marshal())
+	return nil
 }
 
-
-
-
 func evaluate(p *Proposal, r VoteRule) (passed, rejected bool) {
-    // Check authority bucket if enabled.
-    if r.EnableAuthVotes {
-        total := int(p.AuthYes + p.AuthNo)
-        if total >= r.AuthQuorum {
-            perc := int(p.AuthYes) * 100 / total
-            if perc < r.AuthMajority { return false, true }
-        } else { return false, false }
-    }
-    // Check public bucket if enabled.
-    if r.EnablePublicVotes {
-        total := int(p.PubYes + p.PubNo)
-        if total >= r.PubQuorum {
-            perc := int(p.PubYes) * 100 / total
-            if perc < r.PubMajority { return false, true }
-        } else { return false, false }
-    }
-    // If we reached here, all enabled buckets met quorum+majority ⇒ passed.
-    return true, false
+	// Check authority bucket if enabled.
+	if r.EnableAuthVotes {
+		total := int(p.AuthYes + p.AuthNo)
+		if total >= r.AuthQuorum {
+			perc := int(p.AuthYes) * 100 / total
+			if perc < r.AuthMajority {
+				return false, true
+			}
+		} else {
+			return false, false
+		}
+	}
+	// Check public bucket if enabled.
+	if r.EnablePublicVotes {
+		total := int(p.PubYes + p.PubNo)
+		if total >= r.PubQuorum {
+			perc := int(p.PubYes) * 100 / total
+			if perc < r.PubMajority {
+				return false, true
+			}
+		} else {
+			return false, false
+		}
+	}
+	// If we reached here, all enabled buckets met quorum+majority ⇒ passed.
+	return true, false
+}
+
+//---------------------------------------------------------------------
+// Query helpers
+//---------------------------------------------------------------------
+
+// GetProposal returns a copy of a proposal from the ledger.
+func (lp *LoanPool) GetProposal(id Hash) (Proposal, bool, error) {
+	lp.mu.Lock()
+	defer lp.mu.Unlock()
+	var p Proposal
+	raw, err := lp.ledger.GetState(proposalKey(id))
+	if err != nil {
+		return p, false, err
+	}
+	if len(raw) == 0 {
+		return p, false, nil
+	}
+	if err := json.Unmarshal(raw, &p); err != nil {
+		return p, false, err
+	}
+	return p, true, nil
+}
+
+// ListProposals returns proposals matching a status filter. If status==0 all are returned.
+func (lp *LoanPool) ListProposals(status ProposalStatus) ([]Proposal, error) {
+	lp.mu.Lock()
+	defer lp.mu.Unlock()
+	iter := lp.ledger.PrefixIterator([]byte("loanpool:proposal:"))
+	var out []Proposal
+	for iter.Next() {
+		var p Proposal
+		if err := json.Unmarshal(iter.Value(), &p); err != nil {
+			return nil, err
+		}
+		if status == 0 || p.Status == status {
+			out = append(out, p)
+		}
+	}
+	return out, nil
 }
 
 //---------------------------------------------------------------------
@@ -318,36 +391,81 @@ func evaluate(p *Proposal, r VoteRule) (passed, rejected bool) {
 //---------------------------------------------------------------------
 
 func (lp *LoanPool) Disburse(id Hash) error {
-    lp.mu.Lock(); defer lp.mu.Unlock()
-    raw, err := lp.ledger.GetState(proposalKey(id)); if err != nil || len(raw)==0 { return errors.New("proposal not found") }
-    var p Proposal; _ = json.Unmarshal(raw, &p)
-    if p.Status != Passed { return errors.New("proposal not passed") }
-    if p.ExecutedAt != 0 { return errors.New("already executed") }
-    if err := lp.ledger.Transfer(LoanPoolAccount, p.Recipient, p.Amount); err != nil { return err }
-    p.Status = Executed; p.ExecutedAt = time.Now().Unix(); lp.ledger.SetState(proposalKey(id), p.Marshal());
-    lp.logger.Printf("disbursed %d wei to %s (proposal %s)", p.Amount, p.Recipient.Short(), id.Short())
-    return nil
+	lp.mu.Lock()
+	defer lp.mu.Unlock()
+	raw, err := lp.ledger.GetState(proposalKey(id))
+	if err != nil || len(raw) == 0 {
+		return errors.New("proposal not found")
+	}
+	var p Proposal
+	_ = json.Unmarshal(raw, &p)
+	if p.Status != Passed {
+		return errors.New("proposal not passed")
+	}
+	if p.ExecutedAt != 0 {
+		return errors.New("already executed")
+	}
+	if err := lp.ledger.Transfer(LoanPoolAccount, p.Recipient, p.Amount); err != nil {
+		return err
+	}
+	p.Status = Executed
+	p.ExecutedAt = time.Now().Unix()
+	lp.ledger.SetState(proposalKey(id), p.Marshal())
+	lp.logger.Printf("disbursed %d wei to %s (proposal %s)", p.Amount, p.Recipient.Short(), id.Short())
+	return nil
 }
 
 func (lp *LoanPool) Tick(now time.Time) {
-    lp.mu.Lock(); defer lp.mu.Unlock()
-    iter := lp.ledger.PrefixIterator([]byte("loanpool:proposal:"))
-    for iter.Next() {
-        var p Proposal; _ = json.Unmarshal(iter.Value(), &p)
-        if p.Status != Active { continue }
-        if now.Unix() > p.Deadline {
-            rule := lp.cfg.Rules[p.Type]
-            if passed, rejected := evaluate(&p, rule); passed {
-                p.Status = Passed
-            } else if rejected {
-                p.Status = Rejected
-            } else {
-                p.Status = Expired
-            }
-            lp.ledger.SetState(iter.Key(), p.Marshal())
-        }
-    }
-    // Redistribution identical to previous implementation ... omitted for brevity
+	lp.mu.Lock()
+	defer lp.mu.Unlock()
+	iter := lp.ledger.PrefixIterator([]byte("loanpool:proposal:"))
+	for iter.Next() {
+		var p Proposal
+		_ = json.Unmarshal(iter.Value(), &p)
+		if p.Status != Active {
+			continue
+		}
+		if now.Unix() > p.Deadline {
+			rule := lp.cfg.Rules[p.Type]
+			if passed, rejected := evaluate(&p, rule); passed {
+				p.Status = Passed
+			} else if rejected {
+				p.Status = Rejected
+			} else {
+				p.Status = Expired
+			}
+			lp.ledger.SetState(iter.Key(), p.Marshal())
+		}
+	}
+	if lp.cfg.RedistributeInterval > 0 {
+		if lp.lastRedistribute == 0 {
+			raw, _ := lp.ledger.GetState([]byte("loanpool:lastredis"))
+			if len(raw) == 8 {
+				lp.lastRedistribute = int64(binary.BigEndian.Uint64(raw))
+			}
+		}
+		if now.Unix()-lp.lastRedistribute >= int64(lp.cfg.RedistributeInterval.Seconds()) {
+			lp.redistribute(now)
+			lp.lastRedistribute = now.Unix()
+			buf := make([]byte, 8)
+			binary.BigEndian.PutUint64(buf, uint64(lp.lastRedistribute))
+			lp.ledger.SetState([]byte("loanpool:lastredis"), buf)
+		}
+	}
+}
+
+func (lp *LoanPool) redistribute(now time.Time) {
+	bal := lp.ledger.BalanceOf(LoanPoolAccount)
+	if bal == 0 || lp.cfg.RedistributePerc <= 0 {
+		return
+	}
+	amt := bal * uint64(lp.cfg.RedistributePerc) / 100
+	if amt == 0 {
+		return
+	}
+	// send to CharityPoolAccount as ecosystem support
+	_ = lp.ledger.Transfer(LoanPoolAccount, CharityPoolAccount, amt)
+	lp.logger.Printf("redistributed %d wei from loan pool to charity", amt)
 }
 
 //---------------------------------------------------------------------
@@ -355,13 +473,31 @@ func (lp *LoanPool) Tick(now time.Time) {
 //---------------------------------------------------------------------
 
 func proposalKey(id Hash) []byte { return append([]byte("loanpool:proposal:"), id[:]...) }
-func voteKey(id Hash, voter Address) []byte { return append(append([]byte("loanpool:vote:"), id[:]...), voter.Bytes()...) }
+func voteKey(id Hash, voter Address) []byte {
+	return append(append([]byte("loanpool:vote:"), id[:]...), voter.Bytes()...)
+}
 
-func containsAddr(list []Address, a Address) bool { for _, x := range list { if x==a { return true } }; return false }
+func containsAddr(list []Address, a Address) bool {
+	for _, x := range list {
+		if x == a {
+			return true
+		}
+	}
+	return false
+}
 
-func alreadyVoted(led StateRW, id Hash, voter Address) bool { ok, _ := led.HasState(voteKey(id,voter)); return ok }
+func alreadyVoted(led StateRW, id Hash, voter Address) bool {
+	ok, _ := led.HasState(voteKey(id, voter))
+	return ok
+}
 
-func recordVote(led StateRW, id Hash, voter Address, approve bool) { b:=[]byte{0x00}; if approve { b[0]=0x01 }; led.SetState(voteKey(id,voter), b) }
+func recordVote(led StateRW, id Hash, voter Address, approve bool) {
+	b := []byte{0x00}
+	if approve {
+		b[0] = 0x01
+	}
+	led.SetState(voteKey(id, voter), b)
+}
 
 //---------------------------------------------------------------------
 // Marshal helpers for enums
@@ -369,13 +505,20 @@ func recordVote(led StateRW, id Hash, voter Address, approve bool) { b:=[]byte{0
 
 func (h ProposalType) MarshalText() ([]byte, error) { return []byte(h.String()), nil }
 func (s ProposalStatus) MarshalText() ([]byte, error) {
-    switch s {
-    case Active: return []byte("Active"), nil
-    case Passed: return []byte("Passed"), nil
-    case Rejected: return []byte("Rejected"), nil
-    case Executed: return []byte("Executed"), nil
-    case Expired: return []byte("Expired"), nil
-    default: return []byte("Unknown"), nil }
+	switch s {
+	case Active:
+		return []byte("Active"), nil
+	case Passed:
+		return []byte("Passed"), nil
+	case Rejected:
+		return []byte("Rejected"), nil
+	case Executed:
+		return []byte("Executed"), nil
+	case Expired:
+		return []byte("Expired"), nil
+	default:
+		return []byte("Unknown"), nil
+	}
 }
 
 //---------------------------------------------------------------------
