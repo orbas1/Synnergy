@@ -27,6 +27,8 @@ import (
 	"time"
 )
 
+
+// Simplified opcode set for the light interpreter
 const (
 	PUSH Opcode = iota
 	ADD

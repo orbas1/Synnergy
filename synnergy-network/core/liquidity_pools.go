@@ -218,29 +218,25 @@ func (a *AMM) RemoveLiquidity(p PoolID, provider Address, lpAmount uint64) (amtA
 //---------------------------------------------------------------------
 
 // Pool returns a snapshot of the given pool's state.
-func (a *AMM) Pool(pid PoolID) (Pool, error) {
+func (a *AMM) Pool(pid PoolID) (*Pool, error) {
 	a.mu.RLock()
 	pool, ok := a.pools[pid]
 	a.mu.RUnlock()
 	if !ok {
-		return Pool{}, errors.New("pool not found")
+		return nil, errors.New("pool not found")
 	}
 	pool.mu.RLock()
 	defer pool.mu.RUnlock()
-	cp := *pool
-	return cp, nil
+	return pool, nil
 }
 
 // Pools returns copies of all pools managed by the AMM.
-func (a *AMM) Pools() []Pool {
+func (a *AMM) Pools() []*Pool {
 	a.mu.RLock()
 	defer a.mu.RUnlock()
-	out := make([]Pool, 0, len(a.pools))
+	out := make([]*Pool, 0, len(a.pools))
 	for _, p := range a.pools {
-		p.mu.RLock()
-		cp := *p
-		p.mu.RUnlock()
-		out = append(out, cp)
+		out = append(out, p)
 	}
 	return out
 }
