@@ -441,7 +441,7 @@ func init() {
 //---------------------------------------------------------------------
 
 func registerTokenOpcodes() {
-	Register(0xB0, func(ctx Context) error {
+	Register(0xB0, func(ctx *Context) error {
 		id := TokenID(ctx.Stack.PopUint32())
 		to := ctx.Stack.PopAddress()
 		amt := ctx.Stack.PopUint64()

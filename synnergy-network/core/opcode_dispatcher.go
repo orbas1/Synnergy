@@ -40,16 +40,15 @@ import (
 
 // Context is provided by the VM; it gives opcode handlers controlled access
 // to message meta-data, state-DB, gas-meter, logger, etc.
-type Context interface {
-	Call(string) error // unified façade (ledger/consensus/VM)
-	Gas(uint64) error  // deducts gas or returns an error if exhausted
-}
+// OpContext is the execution context passed to opcode handlers.
+// It aliases the transaction Context to avoid circular imports.
+type OpContext = Context
 
 // Opcode is a 24-bit, deterministic instruction identifier.
 type Opcode uint32
 
 // OpcodeFunc is the concrete implementation invoked by the VM.
-type OpcodeFunc func(ctx Context) error
+type OpcodeFunc func(ctx *Context) error
 
 // opcodeTable holds the runtime mapping (populated once in init()).
 var (
@@ -70,7 +69,7 @@ func Register(op Opcode, fn OpcodeFunc) {
 }
 
 // Dispatch is called by the VM executor for every instruction.
-func Dispatch(ctx Context, op Opcode) error {
+func Dispatch(ctx *Context, op Opcode) error {
 	mu.RLock()
 	fn, ok := opcodeTable[op]
 	mu.RUnlock()
@@ -87,7 +86,7 @@ func Dispatch(ctx Context, op Opcode) error {
 
 // helper returns a closure that delegates the call to Context.Call(<name>).
 func wrap(name string) OpcodeFunc {
-	return func(ctx Context) error { return ctx.Call(name) }
+	return func(ctx *Context) error { return ctx.Call(name) }
 }
 
 // ────────────────────────────────────────────────────────────────────────────

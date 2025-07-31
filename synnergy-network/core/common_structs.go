@@ -9,6 +9,7 @@ package core
 
 import (
 	"context"
+	"fmt"
 	"math/big"
 	"net"
 	"net/http"
@@ -17,8 +18,8 @@ import (
 	"time"
 	// Logging & P2P
 	"github.com/ethereum/go-ethereum/accounts/abi"
-	host "github.com/libp2p/go-libp2p-core/host"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	host "github.com/libp2p/go-libp2p/core/host"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -792,6 +793,23 @@ type Context struct {
 	Args        []byte // transaction input data
 	Memory      *Memory
 	State       StateRW
+}
+
+// Call delegates to the underlying state to invoke a contract or high level
+// function by name. This is a stub implementation used during early
+// development and simply returns an error until the VM wiring is completed.
+func (ctx *Context) Call(name string) error {
+	return fmt.Errorf("call %s not implemented", name)
+}
+
+// Gas deducts the given amount from the remaining gas limit and returns an
+// error if insufficient gas is available.
+func (ctx *Context) Gas(amount uint64) error {
+	if ctx.GasLimit < amount {
+		return fmt.Errorf("out of gas")
+	}
+	ctx.GasLimit -= amount
+	return nil
 }
 
 type Registry struct {
