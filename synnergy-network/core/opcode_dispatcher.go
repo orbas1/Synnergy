@@ -160,6 +160,8 @@ var catalogue = []struct {
 	{"Coin_Mint", 0x050002},
 	{"Coin_TotalSupply", 0x050003},
 	{"Coin_BalanceOf", 0x050004},
+	{"Coin_Transfer", 0x050005},
+	{"Coin_Burn", 0x050006},
 
 	// Compliance (0x06)
 	{"InitCompliance", 0x060001},
