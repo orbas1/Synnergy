@@ -42,7 +42,7 @@ import (
 //---------------------------------------------------------------------
 
 func init() {
-	if err := bls.Init(0); err != nil {
+	if err := bls.Init(bls.BLS12_381); err != nil {
 		panic(fmt.Errorf("bls init: %w", err))
 	}
 }
