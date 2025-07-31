@@ -624,6 +624,7 @@ func (l *Ledger) BurnLP(addr Address, pool PoolID, amt uint64) error {
 	return nil
 }
 
+
 func (l *Ledger) NonceOf(addr Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
