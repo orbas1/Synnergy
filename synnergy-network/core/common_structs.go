@@ -17,8 +17,8 @@ import (
 	"time"
 	// Logging & P2P
 	"github.com/ethereum/go-ethereum/accounts/abi"
-	host "github.com/libp2p/go-libp2p-core/host"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	host "github.com/libp2p/go-libp2p/core/host"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -356,6 +356,7 @@ type Ledger struct {
 	TxPool           map[string]*Transaction
 	Contracts        map[string]Contract
 	TokenBalances    map[string]uint64
+	logs             []*Log
 	walFile          *os.File
 	snapshotPath     string
 	snapshotInterval int
@@ -776,7 +777,7 @@ type WithdrawProof struct {
 }
 
 // Context holds the transaction-level fields (args, caller, origin, etc.).
-type Context struct {
+type TxContext struct {
 	BlockHeight uint64
 	TxHash      Hash
 	Caller      Address

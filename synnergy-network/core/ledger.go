@@ -351,7 +351,7 @@ func (l *Ledger) GetContract(address []byte) (*Contract, error) {
 }
 
 // BalanceOf returns token balance.
-func (l *Ledger) BalanceOf(address []byte) uint64 {
+func (l *Ledger) BalanceOf(address Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
 	return l.TokenBalances[fmt.Sprintf("%x", address)]
@@ -627,38 +627,15 @@ func (l *Ledger) NonceOf(addr Address) uint64 {
 	return l.nonces[addr]
 }
 
-func (l *Ledger) BlockByHash(h Hash) (*Block, error) {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-	for _, b := range l.Blocks {
-		if b.Hash() == h {
-			return b, nil
-		}
+// AddLog appends an execution log entry to the ledger. The log slice is lazily
+// initialised on first use to avoid nil checks across the codebase.
+func (l *Ledger) AddLog(log *Log) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.logs == nil {
+		l.logs = make([]*Log, 0, 16)
 	}
-	return nil, fmt.Errorf("block not found")
-}
-
-func (l *Ledger) HasBlock(h Hash) bool {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-	for _, b := range l.Blocks {
-		if b.Hash() == h {
-			return true
-		}
-	}
-	return false
-}
-
-func (l *Ledger) ImportBlock(b *Block) error {
-	return l.AddBlock(b)
-}
-
-func (l *Ledger) DecodeBlockRLP(data []byte) (*Block, error) {
-	var blk Block
-	if err := rlp.DecodeBytes(data, &blk); err != nil {
-		return nil, err
-	}
-	return &blk, nil
+	l.logs = append(l.logs, log)
 }
 
 func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
