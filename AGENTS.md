@@ -123,9 +123,9 @@ you progress.
 1. [x] ai.go
 2. [x] amm.go
 3. [x] authority_node.go
-4. [ ] charity_pool.go
-5. [ ] coin.go
-6. [ ] compliance.go
+4. [x] charity_pool.go
+5. [x] coin.go
+6. [x] compliance.go
 7. [ ] consensus.go
 8. [ ] contracts.go
 9. [ ] cross_chain.go
