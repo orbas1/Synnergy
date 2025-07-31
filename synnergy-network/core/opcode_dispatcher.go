@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -294,6 +294,9 @@ var catalogue = []struct {
 	{"Loanpool_Vote", 0x100006},
 	{"Disburse", 0x100007},
 	{"Loanpool_Tick", 0x100008},
+	{"Loanpool_GetProposal", 0x100009},
+	{"Loanpool_ListProposals", 0x10000A},
+	{"Loanpool_Redistribute", 0x10000B},
 
 	// Network (0x11)
 	{"NewNode", 0x110001},

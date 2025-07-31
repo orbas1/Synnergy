@@ -50,17 +50,15 @@ var gasTable = map[Opcode]uint64{
 	ReleaseEscrow:  12_000,
 	PredictVolume:  15_000,
 
-
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-	SwapExactIn:    4_500,
-	AddLiquidity:   5_000,
-	RemoveLiquidity:5_000,
-  Quote:          2_500,
-  AllPairs:       2_000,
-  InitPoolsFromFile: 6_000,
-
+	SwapExactIn:       4_500,
+	AddLiquidity:      5_000,
+	RemoveLiquidity:   5_000,
+	Quote:             2_500,
+	AllPairs:          2_000,
+	InitPoolsFromFile: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
@@ -105,7 +103,6 @@ var gasTable = map[Opcode]uint64{
 	Compliance_AuditTrail: 3_000,
 	Compliance_MonitorTx:  5_000,
 	Compliance_VerifyZKP:  12_000,
-
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
@@ -234,9 +231,12 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Loan-Pool
 	// ----------------------------------------------------------------------
-	NewLoanPool: 20_000,
-	Submit:      3_000,
-	Disburse:    8_000,
+	NewLoanPool:   20_000,
+	Submit:        3_000,
+	Disburse:      8_000,
+	GetProposal:   1_000,
+	ListProposals: 1_500,
+	Redistribute:  5_000,
 	// Vote  & Tick already priced
 	// RandomElectorate / IsAuthority already priced
 
