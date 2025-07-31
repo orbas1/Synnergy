@@ -50,17 +50,15 @@ var gasTable = map[Opcode]uint64{
 	ReleaseEscrow:  12_000,
 	PredictVolume:  15_000,
 
-
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-	SwapExactIn:    4_500,
-	AddLiquidity:   5_000,
-	RemoveLiquidity:5_000,
-  Quote:          2_500,
-  AllPairs:       2_000,
-  InitPoolsFromFile: 6_000,
-
+	SwapExactIn:       4_500,
+	AddLiquidity:      5_000,
+	RemoveLiquidity:   5_000,
+	Quote:             2_500,
+	AllPairs:          2_000,
+	InitPoolsFromFile: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
@@ -105,7 +103,6 @@ var gasTable = map[Opcode]uint64{
 	Compliance_AuditTrail: 3_000,
 	Compliance_MonitorTx:  5_000,
 	Compliance_VerifyZKP:  12_000,
-
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
@@ -185,13 +182,14 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Green Technology
 	// ----------------------------------------------------------------------
-	InitGreenTech:  8_000,
-	Green:          2_000,
-	RecordUsage:    3_000,
-	RecordOffset:   3_000,
-	Certify:        7_000,
-	CertificateOf:  500,
-	ShouldThrottle: 200,
+	InitGreenTech:    8_000,
+	Green:            2_000,
+	RecordUsage:      3_000,
+	RecordOffset:     3_000,
+	Certify:          7_000,
+	CertificateOf:    500,
+	ShouldThrottle:   200,
+	ListCertificates: 1_000,
 
 	// ----------------------------------------------------------------------
 	// Ledger / UTXO / Account-Model
