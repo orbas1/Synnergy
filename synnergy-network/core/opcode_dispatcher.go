@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -404,6 +404,9 @@ var catalogue = []struct {
 	{"VerifySig", 0x1A0002},
 	{"ValidateTx", 0x1A0003},
 	{"NewTxPool", 0x1A0004},
+	{"AddTx", 0x1A0005},
+	{"PickTxs", 0x1A0006},
+	{"TxPoolSnapshot", 0x1A0007},
 
 	// Utilities (0x1B) – EVM-compatible arithmetic & crypto
 	{"Short", 0x1B0001},
