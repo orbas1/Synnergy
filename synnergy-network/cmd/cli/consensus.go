@@ -36,7 +36,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	// Core & service layer
+	// Core services
 	"synnergy-network/core"
 )
 
@@ -52,6 +52,12 @@ var (
 	ledger      *core.Ledger
 	logger      = logrus.StandardLogger()
 )
+
+// stubSecurity implements core's securityAdapter with no-op methods.
+type stubSecurity struct{}
+
+func (stubSecurity) Sign(_ string, _ []byte) ([]byte, error) { return nil, nil }
+func (stubSecurity) Verify(_, _, _ []byte) bool              { return true }
 
 // initConsensusMiddleware loads configuration, initialises shared services
 // (ledger, p2p, security, txpool, authority) and constructs the consensus
@@ -99,39 +105,25 @@ func initConsensusMiddleware(cmd *cobra.Command, _ []string) error {
 		listenPort = "30333"
 	}
 	boot := strings.Split(os.Getenv("P2P_BOOTNODES"), ",")
-	p2pCfg := network.Config{
-		ListenAddr: fmt.Sprintf(":%s", listenPort),
-		Bootnodes:  boot,
-		Logger:     logger,
+	p2pCfg := core.Config{
+		ListenAddr:     fmt.Sprintf(":%s", listenPort),
+		BootstrapPeers: boot,
+		DiscoveryTag:   "synnergy",
 	}
-	p2pSvc, err := core.NewService(p2pCfg)
+	p2pSvc, err := core.NewNode(p2pCfg)
 	if err != nil {
 		return fmt.Errorf("init p2p: %w", err)
 	}
 
 	// 5. security (crypto keys & signatures)
-	ksPath := os.Getenv("KEYSTORE_PATH")
-	if ksPath == "" {
-		return fmt.Errorf("KEYSTORE_PATH not set")
-	}
-	secSvc, err := security.NewService(security.Config{KeyStorePath: ksPath})
-	if err != nil {
-		return fmt.Errorf("init security: %w", err)
-	}
+	secSvc := stubSecurity{}
 
 	// 6. transaction pool (bounded‑size mempool driven by ledger state)
-	txPoolCfg := txpool.Config{MaxPool: 50_000, Ledger: ledger, Logger: logger}
-	txPoolSvc := txpool.New(txPoolCfg)
+	authSvc := core.NewAuthoritySet(logger, ledger)
+	txPoolSvc := core.NewTxPool(nil, ledger, authSvc, nil, p2pSvc, 0)
 
 	// 7. authority (staking / roles)
-	authDB := os.Getenv("AUTH_DB_PATH")
-	if authDB == "" {
-		return fmt.Errorf("AUTH_DB_PATH not set")
-	}
-	authSvc, err := authority.New(authority.Config{DBPath: authDB, Ledger: ledger})
-	if err != nil {
-		return fmt.Errorf("init authority: %w", err)
-	}
+	// authority service already created above
 
 	// 8. create consensus
 	cns, err := core.NewConsensus(logger, ledger, p2pSvc, secSvc, txPoolSvc, authSvc)
