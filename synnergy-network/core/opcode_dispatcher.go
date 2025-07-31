@@ -40,7 +40,6 @@ import (
 
 // OpContext is provided by the VM; it gives opcode handlers controlled access
 // to message meta-data, state-DB, gas-meter, logger, etc.
-
 type OpContext interface {
 	Call(string) error // unified façade (ledger/consensus/VM)
 	Gas(uint64) error  // deducts gas or returns an error if exhausted
@@ -51,7 +50,6 @@ type Opcode uint32
 
 // OpcodeFunc is the concrete implementation invoked by the VM.
 type OpcodeFunc func(ctx OpContext) error
-
 
 // opcodeTable holds the runtime mapping (populated once in init()).
 var (
