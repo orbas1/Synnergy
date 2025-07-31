@@ -51,13 +51,16 @@ func (m *mockCrypto) Sign(_ string, data []byte) ([]byte, error) {
 
 func (m *mockCrypto) Verify(_, _, _ []byte) bool { return true }
 
-
 func (m *mockAuthority) ValidatorPubKey(role string) []byte {
 	return []byte("validator-pubkey")
 }
 
-func (m *mockAuthority) StakeOf([]byte) uint64      { return 100 }
-func (m *mockAuthority) LoanPoolAddress() Address   { var a Address; copy(a[:], []byte("loan")); return a }
+func (m *mockAuthority) StakeOf([]byte) uint64 { return 100 }
+func (m *mockAuthority) LoanPoolAddress() Address {
+	var a Address
+	copy(a[:], []byte("loan"))
+	return a
+}
 
 // --- Tests ---
 
@@ -103,13 +106,15 @@ func TestValidatePoH(t *testing.T) {
 	txs := [][]byte{[]byte("a"), []byte("b")}
 	ts := time.Now().UnixMilli()
 	h := sha256.New()
-	for _, tx := range txs { h.Write(tx) }
+	for _, tx := range txs {
+		h.Write(tx)
+	}
 	tb := make([]byte, 8)
 	binary.LittleEndian.PutUint64(tb, uint64(ts))
 	h.Write(tb)
 
 	header := SubBlockHeader{
-		PoHHash:  h.Sum(nil),
+		PoHHash:   h.Sum(nil),
 		Timestamp: ts,
 	}
 	block := &SubBlock{

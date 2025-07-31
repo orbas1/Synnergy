@@ -2,11 +2,11 @@
 // Package core – shared security primitives for the Synnergy Network stack.
 //
 // Exposes:
-//   • Sign / Verify      – Ed25519 (wallets) + BLS12-381 (validators).
-//   • BLS aggregation    – multi-sig / threshold helpers.
-//   • XChaCha20-Poly1305 – authenticated encryption.
-//   • ComputeMerkleRoot – Bitcoin-style double-SHA256 Merkle tree.
-//   • TLS loader         – hardened TLS 1.3 config for node-to-node gRPC.
+//   - Sign / Verify      – Ed25519 (wallets) + BLS12-381 (validators).
+//   - BLS aggregation    – multi-sig / threshold helpers.
+//   - XChaCha20-Poly1305 – authenticated encryption.
+//   - ComputeMerkleRoot – Bitcoin-style double-SHA256 Merkle tree.
+//   - TLS loader         – hardened TLS 1.3 config for node-to-node gRPC.
 //
 // All crypto comes from Go 1.22 std-lib or herumi BLS (battle-tested).
 package core
@@ -26,7 +26,7 @@ import (
 	"sort"
 
 	bls "github.com/herumi/bls-eth-go-binary/bls"
-    
+
 	"golang.org/x/crypto/chacha20poly1305"
 )
 
@@ -59,8 +59,8 @@ const (
 	AlgoBLS
 )
 
-// Sign signs msg with priv.  
-// - For Ed25519: priv must be ed25519.PrivateKey.  
+// Sign signs msg with priv.
+// - For Ed25519: priv must be ed25519.PrivateKey.
 // - For BLS:     priv must be *bls.SecretKey.
 func Sign(algo KeyAlgo, priv interface{}, msg []byte) ([]byte, error) {
 	switch algo {
@@ -209,6 +209,7 @@ func gfMul(a, b byte) byte {
 	}
 	return p
 }
+
 // Multiplicative inverse in GF(2⁸) using the extended Euclidean algorithm.
 func gfInv(a byte) byte {
 	if a == 0 {
@@ -250,7 +251,7 @@ func polyDiv(a, b byte) byte {
 
 // Encrypt returns nonce || ciphertext || tag using XChaCha20-Poly1305.
 func Encrypt(key, plaintext, aad []byte) ([]byte, error) {
-	if len(key) != chacha20poly1305.KeySize {          // ← use KeySize
+	if len(key) != chacha20poly1305.KeySize { // ← use KeySize
 		return nil, errors.New("key must be 32 bytes")
 	}
 	aead, err := chacha20poly1305.NewX(key)
@@ -269,7 +270,7 @@ func Encrypt(key, plaintext, aad []byte) ([]byte, error) {
 
 // Decrypt verifies and opens a blob produced by Encrypt.
 func Decrypt(key, blob, aad []byte) ([]byte, error) {
-	if len(key) != chacha20poly1305.KeySize {          // ← use KeySize
+	if len(key) != chacha20poly1305.KeySize { // ← use KeySize
 		return nil, errors.New("key must be 32 bytes")
 	}
 	minLen := chacha20poly1305.NonceSizeX + chacha20poly1305.Overhead
@@ -284,7 +285,6 @@ func Decrypt(key, blob, aad []byte) ([]byte, error) {
 	}
 	return aead.Open(nil, nonce, ciphertext, aad)
 }
-
 
 //---------------------------------------------------------------------
 // Merkle root (double-SHA256, canonical ordering)

@@ -1,6 +1,5 @@
 package core
 
-
 import (
 	"encoding/json"
 	"fmt"
@@ -19,8 +18,6 @@ const Code = "SYNN"
 
 // GenesisAlloc is the amount to allocate in the genesis block via consensus.
 const GenesisAlloc uint64 = 10_000_000
-
-
 
 // NewCoin constructs a Coin manager backed by the given ledger.
 // It initializes totalMinted by summing existing balances, so that
@@ -81,7 +78,6 @@ func (c *Coin) Mint(to []byte, amount uint64) error {
 		amount, Code, to, c.totalMinted)
 	return nil
 }
-
 
 // TotalSupply returns the total number of Synthron coins minted so far.
 func (c *Coin) TotalSupply() uint64 {

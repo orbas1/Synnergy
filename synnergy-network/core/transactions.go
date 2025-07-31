@@ -8,21 +8,18 @@ import (
 	"crypto/ecdsa"
 	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	"log"
 	"sync"
-	"github.com/ethereum/go-ethereum/crypto"
-    "encoding/hex"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 // -----------------------------------------------------------------------------
 // Address helper (our 20-byte address type ↔ go-ethereum common.Address)
 // -----------------------------------------------------------------------------
-
-
-
 
 // Converts go-ethereum common.Address → your custom Address
 func FromCommon(a common.Address) Address {
@@ -66,8 +63,6 @@ func (tx *Transaction) HashTx() Hash {
 	copy(tx.Hash[:], e[:])
 	return tx.Hash
 }
-
-
 
 func (tx *Transaction) Sign(priv *ecdsa.PrivateKey) error {
 	if priv == nil {
@@ -147,8 +142,6 @@ func (tp *TxPool) ValidateTx(tx *Transaction) error {
 	return nil
 }
 
-
-
 // -----------------------------------------------------------------------------
 // txItem / txPriorityQueue (unchanged, compile-ready)
 // -----------------------------------------------------------------------------
@@ -161,9 +154,12 @@ type txItem struct {
 
 type txPriorityQueue []*txItem
 
-func (pq txPriorityQueue) Len() int            { return len(pq) }
-func (pq txPriorityQueue) Less(i, j int) bool  { return pq[i].pr > pq[j].pr }
-func (pq txPriorityQueue) Swap(i, j int)       { pq[i], pq[j] = pq[j], pq[i]; pq[i].index, pq[j].index = i, j }
+func (pq txPriorityQueue) Len() int           { return len(pq) }
+func (pq txPriorityQueue) Less(i, j int) bool { return pq[i].pr > pq[j].pr }
+func (pq txPriorityQueue) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+	pq[i].index, pq[j].index = i, j
+}
 func (pq *txPriorityQueue) Push(x interface{}) { *pq = append(*pq, x.(*txItem)) }
 func (pq *txPriorityQueue) Pop() interface{} {
 	old := *pq
@@ -177,15 +173,13 @@ func (pq *txPriorityQueue) Pop() interface{} {
 // TxPool skeleton – minimal fields & ctor compile-ready
 // -----------------------------------------------------------------------------
 
-
-
 func NewTxPool(
-	lg        *log.Logger,   // ← unused for now
-	led       ReadOnlyState,
-	auth      *AuthoritySet,
-	gasCalc   GasCalculator,
-	net       Broadcaster,
-	maxBytes  int,           // ← unused for now
+	lg *log.Logger, // ← unused for now
+	led ReadOnlyState,
+	auth *AuthoritySet,
+	gasCalc GasCalculator,
+	net Broadcaster,
+	maxBytes int, // ← unused for now
 ) *TxPool {
 
 	return &TxPool{
@@ -208,8 +202,6 @@ func (tx *Transaction) IDHex() string {
 // interfaces & stubs just to make the file compile
 // -----------------------------------------------------------------------------
 
-
-
 type TxType uint8
 
 const (
@@ -218,11 +210,9 @@ const (
 	TxReversal
 )
 
-
-func (a *AuthoritySet) ActiveAddresses() []Address      { return nil }
+func (a *AuthoritySet) ActiveAddresses() []Address { return nil }
 
 // -----------------------------------------------------------------------------
 // minimal sync import for TxPool
 // -----------------------------------------------------------------------------
 var _ = sync.RWMutex{}
-

@@ -13,10 +13,10 @@ func init() {
 }
 
 type mockPoolManager struct {
-	pools map[PoolID]*Pool
-	swapFn         func(PoolID, Address, TokenID, uint64, uint8) (uint64, error)
-	liqAddFn       func(PoolID, Address, uint64, uint64) (uint64, error)
-	liqRemoveFn    func(PoolID, Address, uint64) (uint64, uint64, error)
+	pools       map[PoolID]*Pool
+	swapFn      func(PoolID, Address, TokenID, uint64, uint8) (uint64, error)
+	liqAddFn    func(PoolID, Address, uint64, uint64) (uint64, error)
+	liqRemoveFn func(PoolID, Address, uint64) (uint64, uint64, error)
 }
 
 func (m *mockPoolManager) Swap(pid PoolID, trader Address, tokenIn TokenID, amtIn uint64, slippage uint8) (uint64, error) {

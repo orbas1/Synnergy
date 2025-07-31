@@ -149,7 +149,6 @@ func TestCoin_Mint(t *testing.T) {
 	}
 }
 
-
 /*
 	--------------------------------------------------------------------
 	Compile-time assertions – guard against interface drift.
@@ -196,5 +195,3 @@ func TestLedger_MintToken_ZeroAmount(t *testing.T) {
 	functions above aren’t elided by the compiler).
 	--------------------------------------------------------------------
 */
-
-

@@ -8,42 +8,40 @@
 package core
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
-	"math/big"
-	"net/http"
-	"sync"
-	"time"
-    "bytes"
+	"github.com/ethereum/go-ethereum/common" // common.Address
+	"github.com/ethereum/go-ethereum/crypto" // crypto.Keccak256
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus" // aliased below
 	"github.com/wasmerio/wasmer-go/wasmer"
 	"golang.org/x/time/rate"
-	"github.com/ethereum/go-ethereum/common" // common.Address
-	"github.com/ethereum/go-ethereum/crypto" // crypto.Keccak256
+	"math/big"
+	"net/http"
+	"sync"
+	"time"
 )
 
 //---------------------------------------------------------------------
 // Minimal state interface + in-memory implementation
 //---------------------------------------------------------------------
 
-
 type memState struct {
-	mu           sync.RWMutex
-	data         map[string][]byte
-	balances     map[Address]uint64
-	lpBalances   map[Address]map[PoolID]uint64
-	logs         []*Log
-	contracts    map[Address][]byte
-	tokens     map[TokenID]Token  // <- Add this
-	codeHashes   map[Address]Hash
-	nonces       map[Address]uint64
+	mu         sync.RWMutex
+	data       map[string][]byte
+	balances   map[Address]uint64
+	lpBalances map[Address]map[PoolID]uint64
+	logs       []*Log
+	contracts  map[Address][]byte
+	tokens     map[TokenID]Token // <- Add this
+	codeHashes map[Address]Hash
+	nonces     map[Address]uint64
 }
-
 
 func (m *memState) Burn(addr Address, amt uint64) error {
 	m.mu.Lock()
@@ -82,7 +80,6 @@ func (m *memState) MintLP(to Address, pool PoolID, amt uint64) error {
 	m.lpBalances[to][pool] += amt
 	return nil
 }
-
 
 func NewInMemory() (StateRW, error) {
 	return &memState{
@@ -228,7 +225,6 @@ func (m *memState) StaticCall(from, to Address, input []byte, gas uint64) ([]byt
 	return receipt.ReturnData, true, nil
 }
 
-
 func (m *memState) GetBalance(addr Address) uint64 {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
@@ -269,8 +265,6 @@ func (m *memState) GetTokenSupply(tokenID TokenID) (uint64, error) {
 	return totalSupply, nil
 }
 
-
-
 func (m *memState) SetBalance(addr Address, amount uint64) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -292,8 +286,6 @@ func (w *memStateWrapper) CallContract(from, to Address, input []byte, value *bi
 func (w *memStateWrapper) StaticCall(from, to Address, input []byte, gas uint64) ([]byte, bool, error) {
 	return w.memState.StaticCall(from, to, input, gas)
 }
-
-
 
 func (m *memState) DelegateCall(from, to Address, input []byte, value *big.Int, gas uint64) error {
 	m.mu.Lock()
@@ -335,8 +327,6 @@ func (m *memState) DelegateCall(from, to Address, input []byte, value *big.Int, 
 	return err
 }
 
-
-
 func (m *memState) GetToken(tokenID TokenID) (Token, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
@@ -348,16 +338,11 @@ func (m *memState) GetToken(tokenID TokenID) (Token, error) {
 	return token, nil
 }
 
-
-
-
-
 func NewMemory() Memory {
 	return &LinearMemory{
 		data: make([]byte, 0, 1024),
 	}
 }
-
 
 type LinearMemory struct {
 	data []byte
@@ -387,8 +372,6 @@ func (m *LinearMemory) Write(offset uint64, data []byte) {
 func (m *LinearMemory) Len() int {
 	return len(m.data)
 }
-
-
 
 func (m *memState) Call(from, to Address, input []byte, value *big.Int, gas uint64) ([]byte, error) {
 	m.mu.Lock()
@@ -434,17 +417,13 @@ func (m *memState) Call(from, to Address, input []byte, value *big.Int, gas uint
 	return receipt.ReturnData, nil
 }
 
-
 type memStateWrapper struct {
 	*memState
 }
 
-
 func (w *memStateWrapper) Call(from, to Address, input []byte, value *big.Int, gas uint64) ([]byte, error) {
 	return w.memState.Call(from, to, input, value, gas)
 }
-
-
 
 func SelectVM(code []byte) string {
 	if len(code) < 100 {
@@ -512,8 +491,6 @@ func (m *memState) CreateContract(caller Address, code []byte, value *big.Int, g
 	return contractAddr, receipt.ReturnData, true, nil
 }
 
-
-
 func (m *memState) GetContract(addr Address) (*Contract, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
@@ -531,13 +508,11 @@ func (m *memState) AddLog(log *Log) {
 	m.logs = append(m.logs, log)
 }
 
-
 func (m *memState) GetCode(addr Address) []byte {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	return m.contracts[addr]
 }
-
 
 func (m *memState) GetCodeHash(addr Address) Hash {
 	m.mu.RLock()
@@ -545,35 +520,29 @@ func (m *memState) GetCodeHash(addr Address) Hash {
 	return m.codeHashes[addr]
 }
 
-
-
-
-
 func (m *memState) MintToken(addr Address, amount uint64) error {
-    m.mu.Lock()
-    defer m.mu.Unlock()
-    if m.balances == nil {
-        m.balances = make(map[Address]uint64)
-    }
-    m.balances[addr] += amount
-    return nil
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.balances == nil {
+		m.balances = make(map[Address]uint64)
+	}
+	m.balances[addr] += amount
+	return nil
 }
 
 func (m *memState) Transfer(from, to Address, amount uint64) error {
-    m.mu.Lock()
-    defer m.mu.Unlock()
-    if m.balances == nil {
-        return fmt.Errorf("no balances initialized")
-    }
-    if m.balances[from] < amount {
-        return fmt.Errorf("insufficient balance: have %d, need %d", m.balances[from], amount)
-    }
-    m.balances[from] -= amount
-    m.balances[to] += amount
-    return nil
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.balances == nil {
+		return fmt.Errorf("no balances initialized")
+	}
+	if m.balances[from] < amount {
+		return fmt.Errorf("insufficient balance: have %d, need %d", m.balances[from], amount)
+	}
+	m.balances[from] -= amount
+	m.balances[to] += amount
+	return nil
 }
-
-
 
 type memIterator struct {
 	keys   [][]byte
@@ -626,35 +595,34 @@ func (it *memIterator) Error() error {
 	return it.err
 }
 
-
 func (m *memState) Snapshot(fn func() error) error {
-    m.mu.RLock()
-    defer m.mu.RUnlock()
-    // Create a copy of the current state
-    dataCopy := make(map[string][]byte, len(m.data))
-    for k, v := range m.data {
-        dataCopy[k] = append([]byte(nil), v...) // deep copy
-    }
-    balancesCopy := make(map[Address]uint64, len(m.balances))
-    for k, v := range m.balances {
-        balancesCopy[k] = v
-    }
-    // Call the provided function with the copied state
-    return fn()
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	// Create a copy of the current state
+	dataCopy := make(map[string][]byte, len(m.data))
+	for k, v := range m.data {
+		dataCopy[k] = append([]byte(nil), v...) // deep copy
+	}
+	balancesCopy := make(map[Address]uint64, len(m.balances))
+	for k, v := range m.balances {
+		balancesCopy[k] = v
+	}
+	// Call the provided function with the copied state
+	return fn()
 }
 
 func (m *memState) NonceOf(addr Address) uint64 {
-    m.mu.RLock()
-    defer m.mu.RUnlock()
-    // Nonce is not implemented in this simple state, returning 0
-    return 0
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	// Nonce is not implemented in this simple state, returning 0
+	return 0
 }
 
 func (m *memState) IsIDTokenHolder(addr Address) bool {
-    m.mu.RLock()
-    defer m.mu.RUnlock()
-    _, ok := m.balances[addr]
-    return ok
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	_, ok := m.balances[addr]
+	return ok
 }
 
 func (m *memState) GetState(key []byte) ([]byte, error) {
@@ -675,10 +643,10 @@ func (m *memState) SetState(key, value []byte) error {
 }
 
 func (m *memState) HasState(key []byte) (bool, error) {
-    m.mu.RLock()
-    defer m.mu.RUnlock()
-    _, ok := m.data[string(key)]
-    return ok, nil
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	_, ok := m.data[string(key)]
+	return ok, nil
 }
 
 func (m *memState) DeleteState(key []byte) error {
@@ -689,15 +657,12 @@ func (m *memState) DeleteState(key []byte) error {
 	return nil
 }
 
-
-
 func (m *memState) BalanceOf(addr Address) uint64 {
 	if m.balances == nil {
 		return 0
 	}
 	return m.balances[addr]
 }
-
 
 func (m *memState) Balance(addr Address) uint64 {
 	if m.balances == nil {
@@ -706,13 +671,13 @@ func (m *memState) Balance(addr Address) uint64 {
 	return m.balances[addr]
 }
 func (m *memState) Mint(addr Address, amt uint64) error {
-    m.mu.Lock()
-    defer m.mu.Unlock()
-    if m.balances == nil {
-        m.balances = make(map[Address]uint64)
-    }
-    m.balances[addr] += amt
-    return nil
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.balances == nil {
+		m.balances = make(map[Address]uint64)
+	}
+	m.balances[addr] += amt
+	return nil
 }
 
 func (m *memState) composite(ns, k []byte) string {
@@ -743,44 +708,44 @@ func (m *memState) Set(ns, key, val []byte) error {
 //---------------------------------------------------------------------
 
 type VMContext struct {
-    Caller   common.Address
-    Origin   common.Address
-    TxHash   [32]byte
-    GasLimit uint64
-    Context
-    Memory    Memory
-    State     StateRW
-    Chain     ChainContext
-    PC        uint64
-    JumpTable map[uint64]struct{}
-    GasMeter  *GasMeter
-    LastReturnData []byte
-    Code      []byte
+	Caller   common.Address
+	Origin   common.Address
+	TxHash   [32]byte
+	GasLimit uint64
+	Context
+	Memory         Memory
+	State          StateRW
+	Chain          ChainContext
+	PC             uint64
+	JumpTable      map[uint64]struct{}
+	GasMeter       *GasMeter
+	LastReturnData []byte
+	Code           []byte
 }
 
 // Memory is the linear byte‐array your opcodes read from and write to.
 type Memory interface {
-    // Read returns exactly `size` bytes (zero-extended if past the end).
-    Read(offset, size uint64) []byte
-    // Write writes the full slice at the given offset, growing as necessary.
-    Write(offset uint64, data []byte)
-    // Len returns the current size of memory.
-    Len() int
+	// Read returns exactly `size` bytes (zero-extended if past the end).
+	Read(offset, size uint64) []byte
+	// Write writes the full slice at the given offset, growing as necessary.
+	Write(offset uint64, data []byte)
+	// Len returns the current size of memory.
+	Len() int
 }
 
 // ChainContext provides the blockchain‐level data your opcodes need.
 type ChainContext interface {
-    BlockNumber() uint64
-    Time() uint64
-    Difficulty() *big.Int
-    GasLimit() uint64
-    ChainID() *big.Int
-    BlockHash(number uint64) common.Hash
+	BlockNumber() uint64
+	Time() uint64
+	Difficulty() *big.Int
+	GasLimit() uint64
+	ChainID() *big.Int
+	BlockHash(number uint64) common.Hash
 }
 
 type Log struct {
-	Address   Address       `json:"address"`   // <- Add this
-	Topics    []common.Hash `json:"topics"`    // <- Add this
+	Address   Address       `json:"address"` // <- Add this
+	Topics    []common.Hash `json:"topics"`  // <- Add this
 	Data      []byte        `json:"data"`
 	BlockTime int64         `json:"block_time"`
 }
@@ -799,13 +764,13 @@ type Receipt struct {
 
 // GasMeter tracks gas usage and enforces the execution gas limit.
 type GasMeter struct {
-    used  uint64 // gas consumed so far
-    limit uint64 // total gas available
+	used  uint64 // gas consumed so far
+	limit uint64 // total gas available
 }
 
 // NewGasMeter constructs a GasMeter with the given gas limit.
 func NewGasMeter(limit uint64) *GasMeter {
-    return &GasMeter{used: 0, limit: limit}
+	return &GasMeter{used: 0, limit: limit}
 }
 
 func (m *memState) SelfDestruct(contract, beneficiary Address) {
@@ -824,13 +789,10 @@ func (m *memState) SelfDestruct(contract, beneficiary Address) {
 	// Optionally delete state or tokens tied to the contract
 }
 
-
 // Remaining returns the current gas remaining.
 func (g *GasMeter) Remaining() uint64 {
-    return g.limit - g.used
+	return g.limit - g.used
 }
-
-
 
 func (g *GasMeter) Consume(op Opcode) error {
 	c := GasCost(op)
@@ -840,9 +802,6 @@ func (g *GasMeter) Consume(op Opcode) error {
 	g.used += c
 	return nil
 }
-
-
-
 
 // AddBigInts – deterministic addition for arbitrary-length byte slices.
 func AddBigInts(a, b []byte) []byte {
@@ -995,14 +954,12 @@ func (vm *LightVM) Execute(b []byte, ctx *VMContext) (*Receipt, error) {
 	return rec, nil
 }
 
-
-
 //---------------------------------------------------------------------
 // Heavy (Wasmer JIT) – host bindings
 //---------------------------------------------------------------------
 
 type hostCtx struct {
-	mem  *wasmer.Memory
+	mem   *wasmer.Memory
 	store StateRW
 	gas   *GasMeter
 	tx    *VMContext
@@ -1010,43 +967,41 @@ type hostCtx struct {
 }
 
 func (vm *HeavyVM) Execute(code []byte, ctx *VMContext) (*Receipt, error) {
-    rec := &Receipt{Status: true}
+	rec := &Receipt{Status: true}
 
-    store := wasmer.NewStore(vm.engine)          // ← you already have this
-    mod, err := wasmer.NewModule(store, code)
-    if err != nil {
-        return nil, err
-    }
+	store := wasmer.NewStore(vm.engine) // ← you already have this
+	mod, err := wasmer.NewModule(store, code)
+	if err != nil {
+		return nil, err
+	}
 
-    hctx := &hostCtx{store: vm.led, gas: vm.gas, tx: ctx, rec: rec}
+	hctx := &hostCtx{store: vm.led, gas: vm.gas, tx: ctx, rec: rec}
 
-    imports := registerHost(store, hctx)         // ← pass store **and** hctx
+	imports := registerHost(store, hctx) // ← pass store **and** hctx
 
-    instance, err := wasmer.NewInstance(mod, imports)
-    if err != nil {
-        return nil, err
-    }
+	instance, err := wasmer.NewInstance(mod, imports)
+	if err != nil {
+		return nil, err
+	}
 
-    mem, err := instance.Exports.GetMemory("memory")
-    if err != nil {
-        return nil, errors.New("wasm memory export missing")
-    }
-    hctx.mem = mem
+	mem, err := instance.Exports.GetMemory("memory")
+	if err != nil {
+		return nil, errors.New("wasm memory export missing")
+	}
+	hctx.mem = mem
 
-    start, err := instance.Exports.GetFunction("_start")
-    if err != nil {
-        return nil, errors.New("_start function required")
-    }
-    if _, err = start(); err != nil {
-        rec.Status = false
-        rec.Error  = err.Error()
-    }
+	start, err := instance.Exports.GetFunction("_start")
+	if err != nil {
+		return nil, errors.New("_start function required")
+	}
+	if _, err = start(); err != nil {
+		rec.Status = false
+		rec.Error = err.Error()
+	}
 
-    rec.GasUsed = vm.gas.used
-    return rec, nil
+	rec.GasUsed = vm.gas.used
+	return rec, nil
 }
-
-
 
 // registerHost converts your Go callbacks into Wasm imports.
 // `store` is the same store used to compile the module.
@@ -1067,113 +1022,108 @@ func registerHost(store *wasmer.Store, h *hostCtx) *wasmer.ImportObject {
 	// -----------------------------------------------------------------
 	// host_consume_gas(op u32) -> i32
 	// -----------------------------------------------------------------
-    hostConsumeGas := wasmer.NewFunction(
-    store,
-    wasmer.NewFunctionType(
-        // cast the C-constant into a Go ValueKind:
-        wasmer.NewValueTypes(wasmer.ValueKind(wasmer.I32)),
-        wasmer.NewValueTypes(wasmer.ValueKind(wasmer.I32)),
-    ),
-    func(args []wasmer.Value) ([]wasmer.Value, error) {
-        op := uint32(args[0].I32())
-        if err := h.gas.Consume(Opcode(op)); err != nil {
-            h.rec.Status = false
-            h.rec.Error = err.Error()
-            return []wasmer.Value{wasmer.NewI32(-1)}, nil
-        }
-        return []wasmer.Value{wasmer.NewI32(0)}, nil
-    },
-    )
-
-
+	hostConsumeGas := wasmer.NewFunction(
+		store,
+		wasmer.NewFunctionType(
+			// cast the C-constant into a Go ValueKind:
+			wasmer.NewValueTypes(wasmer.ValueKind(wasmer.I32)),
+			wasmer.NewValueTypes(wasmer.ValueKind(wasmer.I32)),
+		),
+		func(args []wasmer.Value) ([]wasmer.Value, error) {
+			op := uint32(args[0].I32())
+			if err := h.gas.Consume(Opcode(op)); err != nil {
+				h.rec.Status = false
+				h.rec.Error = err.Error()
+				return []wasmer.Value{wasmer.NewI32(-1)}, nil
+			}
+			return []wasmer.Value{wasmer.NewI32(0)}, nil
+		},
+	)
 
 	// -----------------------------------------------------------------
 	// host_read(keyPtr,len,dstPtr) -> i32(len)|-1
 	// -----------------------------------------------------------------
 	hostRead := wasmer.NewFunction(
-    store,
-    wasmer.NewFunctionType(
-        // cast each I32 into a ValueKind
-        wasmer.NewValueTypes(
-            wasmer.ValueKind(wasmer.I32),
-            wasmer.ValueKind(wasmer.I32),
-            wasmer.ValueKind(wasmer.I32),
-        ),
-        wasmer.NewValueTypes(
-            wasmer.ValueKind(wasmer.I32),
-        ),
-    ),
-    func(args []wasmer.Value) ([]wasmer.Value, error) {
-        kPtr, kLen, dPtr := args[0].I32(), args[1].I32(), args[2].I32()
-        key := read(kPtr, kLen)
-        val, err := h.store.Get(h.tx.TxHash[:], key)
-        if err != nil {
-            return []wasmer.Value{wasmer.NewI32(-1)}, nil
-        }
-        write(dPtr, val)
-        return []wasmer.Value{wasmer.NewI32(int32(len(val)))}, nil
-    },
-    )
-
+		store,
+		wasmer.NewFunctionType(
+			// cast each I32 into a ValueKind
+			wasmer.NewValueTypes(
+				wasmer.ValueKind(wasmer.I32),
+				wasmer.ValueKind(wasmer.I32),
+				wasmer.ValueKind(wasmer.I32),
+			),
+			wasmer.NewValueTypes(
+				wasmer.ValueKind(wasmer.I32),
+			),
+		),
+		func(args []wasmer.Value) ([]wasmer.Value, error) {
+			kPtr, kLen, dPtr := args[0].I32(), args[1].I32(), args[2].I32()
+			key := read(kPtr, kLen)
+			val, err := h.store.Get(h.tx.TxHash[:], key)
+			if err != nil {
+				return []wasmer.Value{wasmer.NewI32(-1)}, nil
+			}
+			write(dPtr, val)
+			return []wasmer.Value{wasmer.NewI32(int32(len(val)))}, nil
+		},
+	)
 
 	// -----------------------------------------------------------------
 	// host_write(keyPtr,len,valPtr,valLen) -> i32
 	// -----------------------------------------------------------------
 	hostWrite := wasmer.NewFunction(
-    store,
-    wasmer.NewFunctionType(
-        // four i32 params, one i32 result
-        wasmer.NewValueTypes(
-            wasmer.ValueKind(wasmer.I32),
-            wasmer.ValueKind(wasmer.I32),
-            wasmer.ValueKind(wasmer.I32),
-            wasmer.ValueKind(wasmer.I32),
-        ),
-        wasmer.NewValueTypes(
-            wasmer.ValueKind(wasmer.I32),
-        ),
-    ),
-    func(args []wasmer.Value) ([]wasmer.Value, error) {
-        kPtr, kLen, vPtr, vLen := args[0].I32(), args[1].I32(), args[2].I32(), args[3].I32()
-        key := read(kPtr, kLen)
-        val := read(vPtr, vLen)
-        if err := h.store.Set(h.tx.TxHash[:], key, val); err != nil {
-            h.rec.Status = false
-            h.rec.Error = err.Error()
-            return []wasmer.Value{wasmer.NewI32(-1)}, nil
-        }
-        return []wasmer.Value{wasmer.NewI32(0)}, nil
-    },
-    )
-
+		store,
+		wasmer.NewFunctionType(
+			// four i32 params, one i32 result
+			wasmer.NewValueTypes(
+				wasmer.ValueKind(wasmer.I32),
+				wasmer.ValueKind(wasmer.I32),
+				wasmer.ValueKind(wasmer.I32),
+				wasmer.ValueKind(wasmer.I32),
+			),
+			wasmer.NewValueTypes(
+				wasmer.ValueKind(wasmer.I32),
+			),
+		),
+		func(args []wasmer.Value) ([]wasmer.Value, error) {
+			kPtr, kLen, vPtr, vLen := args[0].I32(), args[1].I32(), args[2].I32(), args[3].I32()
+			key := read(kPtr, kLen)
+			val := read(vPtr, vLen)
+			if err := h.store.Set(h.tx.TxHash[:], key, val); err != nil {
+				h.rec.Status = false
+				h.rec.Error = err.Error()
+				return []wasmer.Value{wasmer.NewI32(-1)}, nil
+			}
+			return []wasmer.Value{wasmer.NewI32(0)}, nil
+		},
+	)
 
 	// -----------------------------------------------------------------
 	// host_log(ptr,len)
 	// -----------------------------------------------------------------
 	hostLog := wasmer.NewFunction(
-    store,
-    wasmer.NewFunctionType(
-        // two i32 params
-        wasmer.NewValueTypes(
-            wasmer.ValueKind(wasmer.I32),
-            wasmer.ValueKind(wasmer.I32),
-        ),
-        // no results
-        wasmer.NewValueTypes(),
-    ),
-    func(args []wasmer.Value) ([]wasmer.Value, error) {
-        p, l := args[0].I32(), args[1].I32()
-        msg := read(p, l)
-        h.rec.Logs = append(h.rec.Logs, Log{
-            BlockTime: time.Now().Unix(),
-            Topics: []common.Hash{common.BytesToHash(h.tx.TxHash[:])},
-            Data:      msg,
-        })
-        // return an empty slice for no results:
-        return []wasmer.Value{}, nil
-    },
-)
-
+		store,
+		wasmer.NewFunctionType(
+			// two i32 params
+			wasmer.NewValueTypes(
+				wasmer.ValueKind(wasmer.I32),
+				wasmer.ValueKind(wasmer.I32),
+			),
+			// no results
+			wasmer.NewValueTypes(),
+		),
+		func(args []wasmer.Value) ([]wasmer.Value, error) {
+			p, l := args[0].I32(), args[1].I32()
+			msg := read(p, l)
+			h.rec.Logs = append(h.rec.Logs, Log{
+				BlockTime: time.Now().Unix(),
+				Topics:    []common.Hash{common.BytesToHash(h.tx.TxHash[:])},
+				Data:      msg,
+			})
+			// return an empty slice for no results:
+			return []wasmer.Value{}, nil
+		},
+	)
 
 	// Register all functions under the "env" namespace.
 	imports.Register("env", map[string]wasmer.IntoExtern{
@@ -1185,8 +1135,6 @@ func registerHost(store *wasmer.Store, h *hostCtx) *wasmer.ImportObject {
 
 	return imports
 }
-
-
 
 //---------------------------------------------------------------------
 // HTTP API + rate limiter
@@ -1273,4 +1221,3 @@ func fail(rec *Receipt, err error) (*Receipt, error) {
 	rec.Error = err.Error()
 	return rec, err
 }
-

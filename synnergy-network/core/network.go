@@ -7,17 +7,16 @@ import (
 	"strings"
 	"time"
 
+	"errors"
 	"github.com/libp2p/go-libp2p"
-	"github.com/libp2p/go-libp2p/core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/libp2p/go-libp2p/p2p/discovery/mdns"
 	"github.com/sirupsen/logrus"
-	"net"
-	"errors"
-	"sync"
 	"log"
+	"net"
+	"sync"
 )
-
 
 func NewNode(cfg Config) (*Node, error) {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -59,10 +58,8 @@ func NewNode(cfg Config) (*Node, error) {
 	return n, nil
 }
 
-
 // Ensure Node implements mdns.Notifee
 var _ mdns.Notifee = (*Node)(nil)
-
 
 // HandlePeerFound implements mdns.Notifee: connect to discovered peer.
 func (n *Node) HandlePeerFound(info peer.AddrInfo) {
@@ -121,8 +118,6 @@ func HandleNetworkMessage(msg NetworkMessage) {
 	// Example: propagateToPeers(msg)
 }
 
-
-
 func (n *Node) Broadcast(topic string, data []byte) error {
 	t, ok := n.topics[topic]
 	if !ok {
@@ -141,7 +136,6 @@ func (n *Node) Broadcast(topic string, data []byte) error {
 	HandleNetworkMessage(NetworkMessage{Topic: topic, Content: data})
 	return nil
 }
-
 
 // Subscribe listens for messages on a topic.
 func (n *Node) Subscribe(topic string) (<-chan Message, error) {
