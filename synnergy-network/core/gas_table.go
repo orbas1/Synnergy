@@ -179,6 +179,8 @@ var gasTable = map[Opcode]uint64{
 	BalanceOfAsset:  600,
 	CastVote:        3_000,
 	ExecuteProposal: 15_000,
+	GetProposal:     1_000,
+	ListProposals:   2_000,
 
 	// ----------------------------------------------------------------------
 	// Green Technology
