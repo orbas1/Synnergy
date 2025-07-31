@@ -129,6 +129,7 @@ var catalogue = []struct {
 	{"BuyModel", 0x010009},
 	{"RentModel", 0x01000A},
 	{"ReleaseEscrow", 0x01000B},
+	{"PredictVolume", 0x01000C},
 
 	// AMM (0x02)
 	{"SwapExactIn", 0x020001},

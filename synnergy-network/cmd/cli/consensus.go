@@ -17,7 +17,7 @@ package cli
 //   • CONSENSUS_AUTO_START  – "true" to auto‑start engine when CLI initialises.
 //
 // Wiring into root CLI remains identical:
-//     import "github.com/synnergy-network/cmd/cli/middleware" // adjust path
+//     import "synnergy-network/cmd/cli/middleware" // adjust path
 //     func init() { middleware.RegisterConsensus(rootCmd) }
 //
 // ──────────────────────────────────────────────────────────────────────────────

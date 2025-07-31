@@ -17,18 +17,19 @@
 package cli
 
 import (
-	"encoding/hex"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"io/ioutil"
-	"strconv"
-	"strings"
+    "encoding/hex"
+    "encoding/json"
+    "errors"
+    "fmt"
+    "io/ioutil"
+    "strconv"
+    "strings"
 
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+    "github.com/spf13/cobra"
+    "github.com/spf13/viper"
 
-	core "github.com/synnergy-network/core" // update if go.mod root differs
+    core "synnergy-network/core" // update if go.mod root differs
+
 )
 
 //---------------------------------------------------------------------
