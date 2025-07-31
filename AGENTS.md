@@ -105,7 +105,7 @@ you progress.
 11. **Stage 11** – Module: `ai.go`, `amm.go`, `authority_nodes.go`.
 12. **Stage 12** – Module: `charity_pool.go`, `coin.go`, `common_structs.go`.
 13. **Stage 13** – Module: `compliance.go`, `consensus.go`, `contracts.go`.
-14. **Stage 14** – Module: `contracts_opcodes.go`, `cross_chain.go`, `data.go`.
+14. **Stage 14** – Module: `contracts_opcodes.go`, `cross_chain.go`, `data.go`. ✅
 15. **Stage 15** – Module: `fault_tolerance.go`, `gas_table.go`, `governance.go`.
 16. **Stage 16** – Module: `green_technology.go`, `ledger.go`, `ledger_test.go`.
 17. **Stage 17** – Module: `liquidity_pools.go`, `loanpool.go`, `network.go`.
@@ -182,9 +182,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 7. [x] compliance.go
 8. [x] consensus.go
 9. [x] contracts.go
-10. [ ] contracts_opcodes.go
-11. [ ] cross_chain.go
-12. [ ] data.go
+10. [x] contracts_opcodes.go
+11. [x] cross_chain.go
+12. [x] data.go
 13. [x] fault_tolerance.go
 14. [x] gas_table.go
 15. [x] governance.go
