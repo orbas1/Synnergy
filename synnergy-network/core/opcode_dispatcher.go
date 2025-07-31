@@ -371,6 +371,10 @@ var catalogue = []struct {
 	{"Storage_Create", 0x180007},
 	{"CloseDeal", 0x180008},
 	{"Release", 0x180009},
+	{"GetListing", 0x18000A},
+	{"ListListings", 0x18000B},
+	{"GetDeal", 0x18000C},
+	{"ListDeals", 0x18000D},
 
 	// Tokens (0x19)
 	{"ID", 0x190001},

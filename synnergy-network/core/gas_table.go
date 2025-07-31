@@ -323,6 +323,10 @@ var gasTable = map[Opcode]uint64{
 	Create:        8_000, // generic create (non-AMM/non-contract)
 	CloseDeal:     5_000,
 	Release:       2_000,
+	GetListing:    1_000,
+	ListListings:  1_000,
+	GetDeal:       1_000,
+	ListDeals:     1_000,
 	// Pin & Retrieve already priced
 
 	// ----------------------------------------------------------------------
