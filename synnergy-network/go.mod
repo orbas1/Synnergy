@@ -11,7 +11,6 @@ require (
 	github.com/ipfs/go-cid v0.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/libp2p/go-libp2p v0.42.0
-	github.com/libp2p/go-libp2p-core v0.20.1
 	github.com/libp2p/go-libp2p-pubsub v0.14.2
 	github.com/multiformats/go-multihash v0.2.3
 	github.com/sirupsen/logrus v1.9.3
