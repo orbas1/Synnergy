@@ -110,7 +110,7 @@ you progress.
 16. **Stage 16** – Module: `green_technology.go`, `ledger.go`, `ledger_test.go`.
 17. **Stage 17** – Module: `liquidity_pools.go`, `loanpool.go`, `network.go`.
 18. **Stage 18** – Module: `opcode_dispatcher.go`, `replication.go`, `rollups.go`.
-19. **Stage 19** – Module: `security.go`, `sharding.go`, `sidechains.go`.
+19. **Stage 19** – Module: `security.go`, `sharding.go`, `sidechains.go`. ✅
 20. **Stage 20** – Module: `state_channel.go`, `storage.go`, `tokens.go`.
 21. **Stage 21** – Module: `transactions.go`, `utility_functions.go`,
     `virtual_machine.go`.
@@ -178,9 +178,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 22. [x] opcode_dispatcher.go
 23. [x] replication.go
 24. [x] rollups.go
-25. [ ] security.go
-26. [ ] sharding.go
-27. [ ] sidechains.go
+25. [x] security.go
+26. [x] sharding.go
+27. [x] sidechains.go
 28. [ ] state_channel.go
 29. [ ] storage.go
 30. [ ] tokens.go
