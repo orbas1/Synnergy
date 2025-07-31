@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ai;
+
+service TFService {
+  rpc Predict (PredictRequest) returns (PredictResponse);
+}
+
+message PredictRequest {
+  bytes input = 1;
+}
+
+message PredictResponse {
+  bytes output = 1;
+}

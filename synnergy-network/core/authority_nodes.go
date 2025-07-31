@@ -1,0 +1,207 @@
+package core
+
+// Authority Nodes governance sub‑system.
+//
+// * Six roles with bespoke admission thresholds (public votes + authority votes).
+// * Votes are recorded on‑chain; once threshold met, node becomes ACTIVE.
+// * Exposes RandomElectorate() for LoanPool & Consensus – picks validators across
+//   roles weighted by `RoleWeight` table.
+//
+// Persistent keys under prefix "authority:{role}:{addr}".
+//
+// Compile‑time dependencies: common, ledger, security (sig verify).
+
+import (
+    "encoding/json"
+    "errors"
+    "math/rand"
+    "time"
+    "crypto/sha256"
+    "github.com/sirupsen/logrus"
+)
+
+//---------------------------------------------------------------------
+// Role enum & admission rules
+//---------------------------------------------------------------------
+
+type AuthorityRole uint8
+
+const (
+    GovernmentNode AuthorityRole = iota + 1
+    CentralBankNode
+    RegulationNode
+    StandardAuthorityNode
+    MilitaryNode
+    LargeCommerceNode
+)
+
+func (r AuthorityRole) String() string {
+    switch r {
+    case GovernmentNode:
+        return "GovernmentNode"
+    case CentralBankNode:
+        return "CentralBankNode"
+    case RegulationNode:
+        return "RegulationNode"
+    case StandardAuthorityNode:
+        return "StandardAuthorityNode"
+    case MilitaryNode:
+        return "MilitaryNode"
+    case LargeCommerceNode:
+        return "LargeCommerceNode"
+    default:
+        return "Unknown"
+    }
+}
+
+// Admission thresholds by role.
+var admissionRules = map[AuthorityRole]struct {
+    PublicVotes uint32
+    AuthVotes   uint32
+}{
+    GovernmentNode:        {PublicVotes: 5_000, AuthVotes: 20},
+    CentralBankNode:       {PublicVotes: 4_000, AuthVotes: 18},
+    RegulationNode:        {PublicVotes: 3_000, AuthVotes: 15},
+    StandardAuthorityNode: {PublicVotes: 500, AuthVotes: 10},
+    MilitaryNode:          {PublicVotes: 2_000, AuthVotes: 12},
+    LargeCommerceNode:     {PublicVotes: 1_000, AuthVotes: 8},
+}
+
+
+//---------------------------------------------------------------------
+// AuthoritySet keeper
+//---------------------------------------------------------------------
+
+
+func NewAuthoritySet(lg *logrus.Logger, led StateRW) *AuthoritySet {
+    return &AuthoritySet{logger: lg, led: led}
+}
+
+//---------------------------------------------------------------------
+// RecordVote – public or authority node voting for candidate.
+//---------------------------------------------------------------------
+
+func (as *AuthoritySet) RecordVote(voter, candidate Address) error {
+    as.mu.Lock(); defer as.mu.Unlock()
+
+    nodeRaw, _ := as.led.GetState(nodeKey(candidate))
+    if len(nodeRaw) == 0 {
+        return errors.New("candidate not found")
+    }
+    var n AuthorityNode; _ = json.Unmarshal(nodeRaw, &n)
+
+    // Prevent self vote & duplicate
+    vk := voteKey(hashFromAddress(candidate), voter)
+    if ok, _ := as.led.HasState(vk); ok {
+        return errors.New("duplicate vote")
+    }
+    as.led.SetState(vk, []byte{0x01})
+
+    // Determine bucket – authority or public
+    if n2, _ := as.led.GetState(nodeKey(voter)); len(n2) > 0 {
+        n.AuthVotes++
+    } else {
+        n.PublicVotes++
+    }
+
+    // Check activation thresholds
+    rule := admissionRules[n.Role]
+    if !n.Active && n.PublicVotes >= rule.PublicVotes && n.AuthVotes >= rule.AuthVotes {
+        n.Active = true
+        as.logger.Printf("node %s promoted to ACTIVE %s", candidate.Short(), n.Role)
+    }
+    as.led.SetState(nodeKey(candidate), mustJSON(n))
+    return nil
+}
+
+func hashFromAddress(addr Address) Hash {
+    var h Hash
+    sum := sha256.Sum256(addr[:])
+    copy(h[:], sum[:])
+    return h
+}
+
+
+//---------------------------------------------------------------------
+// RegisterCandidate – owner submits node for role.
+//---------------------------------------------------------------------
+
+func (as *AuthoritySet) RegisterCandidate(addr Address, role AuthorityRole) error {
+    if role < GovernmentNode || role > LargeCommerceNode {
+        return errors.New("invalid role")
+    }
+    if exists, _ := as.led.HasState(nodeKey(addr)); exists {
+        return errors.New("already registered")
+    }
+    n := AuthorityNode{Addr: addr, Role: role, CreatedAt: time.Now().Unix()}
+    as.led.SetState(nodeKey(addr), mustJSON(n))
+    as.logger.Printf("authority candidate %s registered for role %s", addr.Short(), role)
+    return nil
+}
+
+//---------------------------------------------------------------------
+// RandomElectorate – returns random ACTIVE authority nodes weighted by role.
+//---------------------------------------------------------------------
+
+// roleWeights influences sampling frequency (e.g. Gov nodes weights higher).
+var roleWeights = map[AuthorityRole]int{
+    GovernmentNode:        6,
+    CentralBankNode:       5,
+    RegulationNode:        4,
+    StandardAuthorityNode: 3,
+    MilitaryNode:          2,
+    LargeCommerceNode:     2,
+}
+
+func (as *AuthoritySet) RandomElectorate(size int) ([]Address, error) {
+    as.mu.RLock(); defer as.mu.RUnlock()
+    if size <= 0 { return nil, errors.New("size must be >0") }
+
+    // Build weighted pool of active addresses
+    var pool []Address
+    iter := as.led.PrefixIterator([]byte("authority:node:"))
+    for iter.Next() {
+        var n AuthorityNode; _ = json.Unmarshal(iter.Value(), &n)
+        if !n.Active { continue }
+        w := roleWeights[n.Role]
+        for i := 0; i < w; i++ { pool = append(pool, n.Addr) }
+    }
+    if len(pool) == 0 {
+        return nil, errors.New("no active authority nodes")
+    }
+
+    // Sample without replacement
+    rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+    sel := unique(pool)
+    if len(sel) < size {
+        size = len(sel)
+    }
+    return sel[:size], nil
+}
+
+//---------------------------------------------------------------------
+// Helper funcs
+//---------------------------------------------------------------------
+
+func (as *AuthoritySet) IsAuthority(addr Address) bool {
+    raw, _ := as.led.GetState(nodeKey(addr))
+    if len(raw) == 0 { return false }
+    var n AuthorityNode; _ = json.Unmarshal(raw, &n)
+    return n.Active
+}
+
+func nodeKey(addr Address) []byte { return []byte("authority:node:" + addr.Hex()) }
+
+
+
+func unique(in []Address) []Address {
+    seen := make(map[Address]struct{})
+    var out []Address
+    for _, a := range in {
+        if _, ok := seen[a]; !ok {
+            seen[a] = struct{}{}; out = append(out, a)
+        }
+    }
+    return out
+}
+

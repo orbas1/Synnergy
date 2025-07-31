@@ -1,0 +1,222 @@
+// Package network implements P2P networking for Synnergy nodes.
+package core
+
+import (
+	"context"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/libp2p/go-libp2p"
+	"github.com/libp2p/go-libp2p/core/peer"
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	"github.com/libp2p/go-libp2p/p2p/discovery/mdns"
+	"github.com/sirupsen/logrus"
+	"net"
+	"errors"
+	"sync"
+	"log"
+)
+
+
+func NewNode(cfg Config) (*Node, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// create libp2p host
+	h, err := libp2p.New(libp2p.ListenAddrStrings(cfg.ListenAddr))
+	if err != nil {
+		cancel()
+		return nil, fmt.Errorf("failed to create host: %w", err)
+	}
+
+	// setup pubsub
+	ps, err := pubsub.NewGossipSub(ctx, h)
+	if err != nil {
+		h.Close()
+		cancel()
+		return nil, fmt.Errorf("failed to create pubsub: %w", err)
+	}
+
+	n := &Node{
+		host:   h,
+		pubsub: ps,
+		topics: make(map[string]*pubsub.Topic),
+		subs:   make(map[string]*pubsub.Subscription),
+		peers:  make(map[NodeID]*Peer),
+		ctx:    ctx,
+		cancel: cancel,
+		cfg:    cfg,
+	}
+
+	// bootstrap peers
+	if err := n.DialSeed(cfg.BootstrapPeers); err != nil {
+		logrus.Warnf("DialSeed warning: %v", err)
+	}
+
+	// mDNS discovery (this automatically registers n as a notifee)
+	mdns.NewMdnsService(h, cfg.DiscoveryTag, n)
+
+	return n, nil
+}
+
+
+// Ensure Node implements mdns.Notifee
+var _ mdns.Notifee = (*Node)(nil)
+
+
+// HandlePeerFound implements mdns.Notifee: connect to discovered peer.
+func (n *Node) HandlePeerFound(info peer.AddrInfo) {
+	err := n.host.Connect(n.ctx, info)
+	if err != nil {
+		logrus.Warnf("Failed to connect to discovered peer %s: %v", info.ID.String(), err)
+		return
+	}
+	n.peerLock.Lock()
+	n.peers[NodeID(info.ID.String())] = &Peer{ID: NodeID(info.ID.String()), Addr: info.String()}
+	n.peerLock.Unlock()
+	logrus.Infof("Connected to peer %s via mDNS", info.ID.String())
+}
+
+// DialSeed connects to a list of bootstrap peers.
+func (n *Node) DialSeed(seeds []string) error {
+	var errs []string
+	for _, addr := range seeds {
+		pi, err := peer.AddrInfoFromString(addr)
+		if err != nil {
+			errs = append(errs, fmt.Sprintf("invalid addr %s: %v", addr, err))
+			continue
+		}
+		if err := n.host.Connect(n.ctx, *pi); err != nil {
+			errs = append(errs, fmt.Sprintf("connect %s: %v", addr, err))
+			continue
+		}
+		n.peerLock.Lock()
+		n.peers[NodeID(pi.ID.String())] = &Peer{ID: NodeID(pi.ID.String()), Addr: addr}
+		n.peerLock.Unlock()
+		logrus.Infof("Bootstrapped to %s", addr)
+	}
+	if len(errs) > 0 {
+		return fmt.Errorf("dial errors: %s", strings.Join(errs, "; "))
+	}
+	return nil
+}
+
+// Global replication store (can be swapped out for DB or network broadcast later)
+var replicatedMessages = make(map[string][][]byte)
+var replicatedMu sync.Mutex
+
+// HandleNetworkMessage handles incoming network messages and replicates them.
+func HandleNetworkMessage(msg NetworkMessage) {
+	log.Printf("Replicating message on topic: %s, data: %x", msg.Topic, msg.Content)
+
+	// Lock to prevent concurrent writes
+	replicatedMu.Lock()
+	defer replicatedMu.Unlock()
+
+	// Store replicated data
+	replicatedMessages[msg.Topic] = append(replicatedMessages[msg.Topic], msg.Content)
+
+	// (Optional) Trigger additional hooks here: save to disk, gossip, etc.
+	// Example: replicateToDisk(msg)
+	// Example: propagateToPeers(msg)
+}
+
+
+
+func (n *Node) Broadcast(topic string, data []byte) error {
+	t, ok := n.topics[topic]
+	if !ok {
+		var err error
+		t, err = n.pubsub.Join(topic)
+		if err != nil {
+			return fmt.Errorf("join topic %s: %w", topic, err)
+		}
+		n.topics[topic] = t
+	}
+	if err := t.Publish(n.ctx, data); err != nil {
+		return fmt.Errorf("publish topic %s: %w", topic, err)
+	}
+
+	// Optional replication hook
+	HandleNetworkMessage(NetworkMessage{Topic: topic, Content: data})
+	return nil
+}
+
+
+// Subscribe listens for messages on a topic.
+func (n *Node) Subscribe(topic string) (<-chan Message, error) {
+	sub, ok := n.subs[topic]
+	if !ok {
+		var err error
+		sub, err = n.pubsub.Subscribe(topic)
+		if err != nil {
+			return nil, fmt.Errorf("subscribe topic %s: %w", topic, err)
+		}
+		n.subs[topic] = sub
+	}
+	out := make(chan Message)
+	go func() {
+		for {
+			msg, err := sub.Next(n.ctx)
+			if err != nil {
+				logrus.Warnf("subscription next error: %v", err)
+				close(out)
+				return
+			}
+			out <- Message{From: NodeID(msg.GetFrom().String()), Topic: topic, Data: msg.Data}
+		}
+	}()
+	return out, nil
+}
+
+// ListenAndServe blocks until context cancellation (serve as long-lived process).
+func (n *Node) ListenAndServe() {
+	<-n.ctx.Done()
+	logrus.Info("Network node shutting down")
+}
+
+// Close tears down the node, closing host and context.
+func (n *Node) Close() error {
+	n.cancel()
+	return n.host.Close()
+}
+
+// Peers returns the current peer list.
+func (n *Node) Peers() []*Peer {
+	n.peerLock.RLock()
+	defer n.peerLock.RUnlock()
+	list := make([]*Peer, 0, len(n.peers))
+	for _, p := range n.peers {
+		list = append(list, p)
+	}
+	return list
+}
+
+// Dialer manages outbound peer connections (TCP, WebSocket, etc.).
+type Dialer struct {
+	Timeout   time.Duration // connection timeout
+	KeepAlive time.Duration // TCP keepalive duration
+}
+
+// NewDialer creates a new network dialer with given settings.
+func NewDialer(timeout, keepAlive time.Duration) *Dialer {
+	return &Dialer{
+		Timeout:   timeout,
+		KeepAlive: keepAlive,
+	}
+}
+
+// Dial connects to a remote address and returns a net.Conn.
+// Supports TCP connections for now. Extend for WebSocket/gRPC as needed.
+func (d *Dialer) Dial(ctx context.Context, address string) (net.Conn, error) {
+	dialer := &net.Dialer{
+		Timeout:   d.Timeout,
+		KeepAlive: d.KeepAlive,
+	}
+
+	conn, err := dialer.DialContext(ctx, "tcp", address)
+	if err != nil {
+		return nil, errors.New("dialer: failed to connect: " + err.Error())
+	}
+	return conn, nil
+}

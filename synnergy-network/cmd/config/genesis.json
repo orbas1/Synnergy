@@ -1,0 +1,11 @@
+{
+  "genesis_time": "2025-07-09T12:00:00Z",
+  "chain_id": "synnergy-mainnet",
+  "initial_balances": {
+    "0xABC...": 1000000000,
+    "0xDEF...": 500000000
+  },
+  "validators": [
+    { "address": "0x123...", "stake": 1000000 }
+  ]
+}

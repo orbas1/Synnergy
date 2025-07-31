@@ -1,0 +1,24 @@
+network:
+  id: synnergy-mainnet
+  chain_id: 1215
+  max_peers: 50
+  genesis_file: config/genesis.json
+  rpc_enabled: true
+  p2p_port: 30303
+
+consensus:
+  type: pos
+  block_time_ms: 3000
+  validators_required: 3
+
+vm:
+  max_gas_per_block: 8000000
+  opcode_debug: false
+
+storage:
+  db_path: ./data/db
+  prune: true
+
+logging:
+  level: info
+  file: logs/synnergy.log
