@@ -243,6 +243,7 @@ func (tp *TxPool) AddTx(tx *Transaction) error {
 	tp.lookup[tx.Hash] = tx
 	tp.queue = append(tp.queue, tx)
 
+
 	if len(tp.net.peers) > 0 {
 		if data, err := json.Marshal(tx); err == nil {
 			_ = tp.net.Broadcast("tx:new", data)

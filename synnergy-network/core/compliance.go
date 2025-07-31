@@ -331,8 +331,9 @@ func (c *ComplianceEngine) AuditTrail(addr Address) ([]AuditEntry, error) {
 		}
 		out = append(out, e)
 	}
-
-	// in-memory iterator never returns errors
+	if ierr, ok := it.(interface{ Error() error }); ok {
+		return out, ierr.Error()
+	}
 	return out, nil
 }
 

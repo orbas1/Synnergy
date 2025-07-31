@@ -72,6 +72,7 @@ func TestAddBlock_HeightMismatch(t *testing.T) {
 // Test MintToken and BalanceOf
 //-------------------------------------------------------------
 
+
 func TestMintToken_Balance(t *testing.T) {
 	cfg, _ := tmpLedgerConfig(t, nil)
 	led, _ := NewLedger(cfg)
