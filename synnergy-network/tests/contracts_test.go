@@ -93,7 +93,7 @@ func TestDeriveContractAddress(t *testing.T) {
 
 func TestDeployAndRicardian(t *testing.T) {
 	led, _ := NewInMemory()
-	InitContracts(led, &mockVM{})
+	InitContracts(nil, &mockVM{})
 
 	code := []byte{0x00, 0x61, 0x73, 0x6d}
 	ric := []byte(`{"title":"test"}`)

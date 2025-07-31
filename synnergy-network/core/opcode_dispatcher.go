@@ -40,15 +40,19 @@ import (
 
 // Context is provided by the VM; it gives opcode handlers controlled access
 // to message meta-data, state-DB, gas-meter, logger, etc.
-// OpContext is the execution context passed to opcode handlers.
-// It aliases the transaction Context to avoid circular imports.
-type OpContext = Context
+// OpContext is provided by the VM; it gives opcode handlers controlled access
+// to message meta-data, state-DB, gas-meter, logger, etc.
+type OpContext interface {
+	Call(string) error // unified façade (ledger/consensus/VM)
+	Gas(uint64) error  // deducts gas or returns an error if exhausted
+}
 
 // Opcode is a 24-bit, deterministic instruction identifier.
 type Opcode uint32
 
 // OpcodeFunc is the concrete implementation invoked by the VM.
 type OpcodeFunc func(ctx *Context) error
+
 
 // opcodeTable holds the runtime mapping (populated once in init()).
 var (
@@ -610,7 +614,7 @@ func init() {
 }
 
 // Hex returns the canonical hexadecimal representation (upper-case, 6 digits).
-func (op Opcode) Hex() string { return fmt.Sprintf("0x%06X", op) }
+func (op Opcode) Hex() string { return fmt.Sprintf("0x%06X", uint32(op)) }
 
 // Bytes gives the 3-byte big-endian encoding used in VM bytecode streams.
 func (op Opcode) Bytes() []byte {

@@ -219,7 +219,7 @@ type RicardianContract struct {
 
 type ContractRegistry struct {
 	*Registry
-	ledger StateRW
+	ledger *Ledger
 	vm     VM
 	mu     sync.RWMutex
 	byAddr map[Address]*SmartContract
@@ -364,6 +364,7 @@ type Ledger struct {
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
+	logs             []*Log
 }
 
 //---------------------------------------------------------------------
@@ -812,6 +813,7 @@ func (ctx *Context) Gas(amount uint64) error {
 	return nil
 }
 
+
 type Registry struct {
 	mu      sync.RWMutex
 	Entries map[string][]byte
@@ -827,7 +829,7 @@ type TxPool struct {
 	mu        sync.RWMutex
 	ledger    ReadOnlyState
 	gasCalc   GasCalculator
-	net       Broadcaster
+	net       *Broadcaster
 	lookup    map[Hash]*Transaction
 	queue     []*Transaction
 	authority *AuthoritySet

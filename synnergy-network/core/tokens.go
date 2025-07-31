@@ -169,7 +169,7 @@ type BaseToken struct {
 	balances  *BalanceTable
 	allowance sync.Map
 	lock      sync.RWMutex
-	ledger    Ledger
+	ledger    *Ledger
 	gas       GasCalculator
 }
 
@@ -313,7 +313,6 @@ func InitTokens(ledger *Ledger, vm VM, gas GasCalculator) {
 	r := getRegistry()
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	r.ledger = ledger
 	r.vm = vm
 	if ledger.tokens == nil {
 		ledger.tokens = make(map[TokenID]Token)
@@ -453,7 +452,7 @@ func registerTokenOpcodes() {
 		if err := tok.Transfer(from, to, amt); err != nil {
 			return err
 		}
-		ctx.Stack.PushBool(true)
+		ctx.StackRef().PushBool(true)
 		ctx.RefundGas(OpTokenTransfer)
 		return nil
 	})
