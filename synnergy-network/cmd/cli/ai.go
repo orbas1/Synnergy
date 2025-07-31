@@ -31,7 +31,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	core "github.com/synnergy-network/core" // adjust if your go.mod path differs
+	core "synnergy-network/core" // adjust if your go.mod path differs
 )
 
 //---------------------------------------------------------------------

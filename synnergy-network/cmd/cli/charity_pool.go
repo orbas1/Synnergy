@@ -26,7 +26,7 @@ import (
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
     "github.com/sirupsen/logrus"
-    core "github.com/synnergy-network/core" // adjust if go.mod path differs
+    core "synnergy-network/core" // adjust if go.mod path differs
 )
 
 //---------------------------------------------------------------------
