@@ -357,6 +357,7 @@ type Ledger struct {
 	TxPool           map[string]*Transaction
 	Contracts        map[string]Contract
 	TokenBalances    map[string]uint64
+	logs             []*Log
 	walFile          *os.File
 	snapshotPath     string
 	snapshotInterval int
@@ -778,7 +779,7 @@ type WithdrawProof struct {
 }
 
 // Context holds the transaction-level fields (args, caller, origin, etc.).
-type Context struct {
+type TxContext struct {
 	BlockHeight uint64
 	TxHash      Hash
 	Caller      Address

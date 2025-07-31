@@ -351,7 +351,7 @@ func (l *Ledger) GetContract(address []byte) (*Contract, error) {
 }
 
 // BalanceOf returns token balance.
-func (l *Ledger) BalanceOf(addr Address) uint64 {
+func (l *Ledger) BalanceOf(address Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
 	return l.TokenBalances[fmt.Sprintf("%x", addr.Bytes())]
@@ -624,10 +624,23 @@ func (l *Ledger) BurnLP(addr Address, pool PoolID, amt uint64) error {
 	return nil
 }
 
+
 func (l *Ledger) NonceOf(addr Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
 	return l.nonces[addr]
+}
+
+
+// AddLog appends an execution log entry to the ledger. The log slice is lazily
+// initialised on first use to avoid nil checks across the codebase.
+func (l *Ledger) AddLog(log *Log) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.logs == nil {
+		l.logs = make([]*Log, 0, 16)
+	}
+	l.logs = append(l.logs, log)
 }
 
 func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {

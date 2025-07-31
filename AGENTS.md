@@ -120,30 +120,45 @@ you progress.
 25. **Stage 25** – Final pass through documentation and ensure all tests pass.
 
 ## CLI Files
-1. [x] ai.go
-2. [x] amm.go
-3. [x] authority_node.go
-4. [x] charity_pool.go
-5. [x] coin.go
-6. [x] compliance.go
+1. [ ] ai.go
+2. [ ] amm.go
+3. [ ] authority_node.go
+4. [ ] charity_pool.go
+5. [ ] coin.go
+6. [ ] compliance.go
 7. [ ] consensus.go
 8. [ ] contracts.go
 9. [ ] cross_chain.go
 10. [ ] data.go
 11. [ ] fault_tolerance.go
 12. [ ] governance.go
-13. [ ] green_technology.go
-14. [ ] index.go
-15. [ ] ledger.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
+1. [x] ai.go
+2. [x] amm.go
+3. [x] authority_node.go
+4. [x] charity_pool.go
+5. [x] coin.go
+6. [x] compliance.go
+7. [x] consensus.go
+8. [x] contracts.go
+9. [x] cross_chain.go
+10. [x] data.go
+11. [x] fault_tolerance.go
+12. [x] governance.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
 16. [ ] liquidity_pools.go
 17. [ ] loanpool.go
 18. [ ] network.go
 19. [x] replication.go
 20. [x] rollups.go
 21. [x] security.go
-22. [ ] sharding.go
-23. [ ] sidechain.go
-24. [ ] state_channel.go
+22. [x] sharding.go
+23. [x] sidechain.go
+24. [x] state_channel.go
 25. [x] storage.go
 26. [x] tokens.go
 27. [x] transactions.go

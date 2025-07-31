@@ -30,6 +30,7 @@ import "log"
 // production and will be revisited during audits.
 const DefaultGasCost uint64 = 100_000
 
+
 // gasTable maps every Opcode to its base gas cost.
 // Gas is charged **before** execution; refunds (e.g. for SELFDESTRUCT) are
 // handled by the VM’s gas-meter at commit-time.
