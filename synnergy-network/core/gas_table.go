@@ -228,6 +228,8 @@ var gasTable = map[Opcode]uint64{
 	CreatePool: 10_000,
 	Swap:       4_500,
 	// AddLiquidity & RemoveLiquidity already defined above
+	Pool:  1_500,
+	Pools: 2_000,
 
 	// ----------------------------------------------------------------------
 	// Loan-Pool

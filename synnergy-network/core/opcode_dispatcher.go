@@ -285,6 +285,8 @@ var catalogue = []struct {
 	{"Liquidity_AddLiquidity", 0x0F0004},
 	{"Liquidity_Swap", 0x0F0005},
 	{"Liquidity_RemoveLiquidity", 0x0F0006},
+	{"Liquidity_Pool", 0x0F0007},
+	{"Liquidity_Pools", 0x0F0008},
 
 	// Loanpool (0x10)
 	{"Loanpool_RandomElectorate", 0x100001},

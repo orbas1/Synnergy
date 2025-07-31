@@ -26,6 +26,7 @@ func main() {
 	rootCmd.AddCommand(
 		cli.AICmd,
 		cli.AMMCmd,
+		cli.PoolsCmd,
 		cli.AuthCmd,
 		cli.CharityCmd,
 		cli.LoanCmd,
