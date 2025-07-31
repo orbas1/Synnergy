@@ -33,6 +33,8 @@ const DefaultGasCost uint64 = 100_000
 // gasTable maps every Opcode to its base gas cost.
 // Gas is charged **before** execution; refunds (e.g. for SELFDESTRUCT) are
 // handled by the VM’s gas-meter at commit-time.
+var gasTable map[Opcode]uint64
+
 // var gasTable = map[Opcode]uint64{
 /*
    // ----------------------------------------------------------------------
@@ -606,7 +608,6 @@ const DefaultGasCost uint64 = 100_000
    NewAddress:          500,
    SignTx:              3_000,
 */
-
 
 // gasNames holds the gas cost associated with each opcode name. During init()
 // these names are resolved to their Opcode values using the catalogue defined
@@ -1183,7 +1184,6 @@ var gasNames = map[string]uint64{
 	"NewAddress":          500,
 	"SignTx":              3_000,
 }
-
 
 func init() {
 	gasTable = make(map[Opcode]uint64, len(gasNames))
