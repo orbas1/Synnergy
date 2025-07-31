@@ -32,6 +32,7 @@ import (
 	core "github.com/synnergy-network/core" // adjust to your go.mod root
 )
 
+
 //---------------------------------------------------------------------
 // Middleware – executed for every ~auth command
 //---------------------------------------------------------------------

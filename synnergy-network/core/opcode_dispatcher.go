@@ -129,13 +129,15 @@ var catalogue = []struct {
 	{"BuyModel", 0x010009},
 	{"RentModel", 0x01000A},
 	{"ReleaseEscrow", 0x01000B},
+	{"PredictVolume", 0x01000C},
 
 	// AMM (0x02)
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-	{"Quote", 0x020004},
-	{"AllPairs", 0x020005},
+        {"Quote", 0x020004},
+        {"AllPairs", 0x020005},
+        {"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -153,18 +155,26 @@ var catalogue = []struct {
 	{"Charity_Register", 0x040003},
 	{"Charity_Vote", 0x040004},
 	{"Charity_Tick", 0x040005},
+	{"Charity_GetRegistration", 0x040006},
+	{"Charity_Winners", 0x040007},
 
 	// Coin (0x05)
 	{"NewCoin", 0x050001},
 	{"Coin_Mint", 0x050002},
 	{"Coin_TotalSupply", 0x050003},
 	{"Coin_BalanceOf", 0x050004},
+	{"Coin_Transfer", 0x050005},
+	{"Coin_Burn", 0x050006},
 
 	// Compliance (0x06)
 	{"InitCompliance", 0x060001},
 	{"Compliance_ValidateKYC", 0x060002},
 	{"EraseData", 0x060003},
 	{"RecordFraudSignal", 0x060004},
+	{"Compliance_LogAudit", 0x060005},
+	{"Compliance_AuditTrail", 0x060006},
+	{"Compliance_MonitorTx", 0x060007},
+	{"Compliance_VerifyZKP", 0x060008},
 
 	// Consensus (0x07)
 	{"Pick", 0x070001},
@@ -183,6 +193,8 @@ var catalogue = []struct {
 	{"ValidatePoH", 0x07000E},
 	{"SealMainBlockPOW", 0x07000F},
 	{"DistributeRewards", 0x070010},
+	{"CalculateWeights", 0x070011},
+	{"ComputeThreshold", 0x070012},
 
 	// Contracts (0x08)
 	{"InitContracts", 0x080001},
