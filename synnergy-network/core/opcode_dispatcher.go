@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -228,6 +228,12 @@ var catalogue = []struct {
 	{"Ping", 0x0B0006},
 	{"SendPing", 0x0B0007},
 	{"AwaitPong", 0x0B0008},
+	{"BackupSnapshot", 0x0B0009},
+	{"RestoreSnapshot", 0x0B000A},
+	{"VerifyBackup", 0x0B000B},
+	{"FailoverNode", 0x0B000C},
+	{"PredictFailure", 0x0B000D},
+	{"AdjustResources", 0x0B000E},
 
 	// Governance (0x0C)
 	{"UpdateParam", 0x0C0001},
