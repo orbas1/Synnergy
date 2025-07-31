@@ -307,6 +307,8 @@ var catalogue = []struct {
 	{"Peers", 0x110008},
 	{"NewDialer", 0x110009},
 	{"Dial", 0x11000A},
+	{"SetBroadcaster", 0x11000B},
+	{"GlobalBroadcast", 0x11000C},
 
 	// Replication (0x12)
 	{"NewReplicator", 0x120001},

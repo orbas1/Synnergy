@@ -249,6 +249,8 @@ var gasTable = map[Opcode]uint64{
 	Peers:           400,
 	NewDialer:       2_000,
 	Dial:            2_000,
+	SetBroadcaster:  500,
+	GlobalBroadcast: 1_000,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------
