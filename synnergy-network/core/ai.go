@@ -8,13 +8,13 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
-	"sync"
-	"time"
 	"fmt"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"sync"
+	"time"
 )
 
 //---------------------------------------------------------------------
@@ -22,7 +22,7 @@ import (
 //---------------------------------------------------------------------
 
 type TFRequest struct{ Payload []byte }
-type TFResponse struct{
+type TFResponse struct {
 	Score  float32
 	Result []byte
 }
@@ -30,6 +30,7 @@ type TFResponse struct{
 type AIStubClient interface {
 	Anomaly(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	FeeOpt(ctx context.Context, req *TFRequest) (*TFResponse, error)
+	Volume(ctx context.Context, req *TFRequest) (*TFResponse, error)
 }
 
 //---------------------------------------------------------------------
@@ -97,6 +98,13 @@ type BlockStats struct {
 	Interval time.Duration
 }
 
+// TxVolume represents historical transaction volume metrics used for
+// forecasting future network load.
+type TxVolume struct {
+	Timestamp time.Time
+	Count     uint64
+}
+
 func (ai *AIEngine) OptimizeFees(stats []BlockStats) (uint64, error) {
 	b, _ := json.Marshal(stats)
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
@@ -112,6 +120,29 @@ func (ai *AIEngine) OptimizeFees(stats []BlockStats) (uint64, error) {
 		return 0, err
 	}
 	return target, nil
+}
+
+// PredictVolume forecasts the number of transactions expected in the near
+// future based on historical volume metrics provided. The returned count can be
+// used by consensus or mempool logic to pre-allocate resources.
+func (ai *AIEngine) PredictVolume(vol []TxVolume) (uint64, error) {
+	if ai == nil {
+		return 0, errors.New("AI engine not initialised")
+	}
+	b, _ := json.Marshal(vol)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	resp, err := ai.client.Volume(ctx, &TFRequest{Payload: b})
+	if err != nil {
+		return 0, err
+	}
+
+	var count uint64
+	if err := json.Unmarshal(resp.Result, &count); err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 //---------------------------------------------------------------------
@@ -163,206 +194,199 @@ func modelKey(h [32]byte) []byte {
 
 // ModelListing represents an AI model available for sale or rent.
 type ModelListing struct {
-    ID     string                `json:"id"`
-    Seller Address        `json:"seller"`
-    Price  uint64                `json:"price"`  // price per sale or per hour rental
-    Meta   map[string]string     `json:"meta"`
+	ID     string            `json:"id"`
+	Seller Address           `json:"seller"`
+	Price  uint64            `json:"price"` // price per sale or per hour rental
+	Meta   map[string]string `json:"meta"`
 }
 
 // Rental holds rental details for an AI model.
 type Rental struct {
-    ListingID string           `json:"listing_id"`
-    Renter    Address   `json:"renter"`
-    Start     time.Time        `json:"start"`
-    End       time.Time        `json:"end"`
+	ListingID string    `json:"listing_id"`
+	Renter    Address   `json:"renter"`
+	Start     time.Time `json:"start"`
+	End       time.Time `json:"end"`
 }
 
 // Escrow holds payment until sale/rental conditions are met.
 type Escrow struct {
-    ID      string             `json:"id"`
-    Buyer   Address     `json:"buyer"`
-    Seller  Address     `json:"seller"`
-    Amount  uint64             `json:"amount"`
-    State   string             `json:"state"`    // "funded", "released"
+	ID     string  `json:"id"`
+	Buyer  Address `json:"buyer"`
+	Seller Address `json:"seller"`
+	Amount uint64  `json:"amount"`
+	State  string  `json:"state"` // "funded", "released"
 }
 
 // resolveEscrow finalizes an escrow by releasing funds to the seller.
 func resolveEscrow(ctx *Context, e *Escrow) error {
-    logger := zap.L().Sugar()
+	logger := zap.L().Sugar()
 
-    if e.State != "funded" {
-        return fmt.Errorf("escrow %s not in funded state", e.ID)
-    }
+	if e.State != "funded" {
+		return fmt.Errorf("escrow %s not in funded state", e.ID)
+	}
 
-    escrowAcc := ModuleAddress("ai_marketplace")
+	escrowAcc := ModuleAddress("ai_marketplace")
 
-    // Transfer funds from escrow account to seller
-    if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, escrowAcc, e.Seller, e.Amount); err != nil {
-        logger.Errorw("failed to release escrow funds", "escrow", e.ID, "error", err)
-        return err
-    }
+	// Transfer funds from escrow account to seller
+	if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, escrowAcc, e.Seller, e.Amount); err != nil {
+		logger.Errorw("failed to release escrow funds", "escrow", e.ID, "error", err)
+		return err
+	}
 
-    e.State = "released"
+	e.State = "released"
 
-    key := fmt.Sprintf("ai_marketplace:escrow:%s", e.ID)
-    data, _ := json.Marshal(e)
+	key := fmt.Sprintf("ai_marketplace:escrow:%s", e.ID)
+	data, _ := json.Marshal(e)
 
-    if err := CurrentStore().Set([]byte(key), data); err != nil {
-        logger.Errorw("failed to persist escrow state", "escrow", e.ID, "error", err)
-        return err
-    }
+	if err := CurrentStore().Set([]byte(key), data); err != nil {
+		logger.Errorw("failed to persist escrow state", "escrow", e.ID, "error", err)
+		return err
+	}
 
-    logger.Infow("escrow released", "escrow", e.ID)
-    return nil
+	logger.Infow("escrow released", "escrow", e.ID)
+	return nil
 }
-
 
 // ListModel publishes a new model listing.
 func ListModel(m *ModelListing) error {
-    logger := zap.L().Sugar()
+	logger := zap.L().Sugar()
 
-    // KYC check on seller
-    if err := ValidateKYC(m.Seller); err != nil {
-        return fmt.Errorf("seller KYC failed: %w", err)
-    }
+	// KYC check on seller
+	if err := ValidateKYC(m.Seller); err != nil {
+		return fmt.Errorf("seller KYC failed: %w", err)
+	}
 
-    m.ID = uuid.New().String()
-    key := fmt.Sprintf("ai_marketplace:listing:%s", m.ID)
+	m.ID = uuid.New().String()
+	key := fmt.Sprintf("ai_marketplace:listing:%s", m.ID)
 
-    // Check if listing exists
-    raw, err := CurrentStore().Get([]byte(key))
-    if err != nil {
-        return fmt.Errorf("store read error: %w", err)
-    }
-    if raw != nil {
-        return fmt.Errorf("listing %s already exists", m.ID)
-    }
+	// Check if listing exists
+	raw, err := CurrentStore().Get([]byte(key))
+	if err != nil {
+		return fmt.Errorf("store read error: %w", err)
+	}
+	if raw != nil {
+		return fmt.Errorf("listing %s already exists", m.ID)
+	}
 
-    data, err := json.Marshal(m)
-    if err != nil {
-        return fmt.Errorf("marshal listing: %w", err)
-    }
+	data, err := json.Marshal(m)
+	if err != nil {
+		return fmt.Errorf("marshal listing: %w", err)
+	}
 
-    if err := CurrentStore().Set([]byte(key), data); err != nil {
-        return fmt.Errorf("persist listing: %w", err)
-    }
+	if err := CurrentStore().Set([]byte(key), data); err != nil {
+		return fmt.Errorf("persist listing: %w", err)
+	}
 
-    logger.Infow("model listed", "id", m.ID, "seller", m.Seller)
-    return nil
+	logger.Infow("model listed", "id", m.ID, "seller", m.Seller)
+	return nil
 }
-
 
 func ValidateKYC(addr Address) error {
-    // placeholder logic
-    return nil
+	// placeholder logic
+	return nil
 }
-
 
 func BuyModel(ctx *Context, listingID string, buyer Address) (*Escrow, error) {
-    logger := zap.L().Sugar()
+	logger := zap.L().Sugar()
 
-    // Fetch model listing
-    key := fmt.Sprintf("ai_marketplace:listing:%s", listingID)
-    raw, err := CurrentStore().Get([]byte(key))
-    if err != nil || raw == nil {
-        return nil, fmt.Errorf("listing not found: %w", err)
-    }
+	// Fetch model listing
+	key := fmt.Sprintf("ai_marketplace:listing:%s", listingID)
+	raw, err := CurrentStore().Get([]byte(key))
+	if err != nil || raw == nil {
+		return nil, fmt.Errorf("listing not found: %w", err)
+	}
 
-    var m ModelListing
-    if err := json.Unmarshal(raw, &m); err != nil {
-        return nil, fmt.Errorf("unmarshal listing: %w", err)
-    }
+	var m ModelListing
+	if err := json.Unmarshal(raw, &m); err != nil {
+		return nil, fmt.Errorf("unmarshal listing: %w", err)
+	}
 
-    // KYC check on buyer
-    if err := ValidateKYC(buyer); err != nil {
-        return nil, fmt.Errorf("buyer KYC failed: %w", err)
-    }
+	// KYC check on buyer
+	if err := ValidateKYC(buyer); err != nil {
+		return nil, fmt.Errorf("buyer KYC failed: %w", err)
+	}
 
-    // Create escrow object
-    esc := &Escrow{
-        ID:     uuid.New().String(),
-        Buyer:  buyer,
-        Seller: m.Seller,
-        Amount: m.Price,
-        State:  "funded",
-    }
+	// Create escrow object
+	esc := &Escrow{
+		ID:     uuid.New().String(),
+		Buyer:  buyer,
+		Seller: m.Seller,
+		Amount: m.Price,
+		State:  "funded",
+	}
 
-    // Transfer funds to escrow account
-    escrowAcc := ModuleAddress("ai_marketplace")
-    if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, buyer, escrowAcc, m.Price); err != nil {
-        return nil, fmt.Errorf("transfer to escrow: %w", err)
-    }
+	// Transfer funds to escrow account
+	escrowAcc := ModuleAddress("ai_marketplace")
+	if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, buyer, escrowAcc, m.Price); err != nil {
+		return nil, fmt.Errorf("transfer to escrow: %w", err)
+	}
 
-    // Persist escrow
-    eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", esc.ID)
-    data, _ := json.Marshal(esc)
-    if err := CurrentStore().Set([]byte(eskKey), data); err != nil {
-        return nil, fmt.Errorf("persist escrow: %w", err)
-    }
+	// Persist escrow
+	eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", esc.ID)
+	data, _ := json.Marshal(esc)
+	if err := CurrentStore().Set([]byte(eskKey), data); err != nil {
+		return nil, fmt.Errorf("persist escrow: %w", err)
+	}
 
-    logger.Infow("model purchase escrow created", "escrow", esc.ID, "buyer", buyer)
-    return esc, nil
+	logger.Infow("model purchase escrow created", "escrow", esc.ID, "buyer", buyer)
+	return esc, nil
 }
-
 
 func RentModel(ctx *Context, listingID string, renter Address, duration time.Duration) (*Escrow, error) {
-    logger := zap.L().Sugar()
+	logger := zap.L().Sugar()
 
-    key := fmt.Sprintf("ai_marketplace:listing:%s", listingID)
-    raw, err := CurrentStore().Get([]byte(key))
-    if err != nil || raw == nil {
-        return nil, fmt.Errorf("listing not found: %w", err)
-    }
+	key := fmt.Sprintf("ai_marketplace:listing:%s", listingID)
+	raw, err := CurrentStore().Get([]byte(key))
+	if err != nil || raw == nil {
+		return nil, fmt.Errorf("listing not found: %w", err)
+	}
 
-    var m ModelListing
-    if err := json.Unmarshal(raw, &m); err != nil {
-        return nil, fmt.Errorf("unmarshal listing: %w", err)
-    }
+	var m ModelListing
+	if err := json.Unmarshal(raw, &m); err != nil {
+		return nil, fmt.Errorf("unmarshal listing: %w", err)
+	}
 
-    if err := ValidateKYC(renter); err != nil {
-        return nil, fmt.Errorf("renter KYC failed: %w", err)
-    }
+	if err := ValidateKYC(renter); err != nil {
+		return nil, fmt.Errorf("renter KYC failed: %w", err)
+	}
 
-    hours := uint64(duration.Hours())
-    amount := m.Price * hours
+	hours := uint64(duration.Hours())
+	amount := m.Price * hours
 
-    esc := &Escrow{
-        ID:     uuid.New().String(),
-        Buyer:  renter,
-        Seller: m.Seller,
-        Amount: amount,
-        State:  "funded",
-    }
+	esc := &Escrow{
+		ID:     uuid.New().String(),
+		Buyer:  renter,
+		Seller: m.Seller,
+		Amount: amount,
+		State:  "funded",
+	}
 
-    escrowAcc := ModuleAddress("ai_marketplace")
-    if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, renter, escrowAcc, amount); err != nil {
-        return nil, fmt.Errorf("transfer to escrow: %w", err)
-    }
+	escrowAcc := ModuleAddress("ai_marketplace")
+	if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, renter, escrowAcc, amount); err != nil {
+		return nil, fmt.Errorf("transfer to escrow: %w", err)
+	}
 
-    eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", esc.ID)
-    data, _ := json.Marshal(esc)
-    if err := CurrentStore().Set([]byte(eskKey), data); err != nil {
-        return nil, fmt.Errorf("persist escrow: %w", err)
-    }
+	eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", esc.ID)
+	data, _ := json.Marshal(esc)
+	if err := CurrentStore().Set([]byte(eskKey), data); err != nil {
+		return nil, fmt.Errorf("persist escrow: %w", err)
+	}
 
-    logger.Infow("model rental escrow created", "escrow", esc.ID, "renter", renter, "duration", duration)
-    return esc, nil
+	logger.Infow("model rental escrow created", "escrow", esc.ID, "renter", renter, "duration", duration)
+	return esc, nil
 }
-
 
 func ReleaseEscrow(ctx *Context, escrowID string) error {
-    eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", escrowID)
-    raw, err := CurrentStore().Get([]byte(eskKey))
-    if err != nil || raw == nil {
-        return fmt.Errorf("escrow not found: %w", err)
-    }
+	eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", escrowID)
+	raw, err := CurrentStore().Get([]byte(eskKey))
+	if err != nil || raw == nil {
+		return fmt.Errorf("escrow not found: %w", err)
+	}
 
-    var esc Escrow
-    if err := json.Unmarshal(raw, &esc); err != nil {
-        return fmt.Errorf("unmarshal escrow: %w", err)
-    }
+	var esc Escrow
+	if err := json.Unmarshal(raw, &esc); err != nil {
+		return fmt.Errorf("unmarshal escrow: %w", err)
+	}
 
-    return resolveEscrow(ctx, &esc)
+	return resolveEscrow(ctx, &esc)
 }
-
-
