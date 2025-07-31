@@ -627,40 +627,6 @@ func (l *Ledger) NonceOf(addr Address) uint64 {
 	return l.nonces[addr]
 }
 
-func (l *Ledger) BlockByHash(h Hash) (*Block, error) {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-	for _, b := range l.Blocks {
-		if b.Hash() == h {
-			return b, nil
-		}
-	}
-	return nil, fmt.Errorf("block not found")
-}
-
-func (l *Ledger) HasBlock(h Hash) bool {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-	for _, b := range l.Blocks {
-		if b.Hash() == h {
-			return true
-		}
-	}
-	return false
-}
-
-func (l *Ledger) ImportBlock(b *Block) error {
-	return l.AddBlock(b)
-}
-
-func (l *Ledger) DecodeBlockRLP(data []byte) (*Block, error) {
-	var blk Block
-	if err := rlp.DecodeBytes(data, &blk); err != nil {
-		return nil, err
-	}
-	return &blk, nil
-}
-
 func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 	if bytes <= 0 {
 		return nil

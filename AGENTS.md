@@ -138,9 +138,9 @@ you progress.
 16. [ ] liquidity_pools.go
 17. [ ] loanpool.go
 18. [ ] network.go
-19. [ ] replication.go
-20. [ ] rollups.go
-21. [ ] security.go
+19. [x] replication.go
+20. [x] rollups.go
+21. [x] security.go
 22. [ ] sharding.go
 23. [ ] sidechain.go
 24. [ ] state_channel.go
