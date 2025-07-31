@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -238,6 +238,8 @@ var catalogue = []struct {
 	{"BalanceOfAsset", 0x0C0006},
 	{"CastVote", 0x0C0007},
 	{"ExecuteProposal", 0x0C0008},
+	{"GetProposal", 0x0C0009},
+	{"ListProposals", 0x0C000A},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},
