@@ -166,9 +166,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 10. [ ] contracts_opcodes.go
 11. [ ] cross_chain.go
 12. [ ] data.go
-13. [ ] fault_tolerance.go
-14. [ ] gas_table.go
-15. [ ] governance.go
+13. [x] fault_tolerance.go
+14. [x] gas_table.go
+15. [x] governance.go
 16. [ ] green_technology.go
 17. [ ] ledger.go
 18. [ ] ledger_test.go
