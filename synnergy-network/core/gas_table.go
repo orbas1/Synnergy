@@ -61,11 +61,14 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
 	// ----------------------------------------------------------------------
-	NewAuthoritySet:   20_000,
-	RecordVote:        3_000,
-	RegisterCandidate: 8_000,
-	RandomElectorate:  4_000,
-	IsAuthority:       800,
+	NewAuthoritySet:     20_000,
+	RecordVote:          3_000,
+	RegisterCandidate:   8_000,
+	RandomElectorate:    4_000,
+	IsAuthority:         800,
+	GetAuthority:        1_000,
+	ListAuthorities:     2_000,
+	DeregisterAuthority: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Charity Pool
