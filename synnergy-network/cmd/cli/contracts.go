@@ -42,6 +42,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/wasmerio/wasmer-go/wasmer"
 
 	"synnergy-network/core"
 )
@@ -81,7 +82,7 @@ func initContractsMiddleware(cmd *cobra.Command, _ []string) error {
 			return
 		}
 
-		vmSvc = vm.NewEngine(vm.Config{Logger: logger})
+		vmSvc = core.NewHeavyVM(ledger, core.NewGasMeter(8_000_000), wasmer.NewEngine())
 		core.InitContracts(ledger, vmSvc)
 	})
 	return err

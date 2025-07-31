@@ -622,6 +622,7 @@ func init() {
 	}
 }
 
+
 // GasCost returns the **base** gas cost for a single opcode.  Dynamic portions
 // (e.g. per-word fees, storage-touch refunds, call-stipends) are handled by the
 // VM’s gas-meter layer.

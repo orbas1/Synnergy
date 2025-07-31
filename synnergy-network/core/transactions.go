@@ -181,7 +181,7 @@ func NewTxPool(
 	led ReadOnlyState,
 	auth *AuthoritySet,
 	gasCalc GasCalculator,
-	net Broadcaster,
+	net *Broadcaster,
 	maxBytes int, // ← unused for now
 ) *TxPool {
 
@@ -243,7 +243,7 @@ func (tp *TxPool) AddTx(tx *Transaction) error {
 	tp.lookup[tx.Hash] = tx
 	tp.queue = append(tp.queue, tx)
 
-	if tp.net != nil {
+	if len(tp.net.peers) > 0 {
 		if data, err := json.Marshal(tx); err == nil {
 			_ = tp.net.Broadcast("tx:new", data)
 		}

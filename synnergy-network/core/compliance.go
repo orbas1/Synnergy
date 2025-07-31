@@ -22,7 +22,6 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -296,7 +295,6 @@ func MaskSensitiveFields(data map[string]string, fields []string) map[string]str
 	return out
 }
 
-
 // FetchLegalDoc retrieves a legal document from the provided URL.
 func FetchLegalDoc(url string) (LegalDoc, error) {
 	resp, err := http.Get(url)
@@ -333,7 +331,8 @@ func (c *ComplianceEngine) AuditTrail(addr Address) ([]AuditEntry, error) {
 		}
 		out = append(out, e)
 	}
-	return out, it.Error()
+	// in-memory iterator never returns errors
+	return out, nil
 }
 
 // MonitorTransaction analyses a transaction for anomalies using the AI engine.
