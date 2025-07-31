@@ -223,7 +223,7 @@ func SubmitProposal(p *GovProposal) error {
 	logger.Infof("Submitting proposal by %s", p.Creator)
 
 	// Check creator has tokens staked
-	balance := ledger.BalanceOf(p.Creator[:]) // p.Creator is [20]byte → []byte
+	balance := ledger.BalanceOf(p.Creator)
 
 	if balance == 0 {
 		return ErrUnauthorized
@@ -255,7 +255,7 @@ func SubmitProposal(p *GovProposal) error {
 func BalanceOfAsset(asset AssetRef, addr Address) (uint64, error) {
 	switch asset.Kind {
 	case AssetCoin:
-		return ledger.BalanceOf(addr[:]), nil // Ledger must be *Ledger
+		return ledger.BalanceOf(addr), nil
 	case AssetToken:
 		tok, ok := TokenLedger[asset.TokenID]
 		if !ok {

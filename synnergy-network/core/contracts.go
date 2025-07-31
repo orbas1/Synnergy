@@ -35,7 +35,7 @@ var (
 	reg          *ContractRegistry
 )
 
-func InitContracts(led StateRW, vmm VM) {
+func InitContracts(led *Ledger, vmm VM) {
 	contractOnce.Do(func() {
 		reg = &ContractRegistry{
 			ledger: led,

@@ -81,7 +81,7 @@ func TestMintToken_Balance(t *testing.T){
     if err := led.MintToken(addr, "SYNN", 500); err != nil {
         t.Fatalf("mint err %v", err)
     }
-    bal := led.BalanceOf([]byte(addr.String()+":SYNN")) // stored as key string
+    bal := led.BalanceOf(addr)
     if bal != 500 {
         t.Fatalf("balance %d want 500", bal)
     }
