@@ -6,32 +6,35 @@ Most commands require environment variables or a configuration file to be presen
 
 ## Available Command Groups
 
-- **ai** – Manage on‑chain AI models and run anomaly predictions.
-- **amm** – Swap tokens and manage liquidity pools through the automated market maker.
-- **authority_node** – Inspect or update validator node status.
-- **charity_pool** – Query and distribute funds from the community charity pool.
-- **coin** – Mint, transfer and query the native coin supply.
-- **compliance** – Perform compliance checks or export audit logs.
-- **consensus** – Start or stop the consensus service and monitor its status.
-- **contracts** – Deploy and invoke smart contracts.
-- **cross_chain** – Operations related to bridging assets across chains.
-- **data** – Low level data store inspection utilities.
-- **fault_tolerance** – Tools for recovery and fault injection testing.
-- **governance** – Vote on proposals and manage DAO parameters.
-- **green_technology** – Energy saving options and environmental metrics.
-- **ledger** – Inspect blocks, balances and perform administrative token actions.
-- **network** – Control the libp2p networking layer and monitor peers.
-- **replication** – Manage node replication and backup tasks.
-- **rollups** – Create or inspect rollup batches.
-- **security** – Key management and signature utilities.
-- **sharding** – Commands for inspecting shards and migrating data.
-- **sidechain** – Manage side‑chains and interact with side‑chain nodes.
-- **state_channel** – Open or close payment channels and check channel status.
-- **storage** – Interact with the underlying key/value stores.
-- **tokens** – List registered tokens and move balances between accounts.
-- **transactions** – Build or submit raw transactions to the network.
-- **utility_functions** – Miscellaneous helper commands used by other groups.
-- **virtual_machine** – Execute scripts directly in the VM sandbox.
-- **wallet** – Simple wallet operations such as key generation and signing.
+The following command groups expose the same functionality available in the core modules. Each can be mounted on a root [`cobra.Command`](https://github.com/spf13/cobra).
+
+- **ai** – Tools for publishing ML models and running anomaly detection jobs via gRPC to the AI service. Useful for training pipelines and on‑chain inference.
+- **amm** – Swap tokens and manage liquidity pools. Includes helpers to quote routes and add/remove liquidity.
+- **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
+- **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
+- **coin** – Mint the base coin, transfer balances and inspect supply metrics.
+- **compliance** – Run KYC/AML checks on addresses and export audit reports.
+- **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
+- **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
+- **cross_chain** – Bridge assets to or from other chains using lock and release commands.
+- **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **governance** – Create proposals, cast votes and check DAO parameters.
+- **green_technology** – View energy metrics and toggle any experimental sustainability features.
+- **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
+- **network** – Manage peer connections and print networking statistics.
+- **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+- **rollups** – Create rollup batches or inspect existing ones.
+- **security** – Key generation, signing utilities and password helpers.
+- **sharding** – Migrate data between shards and check shard status.
+- **sidechain** – Launch side chains or interact with remote side‑chain nodes.
+- **state_channel** – Open, close and settle payment channels.
+- **storage** – Configure the backing key/value store and inspect content.
+- **tokens** – Register new token types and move balances between accounts.
+- **transactions** – Build raw transactions, sign them and broadcast to the network.
+- **utility_functions** – Miscellaneous helpers shared by other command groups.
+- **virtual_machine** – Execute scripts in the built‑in VM for testing.
+- **wallet** – Generate mnemonics, derive addresses and sign transactions.
+
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
