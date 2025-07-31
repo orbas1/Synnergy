@@ -1,18 +1,19 @@
 package core
 
-
 import (
 	"bufio"
-	"encoding/json"
-	"fmt"
-	"os"
-	"github.com/sirupsen/logrus"
-	"math/big"
-	"log"
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/sirupsen/logrus"
+	"log"
+	"math/big"
+	"os"
+	"path/filepath"
 )
-
 
 // NewLedger initializes a ledger, replaying an existing WAL and optionally loading a genesis block.
 func NewLedger(cfg LedgerConfig) (*Ledger, error) {
@@ -24,14 +25,16 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 	}
 
 	l := &Ledger{
-		Blocks:          []*Block{},
-		State:           make(map[string][]byte),
-		UTXO:            make(map[string]UTXO),
-		TxPool:          make(map[string]*Transaction),
-		Contracts:       make(map[string]Contract),
-		TokenBalances:   make(map[string]uint64),
-		walFile:         wal,
-		snapshotPath:    cfg.SnapshotPath,
+		Blocks:           []*Block{},
+		State:            make(map[string][]byte),
+		UTXO:             make(map[string]UTXO),
+		TxPool:           make(map[string]*Transaction),
+		Contracts:        make(map[string]Contract),
+		TokenBalances:    make(map[string]uint64),
+		lpBalances:       make(map[Address]map[PoolID]uint64),
+		nonces:           make(map[Address]uint64),
+		walFile:          wal,
+		snapshotPath:     cfg.SnapshotPath,
 		snapshotInterval: cfg.SnapshotInterval,
 	}
 	if cfg.GenesisBlock != nil {
@@ -57,71 +60,111 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 	return l, nil
 }
 
-func (l *Ledger) GetPendingSubBlocks() []SubBlock {
-    l.mu.RLock()
-    defer l.mu.RUnlock()
+// OpenLedger loads an existing ledger snapshot and replays its WAL. The path
+// parameter is treated as a directory containing `ledger.snap` and `ledger.wal`.
+// If no snapshot exists, an empty ledger is created.
+func OpenLedger(path string) (*Ledger, error) {
+	snap := filepath.Join(path, "ledger.snap")
+	wal := filepath.Join(path, "ledger.wal")
 
-    blocks := make([]SubBlock, len(l.pendingSubBlocks))
-    copy(blocks, l.pendingSubBlocks)
-    return blocks
+	var genesis *Block
+	l := &Ledger{}
+
+	if f, err := os.Open(snap); err == nil {
+		defer f.Close()
+		if err := json.NewDecoder(f).Decode(l); err != nil {
+			return nil, fmt.Errorf("decode snapshot: %w", err)
+		}
+		l.snapshotPath = snap
+	} else if !os.IsNotExist(err) {
+		return nil, fmt.Errorf("open snapshot: %w", err)
+	}
+
+	cfg := LedgerConfig{WALPath: wal, SnapshotPath: snap, GenesisBlock: genesis}
+	if l.Blocks != nil {
+		// ledger restored from snapshot; reuse existing blocks/state
+		cfg.GenesisBlock = nil
+	}
+
+	loaded, err := NewLedger(cfg)
+	if err != nil {
+		return nil, err
+	}
+	if l.Blocks != nil {
+		// copy restored data into loaded ledger
+		loaded.Blocks = l.Blocks
+		loaded.State = l.State
+		loaded.UTXO = l.UTXO
+		loaded.TxPool = l.TxPool
+		loaded.Contracts = l.Contracts
+		loaded.TokenBalances = l.TokenBalances
+	}
+	return loaded, nil
+}
+
+func (l *Ledger) GetPendingSubBlocks() []SubBlock {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+
+	blocks := make([]SubBlock, len(l.pendingSubBlocks))
+	copy(blocks, l.pendingSubBlocks)
+	return blocks
 }
 
 func (l *Ledger) LastBlockHash() [32]byte {
-    l.mu.RLock()
-    defer l.mu.RUnlock()
+	l.mu.RLock()
+	defer l.mu.RUnlock()
 
-    if len(l.Blocks) == 0 {
-        return [32]byte{} // empty hash for genesis
-    }
+	if len(l.Blocks) == 0 {
+		return [32]byte{} // empty hash for genesis
+	}
 
-    return l.Blocks[len(l.Blocks)-1].Hash()
+	return l.Blocks[len(l.Blocks)-1].Hash()
 }
 
 func (l *Ledger) AppendBlock(blk *Block) error {
-    l.mu.Lock()
-    defer l.mu.Unlock()
+	l.mu.Lock()
+	defer l.mu.Unlock()
 
-    // Optional: verify hash matches PoW, validate header/prevHash, etc.
-    l.Blocks = append(l.Blocks, blk)
-    return nil
+	// Optional: verify hash matches PoW, validate header/prevHash, etc.
+	l.Blocks = append(l.Blocks, blk)
+	return nil
 }
 
 func (l *Ledger) MintBig(addr []byte, amount *big.Int) {
-    l.mu.Lock()
-    defer l.mu.Unlock()
+	l.mu.Lock()
+	defer l.mu.Unlock()
 
-    key := string(addr) // ⚠️ make sure this is safe as a map key
-    if l.TokenBalances == nil {
-        l.TokenBalances = make(map[string]uint64)
-    }
+	key := string(addr) // ⚠️ make sure this is safe as a map key
+	if l.TokenBalances == nil {
+		l.TokenBalances = make(map[string]uint64)
+	}
 
-    l.TokenBalances[key] += amount.Uint64()
+	l.TokenBalances[key] += amount.Uint64()
 }
 
 func (l *Ledger) EmitApproval(tokenID TokenID, owner, spender Address, amount uint64) {
-    fmt.Printf("[EmitApproval] token: %v, owner: %v, spender: %v, amount: %d\n", tokenID, owner, spender, amount)
+	fmt.Printf("[EmitApproval] token: %v, owner: %v, spender: %v, amount: %d\n", tokenID, owner, spender, amount)
 }
 
 func (l *Ledger) EmitTransfer(tokenID TokenID, from, to Address, amount uint64) {
-    fmt.Printf("[EmitTransfer] token: %v, from: %v, to: %v, amount: %d\n", tokenID, from, to, amount)
+	fmt.Printf("[EmitTransfer] token: %v, from: %v, to: %v, amount: %d\n", tokenID, from, to, amount)
 }
 
 func (l *Ledger) DeductGas(addr Address, amount uint64) {
-    fmt.Printf("[DeductGas] from: %v, gas: %d\n", addr, amount)
+	fmt.Printf("[DeductGas] from: %v, gas: %d\n", addr, amount)
 }
 
 func (l *Ledger) WithinBlock(fn func() error) error {
-    // For now, this just wraps the call
-    return fn()
+	// For now, this just wraps the call
+	return fn()
 }
 
-
-
 func (l *Ledger) IsIDTokenHolder(addr Address) bool {
-    const IDTokenID TokenID = 1 // Use your actual governance/ID token ID
+	const IDTokenID TokenID = 1 // Use your actual governance/ID token ID
 
-    bal := l.TokenBalance(IDTokenID, addr)
-    return bal > 0
+	bal := l.TokenBalance(IDTokenID, addr)
+	return bal > 0
 }
 
 func (l *Ledger) TokenBalance(tid TokenID, addr Address) uint64 {
@@ -133,8 +176,6 @@ func (l *Ledger) TokenBalance(tid TokenID, addr Address) uint64 {
 	}
 	return 0
 }
-
-
 
 // applyBlock appends a block and updates sub-ledgers; if persist is true,
 // it writes to the WAL and performs snapshots.
@@ -161,8 +202,8 @@ func (l *Ledger) applyBlock(block *Block, persist bool) error {
 		for idx, out := range tx.Outputs {
 			key := fmt.Sprintf("%x:%d", tx.ID(), idx)
 			l.UTXO[key] = UTXO{
-				TxID:  tx.ID(),
-				Index: uint32(idx),
+				TxID:   tx.ID(),
+				Index:  uint32(idx),
 				Output: out,
 			}
 		}
@@ -184,9 +225,9 @@ func (l *Ledger) applyBlock(block *Block, persist bool) error {
 		// ---- Token transfers -----------------------------------------------
 		for _, tr := range tx.TokenTransfers {
 			fromHex := fmt.Sprintf("%x", tr.From)
-			toHex   := fmt.Sprintf("%x", tr.To)
+			toHex := fmt.Sprintf("%x", tr.To)
 			l.TokenBalances[fromHex] -= tr.Amount
-			l.TokenBalances[toHex]   += tr.Amount
+			l.TokenBalances[toHex] += tr.Amount
 		}
 	}
 
@@ -267,8 +308,6 @@ func (l *Ledger) GetUTXO(address []byte) []UTXO {
 	return res
 }
 
-
-
 // AddToPool adds a transaction to the pool.
 func (l *Ledger) AddToPool(tx *Transaction) {
 	l.mu.Lock()
@@ -346,63 +385,61 @@ func (l *Ledger) MintToken(addr Address, tokenID string, amount uint64) error {
 }
 
 func (l *Ledger) LastSubBlockHeight() uint64 {
-    l.mu.RLock()
-    defer l.mu.RUnlock()
-    if len(l.Blocks) == 0 {
-        return 0
-    }
-    return l.Blocks[len(l.Blocks)-1].Header.Height
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	if len(l.Blocks) == 0 {
+		return 0
+	}
+	return l.Blocks[len(l.Blocks)-1].Header.Height
 }
 
 func (l *Ledger) LastBlockHeight() uint64 {
-    l.mu.RLock()
-    defer l.mu.RUnlock()
-    return uint64(len(l.Blocks) - 1)
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	return uint64(len(l.Blocks) - 1)
 }
 
 func (l *Ledger) RecordPoSVote(headerHash []byte, sig []byte) error {
-    l.mu.Lock()
-    defer l.mu.Unlock()
+	l.mu.Lock()
+	defer l.mu.Unlock()
 
-    if len(headerHash) == 0 || len(sig) == 0 {
-        return fmt.Errorf("ledger: empty PoS vote")
-    }
+	if len(headerHash) == 0 || len(sig) == 0 {
+		return fmt.Errorf("ledger: empty PoS vote")
+	}
 
-    voteKey := fmt.Sprintf("vote:%x", sha256.Sum256(headerHash))
-    l.State[voteKey] = sig
+	voteKey := fmt.Sprintf("vote:%x", sha256.Sum256(headerHash))
+	l.State[voteKey] = sig
 
-    return nil
+	return nil
 }
-
 
 // AppendSubBlock appends a sub-block to the current block-in-progress or ledger.
 func (l *Ledger) AppendSubBlock(sb *SubBlock) error {
-    l.mu.Lock()
-    defer l.mu.Unlock()
+	l.mu.Lock()
+	defer l.mu.Unlock()
 
-    // Validate sub-block height continuity
-    expected := uint64(len(l.Blocks[len(l.Blocks)-1].Body.SubHeaders))
-    if sb.Header.Height != expected {
-        return fmt.Errorf("ledger: expected sub-block height %d, got %d", expected, sb.Header.Height)
-    }
+	// Validate sub-block height continuity
+	expected := uint64(len(l.Blocks[len(l.Blocks)-1].Body.SubHeaders))
+	if sb.Header.Height != expected {
+		return fmt.Errorf("ledger: expected sub-block height %d, got %d", expected, sb.Header.Height)
+	}
 
-    // Append sub-block header
-    l.Blocks[len(l.Blocks)-1].Body.SubHeaders = append(
-        l.Blocks[len(l.Blocks)-1].Body.SubHeaders, sb.Header,
-    )
+	// Append sub-block header
+	l.Blocks[len(l.Blocks)-1].Body.SubHeaders = append(
+		l.Blocks[len(l.Blocks)-1].Body.SubHeaders, sb.Header,
+	)
 
-    // Optionally append transactions to the pending tx pool or log them
-    for _, tx := range sb.Body.Transactions {
-        txHash := sha256.Sum256(tx)
-        l.TxPool[hex.EncodeToString(txHash[:])] = &Transaction{
-            Payload: tx,
-            Hash:    txHash,
-        }
-    }
+	// Optionally append transactions to the pending tx pool or log them
+	for _, tx := range sb.Body.Transactions {
+		txHash := sha256.Sum256(tx)
+		l.TxPool[hex.EncodeToString(txHash[:])] = &Transaction{
+			Payload: tx,
+			Hash:    txHash,
+		}
+	}
 
-    return nil
+	return nil
 }
-
 
 func (l *Ledger) Transfer(from, to Address, amount uint64) error {
 	l.mu.Lock()
@@ -435,4 +472,152 @@ func (l *Ledger) Burn(from Address, amount uint64) error {
 
 	l.TokenBalances[from.String()] -= amount
 	return nil
+}
+
+// -----------------------------------------------------------------------------
+// Additional StateRW helpers
+// -----------------------------------------------------------------------------
+
+func (l *Ledger) GetState(key []byte) ([]byte, error) {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	val, ok := l.State[string(key)]
+	if !ok {
+		return nil, fmt.Errorf("state key not found")
+	}
+	cpy := make([]byte, len(val))
+	copy(cpy, val)
+	return cpy, nil
+}
+
+func (l *Ledger) SetState(key, value []byte) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	cpy := make([]byte, len(value))
+	copy(cpy, value)
+	l.State[string(key)] = cpy
+	return nil
+}
+
+func (l *Ledger) DeleteState(key []byte) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	delete(l.State, string(key))
+	return nil
+}
+
+func (l *Ledger) HasState(key []byte) (bool, error) {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	_, ok := l.State[string(key)]
+	return ok, nil
+}
+
+type memIter struct {
+	keys   [][]byte
+	values [][]byte
+	idx    int
+}
+
+func (it *memIter) Next() bool { it.idx++; return it.idx < len(it.keys) }
+func (it *memIter) Key() []byte {
+	if it.idx < len(it.keys) {
+		return it.keys[it.idx]
+	}
+	return nil
+}
+func (it *memIter) Value() []byte {
+	if it.idx < len(it.values) {
+		return it.values[it.idx]
+	}
+	return nil
+}
+
+func (l *Ledger) PrefixIterator(prefix []byte) StateIterator {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	var k [][]byte
+	var v [][]byte
+	for key, val := range l.State {
+		if bytes.HasPrefix([]byte(key), prefix) {
+			k = append(k, []byte(key))
+			v = append(v, val)
+		}
+	}
+	return &memIter{keys: k, values: v, idx: -1}
+}
+
+func (l *Ledger) MintLP(addr Address, pool PoolID, amt uint64) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.lpBalances == nil {
+		l.lpBalances = make(map[Address]map[PoolID]uint64)
+	}
+	if l.lpBalances[addr] == nil {
+		l.lpBalances[addr] = make(map[PoolID]uint64)
+	}
+	l.lpBalances[addr][pool] += amt
+	return nil
+}
+
+func (l *Ledger) BurnLP(addr Address, pool PoolID, amt uint64) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.lpBalances == nil || l.lpBalances[addr] == nil {
+		return fmt.Errorf("no LP balance")
+	}
+	if l.lpBalances[addr][pool] < amt {
+		return fmt.Errorf("insufficient LP balance")
+	}
+	l.lpBalances[addr][pool] -= amt
+	return nil
+}
+
+func (l *Ledger) NonceOf(addr Address) uint64 {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	return l.nonces[addr]
+}
+
+func (l *Ledger) BlockByHash(h Hash) (*Block, error) {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	for _, b := range l.Blocks {
+		if b.Hash() == h {
+			return b, nil
+		}
+	}
+	return nil, fmt.Errorf("block not found")
+}
+
+func (l *Ledger) HasBlock(h Hash) bool {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	for _, b := range l.Blocks {
+		if b.Hash() == h {
+			return true
+		}
+	}
+	return false
+}
+
+func (l *Ledger) ImportBlock(b *Block) error {
+	return l.AddBlock(b)
+}
+
+func (l *Ledger) DecodeBlockRLP(data []byte) (*Block, error) {
+	var blk Block
+	if err := rlp.DecodeBytes(data, &blk); err != nil {
+		return nil, err
+	}
+	return &blk, nil
+}
+
+func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
+	if bytes <= 0 {
+		return nil
+	}
+	cost := uint64(bytes)
+	zero := Address{}
+	return l.Transfer(addr, zero, cost)
 }
