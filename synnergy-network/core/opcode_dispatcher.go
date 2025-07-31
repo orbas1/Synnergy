@@ -135,9 +135,9 @@ var catalogue = []struct {
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
-        {"Quote", 0x020004},
-        {"AllPairs", 0x020005},
-        {"InitPoolsFromFile", 0x020006},
+	{"Quote", 0x020004},
+	{"AllPairs", 0x020005},
+	{"InitPoolsFromFile", 0x020006},
 
 	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
@@ -218,6 +218,9 @@ var catalogue = []struct {
 	{"RegisterOracle", 0x0A0006},
 	{"PushFeed", 0x0A0007},
 	{"QueryOracle", 0x0A0008},
+	{"ListCDNNodes", 0x0A0009},
+	{"ListOracles", 0x0A000A},
+	{"PushFeedSigned", 0x0A000B},
 
 	// Fault-Tolerance (0x0B)
 	{"NewHealthChecker", 0x0B0001},
