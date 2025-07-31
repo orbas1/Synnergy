@@ -37,7 +37,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	core "github.com/synnergy-network/core"
+	core "synnergy-network/core"
 )
 
 // -----------------------------------------------------------------------------

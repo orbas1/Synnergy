@@ -28,8 +28,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-        core "synnergy-network/core" // module local import
-
+	core "synnergy-network/core" // module local import
+)
 
 //---------------------------------------------------------------------
 // Middleware – executed for every ~compliance command
