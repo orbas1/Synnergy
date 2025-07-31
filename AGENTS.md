@@ -120,6 +120,21 @@ you progress.
 25. **Stage 25** – Final pass through documentation and ensure all tests pass.
 
 ## CLI Files
+1. [ ] ai.go
+2. [ ] amm.go
+3. [ ] authority_node.go
+4. [ ] charity_pool.go
+5. [ ] coin.go
+6. [ ] compliance.go
+7. [ ] consensus.go
+8. [ ] contracts.go
+9. [ ] cross_chain.go
+10. [ ] data.go
+11. [ ] fault_tolerance.go
+12. [ ] governance.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
 1. [x] ai.go
 2. [x] amm.go
 3. [x] authority_node.go
@@ -132,9 +147,9 @@ you progress.
 10. [x] data.go
 11. [x] fault_tolerance.go
 12. [x] governance.go
-13. [ ] green_technology.go
-14. [ ] index.go
-15. [ ] ledger.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
 16. [ ] liquidity_pools.go
 17. [ ] loanpool.go
 18. [ ] network.go

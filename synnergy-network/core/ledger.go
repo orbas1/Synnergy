@@ -631,6 +631,7 @@ func (l *Ledger) NonceOf(addr Address) uint64 {
 	return l.nonces[addr]
 }
 
+
 // AddLog appends an execution log entry to the ledger. The log slice is lazily
 // initialised on first use to avoid nil checks across the codebase.
 func (l *Ledger) AddLog(log *Log) {
