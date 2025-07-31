@@ -120,15 +120,33 @@ you progress.
 25. **Stage 25** – Final pass through documentation and ensure all tests pass.
 
 ## CLI Files
-1. [ ] ai.go
-2. [ ] amm.go
-3. [ ] authority_node.go
-4. [ ] charity_pool.go
-5. [ ] coin.go
-6. [ ] compliance.go
+1. [x] ai.go
+2. [x] amm.go
+3. [x] authority_node.go
+4. [x] charity_pool.go
+5. [x] coin.go
+6. [x] compliance.go
 7. [ ] consensus.go
 8. [ ] contracts.go
 9. [ ] cross_chain.go
+10. [ ] data.go
+11. [ ] fault_tolerance.go
+12. [ ] governance.go
+13. [ ] green_technology.go
+14. [ ] index.go
+15. [ ] ledger.go
+16. [ ] liquidity_pools.go
+17. [ ] loanpool.go
+18. [ ] network.go
+19. [ ] replication.go
+20. [ ] rollups.go
+21. [ ] security.go
+22. [ ] sharding.go
+23. [ ] sidechain.go
+24. [ ] state_channel.go
+25. [x] storage.go
+26. [x] tokens.go
+27. [x] transactions.go
 10. [x] data.go
 11. [x] fault_tolerance.go
 12. [x] governance.go
@@ -144,12 +162,13 @@ you progress.
 22. [x] sharding.go
 23. [x] sidechain.go
 24. [x] state_channel.go
-25. [ ] storage.go
-26. [ ] tokens.go
-27. [ ] transactions.go
-28. [ ] utility_functions.go
-29. [ ] virtual_machine.go
-30. [ ] wallet.go
+25. [x] storage.go
+26. [x] tokens.go
+27. [x] transactions.go
+28. [x] utility_functions.go
+29. [x] virtual_machine.go
+30. [x] wallet.go
+
 
 ## Module Files
 All modules live under `synnergy-network/core`. For a short description of each
@@ -169,9 +188,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 13. [x] fault_tolerance.go
 14. [x] gas_table.go
 15. [x] governance.go
-16. [ ] green_technology.go
-17. [ ] ledger.go
-18. [ ] ledger_test.go
+16. [x] green_technology.go
+17. [x] ledger.go
+18. [x] ledger_test.go
 19. [x] liquidity_pools.go
 20. [x] loanpool.go
 21. [x] network.go
@@ -181,9 +200,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 25. [x] security.go
 26. [x] sharding.go
 27. [x] sidechains.go
-28. [ ] state_channel.go
-29. [ ] storage.go
-30. [ ] tokens.go
+28. [x] state_channel.go
+29. [x] storage.go
+30. [x] tokens.go
 31. [x] transactions.go
 32. [x] utility_functions.go
 33. [x] virtual_machine.go
