@@ -360,6 +360,8 @@ var catalogue = []struct {
 	{"InitiateClose", 0x170005},
 	{"Challenge", 0x170006},
 	{"Finalize", 0x170007},
+	{"GetChannel", 0x170008},
+	{"ListChannels", 0x170009},
 
 	// Storage (0x18)
 	{"NewStorage", 0x180001},

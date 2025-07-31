@@ -312,6 +312,8 @@ var gasTable = map[Opcode]uint64{
 	InitiateClose:        3_000,
 	Challenge:            4_000,
 	Finalize:             5_000,
+	GetChannel:           800,
+	ListChannels:         1_200,
 
 	// ----------------------------------------------------------------------
 	// Storage / Marketplace

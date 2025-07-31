@@ -156,6 +156,33 @@ func finalizeHandler(cmd *cobra.Command, args []string) {
 	fmt.Println("✅ Channel finalized")
 }
 
+func statusHandler(cmd *cobra.Command, args []string) {
+	cidHex, _ := cmd.Flags().GetString("channel")
+	if cidHex == "" {
+		_ = cmd.Usage()
+		log.Fatalf("--channel id is required")
+	}
+	idBytes, err := hex.DecodeString(cidHex)
+	bail(err)
+	if len(idBytes) != 32 {
+		log.Fatalf("channel id must be 32-byte hex")
+	}
+	var id core.ChannelID
+	copy(id[:], idBytes)
+
+	ch, err := engine.GetChannel(id)
+	bail(err)
+	b, _ := json.MarshalIndent(ch, "", "  ")
+	fmt.Println(string(b))
+}
+
+func listHandler(cmd *cobra.Command, args []string) {
+	chans, err := engine.ListChannels()
+	bail(err)
+	b, _ := json.MarshalIndent(chans, "", "  ")
+	fmt.Println(string(b))
+}
+
 //-------------------------------------------------------------------------
 // bail helper
 //-------------------------------------------------------------------------
@@ -200,6 +227,18 @@ var finalizeCmd = &cobra.Command{
 	Run:   finalizeHandler,
 }
 
+var statusCmd = &cobra.Command{
+	Use:   "status",
+	Short: "Show current state of a channel",
+	Run:   statusHandler,
+}
+
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all open channels",
+	Run:   listHandler,
+}
+
 //-------------------------------------------------------------------------
 // init – flag wiring
 //-------------------------------------------------------------------------
@@ -222,12 +261,15 @@ func init() {
 
 	// finalize flags
 	finalizeCmd.Flags().String("channel", "", "ChannelID in hex (32 bytes) [required]")
+	statusCmd.Flags().String("channel", "", "ChannelID in hex (32 bytes) [required]")
 
 	// Sub‑command registration
 	channelCmd.AddCommand(openCmd)
 	channelCmd.AddCommand(closeCmd)
 	channelCmd.AddCommand(challengeCmd)
 	channelCmd.AddCommand(finalizeCmd)
+	channelCmd.AddCommand(statusCmd)
+	channelCmd.AddCommand(listCmd)
 }
 
 //-------------------------------------------------------------------------
