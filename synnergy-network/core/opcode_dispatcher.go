@@ -315,6 +315,7 @@ var catalogue = []struct {
 	{"RequestMissing", 0x120004},
 	{"Replication_Start", 0x120005},
 	{"Stop", 0x120006},
+	{"Synchronize", 0x120007},
 
 	// Rollups (0x13)
 	{"NewAggregator", 0x130001},

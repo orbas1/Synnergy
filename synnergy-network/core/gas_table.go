@@ -257,6 +257,7 @@ var gasTable = map[Opcode]uint64{
 	NewReplicator:  12_000,
 	ReplicateBlock: 30_000,
 	RequestMissing: 4_000,
+	Synchronize:    25_000,
 	Stop:           3_000,
 	// Hash & Start already priced
 
