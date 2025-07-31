@@ -29,7 +29,7 @@ import (
 	"github.com/spf13/viper"
 
 	core "github.com/synnergy-network/core" // update if go.mod root differs
-)
+
 
 //---------------------------------------------------------------------
 // Middleware – executed for every ~compliance command
@@ -128,6 +128,7 @@ func (c *ComplianceController) VerifyZKP(blobPath, commitmentHex, proofHex strin
 		return false, fmt.Errorf("decode proof: %w", err)
 	}
 	return core.Compliance().VerifyZKProof(blob, commitment, proof)
+
 }
 
 //---------------------------------------------------------------------
@@ -272,6 +273,7 @@ func init() {
 	complianceCmd.AddCommand(auditCmd)
 	complianceCmd.AddCommand(monitorCmd)
 	complianceCmd.AddCommand(verifyZKPCmd)
+
 }
 
 // Export for root‑CLI integration

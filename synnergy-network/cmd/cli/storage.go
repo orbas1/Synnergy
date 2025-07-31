@@ -10,24 +10,23 @@ package cli
 // ----------------------------------------------------------------------------
 
 import (
-    "context"
-    "encoding/hex"
-    "encoding/json"
-    "errors"
-    "fmt"
-    "io"
-    "log"
-    "os"
-    "path/filepath"
-    "strconv"
-    "time"
+	"context"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+	"strconv"
+	"time"
 
-    "github.com/joho/godotenv"
-    "github.com/spf13/cobra"
-    logrus "github.com/sirupsen/logrus"
+	"github.com/joho/godotenv"
+	logrus "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 
-    "synnergy-network/core"
-    "synnergy-network/ledger"
+	"synnergy-network/core"
 )
 
 // ---------------------------------------------------------------------------
@@ -35,49 +34,49 @@ import (
 // ---------------------------------------------------------------------------
 
 var (
-    storage      *core.Storage
-    storageLG    = logrus.New()
-    storageFlags struct {
-        ledgerPath   string
-        gatewayURL   string
-        cacheDir     string
-        cacheEntries int
-        timeoutSec   int
-    }
+	storage      *core.Storage
+	storageLG    = logrus.New()
+	storageFlags struct {
+		ledgerPath   string
+		gatewayURL   string
+		cacheDir     string
+		cacheEntries int
+		timeoutSec   int
+	}
 )
 
 func initStorageMiddleware(cmd *cobra.Command, args []string) {
-    // 1) .env overrides
-    _ = godotenv.Load()
+	// 1) .env overrides
+	_ = godotenv.Load()
 
-    resolveStringFlag(cmd, "ledger", &storageFlags.ledgerPath, os.Getenv("LEDGER_PATH"))
-    resolveStringFlag(cmd, "gateway", &storageFlags.gatewayURL, os.Getenv("IPFS_GATEWAY"))
-    resolveStringFlag(cmd, "cache", &storageFlags.cacheDir, os.Getenv("CACHE_DIR"))
-    resolveIntFlag(cmd, "cacheEntries", &storageFlags.cacheEntries, envInt("CACHE_ENTRIES", 10_000))
-    resolveIntFlag(cmd, "timeout", &storageFlags.timeoutSec, envInt("GATEWAY_TIMEOUT", 30))
+	resolveStringFlag(cmd, "ledger", &storageFlags.ledgerPath, os.Getenv("LEDGER_PATH"))
+	resolveStringFlag(cmd, "gateway", &storageFlags.gatewayURL, os.Getenv("IPFS_GATEWAY"))
+	resolveStringFlag(cmd, "cache", &storageFlags.cacheDir, os.Getenv("CACHE_DIR"))
+	resolveIntFlag(cmd, "cacheEntries", &storageFlags.cacheEntries, envInt("CACHE_ENTRIES", 10_000))
+	resolveIntFlag(cmd, "timeout", &storageFlags.timeoutSec, envInt("GATEWAY_TIMEOUT", 30))
 
-    if storageFlags.gatewayURL == "" {
-        log.Fatalf("IPFS gateway URL must be provided via --gateway or IPFS_GATEWAY")
-    }
+	if storageFlags.gatewayURL == "" {
+		log.Fatalf("IPFS gateway URL must be provided via --gateway or IPFS_GATEWAY")
+	}
 
-    // 2) ledger setup (optional, but recommended)
-    led, err := ledger.NewBadgerLedger(storageFlags.ledgerPath)
-    if err != nil {
-        log.Fatalf("ledger open: %v", err)
-    }
+	// 2) ledger setup (optional, but recommended)
+	led, err := ledger.NewBadgerLedger(storageFlags.ledgerPath)
+	if err != nil {
+		log.Fatalf("ledger open: %v", err)
+	}
 
-    // 3) build storage config
-    cfg := &core.StorageConfig{
-        IPFSGateway:      storageFlags.gatewayURL,
-        CacheDir:         storageFlags.cacheDir,
-        CacheSizeEntries: storageFlags.cacheEntries,
-        GatewayTimeout:   time.Duration(storageFlags.timeoutSec) * time.Second,
-    }
+	// 3) build storage config
+	cfg := &core.StorageConfig{
+		IPFSGateway:      storageFlags.gatewayURL,
+		CacheDir:         storageFlags.cacheDir,
+		CacheSizeEntries: storageFlags.cacheEntries,
+		GatewayTimeout:   time.Duration(storageFlags.timeoutSec) * time.Second,
+	}
 
-    storage, err = core.NewStorage(cfg, storageLG, led)
-    if err != nil {
-        log.Fatalf("storage init: %v", err)
-    }
+	storage, err = core.NewStorage(cfg, storageLG, led)
+	if err != nil {
+		log.Fatalf("storage init: %v", err)
+	}
 }
 
 // ---------------------------------------------------------------------------
@@ -85,19 +84,19 @@ func initStorageMiddleware(cmd *cobra.Command, args []string) {
 // ---------------------------------------------------------------------------
 
 func parseAddress(hexStr string) (core.Address, error) {
-    var a core.Address
-    b, err := hex.DecodeString(hexStr)
-    if err != nil || len(b) != len(a) {
-        return a, errors.New("address must be 20-byte hex")
-    }
-    copy(a[:], b)
-    return a, nil
+	var a core.Address
+	b, err := hex.DecodeString(hexStr)
+	if err != nil || len(b) != len(a) {
+		return a, errors.New("address must be 20-byte hex")
+	}
+	copy(a[:], b)
+	return a, nil
 }
 
 func bail(err error) {
-    if err != nil {
-        log.Fatalf("❌ %v", err)
-    }
+	if err != nil {
+		log.Fatalf("❌ %v", err)
+	}
 }
 
 // ---------------------------------------------------------------------------
@@ -105,54 +104,54 @@ func bail(err error) {
 // ---------------------------------------------------------------------------
 
 func pinHandler(cmd *cobra.Command, args []string) {
-    file, _ := cmd.Flags().GetString("file")
-    payerHex, _ := cmd.Flags().GetString("payer")
+	file, _ := cmd.Flags().GetString("file")
+	payerHex, _ := cmd.Flags().GetString("payer")
 
-    if file == "" {
-        _ = cmd.Usage()
-        bail(errors.New("--file is required"))
-    }
-    if payerHex == "" {
-        _ = cmd.Usage()
-        bail(errors.New("--payer is required"))
-    }
+	if file == "" {
+		_ = cmd.Usage()
+		bail(errors.New("--file is required"))
+	}
+	if payerHex == "" {
+		_ = cmd.Usage()
+		bail(errors.New("--payer is required"))
+	}
 
-    data, err := os.ReadFile(file)
-    bail(err)
-    payer, err := parseAddress(payerHex)
-    bail(err)
+	data, err := os.ReadFile(file)
+	bail(err)
+	payer, err := parseAddress(payerHex)
+	bail(err)
 
-    ctx, cancel := context.WithTimeout(cmd.Context(), time.Duration(storageFlags.timeoutSec)*time.Second)
-    defer cancel()
+	ctx, cancel := context.WithTimeout(cmd.Context(), time.Duration(storageFlags.timeoutSec)*time.Second)
+	defer cancel()
 
-    cid, size, err := storage.Pin(ctx, data, payer)
-    bail(err)
-    fmt.Printf("✅ pinned %s (%.2f KB)\n", cid, float64(size)/1024)
+	cid, size, err := storage.Pin(ctx, data, payer)
+	bail(err)
+	fmt.Printf("✅ pinned %s (%.2f KB)\n", cid, float64(size)/1024)
 }
 
 func getHandler(cmd *cobra.Command, args []string) {
-    cidStr, _ := cmd.Flags().GetString("cid")
-    outPath, _ := cmd.Flags().GetString("out")
+	cidStr, _ := cmd.Flags().GetString("cid")
+	outPath, _ := cmd.Flags().GetString("out")
 
-    if cidStr == "" {
-        _ = cmd.Usage()
-        bail(errors.New("--cid is required"))
-    }
+	if cidStr == "" {
+		_ = cmd.Usage()
+		bail(errors.New("--cid is required"))
+	}
 
-    ctx, cancel := context.WithTimeout(cmd.Context(), time.Duration(storageFlags.timeoutSec)*time.Second)
-    defer cancel()
+	ctx, cancel := context.WithTimeout(cmd.Context(), time.Duration(storageFlags.timeoutSec)*time.Second)
+	defer cancel()
 
-    data, err := storage.Retrieve(ctx, cidStr)
-    bail(err)
+	data, err := storage.Retrieve(ctx, cidStr)
+	bail(err)
 
-    if outPath == "-" || outPath == "" {
-        _, _ = io.Copy(os.Stdout, bytes.NewReader(data))
-        return
-    }
-    if err := os.WriteFile(outPath, data, 0o644); err != nil {
-        bail(err)
-    }
-    fmt.Printf("✅ wrote %d bytes to %s\n", len(data), outPath)
+	if outPath == "-" || outPath == "" {
+		_, _ = io.Copy(os.Stdout, bytes.NewReader(data))
+		return
+	}
+	if err := os.WriteFile(outPath, data, 0o644); err != nil {
+		bail(err)
+	}
+	fmt.Printf("✅ wrote %d bytes to %s\n", len(data), outPath)
 }
 
 // ---------------------------------------------------------------------------
@@ -160,61 +159,61 @@ func getHandler(cmd *cobra.Command, args []string) {
 // ---------------------------------------------------------------------------
 
 func createListingHandler(cmd *cobra.Command, args []string) {
-    providerHex, _ := cmd.Flags().GetString("provider")
-    priceStr, _ := cmd.Flags().GetString("price")
-    capacity, _ := cmd.Flags().GetInt("capacity")
+	providerHex, _ := cmd.Flags().GetString("provider")
+	priceStr, _ := cmd.Flags().GetString("price")
+	capacity, _ := cmd.Flags().GetInt("capacity")
 
-    if providerHex == "" || priceStr == "" || capacity == 0 {
-        _ = cmd.Usage()
-        bail(errors.New("--provider, --price and --capacity are required"))
-    }
+	if providerHex == "" || priceStr == "" || capacity == 0 {
+		_ = cmd.Usage()
+		bail(errors.New("--provider, --price and --capacity are required"))
+	}
 
-    provider, err := parseAddress(providerHex)
-    bail(err)
-    price, err := strconv.ParseUint(priceStr, 10, 64)
-    bail(err)
+	provider, err := parseAddress(providerHex)
+	bail(err)
+	price, err := strconv.ParseUint(priceStr, 10, 64)
+	bail(err)
 
-    listing := &core.StorageListing{
-        Provider:   provider,
-        PricePerGB: price,
-        CapacityGB: capacity,
-    }
-    bail(core.CreateListing(listing))
-    fmt.Printf("✅ listing created: %s\n", listing.ID)
+	listing := &core.StorageListing{
+		Provider:   provider,
+		PricePerGB: price,
+		CapacityGB: capacity,
+	}
+	bail(core.CreateListing(listing))
+	fmt.Printf("✅ listing created: %s\n", listing.ID)
 }
 
 func openDealHandler(cmd *cobra.Command, args []string) {
-    listingID, _ := cmd.Flags().GetString("listing")
-    clientHex, _ := cmd.Flags().GetString("client")
-    durHours, _ := cmd.Flags().GetInt("duration")
+	listingID, _ := cmd.Flags().GetString("listing")
+	clientHex, _ := cmd.Flags().GetString("client")
+	durHours, _ := cmd.Flags().GetInt("duration")
 
-    if listingID == "" || clientHex == "" || durHours == 0 {
-        _ = cmd.Usage()
-        bail(errors.New("--listing, --client and --duration are required"))
-    }
+	if listingID == "" || clientHex == "" || durHours == 0 {
+		_ = cmd.Usage()
+		bail(errors.New("--listing, --client and --duration are required"))
+	}
 
-    client, err := parseAddress(clientHex)
-    bail(err)
+	client, err := parseAddress(clientHex)
+	bail(err)
 
-    deal := &core.StorageDeal{
-        ListingID: listingID,
-        Client:    client,
-        Duration:  time.Duration(durHours) * time.Hour,
-    }
-    esc, err := core.OpenDeal(deal)
-    bail(err)
-    fmt.Printf("✅ deal opened: %s  escrow=%s\n", deal.ID, esc.ID)
+	deal := &core.StorageDeal{
+		ListingID: listingID,
+		Client:    client,
+		Duration:  time.Duration(durHours) * time.Hour,
+	}
+	esc, err := core.OpenDeal(deal)
+	bail(err)
+	fmt.Printf("✅ deal opened: %s  escrow=%s\n", deal.ID, esc.ID)
 }
 
 func closeDealHandler(cmd *cobra.Command, args []string) {
-    dealID, _ := cmd.Flags().GetString("deal")
-    if dealID == "" {
-        _ = cmd.Usage()
-        bail(errors.New("--deal is required"))
-    }
-    ctx := &core.Context{} // assuming a Core tx context implementation
-    bail(core.CloseDeal(ctx, dealID))
-    fmt.Println("✅ deal closed")
+	dealID, _ := cmd.Flags().GetString("deal")
+	if dealID == "" {
+		_ = cmd.Usage()
+		bail(errors.New("--deal is required"))
+	}
+	ctx := &core.Context{} // assuming a Core tx context implementation
+	bail(core.CloseDeal(ctx, dealID))
+	fmt.Println("✅ deal closed")
 }
 
 // ---------------------------------------------------------------------------
@@ -222,76 +221,76 @@ func closeDealHandler(cmd *cobra.Command, args []string) {
 // ---------------------------------------------------------------------------
 
 var storageCmd = &cobra.Command{
-    Use:               "storage",
-    Short:             "Decentralised storage operations (IPFS/Arweave & marketplace)",
-    PersistentPreRun:  initStorageMiddleware,
+	Use:              "storage",
+	Short:            "Decentralised storage operations (IPFS/Arweave & marketplace)",
+	PersistentPreRun: initStorageMiddleware,
 }
 
 var pinCmd = &cobra.Command{
-    Use:   "pin",
-    Short: "Pin file/data to the configured gateway",
-    Run:   pinHandler,
+	Use:   "pin",
+	Short: "Pin file/data to the configured gateway",
+	Run:   pinHandler,
 }
 
 var getCmd = &cobra.Command{
-    Use:   "get",
-    Short: "Retrieve data by CID (cache → gateway)",
-    Run:   getHandler,
+	Use:   "get",
+	Short: "Retrieve data by CID (cache → gateway)",
+	Run:   getHandler,
 }
 
 var listCreateCmd = &cobra.Command{
-    Use:   "listing:create",
-    Short: "Create a storage listing (provider side)",
-    Run:   createListingHandler,
+	Use:   "listing:create",
+	Short: "Create a storage listing (provider side)",
+	Run:   createListingHandler,
 }
 
 var dealOpenCmd = &cobra.Command{
-    Use:   "deal:open",
-    Short: "Open a storage deal backed by escrow (client side)",
-    Run:   openDealHandler,
+	Use:   "deal:open",
+	Short: "Open a storage deal backed by escrow (client side)",
+	Run:   openDealHandler,
 }
 
 var dealCloseCmd = &cobra.Command{
-    Use:   "deal:close",
-    Short: "Close a storage deal and release escrow (provider side)",
-    Run:   closeDealHandler,
+	Use:   "deal:close",
+	Short: "Close a storage deal and release escrow (provider side)",
+	Run:   closeDealHandler,
 }
 
 func init() {
-    // persistent root flags (shared)
-    storageCmd.PersistentFlags().String("ledger", "", "Path to ledger DB (LEDGER_PATH)")
-    storageCmd.PersistentFlags().String("gateway", "", "IPFS gateway base URL (IPFS_GATEWAY)")
-    storageCmd.PersistentFlags().String("cache", os.TempDir(), "Cache directory (CACHE_DIR)")
-    storageCmd.PersistentFlags().Int("cacheEntries", 10_000, "Max cache entries (CACHE_ENTRIES)")
-    storageCmd.PersistentFlags().Int("timeout", 30, "Gateway timeout seconds (GATEWAY_TIMEOUT)")
+	// persistent root flags (shared)
+	storageCmd.PersistentFlags().String("ledger", "", "Path to ledger DB (LEDGER_PATH)")
+	storageCmd.PersistentFlags().String("gateway", "", "IPFS gateway base URL (IPFS_GATEWAY)")
+	storageCmd.PersistentFlags().String("cache", os.TempDir(), "Cache directory (CACHE_DIR)")
+	storageCmd.PersistentFlags().Int("cacheEntries", 10_000, "Max cache entries (CACHE_ENTRIES)")
+	storageCmd.PersistentFlags().Int("timeout", 30, "Gateway timeout seconds (GATEWAY_TIMEOUT)")
 
-    // pin flags
-    pinCmd.Flags().String("file", "", "Path to file to pin [required]")
-    pinCmd.Flags().String("payer", "", "Address paying storage rent (hex) [required]")
+	// pin flags
+	pinCmd.Flags().String("file", "", "Path to file to pin [required]")
+	pinCmd.Flags().String("payer", "", "Address paying storage rent (hex) [required]")
 
-    // get flags
-    getCmd.Flags().String("cid", "", "Content identifier to fetch [required]")
-    getCmd.Flags().String("out", "-", "Output file or '-' for STDOUT")
+	// get flags
+	getCmd.Flags().String("cid", "", "Content identifier to fetch [required]")
+	getCmd.Flags().String("out", "-", "Output file or '-' for STDOUT")
 
-    // listing flags
-    listCreateCmd.Flags().String("provider", "", "Provider address (hex) [required]")
-    listCreateCmd.Flags().String("price", "", "Price per GB in tokens [required]")
-    listCreateCmd.Flags().Int("capacity", 0, "Capacity in GB [required]")
+	// listing flags
+	listCreateCmd.Flags().String("provider", "", "Provider address (hex) [required]")
+	listCreateCmd.Flags().String("price", "", "Price per GB in tokens [required]")
+	listCreateCmd.Flags().Int("capacity", 0, "Capacity in GB [required]")
 
-    // deal open flags
-    dealOpenCmd.Flags().String("listing", "", "Listing ID [required]")
-    dealOpenCmd.Flags().String("client", "", "Client address (hex) [required]")
-    dealOpenCmd.Flags().Int("duration", 0, "Deal duration hours [required]")
+	// deal open flags
+	dealOpenCmd.Flags().String("listing", "", "Listing ID [required]")
+	dealOpenCmd.Flags().String("client", "", "Client address (hex) [required]")
+	dealOpenCmd.Flags().Int("duration", 0, "Deal duration hours [required]")
 
-    // deal close flags
-    dealCloseCmd.Flags().String("deal", "", "Deal ID [required]")
+	// deal close flags
+	dealCloseCmd.Flags().String("deal", "", "Deal ID [required]")
 
-    // register sub‑commands
-    storageCmd.AddCommand(pinCmd)
-    storageCmd.AddCommand(getCmd)
-    storageCmd.AddCommand(listCreateCmd)
-    storageCmd.AddCommand(dealOpenCmd)
-    storageCmd.AddCommand(dealCloseCmd)
+	// register sub‑commands
+	storageCmd.AddCommand(pinCmd)
+	storageCmd.AddCommand(getCmd)
+	storageCmd.AddCommand(listCreateCmd)
+	storageCmd.AddCommand(dealOpenCmd)
+	storageCmd.AddCommand(dealCloseCmd)
 }
 
 // ---------------------------------------------------------------------------
@@ -299,28 +298,28 @@ func init() {
 // ---------------------------------------------------------------------------
 
 func envInt(key string, def int) int {
-    if v := os.Getenv(key); v != "" {
-        if n, err := strconv.Atoi(v); err == nil {
-            return n
-        }
-    }
-    return def
+	if v := os.Getenv(key); v != "" {
+		if n, err := strconv.Atoi(v); err == nil {
+			return n
+		}
+	}
+	return def
 }
 
 func resolveStringFlag(cmd *cobra.Command, name string, target *string, fallback string) {
-    if v, _ := cmd.Flags().GetString(name); v != "" {
-        *target = v
-    } else if fallback != "" {
-        *target = fallback
-    }
+	if v, _ := cmd.Flags().GetString(name); v != "" {
+		*target = v
+	} else if fallback != "" {
+		*target = fallback
+	}
 }
 
 func resolveIntFlag(cmd *cobra.Command, name string, target *int, fallback int) {
-    if v, _ := cmd.Flags().GetInt(name); v != 0 {
-        *target = v
-    } else {
-        *target = fallback
-    }
+	if v, _ := cmd.Flags().GetInt(name); v != 0 {
+		*target = v
+	} else {
+		*target = fallback
+	}
 }
 
 // ---------------------------------------------------------------------------

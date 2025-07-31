@@ -296,6 +296,7 @@ func MaskSensitiveFields(data map[string]string, fields []string) map[string]str
 	return out
 }
 
+
 // FetchLegalDoc retrieves a legal document from the provided URL.
 func FetchLegalDoc(url string) (LegalDoc, error) {
 	resp, err := http.Get(url)

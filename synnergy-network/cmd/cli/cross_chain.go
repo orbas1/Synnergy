@@ -27,7 +27,7 @@ import (
     "github.com/google/uuid"
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
-    core "github.com/synnergy-network/core" // adjust to go.mod root
+    core "synnergy-network/core" // adjust to go.mod root
 )
 
 //---------------------------------------------------------------------
