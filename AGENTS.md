@@ -160,9 +160,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 4. [ ] charity_pool.go
 5. [ ] coin.go
 6. [ ] common_structs.go
-7. [ ] compliance.go
-8. [ ] consensus.go
-9. [ ] contracts.go
+7. [x] compliance.go
+8. [x] consensus.go
+9. [x] contracts.go
 10. [ ] contracts_opcodes.go
 11. [ ] cross_chain.go
 12. [ ] data.go
