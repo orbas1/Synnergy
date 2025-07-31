@@ -17,8 +17,8 @@ import (
 	"time"
 	// Logging & P2P
 	"github.com/ethereum/go-ethereum/accounts/abi"
-	host "github.com/libp2p/go-libp2p-core/host"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	host "github.com/libp2p/go-libp2p/core/host"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
