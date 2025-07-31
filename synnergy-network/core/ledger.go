@@ -315,8 +315,8 @@ func (l *Ledger) GetUTXO(address []byte) []UTXO {
 func (l *Ledger) AddToPool(tx *Transaction) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	l.TxPool[fmt.Sprintf("%x", tx.ID)] = tx
-	logrus.Infof("Added transaction %x to pool", tx.ID)
+	l.TxPool[fmt.Sprintf("%x", tx.ID())] = tx
+	logrus.Infof("Added transaction %x to pool", tx.ID())
 }
 
 // ListPool lists pending transactions.
@@ -351,10 +351,10 @@ func (l *Ledger) GetContract(address []byte) (*Contract, error) {
 }
 
 // BalanceOf returns token balance.
-func (l *Ledger) BalanceOf(address []byte) uint64 {
+func (l *Ledger) BalanceOf(address Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
-	return l.TokenBalances[fmt.Sprintf("%x", address)]
+	return l.TokenBalances[fmt.Sprintf("%x", addr.Bytes())]
 }
 
 // Snapshot returns JSON state of ledger.
@@ -565,6 +565,7 @@ type memIter struct {
 	keys   [][]byte
 	values [][]byte
 	idx    int
+	err    error
 }
 
 func (it *memIter) Next() bool { it.idx++; return it.idx < len(it.keys) }
@@ -580,6 +581,8 @@ func (it *memIter) Value() []byte {
 	}
 	return nil
 }
+
+func (it *memIter) Error() error { return it.err }
 
 func (l *Ledger) PrefixIterator(prefix []byte) StateIterator {
 	l.mu.RLock()
@@ -621,44 +624,23 @@ func (l *Ledger) BurnLP(addr Address, pool PoolID, amt uint64) error {
 	return nil
 }
 
+
 func (l *Ledger) NonceOf(addr Address) uint64 {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
 	return l.nonces[addr]
 }
 
-func (l *Ledger) BlockByHash(h Hash) (*Block, error) {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-	for _, b := range l.Blocks {
-		if b.Hash() == h {
-			return b, nil
-		}
-	}
-	return nil, fmt.Errorf("block not found")
-}
 
-func (l *Ledger) HasBlock(h Hash) bool {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-	for _, b := range l.Blocks {
-		if b.Hash() == h {
-			return true
-		}
+// AddLog appends an execution log entry to the ledger. The log slice is lazily
+// initialised on first use to avoid nil checks across the codebase.
+func (l *Ledger) AddLog(log *Log) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.logs == nil {
+		l.logs = make([]*Log, 0, 16)
 	}
-	return false
-}
-
-func (l *Ledger) ImportBlock(b *Block) error {
-	return l.AddBlock(b)
-}
-
-func (l *Ledger) DecodeBlockRLP(data []byte) (*Block, error) {
-	var blk Block
-	if err := rlp.DecodeBytes(data, &blk); err != nil {
-		return nil, err
-	}
-	return &blk, nil
+	l.logs = append(l.logs, log)
 }
 
 func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
@@ -669,3 +651,10 @@ func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 	zero := Address{}
 	return l.Transfer(addr, zero, cost)
 }
+
+// AddLog appends a log entry to the ledger's in-memory log slice.
+// Logs are not persisted yet but can be used for event monitoring.
+func (l *Ledger) AddLog(log *Log) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.logs = append(l.logs, log)

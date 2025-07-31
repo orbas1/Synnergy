@@ -105,12 +105,12 @@ you progress.
 11. **Stage 11** – Module: `ai.go`, `amm.go`, `authority_nodes.go`.
 12. **Stage 12** – Module: `charity_pool.go`, `coin.go`, `common_structs.go`.
 13. **Stage 13** – Module: `compliance.go`, `consensus.go`, `contracts.go`.
-14. **Stage 14** – Module: `contracts_opcodes.go`, `cross_chain.go`, `data.go`.
+14. **Stage 14** – Module: `contracts_opcodes.go`, `cross_chain.go`, `data.go`. ✅
 15. **Stage 15** – Module: `fault_tolerance.go`, `gas_table.go`, `governance.go`.
 16. **Stage 16** – Module: `green_technology.go`, `ledger.go`, `ledger_test.go`.
 17. **Stage 17** – Module: `liquidity_pools.go`, `loanpool.go`, `network.go`.
 18. **Stage 18** – Module: `opcode_dispatcher.go`, `replication.go`, `rollups.go`.
-19. **Stage 19** – Module: `security.go`, `sharding.go`, `sidechains.go`.
+19. **Stage 19** – Module: `security.go`, `sharding.go`, `sidechains.go`. ✅
 20. **Stage 20** – Module: `state_channel.go`, `storage.go`, `tokens.go`.
 21. **Stage 21** – Module: `transactions.go`, `utility_functions.go`,
     `virtual_machine.go`.
@@ -132,9 +132,24 @@ you progress.
 10. [ ] data.go
 11. [ ] fault_tolerance.go
 12. [ ] governance.go
-13. [ ] green_technology.go
-14. [ ] index.go
-15. [ ] ledger.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
+1. [x] ai.go
+2. [x] amm.go
+3. [x] authority_node.go
+4. [x] charity_pool.go
+5. [x] coin.go
+6. [x] compliance.go
+7. [x] consensus.go
+8. [x] contracts.go
+9. [x] cross_chain.go
+10. [x] data.go
+11. [x] fault_tolerance.go
+12. [x] governance.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
 16. [ ] liquidity_pools.go
 17. [ ] loanpool.go
 18. [ ] network.go
@@ -144,12 +159,31 @@ you progress.
 22. [x] sharding.go
 23. [x] sidechain.go
 24. [x] state_channel.go
-25. [ ] storage.go
-26. [ ] tokens.go
-27. [ ] transactions.go
-28. [ ] utility_functions.go
-29. [ ] virtual_machine.go
-30. [ ] wallet.go
+25. [x] storage.go
+26. [x] tokens.go
+27. [x] transactions.go
+10. [x] data.go
+11. [x] fault_tolerance.go
+12. [x] governance.go
+13. [x] green_technology.go
+14. [x] index.go
+15. [x] ledger.go
+16. [x] liquidity_pools.go
+17. [x] loanpool.go
+18. [x] network.go
+19. [x] replication.go
+20. [x] rollups.go
+21. [x] security.go
+22. [x] sharding.go
+23. [x] sidechain.go
+24. [x] state_channel.go
+25. [x] storage.go
+26. [x] tokens.go
+27. [x] transactions.go
+28. [x] utility_functions.go
+29. [x] virtual_machine.go
+30. [x] wallet.go
+
 
 ## Module Files
 All modules live under `synnergy-network/core`. For a short description of each
@@ -160,33 +194,33 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 4. [ ] charity_pool.go
 5. [ ] coin.go
 6. [ ] common_structs.go
-7. [ ] compliance.go
-8. [ ] consensus.go
-9. [ ] contracts.go
-10. [ ] contracts_opcodes.go
-11. [ ] cross_chain.go
-12. [ ] data.go
-13. [ ] fault_tolerance.go
-14. [ ] gas_table.go
-15. [ ] governance.go
-16. [ ] green_technology.go
-17. [ ] ledger.go
-18. [ ] ledger_test.go
-19. [ ] liquidity_pools.go
-20. [ ] loanpool.go
-21. [ ] network.go
-22. [ ] opcode_dispatcher.go
-23. [ ] replication.go
-24. [ ] rollups.go
-25. [ ] security.go
-26. [ ] sharding.go
-27. [ ] sidechains.go
-28. [ ] state_channel.go
-29. [ ] storage.go
-30. [ ] tokens.go
-31. [ ] transactions.go
-32. [ ] utility_functions.go
-33. [ ] virtual_machine.go
+7. [x] compliance.go
+8. [x] consensus.go
+9. [x] contracts.go
+10. [x] contracts_opcodes.go
+11. [x] cross_chain.go
+12. [x] data.go
+13. [x] fault_tolerance.go
+14. [x] gas_table.go
+15. [x] governance.go
+16. [x] green_technology.go
+17. [x] ledger.go
+18. [x] ledger_test.go
+19. [x] liquidity_pools.go
+20. [x] loanpool.go
+21. [x] network.go
+22. [x] opcode_dispatcher.go
+23. [x] replication.go
+24. [x] rollups.go
+25. [x] security.go
+26. [x] sharding.go
+27. [x] sidechains.go
+28. [x] state_channel.go
+29. [x] storage.go
+30. [x] tokens.go
+31. [x] transactions.go
+32. [x] utility_functions.go
+33. [x] virtual_machine.go
 34. [ ] wallet.go
 
 ## Guidance

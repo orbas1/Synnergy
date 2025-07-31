@@ -2,7 +2,6 @@ package core
 
 import (
 	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
