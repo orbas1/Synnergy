@@ -126,9 +126,9 @@ you progress.
 4. [ ] charity_pool.go
 5. [ ] coin.go
 6. [ ] compliance.go
-7. [ ] consensus.go
-8. [ ] contracts.go
-9. [ ] cross_chain.go
+7. [x] consensus.go
+8. [x] contracts.go
+9. [x] cross_chain.go
 10. [ ] data.go
 11. [ ] fault_tolerance.go
 12. [ ] governance.go
