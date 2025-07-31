@@ -38,3 +38,9 @@ The following command groups expose the same functionality available in the core
 
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
+
+If you want to enable **all** CLI modules with a single call, use `cli.RegisterRoutes(rootCmd)` from the `cli` package. This helper mounts every exported command group so routes can be invoked like:
+
+```bash
+$ synnergy ~network ~start
+```
