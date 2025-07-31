@@ -29,7 +29,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	core "github.com/synnergy-network/core" // adjust to your go.mod root
+        core "synnergy-network/core" // module local import
 )
 
 

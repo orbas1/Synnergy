@@ -58,6 +58,14 @@ var globalLogger = log.New()
 //
 // This keeps derivation simple (ed25519 does not support unhardened children).
 
+// Seed returns a copy of the wallet's master seed. Callers should securely wipe
+// the returned slice after use.
+func (w *HDWallet) Seed() []byte {
+    out := make([]byte, len(w.seed))
+    copy(out, w.seed)
+    return out
+}
+
 
 
 //---------------------------------------------------------------------
