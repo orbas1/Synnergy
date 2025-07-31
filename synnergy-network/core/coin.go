@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 	"fmt"
+	"math/big"
 
 	"github.com/sirupsen/logrus"
 )
@@ -145,4 +146,13 @@ func (c *Coin) BalanceOf(address []byte) uint64 {
 		copy(addr[len(addr)-len(address):], address)
 	}
 	return c.ledger.BalanceOf(addr)
+}
+
+// BlockRewardAt returns the block reward at the given height applying the
+// consensus halving schedule defined in consensus.go.
+func BlockRewardAt(height uint64) *big.Int {
+	halves := height / RewardHalvingPeriod
+	r := new(big.Int).Set(InitialReward)
+	r.Rsh(r, uint(halves))
+	return r
 }
