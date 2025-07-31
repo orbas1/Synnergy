@@ -97,11 +97,11 @@ you progress.
 3. **Stage 3** – CLI: `consensus.go`, `contracts.go`, `cross_chain.go`.
 4. **Stage 4** – CLI: `data.go`, `fault_tolerance.go`, `governance.go`.
 5. **Stage 5** – CLI: `green_technology.go`, `index.go`, `ledger.go`.
-6. **Stage 6** – CLI: `liquidity_pools.go`, `loanpool.go`, `network.go`.
-7. **Stage 7** – CLI: `replication.go`, `rollups.go`, `security.go`.
-8. **Stage 8** – CLI: `sharding.go`, `sidechain.go`, `state_channel.go`.
-9. **Stage 9** – CLI: `storage.go`, `tokens.go`, `transactions.go`.
-10. **Stage 10** – CLI: `utility_functions.go`, `virtual_machine.go`, `wallet.go`.
+6. **Stage 6** – CLI: `liquidity_pools.go`, `loanpool.go`, `network.go`. ✅
+7. **Stage 7** – CLI: `replication.go`, `rollups.go`, `security.go`. ✅
+8. **Stage 8** – CLI: `sharding.go`, `sidechain.go`, `state_channel.go`. ✅
+9. **Stage 9** – CLI: `storage.go`, `tokens.go`, `transactions.go`. ✅
+10. **Stage 10** – CLI: `utility_functions.go`, `virtual_machine.go`, `wallet.go`. ✅
 11. **Stage 11** – Module: `ai.go`, `amm.go`, `authority_nodes.go`.
 12. **Stage 12** – Module: `charity_pool.go`, `coin.go`, `common_structs.go`.
 13. **Stage 13** – Module: `compliance.go`, `consensus.go`, `contracts.go`.
@@ -123,15 +123,15 @@ you progress.
 1. [x] ai.go
 2. [x] amm.go
 3. [x] authority_node.go
-4. [ ] charity_pool.go
-5. [ ] coin.go
-6. [ ] compliance.go
-7. [ ] consensus.go
-8. [ ] contracts.go
-9. [ ] cross_chain.go
-10. [ ] data.go
-11. [ ] fault_tolerance.go
-12. [ ] governance.go
+4. [x] charity_pool.go
+5. [x] coin.go
+6. [x] compliance.go
+7. [x] consensus.go
+8. [x] contracts.go
+9. [x] cross_chain.go
+10. [x] data.go
+11. [x] fault_tolerance.go
+12. [x] governance.go
 13. [x] green_technology.go
 14. [x] index.go
 15. [x] ledger.go
@@ -150,9 +150,9 @@ you progress.
 13. [x] green_technology.go
 14. [x] index.go
 15. [x] ledger.go
-16. [ ] liquidity_pools.go
-17. [ ] loanpool.go
-18. [ ] network.go
+16. [x] liquidity_pools.go
+17. [x] loanpool.go
+18. [x] network.go
 19. [x] replication.go
 20. [x] rollups.go
 21. [x] security.go
