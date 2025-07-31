@@ -168,6 +168,9 @@ var catalogue = []struct {
 	{"Compliance_ValidateKYC", 0x060002},
 	{"EraseData", 0x060003},
 	{"RecordFraudSignal", 0x060004},
+	{"Compliance_LogAudit", 0x060005},
+	{"Compliance_AuditTrail", 0x060006},
+	{"Compliance_MonitorTx", 0x060007},
 
 	// Consensus (0x07)
 	{"Pick", 0x070001},

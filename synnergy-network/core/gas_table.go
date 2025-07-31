@@ -92,9 +92,13 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Compliance
 	// ----------------------------------------------------------------------
-	InitCompliance:    8_000,
-	EraseData:         5_000,
-	RecordFraudSignal: 7_000,
+	InitCompliance:        8_000,
+	EraseData:             5_000,
+	RecordFraudSignal:     7_000,
+	Compliance_LogAudit:   2_000,
+	Compliance_AuditTrail: 3_000,
+	Compliance_MonitorTx:  5_000,
+
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
