@@ -135,9 +135,9 @@ you progress.
 13. [ ] green_technology.go
 14. [ ] index.go
 15. [ ] ledger.go
-16. [ ] liquidity_pools.go
-17. [ ] loanpool.go
-18. [ ] network.go
+16. [x] liquidity_pools.go
+17. [x] loanpool.go
+18. [x] network.go
 19. [ ] replication.go
 20. [ ] rollups.go
 21. [ ] security.go
