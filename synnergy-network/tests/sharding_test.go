@@ -95,12 +95,12 @@ func (it *smIter) Error() error { return nil }
 // Dummy Broadcaster (no network) that counts messages
 //------------------------------------------------------------
 
-type stubBC struct {
+type shardStubBC struct {
 	cnt  int
 	last []byte
 }
 
-func (b *stubBC) Broadcast(topic string, msg interface{}) error {
+func (b *shardStubBC) Broadcast(topic string, msg interface{}) error {
 	b.cnt++
 	if raw, ok := msg.([]byte); ok {
 		b.last = raw
@@ -145,7 +145,7 @@ func TestShardOfAddr_Deterministic(t *testing.T) {
 
 func TestSubmitCrossShard_And_Pull(t *testing.T) {
 	led := newShardMem()
-	bc := stubBC{}
+	bc := shardStubBC{}
 	sc := NewShardCoordinator(led, Broadcaster{}) // use empty broadcaster – we will call stub manually
 	// override internal broadcaster with stub using reflection-hack (since field exported). simpler: create coordinator then assign
 	sc.net = Broadcaster{} // zero peers, Broadcast returns nil

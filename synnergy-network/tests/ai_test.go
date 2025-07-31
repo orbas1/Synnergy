@@ -11,24 +11,24 @@ import (
 
 // Mock implementations for StateRW and AIStubClient
 
-type mockLedger struct {
+type mockLedgerAI struct {
 	transfers []string // record From→To strings
 	states    map[string][]byte
 }
 
-func (m *mockLedger) Transfer(from, to Address, amount uint64) error {
+func (m *mockLedgerAI) Transfer(from, to Address, amount uint64) error {
 	m.transfers = append(m.transfers, from.String()+"->"+to.String())
 	return nil
 }
 
-func (m *mockLedger) SetState(key, val []byte) {
+func (m *mockLedgerAI) SetState(key, val []byte) {
 	if m.states == nil {
 		m.states = make(map[string][]byte)
 	}
 	m.states[string(key)] = val
 }
 
-func (m *mockLedger) GetState(key []byte) ([]byte, error) {
+func (m *mockLedgerAI) GetState(key []byte) ([]byte, error) {
 	val, ok := m.states[string(key)]
 	if !ok {
 		return nil, errors.New("not found")
@@ -64,7 +64,7 @@ func TestPredictAnomaly(t *testing.T) {
 	modelCID := "model123"
 	modelHash := sha256.Sum256([]byte(modelCID))
 
-	led := &mockLedger{}
+	led := &mockLedgerAI{}
 	client := &mockClient{
 		anomalyResp: &TFResponse{Score: 0.87, Result: []byte(modelCID)},
 	}
@@ -115,7 +115,7 @@ func TestOptimizeFees(t *testing.T) {
 func TestPublishModel(t *testing.T) {
 	cid := "abc"
 	creator := Address{0xFE}
-	led := &mockLedger{}
+	led := &mockLedgerAI{}
 	ai := &AIEngine{led: led, models: make(map[[32]byte]ModelMeta)}
 
 	hash, err := ai.PublishModel(cid, creator, 99)

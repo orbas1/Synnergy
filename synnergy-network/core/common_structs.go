@@ -796,6 +796,9 @@ type TxContext struct {
 	State       StateRW
 }
 
+// Context is an alias used throughout the codebase for TxContext.
+type Context = TxContext
+
 // Call delegates to the underlying state to invoke a contract or high level
 // function by name. This is a stub implementation used during early
 // development and simply returns an error until the VM wiring is completed.
