@@ -184,9 +184,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 28. [ ] state_channel.go
 29. [ ] storage.go
 30. [ ] tokens.go
-31. [ ] transactions.go
-32. [ ] utility_functions.go
-33. [ ] virtual_machine.go
+31. [x] transactions.go
+32. [x] utility_functions.go
+33. [x] virtual_machine.go
 34. [ ] wallet.go
 
 ## Guidance
