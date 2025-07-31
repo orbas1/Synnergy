@@ -278,6 +278,11 @@ var gasTable = map[Opcode]uint64{
 	Encrypt:           1_500,
 	Decrypt:           1_500,
 	NewTLSConfig:      5_000,
+	DilithiumKeypair:  6_000,
+	DilithiumSign:     5_000,
+	DilithiumVerify:   5_000,
+	PredictRisk:       2_000,
+	AnomalyScore:      2_000,
 
 	// ----------------------------------------------------------------------
 	// Sharding

@@ -332,6 +332,11 @@ var catalogue = []struct {
 	{"Encrypt", 0x140007},
 	{"Decrypt", 0x140008},
 	{"NewTLSConfig", 0x140009},
+	{"DilithiumKeypair", 0x14000A},
+	{"DilithiumSign", 0x14000B},
+	{"DilithiumVerify", 0x14000C},
+	{"PredictRisk", 0x14000D},
+	{"AnomalyScore", 0x14000E},
 
 	// Sharding (0x15)
 	{"NewShardCoordinator", 0x150001},
