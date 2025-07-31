@@ -38,6 +38,7 @@ import (
 // VM dispatcher glue
 // ────────────────────────────────────────────────────────────────────────────
 
+
 // OpContext is provided by the VM; it gives opcode handlers controlled access
 // to message meta-data, state-DB, gas-meter, logger, etc.
 
@@ -72,6 +73,7 @@ func Register(op Opcode, fn OpcodeFunc) {
 }
 
 // Dispatch is called by the VM executor for every instruction.
+
 func Dispatch(ctx OpContext, op Opcode) error {
 	mu.RLock()
 	fn, ok := opcodeTable[op]
