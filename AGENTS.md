@@ -188,12 +188,12 @@ you progress.
 ## Module Files
 All modules live under `synnergy-network/core`. For a short description of each
 file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module_guide.md).
-1. [ ] ai.go
-2. [ ] amm.go
-3. [ ] authority_nodes.go
-4. [ ] charity_pool.go
-5. [ ] coin.go
-6. [ ] common_structs.go
+1. [x] ai.go
+2. [x] amm.go
+3. [x] authority_nodes.go
+4. [x] charity_pool.go
+5. [x] coin.go
+6. [x] common_structs.go
 7. [x] compliance.go
 8. [x] consensus.go
 9. [x] contracts.go
@@ -221,7 +221,7 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 31. [x] transactions.go
 32. [x] utility_functions.go
 33. [x] virtual_machine.go
-34. [ ] wallet.go
+34. [x] wallet.go
 
 ## Guidance
 - Always work through the stages in order.
