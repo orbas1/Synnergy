@@ -342,6 +342,9 @@ var catalogue = []struct {
 	{"Send", 0x150006},
 	{"PullReceipts", 0x150007},
 	{"Reshard", 0x150008},
+	{"GossipTx", 0x150009},
+	{"RebalanceShards", 0x15000A},
+	{"VerticalPartition", 0x15000B},
 
 	// Sidechains (0x16)
 	{"InitSidechains", 0x160001},

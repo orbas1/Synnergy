@@ -289,6 +289,9 @@ var gasTable = map[Opcode]uint64{
 	Send:                2_000,
 	PullReceipts:        3_000,
 	Reshard:             30_000,
+	GossipTx:            5_000,
+	RebalanceShards:     8_000,
+	VerticalPartition:   2_000,
 	// Broadcast already priced
 
 	// ----------------------------------------------------------------------

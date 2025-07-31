@@ -479,6 +479,7 @@ type ShardCoordinator struct {
 	net     Broadcaster
 	mu      sync.RWMutex
 	leaders map[ShardID]Address
+	metrics map[ShardID]*ShardMetrics
 }
 
 //---------------------------------------------------------------------
