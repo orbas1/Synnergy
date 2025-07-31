@@ -218,7 +218,7 @@ type RicardianContract struct {
 
 type ContractRegistry struct {
 	*Registry
-	ledger StateRW
+	ledger *Ledger
 	vm     VM
 	mu     sync.RWMutex
 	byAddr map[Address]*SmartContract
@@ -809,7 +809,7 @@ type TxPool struct {
 	mu        sync.RWMutex
 	ledger    ReadOnlyState
 	gasCalc   GasCalculator
-	net       Broadcaster
+	net       *Broadcaster
 	lookup    map[Hash]*Transaction
 	queue     []*Transaction
 	authority *AuthoritySet

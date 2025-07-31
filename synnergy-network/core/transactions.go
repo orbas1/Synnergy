@@ -181,7 +181,7 @@ func NewTxPool(
 	led ReadOnlyState,
 	auth *AuthoritySet,
 	gasCalc GasCalculator,
-	net Broadcaster,
+	net *Broadcaster,
 	maxBytes int, // ← unused for now
 ) *TxPool {
 
