@@ -175,9 +175,9 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 19. [ ] liquidity_pools.go
 20. [ ] loanpool.go
 21. [ ] network.go
-22. [ ] opcode_dispatcher.go
-23. [ ] replication.go
-24. [ ] rollups.go
+22. [x] opcode_dispatcher.go
+23. [x] replication.go
+24. [x] rollups.go
 25. [ ] security.go
 26. [ ] sharding.go
 27. [ ] sidechains.go
