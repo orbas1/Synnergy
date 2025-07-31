@@ -14,9 +14,12 @@ package core
 
 import (
     "container/heap"
+    "encoding/json"
     "errors"
     "math"
+    "os"
     "sort"
+    log "github.com/sirupsen/logrus"
 )
 
 //---------------------------------------------------------------------
@@ -26,6 +29,51 @@ import (
 
 // graph[token] = outgoing edges
 var graph = make(map[TokenID][]edge)
+
+// PoolFixture defines the JSON schema expected by InitPoolsFromFile. It allows
+// the CLI to bootstrap pools without a running chain.
+type PoolFixture struct {
+    TokenA TokenID `json:"tokenA"`
+    TokenB TokenID `json:"tokenB"`
+    FeeBps uint16  `json:"feeBps"`
+    ResA   uint64  `json:"resA"`
+    ResB   uint64  `json:"resB"`
+}
+
+// InitPoolsFromFile initialises the AMM manager if needed and loads pools from
+// the provided JSON file. It is primarily used for local development and CLI
+// commands when no live node is available.
+func InitPoolsFromFile(path string) error {
+    b, err := os.ReadFile(path)
+    if err != nil {
+        return err
+    }
+    var fixtures []PoolFixture
+    if err := json.Unmarshal(b, &fixtures); err != nil {
+        return err
+    }
+    if Manager() == nil {
+        ledger, err := NewInMemory()
+        if err != nil {
+            return err
+        }
+        InitAMM(log.StandardLogger(), ledger)
+    }
+    for _, f := range fixtures {
+        pid, err := Manager().CreatePool(f.TokenA, f.TokenB, f.FeeBps)
+        if err != nil {
+            return err
+        }
+        p := Manager().pools[pid]
+        p.resA = f.ResA
+        p.resB = f.ResB
+        if f.ResA > 0 && f.ResB > 0 {
+            p.totalLP = uint64(math.Sqrt(float64(f.ResA * f.ResB)))
+        }
+        registerPoolForRouting(p)
+    }
+    return nil
+}
 
 //---------------------------------------------------------------------
 // Router initialisation – called from AMM.Init after every pool creation
