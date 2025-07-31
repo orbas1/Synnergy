@@ -50,32 +50,42 @@ var gasTable = map[Opcode]uint64{
 	ReleaseEscrow:  12_000,
 	PredictVolume:  15_000,
 
+
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
 	// ----------------------------------------------------------------------
-	SwapExactIn:     4_500,
-	AddLiquidity:    5_000,
-	RemoveLiquidity: 5_000,
-	Quote:           2_500,
-	AllPairs:        2_000,
+
+	SwapExactIn:    4_500,
+	AddLiquidity:   5_000,
+	RemoveLiquidity:5_000,
+  Quote:          2_500,
+  AllPairs:       2_000,
+  InitPoolsFromFile: 6_000,
+
 
 	// ----------------------------------------------------------------------
 	// Authority / Validator-Set
-	// ----------------------------------------------------------------------
-	NewAuthoritySet:   20_000,
-	RecordVote:        3_000,
-	RegisterCandidate: 8_000,
-	RandomElectorate:  4_000,
-	IsAuthority:       800,
+	// ---------------------------------------------------------------------
+
+	NewAuthoritySet:     20_000,
+	RecordVote:          3_000,
+	RegisterCandidate:   8_000,
+	RandomElectorate:    4_000,
+	IsAuthority:         800,
+	GetAuthority:        1_000,
+	ListAuthorities:     2_000,
+	DeregisterAuthority: 6_000,
 
 	// ----------------------------------------------------------------------
 	// Charity Pool
 	// ----------------------------------------------------------------------
-	NewCharityPool: 10_000,
-	Deposit:        2_100,
-	Register:       2_500,
-	Vote:           3_000,
-	Tick:           1_000,
+	NewCharityPool:  10_000,
+	Deposit:         2_100,
+	Register:        2_500,
+	Vote:            3_000,
+	Tick:            1_000,
+	GetRegistration: 800,
+	Winners:         800,
 
 	// ----------------------------------------------------------------------
 	// Coin
@@ -88,9 +98,14 @@ var gasTable = map[Opcode]uint64{
 	// ----------------------------------------------------------------------
 	// Compliance
 	// ----------------------------------------------------------------------
-	InitCompliance:    8_000,
-	EraseData:         5_000,
-	RecordFraudSignal: 7_000,
+
+	InitCompliance:        8_000,
+	EraseData:             5_000,
+	RecordFraudSignal:     7_000,
+	Compliance_LogAudit:   2_000,
+	Compliance_AuditTrail: 3_000,
+	Compliance_MonitorTx:  5_000,
+
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
@@ -111,6 +126,8 @@ var gasTable = map[Opcode]uint64{
 	ValidatePoH:           20_000,
 	SealMainBlockPOW:      60_000,
 	DistributeRewards:     10_000,
+	CalculateWeights:      8_000,
+	ComputeThreshold:      6_000,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
