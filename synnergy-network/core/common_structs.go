@@ -218,7 +218,7 @@ type RicardianContract struct {
 
 type ContractRegistry struct {
 	*Registry
-	ledger StateRW
+	ledger *Ledger
 	vm     VM
 	mu     sync.RWMutex
 	byAddr map[Address]*SmartContract
@@ -363,6 +363,7 @@ type Ledger struct {
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
+	logs             []*Log
 }
 
 //---------------------------------------------------------------------
