@@ -25,7 +25,9 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
+	config "synnergy-network/cmd/config"
 	"synnergy-network/core"
 )
 
@@ -49,16 +51,20 @@ func netInit(cmd *cobra.Command, _ []string) error {
 	}
 	_ = godotenv.Load()
 
-	lv, err := logrus.ParseLevel(envOr("LOG_LEVEL", "info"))
+	lv, err := logrus.ParseLevel(viper.GetString("logging.level"))
 	if err != nil {
 		return err
 	}
 	logrus.SetLevel(lv)
 
+	// Pull network options from configuration; env vars override via Viper.
 	cfg := core.Config{
-		ListenAddr:     envOr("P2P_LISTEN_ADDR", "/ip4/0.0.0.0/tcp/4001"),
-		BootstrapPeers: splitCSV(os.Getenv("P2P_BOOTSTRAP")),
-		DiscoveryTag:   envOr("P2P_DISCOVERY_TAG", "synnergy-mesh"),
+		ListenAddr:     viper.GetString("network.listen_addr"),
+		BootstrapPeers: viper.GetStringSlice("network.bootstrap_peers"),
+		DiscoveryTag:   viper.GetString("network.discovery_tag"),
+	}
+	if cfg.ListenAddr == "" {
+		cfg.ListenAddr = "/ip4/0.0.0.0/tcp/4001"
 	}
 	n, err := core.NewNode(cfg)
 	if err != nil {
@@ -69,27 +75,6 @@ func netInit(cmd *cobra.Command, _ []string) error {
 	netNode = n
 	netMu.Unlock()
 	return nil
-}
-
-func envOr(k, d string) string {
-	if v := os.Getenv(k); v != "" {
-		return v
-	}
-	return d
-}
-func splitCSV(s string) []string {
-	if s == "" {
-		return nil
-	}
-	parts := strings.Split(s, ", ")
-	out := make([]string, 0, len(parts))
-	for _, p := range parts {
-		t := strings.TrimSpace(p)
-		if t != "" {
-			out = append(out, t)
-		}
-	}
-	return out
 }
 
 // -----------------------------------------------------------------------------
