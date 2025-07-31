@@ -29,9 +29,8 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-        core "synnergy-network/core" // module local import
+	core "synnergy-network/core" // module local import
 )
-
 
 //---------------------------------------------------------------------
 // Middleware – executed for every ~auth command

@@ -9,6 +9,7 @@ package core
 
 import (
 	"context"
+	"fmt"
 	"math/big"
 	"net"
 	"net/http"
@@ -218,7 +219,7 @@ type RicardianContract struct {
 
 type ContractRegistry struct {
 	*Registry
-	ledger StateRW
+	ledger *Ledger
 	vm     VM
 	mu     sync.RWMutex
 	byAddr map[Address]*SmartContract
@@ -356,6 +357,7 @@ type Ledger struct {
 	TxPool           map[string]*Transaction
 	Contracts        map[string]Contract
 	TokenBalances    map[string]uint64
+	logs             []*Log
 	walFile          *os.File
 	snapshotPath     string
 	snapshotInterval int
@@ -363,6 +365,7 @@ type Ledger struct {
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
+	logs             []*Log
 }
 
 //---------------------------------------------------------------------
@@ -776,7 +779,7 @@ type WithdrawProof struct {
 }
 
 // Context holds the transaction-level fields (args, caller, origin, etc.).
-type Context struct {
+type TxContext struct {
 	BlockHeight uint64
 	TxHash      Hash
 	Caller      Address
@@ -794,6 +797,24 @@ type Context struct {
 	State       StateRW
 }
 
+// Call delegates to the underlying state to invoke a contract or high level
+// function by name. This is a stub implementation used during early
+// development and simply returns an error until the VM wiring is completed.
+func (ctx *Context) Call(name string) error {
+	return fmt.Errorf("call %s not implemented", name)
+}
+
+// Gas deducts the given amount from the remaining gas limit and returns an
+// error if insufficient gas is available.
+func (ctx *Context) Gas(amount uint64) error {
+	if ctx.GasLimit < amount {
+		return fmt.Errorf("out of gas")
+	}
+	ctx.GasLimit -= amount
+	return nil
+}
+
+
 type Registry struct {
 	mu      sync.RWMutex
 	Entries map[string][]byte
@@ -809,7 +830,7 @@ type TxPool struct {
 	mu        sync.RWMutex
 	ledger    ReadOnlyState
 	gasCalc   GasCalculator
-	net       Broadcaster
+	net       *Broadcaster
 	lookup    map[Hash]*Transaction
 	queue     []*Transaction
 	authority *AuthoritySet
