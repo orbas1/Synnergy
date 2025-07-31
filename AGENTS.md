@@ -106,15 +106,15 @@ you progress.
 12. **Stage 12** – Module: `charity_pool.go`, `coin.go`, `common_structs.go`.
 13. **Stage 13** – Module: `compliance.go`, `consensus.go`, `contracts.go`.
 14. **Stage 14** – Module: `contracts_opcodes.go`, `cross_chain.go`, `data.go`. ✅
-15. **Stage 15** – Module: `fault_tolerance.go`, `gas_table.go`, `governance.go`.
-16. **Stage 16** – Module: `green_technology.go`, `ledger.go`, `ledger_test.go`.
-17. **Stage 17** – Module: `liquidity_pools.go`, `loanpool.go`, `network.go`.
-18. **Stage 18** – Module: `opcode_dispatcher.go`, `replication.go`, `rollups.go`.
+15. **Stage 15** – Module: `fault_tolerance.go`, `gas_table.go`, `governance.go`. ✅
+16. **Stage 16** – Module: `green_technology.go`, `ledger.go`, `ledger_test.go`. ✅
+17. **Stage 17** – Module: `liquidity_pools.go`, `loanpool.go`, `network.go`. ✅
+18. **Stage 18** – Module: `opcode_dispatcher.go`, `replication.go`, `rollups.go`. ✅
 19. **Stage 19** – Module: `security.go`, `sharding.go`, `sidechains.go`. ✅
-20. **Stage 20** – Module: `state_channel.go`, `storage.go`, `tokens.go`.
+20. **Stage 20** – Module: `state_channel.go`, `storage.go`, `tokens.go`. ✅
 21. **Stage 21** – Module: `transactions.go`, `utility_functions.go`,
-    `virtual_machine.go`.
-22. **Stage 22** – Module: `wallet.go` and review all preceding fixes.
+    `virtual_machine.go`. ✅
+22. **Stage 22** – Module: `wallet.go` and review all preceding fixes. ✅
 23. **Stage 23** – Run integration tests across CLI packages.
 24. **Stage 24** – Launch a local network and verify node start up.
 25. **Stage 25** – Final pass through documentation and ensure all tests pass.
@@ -188,12 +188,12 @@ you progress.
 ## Module Files
 All modules live under `synnergy-network/core`. For a short description of each
 file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module_guide.md).
-1. [ ] ai.go
-2. [ ] amm.go
-3. [ ] authority_nodes.go
-4. [ ] charity_pool.go
-5. [ ] coin.go
-6. [ ] common_structs.go
+1. [x] ai.go
+2. [x] amm.go
+3. [x] authority_nodes.go
+4. [x] charity_pool.go
+5. [x] coin.go
+6. [x] common_structs.go
 7. [x] compliance.go
 8. [x] consensus.go
 9. [x] contracts.go
@@ -221,7 +221,7 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 31. [x] transactions.go
 32. [x] utility_functions.go
 33. [x] virtual_machine.go
-34. [ ] wallet.go
+34. [x] wallet.go
 
 ## Guidance
 - Always work through the stages in order.

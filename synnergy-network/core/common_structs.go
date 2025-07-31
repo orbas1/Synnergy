@@ -661,6 +661,7 @@ type StateIterator interface {
 	Next() bool
 	Key() []byte
 	Value() []byte
+	Error() error
 }
 
 type StateRW interface {

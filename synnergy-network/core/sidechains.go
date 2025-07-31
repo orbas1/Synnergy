@@ -225,7 +225,7 @@ func (sc *SidechainCoordinator) VerifyWithdraw(p WithdrawProof) error {
 }
 
 func init() {
-	if err := bls.Init(0); err != nil {
+	if err := bls.Init(bls.BLS12_381); err != nil {
 		log.Fatalf("bls init failed: %v", err)
 	}
 }
