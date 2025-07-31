@@ -2,6 +2,7 @@ package core
 
 import (
 	"bufio"
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -11,6 +12,7 @@ import (
 	"log"
 	"math/big"
 	"os"
+	"path/filepath"
 )
 
 // NewLedger initializes a ledger, replaying an existing WAL and optionally loading a genesis block.
@@ -30,6 +32,8 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 		TxPool:           make(map[string]*Transaction),
 		Contracts:        make(map[string]Contract),
 		TokenBalances:    make(map[string]uint64),
+		lpBalances:       make(map[Address]map[PoolID]uint64),
+		nonces:           make(map[Address]uint64),
 		walFile:          wal,
 		snapshotPath:     cfg.SnapshotPath,
 		snapshotInterval: cfg.SnapshotInterval,
@@ -55,6 +59,48 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 		return nil, fmt.Errorf("WAL scan: %w", err)
 	}
 	return l, nil
+}
+
+// OpenLedger loads an existing ledger snapshot and replays its WAL. The path
+// parameter is treated as a directory containing `ledger.snap` and `ledger.wal`.
+// If no snapshot exists, an empty ledger is created.
+func OpenLedger(path string) (*Ledger, error) {
+	snap := filepath.Join(path, "ledger.snap")
+	wal := filepath.Join(path, "ledger.wal")
+
+	var genesis *Block
+	l := &Ledger{}
+
+	if f, err := os.Open(snap); err == nil {
+		defer f.Close()
+		if err := json.NewDecoder(f).Decode(l); err != nil {
+			return nil, fmt.Errorf("decode snapshot: %w", err)
+		}
+		l.snapshotPath = snap
+	} else if !os.IsNotExist(err) {
+		return nil, fmt.Errorf("open snapshot: %w", err)
+	}
+
+	cfg := LedgerConfig{WALPath: wal, SnapshotPath: snap, GenesisBlock: genesis}
+	if l.Blocks != nil {
+		// ledger restored from snapshot; reuse existing blocks/state
+		cfg.GenesisBlock = nil
+	}
+
+	loaded, err := NewLedger(cfg)
+	if err != nil {
+		return nil, err
+	}
+	if l.Blocks != nil {
+		// copy restored data into loaded ledger
+		loaded.Blocks = l.Blocks
+		loaded.State = l.State
+		loaded.UTXO = l.UTXO
+		loaded.TxPool = l.TxPool
+		loaded.Contracts = l.Contracts
+		loaded.TokenBalances = l.TokenBalances
+	}
+	return loaded, nil
 }
 
 func (l *Ledger) GetPendingSubBlocks() []SubBlock {
@@ -474,4 +520,152 @@ func (l *Ledger) Burn(from Address, amount uint64) error {
 
 	l.TokenBalances[from.String()] -= amount
 	return nil
+}
+
+// -----------------------------------------------------------------------------
+// Additional StateRW helpers
+// -----------------------------------------------------------------------------
+
+func (l *Ledger) GetState(key []byte) ([]byte, error) {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	val, ok := l.State[string(key)]
+	if !ok {
+		return nil, fmt.Errorf("state key not found")
+	}
+	cpy := make([]byte, len(val))
+	copy(cpy, val)
+	return cpy, nil
+}
+
+func (l *Ledger) SetState(key, value []byte) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	cpy := make([]byte, len(value))
+	copy(cpy, value)
+	l.State[string(key)] = cpy
+	return nil
+}
+
+func (l *Ledger) DeleteState(key []byte) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	delete(l.State, string(key))
+	return nil
+}
+
+func (l *Ledger) HasState(key []byte) (bool, error) {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	_, ok := l.State[string(key)]
+	return ok, nil
+}
+
+type memIter struct {
+	keys   [][]byte
+	values [][]byte
+	idx    int
+}
+
+func (it *memIter) Next() bool { it.idx++; return it.idx < len(it.keys) }
+func (it *memIter) Key() []byte {
+	if it.idx < len(it.keys) {
+		return it.keys[it.idx]
+	}
+	return nil
+}
+func (it *memIter) Value() []byte {
+	if it.idx < len(it.values) {
+		return it.values[it.idx]
+	}
+	return nil
+}
+
+func (l *Ledger) PrefixIterator(prefix []byte) StateIterator {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	var k [][]byte
+	var v [][]byte
+	for key, val := range l.State {
+		if bytes.HasPrefix([]byte(key), prefix) {
+			k = append(k, []byte(key))
+			v = append(v, val)
+		}
+	}
+	return &memIter{keys: k, values: v, idx: -1}
+}
+
+func (l *Ledger) MintLP(addr Address, pool PoolID, amt uint64) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.lpBalances == nil {
+		l.lpBalances = make(map[Address]map[PoolID]uint64)
+	}
+	if l.lpBalances[addr] == nil {
+		l.lpBalances[addr] = make(map[PoolID]uint64)
+	}
+	l.lpBalances[addr][pool] += amt
+	return nil
+}
+
+func (l *Ledger) BurnLP(addr Address, pool PoolID, amt uint64) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.lpBalances == nil || l.lpBalances[addr] == nil {
+		return fmt.Errorf("no LP balance")
+	}
+	if l.lpBalances[addr][pool] < amt {
+		return fmt.Errorf("insufficient LP balance")
+	}
+	l.lpBalances[addr][pool] -= amt
+	return nil
+}
+
+func (l *Ledger) NonceOf(addr Address) uint64 {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	return l.nonces[addr]
+}
+
+func (l *Ledger) BlockByHash(h Hash) (*Block, error) {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	for _, b := range l.Blocks {
+		if b.Hash() == h {
+			return b, nil
+		}
+	}
+	return nil, fmt.Errorf("block not found")
+}
+
+func (l *Ledger) HasBlock(h Hash) bool {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+	for _, b := range l.Blocks {
+		if b.Hash() == h {
+			return true
+		}
+	}
+	return false
+}
+
+func (l *Ledger) ImportBlock(b *Block) error {
+	return l.AddBlock(b)
+}
+
+func (l *Ledger) DecodeBlockRLP(data []byte) (*Block, error) {
+	var blk Block
+	if err := rlp.DecodeBytes(data, &blk); err != nil {
+		return nil, err
+	}
+	return &blk, nil
+}
+
+func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
+	if bytes <= 0 {
+		return nil
+	}
+	cost := uint64(bytes)
+	zero := Address{}
+	return l.Transfer(addr, zero, cost)
 }

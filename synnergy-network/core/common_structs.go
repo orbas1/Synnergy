@@ -351,6 +351,8 @@ type Ledger struct {
 	snapshotPath     string
 	snapshotInterval int
 	tokens           map[TokenID]Token
+	lpBalances       map[Address]map[PoolID]uint64
+	nonces           map[Address]uint64
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
 }
 
