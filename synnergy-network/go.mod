@@ -141,5 +141,6 @@ replace synnergy-network => .
 
 replace github.com/synnergy-network/core => .
 
+
 replace github.com/libp2p/go-libp2p-core => ./third_party/go-libp2p-core
 
