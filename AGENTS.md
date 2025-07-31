@@ -141,9 +141,9 @@ you progress.
 19. [ ] replication.go
 20. [ ] rollups.go
 21. [ ] security.go
-22. [ ] sharding.go
-23. [ ] sidechain.go
-24. [ ] state_channel.go
+22. [x] sharding.go
+23. [x] sidechain.go
+24. [x] state_channel.go
 25. [ ] storage.go
 26. [ ] tokens.go
 27. [ ] transactions.go
