@@ -611,7 +611,7 @@ func init() {
 }
 
 // Hex returns the canonical hexadecimal representation (upper-case, 6 digits).
-func (op Opcode) Hex() string { return fmt.Sprintf("0x%06X", op) }
+func (op Opcode) Hex() string { return fmt.Sprintf("0x%06X", uint32(op)) }
 
 // Bytes gives the 3-byte big-endian encoding used in VM bytecode streams.
 func (op Opcode) Bytes() []byte {

@@ -814,7 +814,7 @@ type TxPool struct {
 	mu        sync.RWMutex
 	ledger    ReadOnlyState
 	gasCalc   GasCalculator
-	net       Broadcaster
+	net       *Broadcaster
 	lookup    map[Hash]*Transaction
 	queue     []*Transaction
 	authority *AuthoritySet
