@@ -147,9 +147,9 @@ you progress.
 25. [ ] storage.go
 26. [ ] tokens.go
 27. [ ] transactions.go
-28. [ ] utility_functions.go
-29. [ ] virtual_machine.go
-30. [ ] wallet.go
+28. [x] utility_functions.go
+29. [x] virtual_machine.go
+30. [x] wallet.go
 
 ## Module Files
 All modules live under `synnergy-network/core`. For a short description of each
