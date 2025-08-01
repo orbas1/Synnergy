@@ -13,6 +13,12 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// LightNodeInterface extends NodeInterface with header specific accessors.
+// Light nodes only maintain block headers and request full blocks on demand.
+type LightNodeInterface interface {
+	NodeInterface
+	StoreHeader(h BlockHeader)
+	Headers() []BlockHeader
 // IndexingNodeInterface describes the additional capabilities provided by
 // indexing nodes in the network.
 type IndexingNodeInterface interface {
