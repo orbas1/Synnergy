@@ -33,6 +33,7 @@ responsibilities and dependencies of that module.
   virtual machine.  Contracts are stored on chain and invoked by transactions.
 - **cross_chain.go** – Utilities for bridging assets between other chains.  This
   includes proof verification and lock/release semantics.
+- **cross_consensus_scaling_networks.go** – Bridges assets across different consensus systems and coordinates scaling.
 - **data.go** – Low level helpers for reading and writing on‑chain data.  Other
   modules depend on this for simple key/value access.
 - **fault_tolerance.go** – Structures for Byzantine fault detection and recovery
@@ -50,10 +51,13 @@ responsibilities and dependencies of that module.
 - **loanpool.go** – Simple collateralised loan mechanics built on top of the
   token module.
 - **network.go** – libp2p networking stack with pub‑sub gossip and peer discovery.
+- **nat_traversal.go** – NAT-PMP and UPnP helpers to map ports and expose nodes.
+- **plasma.go** – Simple Plasma coordinator handling deposits and exits.
 - **opcode_dispatcher.go** – Maps transaction opcodes to virtual machine handlers
   at runtime.
 - **replication.go** – Block propagation utilities and snapshot distribution to
   new nodes.
+- **resource_allocation_management.go** – Tracks and enforces per-contract gas limits stored in the ledger.
 - **rollups.go** – Support for batching transactions into rollups that settle on
   the main chain.
 - **security.go** – Ed25519 key management, signature helpers and basic crypto

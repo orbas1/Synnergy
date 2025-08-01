@@ -45,6 +45,7 @@ type AIEngine struct {
 	client AIStubClient // manually defined interface
 	mu     sync.RWMutex
 	models map[[32]byte]ModelMeta
+	jobs   map[string]TrainingJob
 }
 
 type ModelMeta struct {
@@ -364,6 +365,8 @@ type Ledger struct {
 	tokens           map[TokenID]Token
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
+	// NodeLocations stores optional geolocation metadata for peers.
+	NodeLocations    map[NodeID]Location
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
 }
 
@@ -427,6 +430,7 @@ type Node struct {
 	subs     map[string]*pubsub.Subscription
 	peerLock sync.RWMutex
 	peers    map[NodeID]*Peer
+	nat      *NATManager
 	ctx      context.Context
 	cancel   context.CancelFunc
 	cfg      Config
@@ -472,6 +476,7 @@ type Aggregator struct {
 	led    StateRW
 	mu     sync.Mutex
 	nextID uint64
+	paused bool
 }
 
 //---------------------------------------------------------------------
@@ -508,6 +513,7 @@ type Sidechain struct {
 	Validators [][]byte    `json:"validators"`
 	LastHeight uint64      `json:"last_height"`
 	LastRoot   [32]byte    `json:"last_state_root"`
+	Paused     bool        `json:"paused"`
 	Registered int64       `json:"registered_unix"`
 }
 
@@ -549,6 +555,7 @@ type Channel struct {
 	BalanceB uint64    `json:"bal_b"`
 	Nonce    uint64    `json:"nonce"`
 	Closing  int64     `json:"closing_ts"`
+	Paused   bool      `json:"paused"`
 }
 
 type SignedState struct {
