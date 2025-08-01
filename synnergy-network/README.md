@@ -79,6 +79,7 @@ all modules from the core library. Highlights include:
 - `tokens` – ERC‑20 style token commands
 - `gaming` – create and join simple on-chain games
 - `transactions` – build and sign transactions
+- `faucet` – dispense test tokens or coins with rate limits
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service
 - `supply` – manage supply chain assets on chain

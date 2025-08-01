@@ -40,6 +40,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **faucet** – Dispense test funds with rate limiting.
 
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
@@ -438,3 +439,11 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### faucet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `request <addr>` | Request faucet funds for an address. |
+| `balance` | Display remaining faucet balance. |
+| `config --amount <n> --cooldown <d>` | Update faucet parameters. |

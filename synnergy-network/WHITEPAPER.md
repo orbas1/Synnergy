@@ -18,6 +18,7 @@ The Synnergy ecosystem brings together several services:
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
 - **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Faucet Service** – Dispense test coins and tokens to developers with rate limits.
 All services are optional and run as independent modules that plug into the core.
 
 ## Synnergy Network Architecture
