@@ -15,6 +15,7 @@ The Synnergy ecosystem brings together several services:
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Feedback System** – Users can submit and browse feedback directly on chain, enabling transparent improvement cycles.
 All services are optional and run as independent modules that plug into the core.
 
 ## Synnergy Network Architecture
@@ -136,5 +137,5 @@ Assuming gradual adoption and comparable DeFi activity:
 These estimates rely on continued development, security audits, and ecosystem partnerships.
 
 ## Conclusion
-Synnergy Network aims to deliver a modular, enterprise-ready blockchain platform that blends advanced compliance, scalable architecture, and developer-friendly tools. The project is moving from early research into production and welcomes community feedback. For source code, development guides, and further documentation visit the repository.
+Synnergy Network aims to deliver a modular, enterprise-ready blockchain platform that blends advanced compliance, scalable architecture, and developer-friendly tools. The project is moving from early research into production and welcomes community feedback. A built-in on-chain feedback system allows suggestions to be recorded transparently. For source code, development guides, and further documentation visit the repository.
 
