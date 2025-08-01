@@ -428,6 +428,13 @@ func init() {
 	}
 
 	for _, m := range canon {
+		if m.Standard == StdSYN3300 {
+			_, err := NewSYN3300(m, ETFRecord{ETFID: m.Symbol, Name: m.Name}, map[Address]uint64{AddressZero: 0})
+			if err != nil {
+				panic(err)
+			}
+			continue
+		}
 		if _, err := f.Create(m, map[Address]uint64{AddressZero: 0}); err != nil {
 			panic(err)
 		}

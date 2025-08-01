@@ -677,6 +677,10 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   ETF_UpdatePrice:      400,
+   ETF_FractionalMint:   2_100,
+   ETF_FractionalBurn:   2_100,
+   ETF_Info:             100,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1628,6 +1632,10 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"ETF_UpdatePrice":        0,
+	"ETF_FractionalMint":     0,
+	"ETF_FractionalBurn":     0,
+	"ETF_Info":               0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
