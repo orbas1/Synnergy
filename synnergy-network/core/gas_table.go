@@ -106,6 +106,14 @@ var gasTable map[Opcode]uint64
    Compliance_AuditTrail: 3_000,
    Compliance_MonitorTx:  5_000,
    Compliance_VerifyZKP:  12_000,
+   InitComplianceManager: 10_000,
+   SuspendAccount:        4_000,
+   ResumeAccount:         4_000,
+   IsSuspended:           500,
+   WhitelistAccount:      3_000,
+   RemoveWhitelist:       3_000,
+   IsWhitelisted:         500,
+   Compliance_ReviewTx:   2_500,
 
    // ----------------------------------------------------------------------
    // Consensus Core
@@ -682,6 +690,14 @@ var gasNames = map[string]uint64{
 	"Compliance_AuditTrail": 3_000,
 	"Compliance_MonitorTx":  5_000,
 	"Compliance_VerifyZKP":  12_000,
+	"InitComplianceManager": 10_000,
+	"SuspendAccount":        4_000,
+	"ResumeAccount":         4_000,
+	"IsSuspended":           500,
+	"WhitelistAccount":      3_000,
+	"RemoveWhitelist":       3_000,
+	"IsWhitelisted":         500,
+	"Compliance_ReviewTx":   2_500,
 
 	// ----------------------------------------------------------------------
 	// Consensus Core

@@ -13,8 +13,9 @@ The following command groups expose the same functionality available in the core
 - **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
-- **compliance** – Run KYC/AML checks on addresses and export audit reports.
-- **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
+ - **compliance** – Run KYC/AML checks on addresses and export audit reports.
+ - **compliance_management** – Manage suspensions and whitelists for addresses.
+ - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
@@ -119,6 +120,17 @@ needed in custom tooling.
 | `audit <address>` | Display the audit trail for an address. |
 | `monitor <tx.json> <threshold>` | Run anomaly detection on a transaction. |
 | `verifyzkp <blob.bin> <commitmentHex> <proofHex>` | Verify a zero‑knowledge proof. |
+
+### compliance_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `suspend <addr>` | Suspend an address from transfers. |
+| `resume <addr>` | Lift an address suspension. |
+| `whitelist <addr>` | Add an address to the whitelist. |
+| `unwhitelist <addr>` | Remove an address from the whitelist. |
+| `status <addr>` | Show suspension and whitelist status. |
+| `review <tx.json>` | Check a transaction before broadcast. |
 
 ### consensus
 
