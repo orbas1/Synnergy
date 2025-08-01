@@ -13,6 +13,11 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// APINodeInterface extends NodeInterface with HTTP API controls.
+type APINodeInterface interface {
+	NodeInterface
+	APINode_Start(addr string) error
+	APINode_Stop() error
 // Watchtower exposes the interface implemented by watchtower nodes.
 type Watchtower interface {
 	NodeInterface
