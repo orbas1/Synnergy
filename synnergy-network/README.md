@@ -62,6 +62,7 @@ all modules from the core library. Highlights include:
 - `data` – inspect and manage raw data storage
 - `fault_tolerance` – simulate faults and backups
 - `governance` – DAO style governance commands
+- `token_vote` – cast token weighted governance votes
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
 - `network` – libp2p networking helpers
