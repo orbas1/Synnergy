@@ -16,6 +16,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	Nodes "synnergy-network/core/Nodes"
 )
 
 func NewNode(cfg Config) (*Node, error) {
@@ -47,6 +48,18 @@ func NewNode(cfg Config) (*Node, error) {
 		cfg:    cfg,
 	}
 
+	natMgr, err := NewNATManager()
+	if err == nil {
+		if port, err := parsePort(cfg.ListenAddr); err == nil {
+			if err := natMgr.Map(port); err != nil {
+				logrus.Warnf("NAT map failed: %v", err)
+			}
+		}
+		n.nat = natMgr
+	} else {
+		logrus.Warnf("NAT discovery failed: %v", err)
+	}
+
 	// bootstrap peers
 	if err := n.DialSeed(cfg.BootstrapPeers); err != nil {
 		logrus.Warnf("DialSeed warning: %v", err)
@@ -60,6 +73,9 @@ func NewNode(cfg Config) (*Node, error) {
 
 // Ensure Node implements mdns.Notifee
 var _ mdns.Notifee = (*Node)(nil)
+
+// Ensure Node conforms to the common node interface
+var _ Nodes.NodeInterface = (*NodeAdapter)(nil)
 
 // HandlePeerFound implements mdns.Notifee: connect to discovered peer.
 func (n *Node) HandlePeerFound(info peer.AddrInfo) {
@@ -199,6 +215,9 @@ func (n *Node) ListenAndServe() {
 // Close tears down the node, closing host and context.
 func (n *Node) Close() error {
 	n.cancel()
+	if n.nat != nil {
+		_ = n.nat.Unmap()
+	}
 	return n.host.Close()
 }
 
