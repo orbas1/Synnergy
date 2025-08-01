@@ -87,7 +87,7 @@ func (e *ChannelEngine) OpenChannel(a, b Address, token TokenID, amountA, amount
 		}
 	}
 
-	ch := Channel{ID: id, PartyA: a, PartyB: b, Token: token, BalanceA: amountA, BalanceB: amountB, Nonce: 0, Closing: 0}
+	ch := Channel{ID: id, PartyA: a, PartyB: b, Token: token, BalanceA: amountA, BalanceB: amountB, Nonce: 0, Closing: 0, Paused: false}
 	e.led.SetState(chKey(id), mustJSON(ch))
 	return id, nil
 }
