@@ -1021,6 +1021,9 @@ var gasTable map[Opcode]uint64
    DataToken_SetPrice: 400,
    DataToken_GrantAccess: 400,
    DataToken_RevokeAccess: 300,
+   SYN5000_PlaceBet: 2100,
+   SYN5000_ResolveBet: 1500,
+   SYN5000_BetInfo: 200,
 
    // ----------------------------------------------------------------------
    SYN1155_BatchTransfer: 2_100,
@@ -2842,6 +2845,9 @@ var gasNames = map[string]uint64{
 	"DataToken_SetPrice":          0,
 	"DataToken_GrantAccess":       0,
 	"DataToken_RevokeAccess":      0,
+	"SYN5000_PlaceBet":            0,
+	"SYN5000_ResolveBet":          0,
+	"SYN5000_BetInfo":             0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
