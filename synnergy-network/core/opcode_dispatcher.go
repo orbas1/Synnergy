@@ -860,6 +860,11 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// Geolocation (0x1E)
+	{"RegisterLocation", 0x1E0001},
+	{"GetLocation", 0x1E0002},
+	{"ListLocations", 0x1E0003},
+	{"NodesInRadius", 0x1E0004},
 	// ConnPool (0x1E)
 	{"NewConnPool", 0x1E0001},
 	{"AcquireConn", 0x1E0002},

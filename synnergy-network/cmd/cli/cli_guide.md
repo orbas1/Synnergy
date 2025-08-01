@@ -98,6 +98,7 @@ The following command groups expose the same functionality available in the core
 - **transactionreversal** – Reverse confirmed transactions with authority approval.
 - **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
+- **geolocation** – Manage node geolocation data.
 - **distribution** – Bulk token distribution and airdrop helpers.
 - **finalization_management** – Finalize blocks, batches and channels.
 - **quorum** – Manage quorum trackers for proposals or validation.

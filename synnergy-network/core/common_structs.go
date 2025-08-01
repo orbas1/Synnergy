@@ -365,6 +365,8 @@ type Ledger struct {
 	tokens           map[TokenID]Token
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
+	// NodeLocations stores optional geolocation metadata for peers.
+	NodeLocations    map[NodeID]Location
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
 }
 

@@ -55,6 +55,7 @@ At a high level the network consists of:
 6. **Messaging Queues** – Pending messages are ordered in queues before being processed by consensus and the VM.
 7. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Geolocation Network** – Optional service mapping node IDs to geographic coordinates for compliance and routing.
 7. **Plasma Bridge** – A lightweight bridge allows fast token transfers to and from child chains with an exit window for security.
 7. **Plasma Layer** – Optional plasma child chains handle high throughput transfers with periodic block roots posted to the ledger.
 7. **Binary Trees** – Ledger-backed search trees provide efficient on-chain indexing for smart contracts and services.

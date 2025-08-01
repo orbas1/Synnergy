@@ -148,6 +148,7 @@ all modules from the core library. Highlights include:
 - `transaction_distribution` – split transaction fees between miner and treasury
 - `faucet` – dispense test tokens or coins with rate limits
 - `utility_functions` – assorted helpers
+- `geolocation` – record node location information
 - `distribution` – bulk token distribution and airdrops
 - `finalization_management` – finalize blocks, rollup batches and channels
 - `quorum` – simple quorum tracker management
