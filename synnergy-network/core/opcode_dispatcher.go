@@ -197,6 +197,9 @@ var catalogue = []struct {
 	{"LockAndMint", 0x090004},
 	{"BurnAndRelease", 0x090005},
 	{"GetBridge", 0x090006},
+	{"RecordCrossChainTx", 0x090007},
+	{"GetCrossChainTx", 0x090008},
+	{"ListCrossChainTx", 0x090009},
 
 	// Data (0x0A)
 	{"RegisterNode", 0x0A0001},

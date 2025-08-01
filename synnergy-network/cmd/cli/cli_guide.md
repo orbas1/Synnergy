@@ -17,6 +17,7 @@ The following command groups expose the same functionality available in the core
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
+- **cross_tx** – Execute cross-chain lock/mint and burn/release transfers.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
@@ -151,6 +152,15 @@ needed in custom tooling.
 | `get <bridge_id>` | Retrieve a bridge configuration. |
 | `authorize <relayer_addr>` | Whitelist a relayer address. |
 | `revoke <relayer_addr>` | Remove a relayer from the whitelist. |
+
+### cross_tx
+
+| Sub-command | Description |
+|-------------|-------------|
+| `lockmint <bridge_id> <asset_id> <amount> <proof>` | Lock native assets and mint wrapped tokens. |
+| `burnrelease <bridge_id> <to> <asset_id> <amount>` | Burn wrapped tokens and release native assets. |
+| `list` | List cross-chain transfer records. |
+| `get <tx_id>` | Retrieve a cross-chain transfer by ID. |
 
 ### data
 
