@@ -116,6 +116,10 @@ For a full table of over 200 operations see the gas schedule file. This ensures 
 ## Consensus Guide
 Synnergy employs a hybrid consensus combining Proof of History for ordering and Proof of Stake for finality. Validators produce PoH hashes to create a verifiable sequence of events. At defined intervals a committee of stakers signs sub-blocks which are then sealed into main blocks using a lightweight Proof of Work puzzle for spam prevention. This design allows fast block times while providing strong security guarantees. Future versions may enable hot-swappable consensus modules so enterprises can adopt algorithms that suit their regulatory environment.
 
+### Dynamic Consensus Hopping
+
+To support diverse deployment scenarios the network introduces **Dynamic Consensus Hopping**. This mechanism evaluates current demand and stake concentration to compute a threshold that selects between PoW, PoS and PoH. The active mode is recorded on-chain so all validators follow the same rules. Operators can query or trigger the switch using the `consensus_hop` CLI commands.
+
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
