@@ -10,6 +10,9 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// MolecularNodeFactory returns a MolecularNodeInterface. Actual constructor lives
+// in the core package.
+type MolecularNodeFactory func(cfg interface{}) (MolecularNodeInterface, error)
 // BiometricSecurityNode extends NodeInterface with biometric operations.
 type BiometricSecurityNode interface {
 	NodeInterface
