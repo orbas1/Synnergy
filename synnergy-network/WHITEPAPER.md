@@ -119,6 +119,8 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+To improve operational awareness across clusters, a lightweight **Distributed Network Coordination** service periodically broadcasts the current ledger height and can distribute test tokens for bootstrap scenarios. This module hooks into the existing networking layer and ledger without introducing consensus dependencies. Enterprises can run the coordinator alongside replication to monitor progress and trigger synchronisation tasks.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 

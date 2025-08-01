@@ -24,6 +24,7 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+- **coordination** – Coordinate distributed nodes and broadcast ledger state.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
 - **sharding** – Migrate data between shards and check shard status.
@@ -265,6 +266,15 @@ needed in custom tooling.
 | `replicate <block-hash>` | Gossip a known block. |
 | `request <block-hash>` | Request a block from peers. |
 | `sync` | Synchronize blocks from peers. |
+
+### coordination
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start` | Start coordination background tasks. |
+| `stop` | Stop coordination tasks. |
+| `broadcast` | Broadcast the current ledger height. |
+| `mint <addr> <token> <amount>` | Mint tokens via the coordinator. |
 
 ### rollups
 

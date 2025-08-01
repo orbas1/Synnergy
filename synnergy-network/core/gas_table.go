@@ -284,6 +284,15 @@ var gasTable map[Opcode]uint64
    // Hash & Start already priced
 
    // ----------------------------------------------------------------------
+   // Distributed Coordination
+   // ----------------------------------------------------------------------
+   NewCoordinator:         10_000,
+   StartCoordinator:        5_000,
+   StopCoordinator:         5_000,
+   BroadcastLedgerHeight:   3_000,
+   DistributeToken:         5_000,
+
+   // ----------------------------------------------------------------------
    // Roll-ups
    // ----------------------------------------------------------------------
    NewAggregator:     15_000,
@@ -857,6 +866,15 @@ var gasNames = map[string]uint64{
 	"RequestMissing": 4_000,
 	"Synchronize":    25_000,
 	"Stop":           3_000,
+	// ----------------------------------------------------------------------
+	// Distributed Coordination
+	// ----------------------------------------------------------------------
+	"NewCoordinator":        10_000,
+	"StartCoordinator":      5_000,
+	"StopCoordinator":       5_000,
+	"BroadcastLedgerHeight": 3_000,
+	"DistributeToken":       5_000,
+
 	// Hash & Start already priced
 
 	// ----------------------------------------------------------------------
