@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **governance_management** – Manage governance contracts on chain.
 - **reputation_voting** – Reputation weighted governance commands.
 - **timelock** – Manage delayed proposal execution.
 - **dao** – Manage DAO creation and membership.
@@ -320,6 +321,16 @@ needed in custom tooling.
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
 
+### governance_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `contract:add <addr> <name>` | Register a governance contract. |
+| `contract:enable <addr>` | Enable a contract for voting. |
+| `contract:disable <addr>` | Disable a contract. |
+| `contract:get <addr>` | Display contract information. |
+| `contract:list` | List registered contracts. |
+| `contract:rm <addr>` | Remove a contract from the registry. |
 ### reputation_voting
 
 | Sub-command | Description |

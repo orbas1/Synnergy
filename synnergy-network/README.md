@@ -73,6 +73,7 @@ all modules from the core library. Highlights include:
 - `fault_tolerance` – simulate faults and backups
 - `employment` – manage on-chain employment contracts and salaries
 - `governance` – DAO style governance commands
+- `governance_management` – register and control governance contracts
 - `reputation_voting` – weighted voting using SYN-REP tokens
 - `timelock` – schedule and execute delayed proposals
 - `dao` – create and manage DAOs
