@@ -46,7 +46,7 @@ type SYN800 interface {
 	UpdateValuation(val uint64) error
 	GetAsset() (AssetMeta, error)
 }
-=======
+
 // SYN700 defines the minimal methods for the intellectual property token
 // standard without referencing core types.
 type SYN700 interface {

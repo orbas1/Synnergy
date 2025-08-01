@@ -687,6 +687,7 @@ var gasTable map[Opcode]uint64
    SYN800_RegisterAsset: 100,
    SYN800_UpdateValuation: 100,
    SYN800_GetAsset: 50,
+
    IDToken_Register:    800,
    IDToken_Verify:      400,
    IDToken_Get:         200,
