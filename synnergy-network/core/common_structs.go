@@ -428,6 +428,7 @@ type Node struct {
 	subs     map[string]*pubsub.Subscription
 	peerLock sync.RWMutex
 	peers    map[NodeID]*Peer
+	nat      *NATManager
 	ctx      context.Context
 	cancel   context.CancelFunc
 	cfg      Config

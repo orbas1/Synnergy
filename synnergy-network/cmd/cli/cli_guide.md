@@ -55,6 +55,7 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **account** – manage accounts and balances
 - **network** – Manage peer connections and print networking statistics.
+- **nat** – Manage router port mappings for inbound connectivity.
 - **peer** – Discover peers, connect to them and advertise this node.
  - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
  - **high_availability** – Manage standby nodes and promote backups.
@@ -580,6 +581,13 @@ needed in custom tooling.
 | `broadcast <topic> <data>` | Publish data on the network. |
 | `subscribe <topic>` | Subscribe to a topic. |
 
+### nat
+
+| Sub-command | Description |
+|-------------|-------------|
+| `map <port>` | Open a port on the router via UPnP/NAT-PMP. |
+| `unmap` | Remove the current port mapping. |
+| `ip` | Show the discovered external IP address. |
 ### peer
 
 | Sub-command | Description |
