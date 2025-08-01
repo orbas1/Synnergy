@@ -10,6 +10,14 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// BankInstitutionalNode defines behaviour for specialised
+// bank/institution authority nodes.
+type BankInstitutionalNode interface {
+	NodeInterface
+	MonitorTransaction(data []byte) error
+	ComplianceReport() ([]byte, error)
+	ConnectFinancialNetwork(endpoint string) error
+	UpdateRuleset(rules map[string]interface{})
 // WarfareNodeInterface is implemented by nodes specialised for military
 // operations. It embeds NodeInterface and exposes additional methods defined
 // in the military_nodes subpackage.

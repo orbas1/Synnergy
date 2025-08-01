@@ -2473,6 +2473,18 @@ var gasNames = map[string]uint64{
 	"Warehouse_ListItems":  0,
 	"Warehouse_GetItem":    0,
 
+	// ----------------------------------------------------------------------
+	// Bank Institutional Node
+	// ----------------------------------------------------------------------
+	"NewBankInstitutionalNode":  1500,
+	"BankNode_Start":            300,
+	"BankNode_Stop":             200,
+	"BankNode_MonitorTx":        250,
+	"BankNode_ComplianceReport": 400,
+	"BankNode_ConnectFinNet":    300,
+	"BankNode_UpdateRules":      250,
+	"BankNode_SubmitTx":         300,
+
 	// ---------------------------------------------------------------------
 	// Immutability Enforcement
 	// ---------------------------------------------------------------------
