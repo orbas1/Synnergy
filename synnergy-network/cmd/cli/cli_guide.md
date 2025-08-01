@@ -31,6 +31,7 @@ The following command groups expose the same functionality available in the core
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
 - **tokens** – Register new token types and move balances between accounts.
+- **gaming** – Manage simple on-chain games.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
@@ -353,6 +354,16 @@ needed in custom tooling.
 | `burn <tok>` | Burn tokens from an address. |
 | `approve <tok>` | Approve a spender allowance. |
 | `allowance <tok> <owner> <spender>` | Show current allowance. |
+
+### gaming
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a new game. |
+| `join <id>` | Join an existing game. |
+| `finish <id>` | Finish a game and release funds. |
+| `get <id>` | Display a game record. |
+| `list` | List games. |
 
 ### transactions
 
