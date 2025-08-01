@@ -677,6 +677,10 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   IDToken_Register:    800,
+   IDToken_Verify:      400,
+   IDToken_Get:         200,
+   IDToken_Logs:        200,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1628,6 +1632,10 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"IDToken_Register":       0,
+	"IDToken_Verify":         0,
+	"IDToken_Get":            0,
+	"IDToken_Logs":           0,
 
 	// ----------------------------------------------------------------------
 	// Transactions

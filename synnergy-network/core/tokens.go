@@ -398,7 +398,6 @@ func init() {
 		{"Synnergy Tangible", "SYN-TANG", 0, StdSYN130, time.Time{}, false, 0},
 		{"Synnergy Intangible", "SYN-INTANG", 0, StdSYN131, time.Time{}, false, 0},
 		{"Synnergy SafeTransfer", "SYN223", 18, StdSYN223, time.Time{}, false, 0},
-		{"Synnergy Identity", "SYN-ID", 0, StdSYN900, time.Time{}, false, 0},
 		{"Synnergy CBDC", "SYN-CBDC", 2, StdSYN10, time.Time{}, false, 0},
 		{"Synnergy Asset‑Backed", "SYN-ASSET", 0, StdSYN800, time.Time{}, false, 0},
 		{"Synnergy ETF", "SYN-ETF", 0, StdSYN3300, time.Time{}, false, 0},
