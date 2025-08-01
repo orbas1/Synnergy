@@ -73,6 +73,7 @@ all modules from the core library. Highlights include:
 - `state_channel` – open and settle payment channels
 - `storage` – interact with on‑chain storage providers
 - `tokens` – ERC‑20 style token commands
+- `token_management` – high level token creation and administration
 - `transactions` – build and sign transactions
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service

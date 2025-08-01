@@ -354,6 +354,14 @@ needed in custom tooling.
 | `approve <tok>` | Approve a spender allowance. |
 | `allowance <tok> <owner> <spender>` | Show current allowance. |
 
+### token_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a new token. |
+| `balance <id> <addr>` | Check balance for a token ID. |
+| `transfer <id>` | Transfer tokens between addresses. |
+
 ### transactions
 
 | Sub-command | Description |
