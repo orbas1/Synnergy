@@ -1,6 +1,6 @@
 # Synnergy Script Guide
 
-This guide documents the utility scripts located in `cmd/scripts`. Each script wraps common `synnergy` CLI commands to showcase typical workflows and to help automate repetitive tasks during development. A working Go toolchain and the compiled `synnergy` binary are required.
+This guide documents the utility scripts located in `cmd/scripts`. Each script wraps common `synnergy` CLI commands to showcase typical workflows and to help automate repetitive tasks during development. The collection now includes helpers for the faucet service, DAO voting, marketplace listings and storage deals. A working Go toolchain and the compiled `synnergy` binary are required.
 
 ## Prerequisites
 
@@ -167,6 +167,48 @@ Pin a file in the storage subsystem.
 
 ```bash
 ./storage_pin.sh <file>
+```
+
+### faucet_fund.sh
+Request coins from the local faucet service.
+
+```bash
+./faucet_fund.sh <address>
+```
+
+### dao_vote.sh
+Cast a vote on a governance proposal.
+
+```bash
+./dao_vote.sh <proposal-id> [approve]
+```
+
+### marketplace_list.sh
+Create an AI marketplace listing for a model.
+
+```bash
+./marketplace_list.sh <price> <cid>
+```
+
+### storage_marketplace_pin.sh
+Pin data and publish a storage listing.
+
+```bash
+./storage_marketplace_pin.sh <file> [provider] [price] [capacity]
+```
+
+### loanpool_apply.sh
+Submit a loan proposal transaction.
+
+```bash
+./loanpool_apply.sh <creator> <recipient> [type] [amount] [desc]
+```
+
+### authority_apply.sh
+Register an authority-node candidate.
+
+```bash
+./authority_apply.sh <address> [role]
 ```
 
 These scripts are intentionally minimal to keep the focus on demonstrating CLI usage. Feel free to modify them or combine commands to suit your workflow.
