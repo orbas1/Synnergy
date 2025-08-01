@@ -581,6 +581,10 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+	{"CreateWallet", 0x1D0007},
+	{"ImportWallet", 0x1D0008},
+	{"WalletBalance", 0x1D0009},
+	{"WalletTransfer", 0x1D000A},
 }
 
 // init wires the catalogue into the live dispatcher.

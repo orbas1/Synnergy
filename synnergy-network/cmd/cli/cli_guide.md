@@ -35,6 +35,7 @@ The following command groups expose the same functionality available in the core
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **wallet_mgmt** – Manage wallets and submit ledger transfers.
 
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
@@ -388,3 +389,11 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### wallet_mgmt
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a wallet and print the mnemonic. |
+| `balance` | Show the SYNN balance for an address. |
+| `transfer` | Send SYNN from a mnemonic to a target address. |
