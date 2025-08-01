@@ -45,6 +45,7 @@ type AIEngine struct {
 	client AIStubClient // manually defined interface
 	mu     sync.RWMutex
 	models map[[32]byte]ModelMeta
+	jobs   map[string]TrainingJob
 }
 
 type ModelMeta struct {
