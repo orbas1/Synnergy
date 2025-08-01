@@ -335,6 +335,13 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+	// SYN131 tokens require the specialised structure with valuation tracking.
+	if meta.Standard == StdSYN131 {
+		tok := NewSYN131Token(meta, init)
+		RegisterToken(tok)
+		return tok, nil
+	}
+
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
