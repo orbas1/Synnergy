@@ -214,6 +214,7 @@ contains a basic HTML page, a JavaScript stub and a README to bootstrap
 interfaces such as the wallet, explorer and various marketplaces. These
 projects are designed for web hosting and will evolve alongside the core
 modules.
+Recent work added an Express-based backend and modular Bootstrap frontend for the token-creation-tool GUI.
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
