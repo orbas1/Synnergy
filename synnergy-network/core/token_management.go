@@ -27,14 +27,21 @@ func (tm *TokenManager) Create(meta Metadata, init map[Address]uint64) (TokenID,
 	if err != nil {
 		return 0, err
 	}
-	bt := tok.(*BaseToken)
-	bt.ledger = tm.ledger
-	bt.gas = tm.gas
+
+	switch t := tok.(type) {
+	case *BaseToken:
+		t.ledger = tm.ledger
+		t.gas = tm.gas
+	case *SYN1155Token:
+		t.ledger = tm.ledger
+		t.gas = tm.gas
+	}
+
 	if tm.ledger.tokens == nil {
 		tm.ledger.tokens = make(map[TokenID]Token)
 	}
-	tm.ledger.tokens[bt.id] = bt
-	return bt.id, nil
+	tm.ledger.tokens[tok.ID()] = tok
+	return tok.ID(), nil
 }
 
 // Transfer moves balances between addresses for the given token.
@@ -80,4 +87,31 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 		return 0, ErrInvalidAsset
 	}
 	return tok.BalanceOf(addr), nil
+}
+
+// BatchTransfer1155 executes a batch transfer for SYN1155 tokens.
+func (tm *TokenManager) BatchTransfer1155(id TokenID, from Address, items []Batch1155Transfer) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	mt, ok := tok.(*SYN1155Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return mt.BatchTransfer(from, items)
+}
+
+// SetApprovalForAll1155 manages operator approvals for SYN1155 tokens.
+func (tm *TokenManager) SetApprovalForAll1155(id TokenID, owner, op Address, appr bool) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	mt, ok := tok.(*SYN1155Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	mt.SetApprovalForAll(owner, op, appr)
+	return nil
 }
