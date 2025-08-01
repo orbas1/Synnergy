@@ -183,6 +183,14 @@ var catalogue = []struct {
 	{"DistributeRewards", 0x070010},
 	{"CalculateWeights", 0x070011},
 	{"ComputeThreshold", 0x070012},
+	{"RegisterValidator", 0x070013},
+	{"DeregisterValidator", 0x070014},
+	{"StakeValidator", 0x070015},
+	{"UnstakeValidator", 0x070016},
+	{"SlashValidator", 0x070017},
+	{"GetValidator", 0x070018},
+	{"ListValidators", 0x070019},
+	{"IsValidator", 0x07001A},
 
 	// Contracts (0x08)
 	{"InitContracts", 0x080001},
