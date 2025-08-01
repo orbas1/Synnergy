@@ -2349,11 +2349,14 @@ var gasNames = map[string]uint64{
 	// Biometrics Authentication
 	// ----------------------------------------------------------------------
 	"Bio_Enroll": 0,
-	"Bio_Verify": 0,
-	"Bio_Delete": 0,
+"Bio_Verify": 0,
+"Bio_Delete": 0,
+"BSN_Register": 500,
+"BSN_VerifyTx": 400,
+"BSN_Remove": 200,
 
-	// ---------------------------------------------------------------------
-	// System Health & Logging
+        // ---------------------------------------------------------------------
+        // System Health & Logging
 	// ---------------------------------------------------------------------
 	"NewHealthLogger": 800,
 	"MetricsSnapshot": 100,

@@ -9,3 +9,12 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// BiometricSecurityNode extends NodeInterface with biometric operations.
+type BiometricSecurityNode interface {
+	NodeInterface
+	Enroll(addr string, data []byte) error
+	Verify(addr string, data []byte) bool
+	Delete(addr string)
+	ValidateTransaction(tx any, data []byte) bool
+}
