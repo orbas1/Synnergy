@@ -13,6 +13,13 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// IndexingNodeInterface describes the additional capabilities provided by
+// indexing nodes in the network.
+type IndexingNodeInterface interface {
+	NodeInterface
+	AddBlock(b any)
+	QueryTxHistory(addr any) []any
+	QueryState(addr any, key string) (any, bool)
 // GatewayInterface extends NodeInterface with cross-chain and data functions.
 type GatewayInterface interface {
 	NodeInterface
