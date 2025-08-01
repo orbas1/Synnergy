@@ -549,6 +549,9 @@ var catalogue = []struct {
 	{"BatchState", 0x130006},
 	{"BatchTransactions", 0x130007},
 	{"ListBatches", 0x130008},
+	{"PauseAggregator", 0x130009},
+	{"ResumeAggregator", 0x13000A},
+	{"AggregatorStatus", 0x13000B},
 
 	// Security (0x14)
 	{"Security_Sign", 0x140001},

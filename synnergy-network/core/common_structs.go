@@ -473,6 +473,7 @@ type Aggregator struct {
 	led    StateRW
 	mu     sync.Mutex
 	nextID uint64
+	paused bool
 }
 
 //---------------------------------------------------------------------

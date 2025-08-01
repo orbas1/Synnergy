@@ -57,6 +57,7 @@ The following command groups expose the same functionality available in the core
  - **rollups** – Create rollup batches or inspect existing ones.
 - **plasma** – Deposit into and withdraw from the Plasma chain.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+ - **rollups** – Create rollup batches, inspect existing ones and control the aggregator state.
 - **initrep** – Bootstrap a ledger via peer replication.
 - **synchronization** – Coordinate block download and verification.
 - **rollups** – Create rollup batches or inspect existing ones.
@@ -603,6 +604,9 @@ needed in custom tooling.
 | `info <batchID>` | Display batch header and state. |
 | `list` | List recent batches. |
 | `txs <batchID>` | List transactions in a batch. |
+| `pause` | Pause the rollup aggregator. |
+| `resume` | Resume the rollup aggregator. |
+| `status` | Show current aggregator status. |
 
 ### compression
 
