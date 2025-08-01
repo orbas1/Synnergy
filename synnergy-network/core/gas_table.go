@@ -2847,6 +2847,14 @@ var gasNames = map[string]uint64{
 	"Custodial_Audit":    1000,
 
 	// ---------------------------------------------------------------------
+	// Forensic Node
+	// ---------------------------------------------------------------------
+	"Forensic_Init":            5000,
+	"Forensic_AnalyseTx":       4000,
+	"Forensic_CheckCompliance": 3000,
+	"Forensic_ThreatResponse":  2000,
+
+	// ---------------------------------------------------------------------
 	// Immutability Enforcement
 	// ---------------------------------------------------------------------
 	"InitImmutability": 800,
