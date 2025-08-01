@@ -18,7 +18,12 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+	Tokens "synnergy-network/core/Tokens"
 )
+
+// Static check to ensure token interfaces are available
+// Reference to TokenInterfaces for package usage
+var _ Tokens.TokenInterfaces
 
 // -----------------------------------------------------------------------------
 // Address helper (our 20-byte address type ↔ go-ethereum common.Address)
