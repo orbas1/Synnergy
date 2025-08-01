@@ -75,6 +75,12 @@ var gasTable map[Opcode]uint64
    GetAuthority:        1_000,
    ListAuthorities:     2_000,
    DeregisterAuthority: 6_000,
+   NewAuthorityApplier: 20_000,
+   SubmitApplication:   4_000,
+   VoteApplication:     3_000,
+   FinalizeApplication: 5_000,
+   GetApplication:      1_000,
+   ListApplications:    2_000,
 
    // ----------------------------------------------------------------------
    // Charity Pool
@@ -106,6 +112,8 @@ var gasTable map[Opcode]uint64
    Compliance_AuditTrail: 3_000,
    Compliance_MonitorTx:  5_000,
    Compliance_VerifyZKP:  12_000,
+   AnalyzeAnomaly:       6_000,
+   FlagAnomalyTx:        2_500,
 
    // ----------------------------------------------------------------------
    // Consensus Core
@@ -258,6 +266,13 @@ var gasTable map[Opcode]uint64
    GetProposal:   1_000,
    ListProposals: 1_500,
    Redistribute:  5_000,
+   NewLoanPoolApply:   20_000,
+   LoanApply_Submit:   3_000,
+   LoanApply_Vote:     3_000,
+   LoanApply_Process:  1_000,
+   LoanApply_Disburse: 8_000,
+   LoanApply_Get:      1_000,
+   LoanApply_List:     1_500,
    // Vote  & Tick already priced
    // RandomElectorate / IsAuthority already priced
 
@@ -274,6 +289,8 @@ var gasTable map[Opcode]uint64
    Dial:            2_000,
    SetBroadcaster:  500,
    GlobalBroadcast: 1_000,
+   StartDevNet:    50_000,
+   StartTestNet:   60_000,
    // Broadcast & Subscribe already priced
 
    // ----------------------------------------------------------------------
@@ -371,6 +388,15 @@ var gasTable map[Opcode]uint64
    ListListings:  1_000,
    GetDeal:       1_000,
    ListDeals:     1_000,
+        // General Marketplace
+        CreateMarketListing:  8_000,
+        PurchaseItem:        6_000,
+        CancelListing:       3_000,
+        ReleaseFunds:        2_000,
+        GetMarketListing:    1_000,
+        ListMarketListings:  1_000,
+        GetMarketDeal:       1_000,
+        ListMarketDeals:     1_000,
    // Pin & Retrieve already priced
 
    // ----------------------------------------------------------------------
@@ -453,6 +479,12 @@ var gasTable map[Opcode]uint64
    Len:               200,
    InitTokens:        8_000,
    GetRegistryTokens: 400,
+   TokenManager_Create: 8_000,
+   TokenManager_Transfer: 2_100,
+   TokenManager_Mint: 2_100,
+   TokenManager_Burn: 2_100,
+   TokenManager_Approve: 800,
+   TokenManager_BalanceOf: 400,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -463,6 +495,8 @@ var gasTable map[Opcode]uint64
    AddTx:          6_000,
    PickTxs:        1_500,
    TxPoolSnapshot: 800,
+   NewTxDistributor: 8_000,
+   DistributeFees:   1_500,
    // Sign already priced
 
    // ----------------------------------------------------------------------
@@ -610,6 +644,27 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+   RegisterIDWallet:    8_000,
+   IsIDWalletRegistered: 500,
+
+   // ----------------------------------------------------------------------
+   // Event Management
+   // ----------------------------------------------------------------------
+   InitEvents: 5_000,
+   EmitEvent: 400,
+   GetEvent:  800,
+   ListEvents: 1_000,
+   CreateWallet:        10_000,
+   ImportWallet:        5_000,
+   WalletBalance:       400,
+   WalletTransfer:      2_100,
+
+   // ----------------------------------------------------------------------
+   // Immutability Enforcement
+   // ----------------------------------------------------------------------
+   InitImmutability: 8_000,
+   VerifyChain:     4_000,
+   RestoreChain:    6_000,
 */
 
 // gasNames holds the gas cost associated with each opcode name. During init()
@@ -654,6 +709,12 @@ var gasNames = map[string]uint64{
 	"GetAuthority":        1_000,
 	"ListAuthorities":     2_000,
 	"DeregisterAuthority": 6_000,
+	"NewAuthorityApplier": 20_000,
+	"SubmitApplication":   4_000,
+	"VoteApplication":     3_000,
+	"FinalizeApplication": 5_000,
+	"GetApplication":      1_000,
+	"ListApplications":    2_000,
 
 	// ----------------------------------------------------------------------
 	// Charity Pool
@@ -685,6 +746,8 @@ var gasNames = map[string]uint64{
 	"Compliance_AuditTrail": 3_000,
 	"Compliance_MonitorTx":  5_000,
 	"Compliance_VerifyZKP":  12_000,
+	"AnalyzeAnomaly":        6_000,
+	"FlagAnomalyTx":         2_500,
 
 	// ----------------------------------------------------------------------
 	// Consensus Core
@@ -743,6 +806,30 @@ var gasNames = map[string]uint64{
 	"ZTDC_Open":      6_000,
 	"ZTDC_Send":      2_000,
 	"ZTDC_Close":     4_000,
+	"RegisterNode":      10_000,
+	"UploadAsset":       30_000,
+	"Pin":               5_000, // shared with Storage
+	"Retrieve":          4_000, // shared with Storage
+	"RetrieveAsset":     4_000,
+	"RegisterOracle":    10_000,
+	"PushFeed":          3_000,
+	"QueryOracle":       3_000,
+	"ListCDNNodes":      3_000,
+	"ListOracles":       3_000,
+	"PushFeedSigned":    4_000,
+	"StoreManagedData":  8_000,
+	"LoadManagedData":   3_000,
+	"DeleteManagedData": 2_000,
+
+	// ---------------------------------------------------------------------
+	// External Sensors
+	// ---------------------------------------------------------------------
+	"RegisterSensor":    10_000,
+	"GetSensor":         1_000,
+	"ListSensors":       2_000,
+	"UpdateSensorValue": 1_500,
+	"PollSensor":        5_000,
+	"TriggerWebhook":    5_000,
 
 	// ----------------------------------------------------------------------
 	// Fault-Tolerance / Health-Checker
@@ -775,6 +862,11 @@ var gasNames = map[string]uint64{
 	"ExecuteProposal": 15_000,
 	"GetProposal":     1_000,
 	"ListProposals":   2_000,
+	"CreateDAO":       10_000,
+	"JoinDAO":         3_000,
+	"LeaveDAO":        2_000,
+	"DAOInfo":         1_000,
+	"ListDAOs":        2_000,
 
 	// ----------------------------------------------------------------------
 	// Green Technology
@@ -816,6 +908,10 @@ var gasNames = map[string]uint64{
 	"AppendSubBlock":      8_000,
 	"Transfer":            2_100, // shared with VM & Tokens
 	"Burn":                2_100, // shared with VM & Tokens
+	"Account_Create":      500,
+	"Account_Delete":      400,
+	"Account_Balance":     200,
+	"Account_Transfer":    2_100,
 
 	// ----------------------------------------------------------------------
 	// Liquidity Manager (high-level AMM façade)
@@ -837,6 +933,13 @@ var gasNames = map[string]uint64{
 	"Loanpool_GetProposal":   1_000,
 	"Loanpool_ListProposals": 1_500,
 	"Redistribute":           5_000,
+	"NewLoanPoolApply":       20_000,
+	"LoanApply_Submit":       3_000,
+	"LoanApply_Vote":         3_000,
+	"LoanApply_Process":      1_000,
+	"LoanApply_Disburse":     8_000,
+	"LoanApply_Get":          1_000,
+	"LoanApply_List":         1_500,
 	// Vote  & Tick already priced
 	// RandomElectorate / IsAuthority already priced
 
@@ -853,6 +956,8 @@ var gasNames = map[string]uint64{
 	"Dial":            2_000,
 	"SetBroadcaster":  500,
 	"GlobalBroadcast": 1_000,
+	"StartDevNet":     50_000,
+	"StartTestNet":    60_000,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------
@@ -950,6 +1055,22 @@ var gasNames = map[string]uint64{
 	"ListListings":  1_000,
 	"GetDeal":       1_000,
 	"ListDeals":     1_000,
+
+  // General Marketplace
+	"CreateMarketListing": 8_000,
+	"PurchaseItem":        6_000,
+	"CancelListing":       3_000,
+	"ReleaseFunds":        2_000,
+	"GetMarketListing":    1_000,
+	"ListMarketListings":  1_000,
+	"GetMarketDeal":       1_000,
+	"ListMarketDeals":     1_000,
+
+  // Tangible assets
+	"Assets_Register": 5_000,
+	"Assets_Transfer": 4_000,
+	"Assets_Get":      1_000,
+	"Assets_List":     1_000,
 	// Pin & Retrieve already priced
 
 	// ----------------------------------------------------------------------
@@ -1011,37 +1132,45 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Token Utilities
 	// ----------------------------------------------------------------------
-	"ID":                400,
-	"Meta":              400,
-	"Allowance":         400,
-	"Approve":           800,
-	"Add":               600,
-	"Sub":               600,
-	"Get":               400,
-	"transfer":          2_100, // lower-case ERC20 compatibility
-	"Calculate":         800,
-	"RegisterToken":     8_000,
-	"NewBalanceTable":   5_000,
-	"Set":               600,
-	"RefundGas":         100,
-	"PopUint32":         300,
-	"PopAddress":        300,
-	"PopUint64":         300,
-	"PushBool":          300,
-	"Push":              300,
-	"Len":               200,
-	"InitTokens":        8_000,
-	"GetRegistryTokens": 400,
+	"ID":                     400,
+	"Meta":                   400,
+	"Allowance":              400,
+	"Approve":                800,
+	"Add":                    600,
+	"Sub":                    600,
+	"Get":                    400,
+	"transfer":               2_100, // lower-case ERC20 compatibility
+	"Calculate":              800,
+	"RegisterToken":          8_000,
+	"NewBalanceTable":        5_000,
+	"Set":                    600,
+	"RefundGas":              100,
+	"PopUint32":              300,
+	"PopAddress":             300,
+	"PopUint64":              300,
+	"PushBool":               300,
+	"Push":                   300,
+	"Len":                    200,
+	"InitTokens":             8_000,
+	"GetRegistryTokens":      400,
+	"TokenManager_Create":    8000,
+	"TokenManager_Transfer":  2100,
+	"TokenManager_Mint":      2100,
+	"TokenManager_Burn":      2100,
+	"TokenManager_Approve":   800,
+	"TokenManager_BalanceOf": 400,
 
 	// ----------------------------------------------------------------------
 	// Transactions
 	// ----------------------------------------------------------------------
-	"VerifySig":      3_500,
-	"ValidateTx":     5_000,
-	"NewTxPool":      12_000,
-	"AddTx":          6_000,
-	"PickTxs":        1_500,
-	"TxPoolSnapshot": 800,
+	"VerifySig":        3_500,
+	"ValidateTx":       5_000,
+	"NewTxPool":        12_000,
+	"AddTx":            6_000,
+	"PickTxs":          1_500,
+	"TxPoolSnapshot":   800,
+	"NewTxDistributor": 8_000,
+	"DistributeFees":   1_500,
 	// Sign already priced
 
 	// ----------------------------------------------------------------------
@@ -1181,14 +1310,156 @@ var gasNames = map[string]uint64{
 	"ExecuteHeavy":      2_000,
 
 	// ----------------------------------------------------------------------
+	// Plasma
+	// ----------------------------------------------------------------------
+	"InitPlasma":      8_000,
+	"Plasma_Deposit":  4_000,
+	"Plasma_Withdraw": 4_000,
+
+  // Gaming
+	// ----------------------------------------------------------------------
+	"CreateGame": 8_000,
+	"JoinGame":   4_000,
+	"FinishGame": 6_000,
+	"GetGame":    1_000,
+	"ListGames":  2_000,
+
+	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
+	"NewRandomWallet":      10_000,
+	"WalletFromMnemonic":   5_000,
+	"NewHDWalletFromSeed":  6_000,
+	"PrivateKey":           400,
+	"NewAddress":           500,
+	"SignTx":               3_000,
+	"RegisterIDWallet":     8_000,
+	"IsIDWalletRegistered": 500,
+	"NewRandomWallet":            10_000,
+	"WalletFromMnemonic":         5_000,
+	"NewHDWalletFromSeed":        6_000,
+	"PrivateKey":                 400,
+	"NewAddress":                 500,
+	"SignTx":                     3_000,
+	"NewOffChainWallet":          8_000,
+	"OffChainWalletFromMnemonic": 5_000,
+	"SignOffline":                2_500,
+	"StoreSignedTx":              300,
+	"LoadSignedTx":               300,
+	"BroadcastSignedTx":          1_000,
 	"NewRandomWallet":     10_000,
 	"WalletFromMnemonic":  5_000,
 	"NewHDWalletFromSeed": 6_000,
 	"PrivateKey":          400,
 	"NewAddress":          500,
-	"SignTx":              3_000,
+  "SignTx":              3_000,
+	"RegisterRecovery":    5_000,
+	"RecoverAccount":      8_000,
+  
+  
+  // ----------------------------------------------------------------------
+	// Workflow / Key-Management
+	// ----------------------------------------------------------------------
+	"NewWorkflow":         15_000,
+	"AddWorkflowAction":   2_000,
+	"SetWorkflowTrigger":  1_000,
+	"SetWebhook":          1_000,
+	"ExecuteWorkflow":     5_000,
+	"ListWorkflows":       500,
+	
+
+	// ------------------------------------------------------------------
+	// Swarm
+	// ------------------------------------------------------------------
+	"NewSwarm":          10_000,
+	"Swarm_AddNode":     3_000,
+	"Swarm_RemoveNode":  2_000,
+	"Swarm_BroadcastTx": 5_000,
+	"Swarm_Start":       8_000,
+	"Swarm_Stop":        5_000,
+	"Swarm_Peers":       300,
+  	// ----------------------------------------------------------------------
+	// Real Estate
+	// ----------------------------------------------------------------------
+  
+  "RegisterProperty":    4_000,
+	"TransferProperty":    3_500,
+	"GetProperty":         1_000,
+	"ListProperties":      1_500,
+
+	// ----------------------------------------------------------------------
+	// Event Management
+	// ----------------------------------------------------------------------
+	"InitEvents": 5_000,
+	"EmitEvent":  400,
+	"GetEvent":   800,
+	"ListEvents": 1_000,
+	"CreateWallet":        10_000,
+	"ImportWallet":        5_000,
+	"WalletBalance":       400,
+	"WalletTransfer":      2_100,
+
+	// ----------------------------------------------------------------------
+	// Employment Contracts
+	// ----------------------------------------------------------------------
+	"InitEmployment": 10_000,
+	"CreateJob":      8_000,
+	"SignJob":        3_000,
+	"RecordWork":     1_000,
+	"PaySalary":      8_000,
+	"GetJob":         1_000,
+	// ------------------------------------------------------------------
+	// Escrow Management
+	// ------------------------------------------------------------------
+	"Escrow_Create":  8_000,
+	"Escrow_Deposit": 4_000,
+	"Escrow_Release": 12_000,
+	"Escrow_Cancel":  6_000,
+	"Escrow_Get":     1_000,
+	"Escrow_List":    2_000,
+	// ---------------------------------------------------------------------
+	// Faucet
+	// ---------------------------------------------------------------------
+	"NewFaucet":          5_000,
+	"Faucet_Request":     1_000,
+	"Faucet_Balance":     200,
+	"Faucet_SetAmount":   500,
+	"Faucet_SetCooldown": 500,
+  // ----------------------------------------------------------------------
+	// Supply Chain
+	// ----------------------------------------------------------------------
+	"GetItem":             1_000,
+	"RegisterItem":        10_000,
+	"UpdateLocation":      5_000,
+	"MarkStatus":          5_000,
+
+	// ----------------------------------------------------------------------
+	// Healthcare Records
+	// ----------------------------------------------------------------------
+	"InitHealthcare":    8_000,
+	"RegisterPatient":   3_000,
+	"AddHealthRecord":   4_000,
+	"GrantAccess":       1_500,
+	"RevokeAccess":      1_000,
+	"ListHealthRecords": 2_000,
+
+	// ----------------------------------------------------------------------
+	// Warehouse Records
+	// ----------------------------------------------------------------------
+
+	"Warehouse_New":        10_000,
+	"Warehouse_AddItem":    2_000,
+	"Warehouse_RemoveItem": 2_000,
+	"Warehouse_MoveItem":   2_000,
+	"Warehouse_ListItems":  1_000,
+	"Warehouse_GetItem":    1_000,
+
+	// ---------------------------------------------------------------------
+	// Immutability Enforcement
+	// ---------------------------------------------------------------------
+	"InitImmutability": 8_000,
+	"VerifyChain":      4_000,
+	"RestoreChain":     6_000,
 }
 
 func init() {
