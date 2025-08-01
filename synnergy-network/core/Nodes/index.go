@@ -9,3 +9,12 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// HybridNodeInterface extends NodeInterface with multi-role helpers.
+type HybridNodeInterface interface {
+	NodeInterface
+	IndexData(key string, data []byte)
+	QueryIndex(key string) ([]byte, bool)
+	ProcessTransaction(tx []byte) error
+	ProposeBlock() error
+}
