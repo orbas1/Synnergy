@@ -234,6 +234,15 @@ func (l *Ledger) applyBlock(block *Block, persist bool) error {
 			l.TokenBalances[fromHex] -= tr.Amount
 			l.TokenBalances[toHex] += tr.Amount
 		}
+
+		// ---- Fee distribution ----------------------------------------
+		fee := tx.GasLimit * tx.GasPrice
+		dist := CurrentTxDistributor()
+		if dist != nil && fee > 0 {
+			if err := dist.DistributeFees(tx.From, block.Header.MinerPk, fee); err != nil {
+				logrus.Warnf("fee distribution: %v", err)
+			}
+		}
 	}
 
 	// 4. Persistence & snapshots ---------------------------------------------
