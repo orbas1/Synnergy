@@ -113,6 +113,7 @@ func RegisterRoutes(root *cobra.Command) {
 		SandboxCmd,
 		LegalCmd,
 		CarbonCmd,
+		FootprintCmd,
 		EnergyCmd,
 		InitRepCmd,
 		FinalizationCmd,
@@ -149,7 +150,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSyncCommand(),
 		NewSecurityCommand(),
 		NewShardingCommand(),
-		NewSidechainCommand(), // includes sidechain management helpers
+		NewSidechainCommand(),
 		NewHealthCommand(),
 	) // includes sidechain management helpers
 }
