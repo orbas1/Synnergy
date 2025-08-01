@@ -21,6 +21,7 @@ The following command groups expose the same functionality available in the core
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
+- **resource_management** – Manage VM resource quotas and usage.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
@@ -210,6 +211,14 @@ needed in custom tooling.
 | `cert <validator-addr>` | Show the sustainability certificate. |
 | `throttle <validator-addr>` | Check if a validator should be throttled. |
 | `list` | List certificates for all validators. |
+
+### resource_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `set <addr> <cpu> <mem> <store>` | Set resource quota for an address. |
+| `show <addr>` | Display quota and current usage. |
+| `charge <addr> <cpu> <mem> <store>` | Charge and record consumed resources. |
 
 ### ledger
 
