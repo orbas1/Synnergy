@@ -5,10 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEX Screener</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body class="p-4">
-    <h1 class="text-2xl font-bold">DEX Screener</h1>
-    <!-- Charts and liquidity pool creation -->
-    <script src="app.js"></script>
+    <h1 class="text-2xl font-bold mb-4">DEX Screener</h1>
+    <table id="pool-table" class="min-w-full text-left">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pair</th>
+                <th>Reserve A</th>
+                <th>Reserve B</th>
+                <th>Fee (bps)</th>
+            </tr>
+        </thead>
+        <tbody id="pools"></tbody>
+    </table>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
