@@ -11,6 +11,7 @@ The Synnergy ecosystem brings together several services:
 - **Core Ledger and Consensus** – The canonical ledger stores blocks and coordinates the validator set.
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
+- **Zero Trust Data Channels** – Encrypted channels for private off-chain messaging integrated with the ledger.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
@@ -67,6 +68,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `sharding` – Split the ledger into shards and coordinate cross-shard messages.
 - `sidechain` – Launch or interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.
+- `ztdc` – Zero trust data channels for encrypted off-chain communication.
 - `storage` – Manage off-chain storage deals.
 - `tokens` – Issue and manage token contracts.
 - `transactions` – Build and broadcast transactions manually.

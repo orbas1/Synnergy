@@ -29,6 +29,7 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **ztdc** – Secure zero trust data channels for encrypted payloads.
 - **storage** – Configure the backing key/value store and inspect content.
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
@@ -326,6 +327,15 @@ needed in custom tooling.
 | `finalize` | Finalize and settle an expired channel. |
 | `status` | Show the current channel state. |
 | `list` | List all open channels. |
+
+### ztdc
+
+| Sub-command | Description |
+|-------------|-------------|
+| `open` | Open a zero trust data channel. |
+| `push` | Send encrypted data over a channel. |
+| `close` | Close an existing channel. |
+| `list` | List known channels. |
 
 ### storage
 
