@@ -25,6 +25,7 @@ type ContentNodeInterface interface {
 	StoreContent(data, key []byte) (string, error)
 	RetrieveContent(cid string, key []byte) ([]byte, error)
 	ListContent() ([]ContentMeta, error)
+
 // ZKPNodeInterface extends NodeInterface with zero-knowledge proof functions.
 type ZKPNodeInterface interface {
 	NodeInterface
