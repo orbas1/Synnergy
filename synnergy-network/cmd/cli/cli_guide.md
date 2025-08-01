@@ -44,6 +44,7 @@ The following command groups expose the same functionality available in the core
 - **timelock** – Manage delayed proposal execution.
 - **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
+- **carbon_credit_system** – Manage carbon offset projects and credits.
 - **energy_efficiency** – Record transaction counts and compute efficiency scores.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **account** – manage accounts and balances
@@ -458,6 +459,15 @@ needed in custom tooling.
 | `throttle <validator-addr>` | Check if a validator should be throttled. |
 | `list` | List certificates for all validators. |
 
+### carbon_credit_system
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <owner> <name> <total>` | Register a carbon offset project. |
+| `issue <projectID> <to> <amount>` | Issue credits from a project. |
+| `retire <holder> <amount>` | Burn carbon credits permanently. |
+| `info <projectID>` | Show details of a project. |
+| `list` | List all projects. |
 ### energy_efficiency
 
 | Sub-command | Description |
