@@ -677,6 +677,10 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   SYN130_UpdateValuation: 1_000,
+   SYN130_RecordSale:     1_000,
+   SYN130_StartLease:     1_000,
+   SYN130_EndLease:       1_000,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1628,6 +1632,10 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"SYN130_UpdateValuation": 0,
+	"SYN130_RecordSale":      0,
+	"SYN130_StartLease":      0,
+	"SYN130_EndLease":        0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
