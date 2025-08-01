@@ -56,14 +56,9 @@ func ensureAIInitialised(cmd *cobra.Command, _ []string) error {
 	}
 
 	// ledger connection depends on wider app – obtain via container / DI.
-	led := core.CurrentLedger() // pseudo helper – replace with actual access function.
-	if led == nil {
-		return fmt.Errorf("ledger not initialised – ensure core.InitLedger ran first")
-	}
-
 	// The compiled gRPC stub lives in core; we inject a concrete client impl.
-	client := core.NewTFStubClient(grpcEndpoint) // hypothetical constructor.
-	if err := core.InitAI(led, grpcEndpoint, client); err != nil {
+	client := core.NewTFStubClient(grpcEndpoint)
+	if err := core.InitAI(nil, grpcEndpoint, client); err != nil {
 		return fmt.Errorf("init AI engine: %w", err)
 	}
 	zap.L().Sugar().Infow("AI engine ready", "endpoint", grpcEndpoint)
@@ -75,6 +70,16 @@ func ensureAIInitialised(cmd *cobra.Command, _ []string) error {
 //---------------------------------------------------------------------
 
 type AIController struct{}
+
+func parseAddr(hexStr string) (core.Address, error) {
+	var a core.Address
+	b, err := hex.DecodeString(strings.TrimPrefix(hexStr, "0x"))
+	if err != nil || len(b) != len(a) {
+		return a, fmt.Errorf("invalid address")
+	}
+	copy(a[:], b)
+	return a, nil
+}
 
 func (c *AIController) PredictAnomaly(txPath string) (float32, error) {
 	raw, err := ioutil.ReadFile(txPath)
@@ -260,9 +265,11 @@ var buyCmd = &cobra.Command{
 	Short: "Buy a model – funds held in escrow",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-		defer cancel()
-		esc, err := core.BuyModel(&core.Context{Ctx: ctx}, args[0], core.Address(args[1]))
+		addr, err := parseAddr(args[1])
+		if err != nil {
+			return err
+		}
+		esc, err := core.BuyModel(&core.Context{}, args[0], addr)
 		if err != nil {
 			return err
 		}
@@ -281,9 +288,11 @@ var rentCmd = &cobra.Command{
 		if err != nil || hours <= 0 {
 			return fmt.Errorf("hours must be positive int: %w", err)
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-		defer cancel()
-		esc, err := core.RentModel(&core.Context{Ctx: ctx}, args[0], core.Address(args[1]), time.Duration(hours)*time.Hour)
+		addr, err := parseAddr(args[1])
+		if err != nil {
+			return err
+		}
+		esc, err := core.RentModel(&core.Context{}, args[0], addr, time.Duration(hours)*time.Hour)
 		if err != nil {
 			return err
 		}
@@ -298,9 +307,7 @@ var releaseCmd = &cobra.Command{
 	Short: "Release funds from escrow to seller (admin/op) ",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		if err := core.ReleaseEscrow(&core.Context{Ctx: ctx}, args[0]); err != nil {
+		if err := core.ReleaseEscrow(&core.Context{}, args[0]); err != nil {
 			return err
 		}
 		fmt.Printf("Escrow %s released.\n", args[0])

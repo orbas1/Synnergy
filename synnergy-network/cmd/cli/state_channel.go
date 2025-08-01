@@ -26,7 +26,7 @@ var (
 	engine     *core.ChannelEngine
 )
 
-func initMiddleware(cmd *cobra.Command, args []string) {
+func channelMiddleware(cmd *cobra.Command, args []string) {
 	// Load .env if present
 	_ = godotenv.Load()
 
@@ -200,7 +200,7 @@ func channelBail(err error) {
 var channelCmd = &cobra.Command{
 	Use:              "channel",
 	Short:            "Manage off‑chain payment/state channels",
-	PersistentPreRun: initMiddleware,
+	PersistentPreRun: channelMiddleware,
 }
 
 var openCmd = &cobra.Command{

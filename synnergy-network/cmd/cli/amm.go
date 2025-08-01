@@ -20,6 +20,7 @@ package cli
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -68,6 +69,24 @@ func ensureAMMInitialised(cmd *cobra.Command, _ []string) error {
 //---------------------------------------------------------------------
 
 type AMMController struct{}
+
+func decodeTokenID(s string) (core.TokenID, error) {
+	id, err := strconv.ParseUint(s, 10, 32)
+	if err != nil {
+		return 0, fmt.Errorf("token ID uint32: %w", err)
+	}
+	return core.TokenID(id), nil
+}
+
+func decodeAddr(hexStr string) (core.Address, error) {
+	var a core.Address
+	b, err := hex.DecodeString(strings.TrimPrefix(hexStr, "0x"))
+	if err != nil || len(b) != len(a) {
+		return a, fmt.Errorf("invalid address")
+	}
+	copy(a[:], b)
+	return a, nil
+}
 
 func (c *AMMController) SwapExactIn(trader core.Address, tokenIn core.TokenID, amtIn uint64, tokenOut core.TokenID, minOut uint64, maxHops int) (uint64, error) {
 	return core.SwapExactIn(trader, tokenIn, amtIn, tokenOut, minOut, maxHops)
@@ -123,7 +142,14 @@ var swapCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &AMMController{}
 		// mandatory
-		tokenIn, tokenOut := core.TokenID(args[0]), core.TokenID(args[2])
+		tokenIn, err := decodeTokenID(args[0])
+		if err != nil {
+			return err
+		}
+		tokenOut, err := decodeTokenID(args[2])
+		if err != nil {
+			return err
+		}
 		amtIn, err := strconv.ParseUint(args[1], 10, 64)
 		if err != nil {
 			return fmt.Errorf("amtIn uint64: %w", err)
@@ -135,7 +161,11 @@ var swapCmd = &cobra.Command{
 		// optional trader address
 		var trader core.Address = core.ModuleAddress("cli_trader")
 		if len(args) == 5 {
-			trader = core.Address(args[4])
+			t, err := decodeAddr(args[4])
+			if err != nil {
+				return err
+			}
+			trader = t
 		}
 		maxHops, _ := cmd.Flags().GetInt("max‑hops")
 		out, err := ctrl.SwapExactIn(trader, tokenIn, amtIn, tokenOut, minOut, maxHops)
@@ -154,8 +184,15 @@ var addCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(4),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &AMMController{}
-		pid := core.PoolID(args[0])
-		provider := core.Address(args[1])
+		pid64, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return fmt.Errorf("poolID uint32: %w", err)
+		}
+		pid := core.PoolID(pid64)
+		provider, err := decodeAddr(args[1])
+		if err != nil {
+			return err
+		}
 		amtA, err := strconv.ParseUint(args[2], 10, 64)
 		if err != nil {
 			return fmt.Errorf("amtA uint64: %w", err)
@@ -180,8 +217,15 @@ var removeCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &AMMController{}
-		pid := core.PoolID(args[0])
-		provider := core.Address(args[1])
+		pid64, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return fmt.Errorf("poolID uint32: %w", err)
+		}
+		pid := core.PoolID(pid64)
+		provider, err := decodeAddr(args[1])
+		if err != nil {
+			return err
+		}
 		lp, err := strconv.ParseUint(args[2], 10, 64)
 		if err != nil {
 			return fmt.Errorf("lpTokens uint64: %w", err)
@@ -202,7 +246,14 @@ var quoteCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &AMMController{}
-		tokenIn, tokenOut := core.TokenID(args[0]), core.TokenID(args[2])
+		tokenIn, err := decodeTokenID(args[0])
+		if err != nil {
+			return err
+		}
+		tokenOut, err := decodeTokenID(args[2])
+		if err != nil {
+			return err
+		}
 		amtIn, err := strconv.ParseUint(args[1], 10, 64)
 		if err != nil {
 			return fmt.Errorf("amtIn uint64: %w", err)

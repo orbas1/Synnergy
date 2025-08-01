@@ -30,11 +30,14 @@ package cli
 import (
 	"context"
 	"crypto/ecdsa"
+	"crypto/x509"
 	"encoding/hex"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -51,14 +54,31 @@ import (
 // ──────────────────────────────────────────────────────────────────────────────
 
 var (
-	txPoolSvc *txpool.TxPool
-	secSvc    *security.Service
+	txPoolSvc *core.TxPool
+	secSvc    *keyService
 	txLogger  = logrus.StandardLogger()
 	txLedger  *core.Ledger
 
 	// protects one‑time init within PersistentPreRunE
 	initOnce sync.Once
 )
+
+// keyService provides minimal PEM key loading for signing transactions.
+type keyService struct{ path string }
+
+func newKeyService(p string) *keyService { return &keyService{path: p} }
+
+func (ks *keyService) LoadKey(name string) (interface{}, error) {
+	b, err := ioutil.ReadFile(filepath.Join(ks.path, name))
+	if err != nil {
+		return nil, err
+	}
+	block, _ := pem.Decode(b)
+	if block == nil {
+		return nil, fmt.Errorf("invalid PEM")
+	}
+	return x509.ParsePKCS8PrivateKey(block.Bytes)
+}
 
 func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 	var retErr error
@@ -95,10 +115,10 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 		if port == "" {
 			port = "30333"
 		}
-		p2pSvc, err := network.NewService(network.Config{
-			ListenAddr: fmt.Sprintf(":%s", port),
-			Bootnodes:  strings.Split(os.Getenv("P2P_BOOTNODES"), ","),
-			Logger:     txLogger,
+		p2pSvc, err := core.NewNode(core.Config{
+			ListenAddr:     fmt.Sprintf(":%s", port),
+			BootstrapPeers: strings.Split(os.Getenv("P2P_BOOTNODES"), ","),
+			DiscoveryTag:   "cli",
 		})
 		if err != nil {
 			retErr = fmt.Errorf("init p2p: %w", err)
@@ -111,36 +131,16 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 			retErr = fmt.Errorf("KEYSTORE_PATH not set")
 			return
 		}
-		secSvc, err = security.NewService(security.Config{KeyStorePath: ks})
-		if err != nil {
-			retErr = fmt.Errorf("init security: %w", err)
-			return
-		}
+		secSvc = newKeyService(ks)
 
 		// 6. Authority (for tx reversal checks)
-		authDB := os.Getenv("AUTH_DB_PATH")
-		if authDB == "" {
-			retErr = fmt.Errorf("AUTH_DB_PATH not set")
-			return
-		}
-		authSvc, err := authority.New(authority.Config{DBPath: authDB, Ledger: txLedger})
-		if err != nil {
-			retErr = fmt.Errorf("init authority: %w", err)
-			return
-		}
+		authSvc := core.NewAuthoritySet(txLogger, txLedger)
 
 		// 7. Gas calculator – placeholder flat gas until economics stabilises
-		gasCalc := txpool.NewFlatGasCalculator(10) // 10 wei per gas unit
+		gasCalc := core.NewFlatGasCalculator(10) // 10 wei per gas unit
 
 		// 8. TxPool
-		txPoolSvc = txpool.New(txpool.Config{
-			Ledger:      txLedger,
-			Authority:   authSvc,
-			GasCalc:     gasCalc,
-			Broadcaster: p2pSvc,
-			MaxPool:     50_000,
-			Logger:      txLogger,
-		})
+		txPoolSvc = core.NewTxPool(nil, txLedger, authSvc, gasCalc, p2pSvc, 0)
 
 		// background processor
 		go txPoolSvc.Run(context.Background())
