@@ -401,6 +401,9 @@ var catalogue = []struct {
 	{"ListListings", 0x18000B},
 	{"GetDeal", 0x18000C},
 	{"ListDeals", 0x18000D},
+	{"IPFS_Add", 0x18000E},
+	{"IPFS_Get", 0x18000F},
+	{"IPFS_Unpin", 0x180010},
 
 	// Tokens (0x19)
 	{"ID", 0x190001},

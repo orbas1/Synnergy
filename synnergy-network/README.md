@@ -72,6 +72,7 @@ all modules from the core library. Highlights include:
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
 - `storage` – interact with on‑chain storage providers
+- `ipfs` – manage IPFS pins and retrieval through the gateway
 - `tokens` – ERC‑20 style token commands
 - `transactions` – build and sign transactions
 - `utility_functions` – assorted helpers

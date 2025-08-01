@@ -341,6 +341,14 @@ needed in custom tooling.
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
 
+### ipfs
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add` | Add a file to the configured IPFS gateway. |
+| `get` | Fetch a CID and write to stdout or a file. |
+| `unpin` | Remove a CID from the gateway pinset. |
+
 ### tokens
 
 | Sub-command | Description |

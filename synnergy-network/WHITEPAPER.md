@@ -10,7 +10,7 @@ Synnergy started as a research project exploring novel consensus models and VM d
 The Synnergy ecosystem brings together several services:
 - **Core Ledger and Consensus** – The canonical ledger stores blocks and coordinates the validator set.
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
-- **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
+- **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain. A dedicated IPFS module broadcasts pinned CIDs through consensus and lets clients unpin data when no longer needed.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
