@@ -82,3 +82,9 @@ func (wc *WalletController) Sign(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(req.Tx)
 }
+
+// Opcodes returns the wallet-related opcode catalogue.
+func (wc *WalletController) Opcodes(w http.ResponseWriter, r *http.Request) {
+	json.NewEncoder(w).Encode(wc.svc.Opcodes())
+}
+
