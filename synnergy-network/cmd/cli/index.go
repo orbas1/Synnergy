@@ -152,6 +152,7 @@ func RegisterRoutes(root *cobra.Command) {
 		DAOAccessCmd,
 		sensorCmd,
 		RealEstateCmd,
+		RentalTokenCmd,
 		EscrowRoute,
 		MarketplaceCmd,
 		HealthcareCmd,

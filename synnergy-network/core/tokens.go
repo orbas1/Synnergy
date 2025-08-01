@@ -350,6 +350,19 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 
 	var tok Token
 	switch meta.Standard {
+	case StdSYN3000:
+		rt := &RentalToken{}
+		rt.id = deriveID(meta.Standard)
+		rt.meta = meta
+		rt.balances = NewBalanceTable()
+		rt.Info = Tokens.RentalTokenMetadata{TokenID: uint64(rt.id), Issued: meta.Created, Active: true}
+		tok = rt
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		tok = bt
+	}
+
+	base := tok.(*BaseToken)
 	case StdSYN2900:
 		tok = NewInsuranceToken(meta)
 	if meta.Standard == StdSYN1967 {
@@ -445,9 +458,11 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 
 	bt := tok.(*BaseToken)
 	for a, v := range init {
-		bt.balances.Set(bt.id, a, v)
-		bt.meta.TotalSupply += v
+		base.balances.Set(base.id, a, v)
+		base.meta.TotalSupply += v
 	}
+	RegisterToken(base)
+	return tok, nil
 	RegisterToken(tok)
 	return tok, nil
 
