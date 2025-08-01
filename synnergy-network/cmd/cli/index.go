@@ -13,6 +13,7 @@ func RegisterRoutes(root *cobra.Command) {
 		WarfareCmd,
 		MobileMinerCmd,
 		BootstrapCmd,
+		SuperNodeCmd,
 		GatewayCmd,
 		APINodeCmd,
 		CustodialCmd,
