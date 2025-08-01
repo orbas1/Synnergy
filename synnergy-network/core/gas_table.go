@@ -2479,6 +2479,14 @@ var gasNames = map[string]uint64{
 	"InitImmutability": 800,
 	"VerifyChain":      400,
 	"RestoreChain":     600,
+
+	// ----------------------------------------------------------------------
+	// Warfare / Military Nodes
+	// ----------------------------------------------------------------------
+	"NewWarfareNode":         2000,
+	"Warfare_SecureCommand":  300,
+	"Warfare_TrackLogistics": 300,
+	"Warfare_ShareTactical":  200,
 }
 
 func init() {
