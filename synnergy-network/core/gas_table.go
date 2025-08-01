@@ -2698,6 +2698,11 @@ var gasNames = map[string]uint64{
 	"RestoreChain":     600,
 
 	// ---------------------------------------------------------------------
+	// Optimization Node
+	// ---------------------------------------------------------------------
+	"InitOptimization":     1000,
+	"OptimizeTransactions": 500,
+	"BalanceLoad":          400,
 	// Archival Witness Node
 	// ---------------------------------------------------------------------
 	"NewArchivalWitnessNode": 1000,
