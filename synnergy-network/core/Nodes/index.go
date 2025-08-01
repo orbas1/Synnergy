@@ -10,6 +10,23 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// TimeLockRecord mirrors core.TimeLockRecord without importing the core package.
+type TimeLockRecord struct {
+	ID        string
+	TokenID   uint32
+	From      [20]byte
+	To        [20]byte
+	Amount    uint64
+	ExecuteAt int64
+}
+
+// TimeLockedNodeInterface exposes time locked execution features.
+type TimeLockedNodeInterface interface {
+	NodeInterface
+	Queue(TimeLockRecord) error
+	Cancel(id string) error
+	ExecuteDue() []string
+	List() []TimeLockRecord
 // EnvironmentalMonitoringInterface extends NodeInterface with sensor management
 // and conditional triggers.
 type EnvironmentalMonitoringInterface interface {
