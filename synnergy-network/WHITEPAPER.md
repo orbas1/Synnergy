@@ -164,6 +164,7 @@ For a full table of over 200 operations see the gas schedule file. This ensures 
 
 ## Consensus Guide
 Synnergy employs a hybrid consensus combining Proof of History for ordering and Proof of Stake for finality. Validators produce PoH hashes to create a verifiable sequence of events. At defined intervals a committee of stakers signs sub-blocks which are then sealed into main blocks using a lightweight Proof of Work puzzle for spam prevention. This design allows fast block times while providing strong security guarantees. Future versions may enable hot-swappable consensus modules so enterprises can adopt algorithms that suit their regulatory environment.
+Adaptive management logic monitors block demand and stake concentration to tune the PoW, PoS and PoH weights in real time. The consensus_adaptive module exposes metrics and allows operators to update coefficients without downtime.
 
 Stake levels for validators are tracked on-chain using the **StakePenaltyManager**. This subsystem allows dynamic adjustments to bonded stake and records penalty points for misbehaviour. Consensus rules may slash or temporarily disable validators when their penalty level exceeds safe limits. Administrators can query and update stakes through CLI commands or smart contracts, ensuring transparent enforcement of network rules.
 
