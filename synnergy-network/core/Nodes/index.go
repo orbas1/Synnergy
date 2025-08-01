@@ -13,6 +13,14 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// RegulatoryNodeInterface extends NodeInterface with compliance helpers.
+type RegulatoryNodeInterface interface {
+	NodeInterface
+	VerifyTransaction([]byte) error
+	VerifyKYC([]byte) error
+	EraseKYC(string) error
+	RiskScore(string) int
+	GenerateReport() ([]byte, error)
 // DisasterRecovery interface extends NodeInterface with backup and restore
 // helpers used by specialised disaster recovery nodes. Implementations may
 // persist snapshots to multiple locations and verify integrity before applying

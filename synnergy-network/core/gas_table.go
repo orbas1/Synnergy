@@ -2526,6 +2526,21 @@ var gasNames = map[string]uint64{
 	// ---------------------------------------------------------------------
 	// Regulatory Management
 	// ---------------------------------------------------------------------
+	"InitRegulatory":    400,
+	"RegisterRegulator": 600,
+	"GetRegulator":      200,
+	"ListRegulators":    200,
+	"EvaluateRuleSet":   500,
+	"NewRegulatoryNode": 2000,
+	"RegNode_Start":     800,
+	"RegNode_Stop":      400,
+	"RegNode_Peers":     100,
+	"RegNode_DialSeed":  200,
+	"RegNode_VerifyTx":  500,
+	"RegNode_KYC":       400,
+	"RegNode_EraseKYC":  300,
+	"RegNode_RiskScore": 200,
+	"RegNode_GenReport": 600,
 	"InitRegulatory":           400,
 	"RegisterRegulator":        600,
 	"GetRegulator":             200,

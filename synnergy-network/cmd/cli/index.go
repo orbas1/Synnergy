@@ -50,6 +50,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ExecutionCmd,
 		DeFiCmd,
 		RegulatoryCmd,
+		RegulatoryNodeCmd,
 		FeedbackCmd,
 		AccountCmd,
 		IDWalletCmd,
