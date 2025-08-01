@@ -19,6 +19,7 @@ The following command groups expose the same functionality available in the core
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **resource_allocation** – Manage per-contract gas limits.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
@@ -189,6 +190,16 @@ needed in custom tooling.
 | `restore <file>` | Restore ledger state from a snapshot. |
 | `failover <addr>` | Force failover of a node. |
 | `predict <addr>` | Predict failure probability for a node. |
+
+### resource_allocation
+
+| Sub-command | Description |
+|-------------|-------------|
+| `set <addr> --limit=<n>` | Set gas limit for an address. |
+| `get <addr>` | Display current gas limit. |
+| `list` | List limits for all addresses. |
+| `consume <addr> --amt=<n>` | Deduct gas from an address limit. |
+| `transfer <from> <to> --amt=<n>` | Transfer limit between addresses. |
 
 ### governance
 

@@ -61,6 +61,7 @@ all modules from the core library. Highlights include:
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
 - `fault_tolerance` – simulate faults and backups
+- `resource_allocation` – manage per-contract gas limits
 - `governance` – DAO style governance commands
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection

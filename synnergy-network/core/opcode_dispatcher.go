@@ -226,6 +226,12 @@ var catalogue = []struct {
 	{"FailoverNode", 0x0B000C},
 	{"PredictFailure", 0x0B000D},
 	{"AdjustResources", 0x0B000E},
+	{"InitResourceManager", 0x0B000F},
+	{"SetLimit", 0x0B0010},
+	{"GetLimit", 0x0B0011},
+	{"ConsumeLimit", 0x0B0012},
+	{"TransferLimit", 0x0B0013},
+	{"ListLimits", 0x0B0014},
 
 	// Governance (0x0C)
 	{"UpdateParam", 0x0C0001},

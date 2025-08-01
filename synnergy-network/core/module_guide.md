@@ -54,6 +54,7 @@ responsibilities and dependencies of that module.
   at runtime.
 - **replication.go** – Block propagation utilities and snapshot distribution to
   new nodes.
+- **resource_allocation_management.go** – Tracks and enforces per-contract gas limits stored in the ledger.
 - **rollups.go** – Support for batching transactions into rollups that settle on
   the main chain.
 - **security.go** – Ed25519 key management, signature helpers and basic crypto
