@@ -246,6 +246,11 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"CreateDAO", 0x0C000B},
+	{"JoinDAO", 0x0C000C},
+	{"LeaveDAO", 0x0C000D},
+	{"DAOInfo", 0x0C000E},
+	{"ListDAOs", 0x0C000F},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},

@@ -63,6 +63,7 @@ all modules from the core library. Highlights include:
 - `immutability` – verify the canonical chain state
 - `fault_tolerance` – simulate faults and backups
 - `governance` – DAO style governance commands
+- `dao` – create and manage DAOs
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
 - `network` – libp2p networking helpers

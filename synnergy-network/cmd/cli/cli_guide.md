@@ -21,6 +21,7 @@ The following command groups expose the same functionality available in the core
 - **immutability** – Verify the chain against the genesis block.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
@@ -205,6 +206,16 @@ needed in custom tooling.
 | `execute <proposal-id>` | Execute a proposal after the deadline. |
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
+
+### dao
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <name> <creator>` | Create a new DAO. |
+| `join <dao-id> <addr>` | Join an existing DAO. |
+| `leave <dao-id> <addr>` | Leave a DAO. |
+| `info <dao-id>` | Display DAO information. |
+| `list` | List all DAOs. |
 
 ### green_technology
 
