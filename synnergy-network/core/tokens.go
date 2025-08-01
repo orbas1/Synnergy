@@ -347,6 +347,14 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+	// Special case for SYN1155 which uses a dedicated struct
+	if meta.Standard == StdSYN1155 {
+		mt := NewSYN1155Token(meta, nil, nil)
+		for a, v := range init {
+			_ = mt.MintAsset(a, 0, v)
+		}
+		RegisterToken(mt)
+		return mt, nil
 	// Special case for SYN721 NFT tokens which require unique handling
 	if meta.Standard == StdSYN721 {
 		nft := NewSYN721Token(meta)
