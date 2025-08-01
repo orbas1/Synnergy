@@ -10,6 +10,13 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// AutonomousAgent defines additional behaviour for autonomous nodes.
+type AutonomousAgent interface {
+	NodeInterface
+	AddRule(rule interface{})
+	RemoveRule(id string)
+	Start()
+	Stop() error
 // HolographicNodeInterface extends NodeInterface with holographic functions.
 type HolographicNodeInterface interface {
 	NodeInterface
