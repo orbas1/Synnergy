@@ -83,6 +83,7 @@ func RegisterRoutes(root *cobra.Command) {
 		BioCmd,
 		BioNodeCmd,
 		AuthCmd,
+		ElectedAuthCmd,
 		AuthorityApplyCmd,
 		MasterCmd,
 		CharityCmd,
