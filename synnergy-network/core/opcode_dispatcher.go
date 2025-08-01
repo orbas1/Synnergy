@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //	0x0D GreenTech              0x1B Utilities
 //	0x0E Ledger                 0x1C VirtualMachine
 //	                            0x1D Wallet
+//			0x1E SmartLegal
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -581,6 +582,11 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+	{"Legal_Register", 0x1E0001},
+	{"Legal_Sign", 0x1E0002},
+	{"Legal_Revoke", 0x1E0003},
+	{"Legal_Info", 0x1E0004},
+	{"Legal_List", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.
