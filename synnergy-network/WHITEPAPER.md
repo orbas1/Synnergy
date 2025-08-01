@@ -114,6 +114,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `testnet` – Launch a configurable test network from a YAML file.
 - `supply` – Track supply chain assets and logistics.
 - `utility_functions` – Miscellaneous support utilities.
+- `quorum` – Track proposal votes and check thresholds.
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `account` – basic account management and balance queries.
 - `wallet` – Create wallets and sign transfers.

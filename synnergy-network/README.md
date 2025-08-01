@@ -114,6 +114,7 @@ all modules from the core library. Highlights include:
 - `transaction_distribution` – split transaction fees between miner and treasury
 - `faucet` – dispense test tokens or coins with rate limits
 - `utility_functions` – assorted helpers
+- `quorum` – simple quorum tracker management
 - `virtual_machine` – run the on‑chain VM service
 - `workflow` – automate multi-step tasks with triggers and webhooks
 - `supply` – manage supply chain assets on chain

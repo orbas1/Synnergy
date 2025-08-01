@@ -67,6 +67,7 @@ The following command groups expose the same functionality available in the core
 - **transactionreversal** – Reverse confirmed transactions with authority approval.
 - **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
+- **quorum** – Manage quorum trackers for proposals or validation.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
@@ -677,6 +678,14 @@ needed in custom tooling.
 | `short-hash` | Shorten a 32-byte hash to first4..last4 format. |
 | `bytes2addr` | Convert big-endian bytes to an address. |
 
+### quorum
+
+| Sub-command | Description |
+|-------------|-------------|
+| `init <total> <threshold>` | Initialise a global quorum tracker. |
+| `vote <address>` | Record a vote from an address. |
+| `check` | Check if the configured quorum is reached. |
+| `reset` | Clear all recorded votes. |
 ### supply
 
 | Sub-command | Description |
