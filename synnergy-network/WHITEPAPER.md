@@ -95,6 +95,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `access` – Manage role based access permissions.
 - `authority_apply` – Submit and vote on authority node applications.
 - `charity_pool` – Contribute to or distribute from community charity funds.
+- `charity_mgmt` – Manage donations and internal fund payouts.
 - `coin` – Mint, transfer, and burn the base asset.
 - `compliance` – Perform KYC/AML verification and auditing.
 - `audit` – Manage ledger-backed audit logs for transparency.

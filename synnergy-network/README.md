@@ -61,6 +61,7 @@ all modules from the core library. Highlights include:
 - `access` – manage role based access permissions
 - `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
+- `charity_mgmt` – manage donations and internal payouts
 - `identity` – manage verified addresses
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks

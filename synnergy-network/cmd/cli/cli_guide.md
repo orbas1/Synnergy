@@ -18,6 +18,7 @@ The following command groups expose the same functionality available in the core
 - **access** – Manage role based access permissions.
 - **authority_apply** – Submit and vote on authority node applications.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
+- **charity_mgmt** – Donate to and withdraw from the charity pool.
 - **identity** – Register and verify user identities.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
  - **compliance** – Run KYC/AML checks on addresses and export audit reports.
@@ -226,6 +227,14 @@ needed in custom tooling.
 | `tick [timestamp]` | Manually trigger pool cron tasks. |
 | `registration <addr> [cycle]` | Show registration info for a charity. |
 | `winners [cycle]` | List winning charities for a cycle. |
+
+### charity_mgmt
+
+| Sub-command | Description |
+|-------------|-------------|
+| `donate <from> <amt>` | Donate tokens to the charity pool. |
+| `withdraw <to> <amt>` | Withdraw internal charity funds. |
+| `balances` | Show pool and internal balances. |
 
 ### coin
 
