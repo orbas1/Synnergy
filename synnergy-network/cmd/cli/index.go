@@ -9,6 +9,7 @@ func RegisterRoutes(root *cobra.Command) {
 	root.AddCommand(
 		NetworkCmd,
 		BootstrapCmd,
+		SuperNodeCmd,
 		NatCmd,
 		PeerCmd,
 		ConsensusCmd,
