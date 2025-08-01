@@ -60,6 +60,7 @@ The following command groups expose the same functionality available in the core
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
 - **swarm** – Manage groups of nodes running together.
 - **storage** – Configure the backing key/value store and inspect content.
+- **staking** – Stake and unstake tokens for DAO governance.
 - **dao_access** – Manage DAO membership roles.
 - **sensor** – Manage external sensor inputs and webhooks.
 - **real_estate** – Manage tokenised real estate assets.
@@ -649,6 +650,15 @@ needed in custom tooling.
 | `remove` | Delete an existing item. |
 | `move` | Transfer item ownership. |
 | `list` | List all warehouse items. |
+
+### staking
+
+| Sub-command | Description |
+|-------------|-------------|
+| `stake <addr> <amt>` | Stake tokens to participate in governance. |
+| `unstake <addr> <amt>` | Unstake previously locked tokens. |
+| `balance <addr>` | Show staked balance of an address. |
+| `total` | Display the total amount staked. |
 
 ### tokens
 

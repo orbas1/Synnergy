@@ -49,6 +49,7 @@ The native asset powering the network is `SYNTHRON` (ticker: SYNN). It has three
 - **Payment and Transaction Fees** – Every on-chain action consumes gas priced in SYNN.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
+- **DAO Staking** – Users may stake SYTHRON to earn voting power in the on-chain DAO.
 - **Reputation Voting** – SYN-REP tokens weight votes for advanced governance scenarios.
 - **DAO Module** – Users can create independent DAOs and manage membership directly on-chain.
 
