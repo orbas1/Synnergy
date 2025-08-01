@@ -20,3 +20,14 @@ exports.get = async (req, res) => {
   if (!contract) return res.status(404).end();
   res.json(contract);
 };
+
+exports.remove = async (req, res) => {
+  await service.deleteContract(req.params.id);
+  res.status(204).end();
+};
+
+exports.wasm = async (req, res) => {
+  const file = await service.getWasm(req.params.id);
+  if (!file) return res.status(404).end();
+  res.type('application/wasm').send(file);
+};

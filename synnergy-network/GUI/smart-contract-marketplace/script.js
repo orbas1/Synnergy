@@ -4,12 +4,30 @@ async function loadNavbar() {
   nav.innerHTML = await res.text();
 }
 
+async function loadFooter() {
+  const footer = document.getElementById('footer');
+  if (!footer) return;
+  const res = await fetch('components/footer.html');
+  footer.innerHTML = await res.text();
+}
+
 async function loadListings() {
-  const res = await fetch('../server/contracts.json').catch(() => ({ json: () => [] }));
+  const res = await fetch('../api/contracts').catch(() => ({ json: () => [] }));
   const listings = await res.json();
   const tbody = document.querySelector('#listings tbody');
   if (!tbody) return;
-  tbody.innerHTML = listings.map(c => `<tr><td>${c.id}</td><td>${c.name}</td></tr>`).join('');
+  tbody.innerHTML = listings.map(c => `<tr><td><a href="detail.html?id=${c.id}">${c.id}</a></td><td>${c.name}</td></tr>`).join('');
+}
+
+async function loadDetail() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) return;
+  const res = await fetch(`../api/contracts/${id}`);
+  const c = await res.json();
+  document.getElementById('contractId').textContent = c.id;
+  document.getElementById('contractName').textContent = c.name;
+  document.getElementById('download').href = `../api/contracts/${id}/wasm`;
 }
 
 function bindDeploy() {

@@ -205,7 +205,8 @@ The current code base is a functional prototype.  The following additions would 
     `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
     `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
     - The smart-contract marketplace now includes an Express backend with REST
-      routes, controllers and services.
+      routes, controllers and services. The frontend loads components dynamically
+      and supports contract detail pages.
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
 

@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marketplace Listings</title>
+  <title>Contract Detail</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="../styles.css" rel="stylesheet">
 </head>
 <body>
   <div id="nav"></div>
   <div class="container mt-4">
-    <h1 class="mb-3">Smart Contract Listings</h1>
-    <table class="table" id="listings">
-      <thead><tr><th>ID</th><th>Name</th></tr></thead>
-      <tbody></tbody>
-    </table>
+    <h1 class="mb-3">Contract <span id="contractName"></span></h1>
+    <p><strong>ID:</strong> <span id="contractId"></span></p>
+    <a id="download" class="btn btn-secondary" href="#">Download WASM</a>
   </div>
   <div id="footer"></div>
   <script src="../script.js"></script>
-  <script>loadNavbar(); loadFooter(); loadListings();</script>
+  <script>loadNavbar(); loadFooter(); loadDetail();</script>
 </body>
 </html>
