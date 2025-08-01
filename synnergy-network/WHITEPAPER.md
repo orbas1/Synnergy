@@ -57,6 +57,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
 - `green_technology` – Manage energy tracking and carbon offsets.
+- `resource_management` – Track quotas and deduct fees for resource usage.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
 - `loanpool` – Submit loan requests and disburse funds.
@@ -95,6 +96,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  ResourceMgmt
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 

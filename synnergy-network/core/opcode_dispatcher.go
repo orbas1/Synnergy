@@ -581,6 +581,12 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Resource Management (0x1E)
+	{"SetQuota", 0x1E0001},
+	{"GetQuota", 0x1E0002},
+	{"ChargeResources", 0x1E0003},
+	{"ReleaseResources", 0x1E0004},
 }
 
 // init wires the catalogue into the live dispatcher.
