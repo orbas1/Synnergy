@@ -27,7 +27,7 @@ The following command groups expose the same functionality available in the core
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
 - **sharding** – Migrate data between shards and check shard status.
-- **sidechain** – Launch side chains or interact with remote side‑chain nodes.
+ - **sidechain** – Launch, manage and interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
 - **tokens** – Register new token types and move balances between accounts.
@@ -315,6 +315,10 @@ needed in custom tooling.
 | `get-header` | Fetch a submitted side-chain header. |
 | `meta <chainID>` | Display side-chain metadata. |
 | `list` | List registered side-chains. |
+| `pause <chainID>` | Pause a side-chain. |
+| `resume <chainID>` | Resume a paused side-chain. |
+| `update-validators` | Update side-chain validator set. |
+| `remove <chainID>` | Remove a side-chain and all data. |
 
 ### state_channel
 

@@ -339,6 +339,10 @@ var gasTable map[Opcode]uint64
    GetSidechainMeta:   1_000,
    ListSidechains:     1_200,
    GetSidechainHeader: 1_000,
+   PauseSidechain:            3_000,
+   ResumeSidechain:           3_000,
+   UpdateSidechainValidators: 5_000,
+   RemoveSidechain:           6_000,
    // Deposit already priced
 
    // ----------------------------------------------------------------------
@@ -905,16 +909,20 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Side-chains
 	// ----------------------------------------------------------------------
-	"InitSidechains":     12_000,
-	"Sidechains":         600,
-	"Sidechain_Register": 5_000,
-	"SubmitHeader":       8_000,
-	"VerifyWithdraw":     4_000,
-	"VerifyAggregateSig": 8_000,
-	"VerifyMerkleProof":  1_200,
-	"GetSidechainMeta":   1_000,
-	"ListSidechains":     1_200,
-	"GetSidechainHeader": 1_000,
+	"InitSidechains":            12_000,
+	"Sidechains":                600,
+	"Sidechain_Register":        5_000,
+	"SubmitHeader":              8_000,
+	"VerifyWithdraw":            4_000,
+	"VerifyAggregateSig":        8_000,
+	"VerifyMerkleProof":         1_200,
+	"GetSidechainMeta":          1_000,
+	"ListSidechains":            1_200,
+	"GetSidechainHeader":        1_000,
+	"PauseSidechain":            3_000,
+	"ResumeSidechain":           3_000,
+	"UpdateSidechainValidators": 5_000,
+	"RemoveSidechain":           6_000,
 	// Deposit already priced
 
 	// ----------------------------------------------------------------------

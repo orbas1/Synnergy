@@ -375,6 +375,10 @@ var catalogue = []struct {
 	{"GetSidechainMeta", 0x160009},
 	{"ListSidechains", 0x16000A},
 	{"GetSidechainHeader", 0x16000B},
+	{"PauseSidechain", 0x16000C},
+	{"ResumeSidechain", 0x16000D},
+	{"UpdateSidechainValidators", 0x16000E},
+	{"RemoveSidechain", 0x16000F},
 
 	// StateChannel (0x17)
 	{"InitStateChannels", 0x170001},
