@@ -110,6 +110,8 @@ func wrap(name string) OpcodeFunc {
 //		0x0C Governance             0x1A Transactions
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
+//		                            0x1D Wallet
+//	                                 0x1E Plasma
 //	                                 0x1D Wallet
 //	                                 0x1E CarbonCredit
 //		                            0x1D Wallet
@@ -845,6 +847,14 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Plasma (0x1E)
+	{"InitPlasma", 0x1E0001},
+	{"Plasma_Deposit", 0x1E0002},
+	{"Plasma_StartExit", 0x1E0003},
+	{"Plasma_FinalizeExit", 0x1E0004},
+	{"Plasma_GetExit", 0x1E0005},
+	{"Plasma_ListExits", 0x1E0006},
 	{"InitPlasma", 0x1E0001},
 	{"Plasma_Deposit", 0x1E0002},
 	{"Plasma_Withdraw", 0x1E0003},

@@ -44,6 +44,7 @@ At a high level the network consists of:
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Plasma Bridge** – A lightweight bridge allows fast token transfers to and from child chains with an exit window for security.
 7. **Plasma Layer** – Optional plasma child chains handle high throughput transfers with periodic block roots posted to the ledger.
 7. **Binary Trees** – Ledger-backed search trees provide efficient on-chain indexing for smart contracts and services.
 7. **Blockchain Compression** – Snapshots can be gzipped and restored on demand to reduce storage costs.
@@ -182,6 +183,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Plasma
                                  0x1E  ResourceMgmt
                                  0x1E  CarbonCredit
                                  0x1E  DeFi

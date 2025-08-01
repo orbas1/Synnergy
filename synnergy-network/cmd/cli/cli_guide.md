@@ -36,6 +36,7 @@ The following command groups expose the same functionality available in the core
 - **resource** – Manage stored data and VM gas allocations.
 - **immutability** – Verify the chain against the genesis block.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **plasma** – Manage deposits and exits on the plasma bridge.
 - **resource_allocation** – Manage per-contract gas limits.
 - **failover** – Manage ledger snapshots and coordinate recovery.
 - **employment** – Manage on-chain employment contracts and salaries.
@@ -692,6 +693,16 @@ needed in custom tooling.
 |-------------|-------------|
 | `deposit` | Deposit funds into the Plasma chain. |
 | `withdraw <nonce>` | Finalise a Plasma exit. |
+
+### plasma
+
+| Sub-command | Description |
+|-------------|-------------|
+| `deposit <from> <token> <amount>` | Deposit tokens into the plasma bridge. |
+| `exit <owner> <token> <amount>` | Start an exit from the bridge. |
+| `finalize <nonce>` | Finalize a pending exit. |
+| `get <nonce>` | Get details about an exit. |
+| `list <owner>` | List exits initiated by an address. |
 
 ### state_channel
 
