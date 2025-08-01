@@ -1,8 +1,11 @@
 import { renderTokenForm } from './components/TokenForm.js';
+import { renderTokenList } from './components/TokenList.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('form-container');
-  renderTokenForm(container);
+  const formContainer = document.getElementById('form-container');
+  renderTokenForm(formContainer);
+  const listContainer = document.getElementById('list-container');
+  renderTokenList(listContainer);
 });
 
 async function createToken(data) {
@@ -16,6 +19,7 @@ async function createToken(data) {
   if (res.ok) {
     result.className = 'alert alert-success';
     result.textContent = `Token created with ID ${out.tokenId}`;
+    renderTokenList(document.getElementById('list-container'));
   } else {
     result.className = 'alert alert-danger';
     result.textContent = out.error || 'Error creating token';
