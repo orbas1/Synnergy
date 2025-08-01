@@ -69,6 +69,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `liquidity_pools` – Create pools and provide liquidity.
 - `loanpool` – Submit loan requests and disburse funds.
 - `network` – Connect peers and view network metrics.
+- `plasma` – Manage Plasma deposits and exits.
 - `replication` – Replicate and synchronize ledger data across nodes.
 - `rollups` – Manage rollup batches and fraud proofs.
 - `security` – Generate keys and sign payloads.

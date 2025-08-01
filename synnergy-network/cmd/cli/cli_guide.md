@@ -26,6 +26,7 @@ The following command groups expose the same functionality available in the core
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
+- **plasma** – Deposit into and withdraw from the Plasma chain.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
@@ -342,6 +343,13 @@ needed in custom tooling.
 | `get-header` | Fetch a submitted side-chain header. |
 | `meta <chainID>` | Display side-chain metadata. |
 | `list` | List registered side-chains. |
+
+### plasma
+
+| Sub-command | Description |
+|-------------|-------------|
+| `deposit` | Deposit funds into the Plasma chain. |
+| `withdraw <nonce>` | Finalise a Plasma exit. |
 
 ### state_channel
 
