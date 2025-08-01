@@ -15,8 +15,8 @@ type PlasmaBlock struct {
 	Timestamp int64    `json:"timestamp"`
 }
 
-// PlasmaDeposit records a token deposit into the plasma bridge.
-type PlasmaDeposit struct {
+// PlasmaBridgeDeposit records a token deposit into the plasma bridge.
+type PlasmaBridgeDeposit struct {
 	Nonce  uint64      `json:"nonce"`
 	From   Address     `json:"from"`
 	Token  TokenID     `json:"token"`
@@ -25,8 +25,8 @@ type PlasmaDeposit struct {
 	Time   int64       `json:"time"`
 }
 
-// PlasmaExit tracks an exit request from the plasma chain.
-type PlasmaExit struct {
+// PlasmaBridgeExit tracks an exit request from the plasma chain.
+type PlasmaBridgeExit struct {
 	Nonce     uint64      `json:"nonce"`
 	Owner     Address     `json:"owner"`
 	Token     TokenID     `json:"token"`
@@ -40,8 +40,8 @@ type PlasmaBroadcaster interface {
 	Broadcast(topic string, msg interface{}) error
 }
 
-// PlasmaCoordinator manages deposits and exits.
-type PlasmaCoordinator struct {
+// BridgeCoordinator manages deposits and exits.
+type BridgeCoordinator struct {
 	Ledger StateRW
 	Net    PlasmaBroadcaster
 	mu     sync.Mutex
@@ -49,33 +49,33 @@ type PlasmaCoordinator struct {
 }
 
 var (
-	plasmaOnce sync.Once
-	plasma     *PlasmaCoordinator
+	plasmaOpOnce sync.Once
+	bridgeCoord  *BridgeCoordinator
 )
 
-// InitPlasma sets up the global plasma coordinator.
-func InitPlasma(led StateRW, net PlasmaBroadcaster) {
-	plasmaOnce.Do(func() { plasma = &PlasmaCoordinator{Ledger: led, Net: net} })
+// InitPlasmaCoordinator sets up the global plasma coordinator.
+func InitPlasmaCoordinator(led StateRW, net PlasmaBroadcaster) {
+	plasmaOpOnce.Do(func() { bridgeCoord = &BridgeCoordinator{Ledger: led, Net: net} })
 }
 
 // Plasma returns the globally configured coordinator.
-func Plasma() *PlasmaCoordinator { return plasma }
+func PlasmaCoordinatorInstance() *BridgeCoordinator { return bridgeCoord }
 
 // Deposit moves tokens from the user account to the plasma bridge.
-func (p *PlasmaCoordinator) Deposit(from Address, token TokenID, amount uint64, blk PlasmaBlock) (PlasmaDeposit, error) {
+func (p *BridgeCoordinator) Deposit(from Address, token TokenID, amount uint64, blk PlasmaBlock) (PlasmaBridgeDeposit, error) {
 	if p == nil {
-		return PlasmaDeposit{}, errors.New("plasma not initialised")
+		return PlasmaBridgeDeposit{}, errors.New("plasma not initialised")
 	}
 	if amount == 0 {
-		return PlasmaDeposit{}, errors.New("zero amount")
+		return PlasmaBridgeDeposit{}, errors.New("zero amount")
 	}
 	tok, ok := GetToken(token)
 	if !ok {
-		return PlasmaDeposit{}, errors.New("token unknown")
+		return PlasmaBridgeDeposit{}, errors.New("token unknown")
 	}
-	bridge := plasmaAccount(token)
+	bridge := bridgeAccount(token)
 	if err := tok.Transfer(from, bridge, amount); err != nil {
-		return PlasmaDeposit{}, err
+		return PlasmaBridgeDeposit{}, err
 	}
 
 	p.mu.Lock()
@@ -83,7 +83,7 @@ func (p *PlasmaCoordinator) Deposit(from Address, token TokenID, amount uint64, 
 	nonce := p.nonce
 	p.mu.Unlock()
 
-	dep := PlasmaDeposit{Nonce: nonce, From: from, Token: token, Amount: amount, Block: blk, Time: time.Now().Unix()}
+	dep := PlasmaBridgeDeposit{Nonce: nonce, From: from, Token: token, Amount: amount, Block: blk, Time: time.Now().Unix()}
 	key := depositKeyPlasma(nonce)
 	p.Ledger.SetState(key, plasmaJSON(dep))
 	if p.Net != nil {
@@ -93,17 +93,17 @@ func (p *PlasmaCoordinator) Deposit(from Address, token TokenID, amount uint64, 
 }
 
 // StartExit records an exit intent which must later be finalised.
-func (p *PlasmaCoordinator) StartExit(owner Address, token TokenID, amount uint64, blk PlasmaBlock) (PlasmaExit, error) {
+func (p *BridgeCoordinator) StartExit(owner Address, token TokenID, amount uint64, blk PlasmaBlock) (PlasmaBridgeExit, error) {
 	if p == nil {
-		return PlasmaExit{}, errors.New("plasma not initialised")
+		return PlasmaBridgeExit{}, errors.New("plasma not initialised")
 	}
 	if amount == 0 {
-		return PlasmaExit{}, errors.New("zero amount")
+		return PlasmaBridgeExit{}, errors.New("zero amount")
 	}
-	bridge := plasmaAccount(token)
+	bridge := bridgeAccount(token)
 	bal := p.Ledger.BalanceOf(bridge)
 	if bal < amount {
-		return PlasmaExit{}, fmt.Errorf("insufficient bridge balance: %d", bal)
+		return PlasmaBridgeExit{}, fmt.Errorf("insufficient bridge balance: %d", bal)
 	}
 
 	p.mu.Lock()
@@ -111,7 +111,7 @@ func (p *PlasmaCoordinator) StartExit(owner Address, token TokenID, amount uint6
 	nonce := p.nonce
 	p.mu.Unlock()
 
-	ex := PlasmaExit{Nonce: nonce, Owner: owner, Token: token, Amount: amount, Block: blk}
+	ex := PlasmaBridgeExit{Nonce: nonce, Owner: owner, Token: token, Amount: amount, Block: blk}
 	key := exitKeyPlasma(nonce)
 	p.Ledger.SetState(key, plasmaJSON(ex))
 	if p.Net != nil {
@@ -121,7 +121,7 @@ func (p *PlasmaCoordinator) StartExit(owner Address, token TokenID, amount uint6
 }
 
 // FinalizeExit releases tokens from the bridge to the owner.
-func (p *PlasmaCoordinator) FinalizeExit(nonce uint64) error {
+func (p *BridgeCoordinator) FinalizeExit(nonce uint64) error {
 	if p == nil {
 		return errors.New("plasma not initialised")
 	}
@@ -129,7 +129,7 @@ func (p *PlasmaCoordinator) FinalizeExit(nonce uint64) error {
 	if err != nil || raw == nil {
 		return errors.New("exit not found")
 	}
-	var ex PlasmaExit
+	var ex PlasmaBridgeExit
 	if err := json.Unmarshal(raw, &ex); err != nil {
 		return err
 	}
@@ -140,7 +140,7 @@ func (p *PlasmaCoordinator) FinalizeExit(nonce uint64) error {
 	if !ok {
 		return errors.New("token unknown")
 	}
-	bridge := plasmaAccount(ex.Token)
+	bridge := bridgeAccount(ex.Token)
 	if err := tok.Transfer(bridge, ex.Owner, ex.Amount); err != nil {
 		return err
 	}
@@ -153,30 +153,30 @@ func (p *PlasmaCoordinator) FinalizeExit(nonce uint64) error {
 }
 
 // GetExit fetches a previously recorded exit.
-func (p *PlasmaCoordinator) GetExit(nonce uint64) (PlasmaExit, error) {
+func (p *BridgeCoordinator) GetExit(nonce uint64) (PlasmaBridgeExit, error) {
 	if p == nil {
-		return PlasmaExit{}, errors.New("plasma not initialised")
+		return PlasmaBridgeExit{}, errors.New("plasma not initialised")
 	}
 	raw, err := p.Ledger.GetState(exitKeyPlasma(nonce))
 	if err != nil || raw == nil {
-		return PlasmaExit{}, errors.New("exit not found")
+		return PlasmaBridgeExit{}, errors.New("exit not found")
 	}
-	var ex PlasmaExit
+	var ex PlasmaBridgeExit
 	if err := json.Unmarshal(raw, &ex); err != nil {
-		return PlasmaExit{}, err
+		return PlasmaBridgeExit{}, err
 	}
 	return ex, nil
 }
 
 // ListExits returns all exits for the given owner.
-func (p *PlasmaCoordinator) ListExits(owner Address) ([]PlasmaExit, error) {
+func (p *BridgeCoordinator) ListExits(owner Address) ([]PlasmaBridgeExit, error) {
 	if p == nil {
 		return nil, errors.New("plasma not initialised")
 	}
 	it := p.Ledger.PrefixIterator([]byte("plasma:exit:"))
-	var out []PlasmaExit
+	var out []PlasmaBridgeExit
 	for it.Next() {
-		var ex PlasmaExit
+		var ex PlasmaBridgeExit
 		if err := json.Unmarshal(it.Value(), &ex); err != nil {
 			continue
 		}
@@ -187,7 +187,7 @@ func (p *PlasmaCoordinator) ListExits(owner Address) ([]PlasmaExit, error) {
 	return out, nil
 }
 
-func plasmaAccount(token TokenID) Address {
+func bridgeAccount(token TokenID) Address {
 	var a Address
 	copy(a[:4], []byte("PLSM"))
 	a[4] = byte(token >> 24)

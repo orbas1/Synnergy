@@ -21,6 +21,9 @@ func InitLedger(path string) error {
 	var err error
 	ledgerOnce.Do(func() {
 		globalLedger, err = OpenLedger(path)
+		if err == nil {
+			InitTxDistributor(globalLedger)
+		}
 	})
 	return err
 }
@@ -91,6 +94,7 @@ func InitFirewall() {
 
 // CurrentFirewall returns the global firewall if initialised.
 func CurrentFirewall() *Firewall { return globalFirewall }
+
 // ------------------------------------------------------------------
 // DynamicGasCalculator parses bytecode and sums real gas costs
 // ------------------------------------------------------------------

@@ -366,8 +366,9 @@ func (sc *SynnergyConsensus) SealMainBlockPOW(headers []SubBlockHeader) error {
 		nonce++
 	}
 
-	blk := &Block{Header: bh, Body: BlockBody{SubHeaders: headers}}
-	if err := sc.ledger.AppendBlock(blk); err != nil {
+	txs := sc.ledger.ListPool(0)
+	blk := &Block{Header: bh, Body: BlockBody{SubHeaders: headers}, Transactions: txs}
+	if err := sc.ledger.AddBlock(blk); err != nil {
 		return err
 	}
 	sc.logger.Printf("block #%d sealed (nonce %d)", bh.Height, nonce)

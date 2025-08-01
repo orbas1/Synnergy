@@ -17,10 +17,10 @@ import (
 type AuthAppStatus uint8
 
 const (
-	AppPending AuthAppStatus = iota + 1
-	AppApproved
-	AppRejected
-	AppExpired
+	AuthPending AuthAppStatus = iota + 1
+	AuthApproved
+	AuthRejected
+	AuthExpired
 )
 
 // AuthApplication is stored in the ledger under prefix "authapply:app:".
@@ -105,7 +105,7 @@ func (ap *AuthorityApplier) SubmitApplication(candidate Address, role AuthorityR
 		Description: desc,
 		Electorate:  elect,
 		Deadline:    time.Now().Add(ap.cfg.VotePeriod).Unix(),
-		Status:      AppPending,
+		Status:      AuthPending,
 	}
 	ap.ledger.SetState(appKey(id), app.Marshal())
 	ap.logger.Printf("authority application %s submitted", id.Hex())
@@ -125,7 +125,7 @@ func (ap *AuthorityApplier) VoteApplication(voter Address, id Hash, approve bool
 	if err := json.Unmarshal(raw, &app); err != nil {
 		return err
 	}
-	if app.Status != AppPending {
+	if app.Status != AuthPending {
 		return errors.New("application not pending")
 	}
 	if !containsAddr(app.Electorate, voter) {
@@ -157,7 +157,7 @@ func (ap *AuthorityApplier) FinalizeApplication(id Hash) error {
 	if err := json.Unmarshal(raw, &app); err != nil {
 		return err
 	}
-	if app.Status != AppPending {
+	if app.Status != AuthPending {
 		return errors.New("already finalised")
 	}
 	if time.Now().Unix() < app.Deadline {
@@ -173,11 +173,11 @@ func (ap *AuthorityApplier) FinalizeApplication(id Hash) error {
 		if err := ap.auth.RegisterCandidate(app.Candidate, app.Role); err != nil {
 			return err
 		}
-		app.Status = AppApproved
+		app.Status = AuthApproved
 		app.ExecutedAt = time.Now().Unix()
 		ap.logger.Printf("authority application %s approved", id.Hex())
 	} else {
-		app.Status = AppRejected
+		app.Status = AuthRejected
 		ap.logger.Printf("authority application %s rejected", id.Hex())
 	}
 	ap.ledger.SetState(appKey(id), app.Marshal())
@@ -192,7 +192,7 @@ func (ap *AuthorityApplier) Tick(now time.Time) {
 	for iter.Next() {
 		var app AuthApplication
 		_ = json.Unmarshal(iter.Value(), &app)
-		if app.Status != AppPending {
+		if app.Status != AuthPending {
 			continue
 		}
 		if now.Unix() >= app.Deadline {

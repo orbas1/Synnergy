@@ -20,13 +20,13 @@ type IdentityService struct {
 }
 
 var (
-	idOnce sync.Once
-	idSvc  *IdentityService
+	idSvcOnce sync.Once
+	idSvc     *IdentityService
 )
 
 // InitIdentityService initializes the singleton using the provided ledger.
 func InitIdentityService(led stateBackend) {
-	idOnce.Do(func() {
+	idSvcOnce.Do(func() {
 		idSvc = &IdentityService{ledger: led, ns: []byte("identity:")}
 	})
 }

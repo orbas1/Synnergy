@@ -17,11 +17,11 @@ import (
 type ApplicationStatus uint8
 
 const (
-	AppPending ApplicationStatus = iota + 1
-	AppApproved
-	AppRejected
-	AppFunded
-	AppExpired
+	LoanPending ApplicationStatus = iota + 1
+	LoanApproved
+	LoanRejected
+	LoanFunded
+	LoanExpired
 )
 
 // LoanApplication holds the state for a submitted request.
@@ -74,7 +74,7 @@ func (lp *LoanPoolApply) Submit(applicant Address, amount uint64, term uint16, p
 	app := LoanApplication{
 		ID: id, Applicant: applicant, Amount: amount, TermMonths: term,
 		Purpose: purpose, Deadline: time.Now().Add(lp.votePeriod).Unix(),
-		Status: AppPending,
+		Status: LoanPending,
 	}
 	lp.ledger.SetState(lp.key(id), mustJSON(app))
 	if lp.logger != nil {
@@ -96,7 +96,7 @@ func (lp *LoanPoolApply) Vote(voter Address, id Hash, approve bool) error {
 	if err := json.Unmarshal(raw, &app); err != nil {
 		return err
 	}
-	if app.Status != AppPending {
+	if app.Status != LoanPending {
 		return errors.New("not pending")
 	}
 	if ok, _ := lp.ledger.HasState(lp.voteKey(id, voter)); ok {
@@ -123,16 +123,16 @@ func (lp *LoanPoolApply) Process(now time.Time) {
 		if err := json.Unmarshal(iter.Value(), &app); err != nil {
 			continue
 		}
-		if app.Status != AppPending {
+		if app.Status != LoanPending {
 			continue
 		}
 		if now.Unix() < app.Deadline {
 			continue
 		}
 		if app.Yes > app.No {
-			app.Status = AppApproved
+			app.Status = LoanApproved
 		} else {
-			app.Status = AppRejected
+			app.Status = LoanRejected
 		}
 		lp.ledger.SetState(iter.Key(), mustJSON(app))
 	}
@@ -151,13 +151,13 @@ func (lp *LoanPoolApply) Disburse(id Hash) error {
 	if err := json.Unmarshal(raw, &app); err != nil {
 		return err
 	}
-	if app.Status != AppApproved {
+	if app.Status != LoanApproved {
 		return errors.New("not approved")
 	}
 	if err := lp.ledger.Transfer(LoanPoolAccount, app.Applicant, app.Amount); err != nil {
 		return err
 	}
-	app.Status = AppFunded
+	app.Status = LoanFunded
 	app.FundedAt = time.Now().Unix()
 	lp.ledger.SetState(lp.key(id), mustJSON(app))
 	if lp.logger != nil {
