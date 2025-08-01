@@ -1,0 +1,1 @@
+# Authority Node Type Manual
