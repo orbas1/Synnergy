@@ -19,6 +19,12 @@ func RegisterRoutes(root *cobra.Command) {
 		AdaptiveCmd,
 		TokensCmd,
 		TokenMgmtCmd,
+		TicketCmd,
+		Syn1900Cmd,
+		Syn2100Cmd,
+		Syn2200Cmd,
+		Syn2400Cmd,
+		DAOTokenCmd,
 		CoinCmd,
 		ContractsCmd,
 		ContractMgmtCmd,
@@ -108,6 +114,7 @@ func RegisterRoutes(root *cobra.Command) {
 		SandboxCmd,
 		LegalCmd,
 		CarbonCmd,
+		FootprintCmd,
 		EnergyCmd,
 		InitRepCmd,
 		FinalizationCmd,
@@ -143,10 +150,9 @@ func RegisterRoutes(root *cobra.Command) {
 		NewReplicationCommand(),
 		NewRollupCommand(), // includes rollup management
 		NewSyncCommand(),
-		NewRollupCommand(),
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),
 		NewHealthCommand(),
-	)
+	) // includes sidechain management helpers
 }
