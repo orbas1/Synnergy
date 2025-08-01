@@ -368,6 +368,7 @@ type Ledger struct {
 	// NodeLocations stores optional geolocation metadata for peers.
 	NodeLocations    map[NodeID]Location
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
+	holoData         map[Hash][]byte
 }
 
 //---------------------------------------------------------------------
@@ -827,7 +828,7 @@ func (ctx *Context) Gas(amount uint64) error {
 type Registry struct {
 	mu      sync.RWMutex
 	Entries map[string][]byte
-	tokens  map[TokenID]*BaseToken
+	tokens  map[TokenID]Token
 }
 
 type BalanceTable struct {
