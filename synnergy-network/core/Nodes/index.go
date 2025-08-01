@@ -10,6 +10,13 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// MobileMiner extends NodeInterface with light mining controls.
+type MobileMiner interface {
+	NodeInterface
+	StartMining()
+	StopMining()
+	SetIntensity(int)
+	Stats() any
 // CentralBankingNode defines the extended behaviour required by central bank
 // infrastructure. It mirrors the high level actions without importing core
 // types to avoid circular dependencies.
