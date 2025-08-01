@@ -32,6 +32,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
+- **cross_chain_agnostic_protocols** – Register cross-chain protocols.
 - **cross_chain_bridge** – Manage cross-chain token transfers.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fork** – Manage chain forks and resolve competing branches.
@@ -339,6 +340,14 @@ needed in custom tooling.
 | `get <bridge_id>` | Retrieve a bridge configuration. |
 | `authorize <relayer_addr>` | Whitelist a relayer address. |
 | `revoke <relayer_addr>` | Remove a relayer from the whitelist. |
+### cross_chain_agnostic_protocols
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <name>` | Register a new protocol definition. |
+| `list` | List registered protocols. |
+| `get <id>` | Retrieve a protocol configuration. |
+
 
 ### cross_chain_bridge
 
