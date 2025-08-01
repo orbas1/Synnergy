@@ -1,0 +1,47 @@
+[
+  {
+    "inputs": [{"internalType":"bytes","name":"data","type":"bytes"}],
+    "name": "submit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType":"bytes32","name":"proposalId","type":"bytes32"},
+      {"internalType":"bool","name":"approve","type":"bool"}
+    ],
+    "name": "vote",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType":"bytes32","name":"proposalId","type":"bytes32"}],
+    "name": "get",
+    "outputs": [{"internalType":"bytes","name":"result","type":"bytes"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "list",
+    "outputs": [{"internalType":"bytes","name":"result","type":"bytes"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType":"bytes32","name":"proposalId","type":"bytes32"}],
+    "name": "execute",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType":"address","name":"asset","type":"address"}],
+    "name": "balanceOf",
+    "outputs": [{"internalType":"uint256","name":"bal","type":"uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

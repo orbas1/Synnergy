@@ -224,7 +224,10 @@ Further expanded the token-creation-tool with a TokenFactory contract, new API r
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
-- Added `cmd/dexserver` and expanded `GUI/dex-screener` with Tailwind interface and pool API integration.
+**DAO Explorer** – Tailwind frontend served from Express with controllers,
+services and smart contract bindings. Solidity contract now covers multiple
+governance opcodes and backend can interact with it via ethers.js.
+
 
 ---
 
