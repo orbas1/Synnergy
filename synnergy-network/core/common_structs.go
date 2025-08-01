@@ -45,6 +45,7 @@ type AIEngine struct {
 	client AIStubClient // manually defined interface
 	mu     sync.RWMutex
 	models map[[32]byte]ModelMeta
+	jobs   map[string]TrainingJob
 }
 
 type ModelMeta struct {
@@ -549,6 +550,7 @@ type Channel struct {
 	BalanceB uint64    `json:"bal_b"`
 	Nonce    uint64    `json:"nonce"`
 	Closing  int64     `json:"closing_ts"`
+	Paused   bool      `json:"paused"`
 }
 
 type SignedState struct {
