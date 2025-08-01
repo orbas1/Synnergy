@@ -300,6 +300,9 @@ var catalogue = []struct {
 	{"Loanpool_GetProposal", 0x100009},
 	{"Loanpool_ListProposals", 0x10000A},
 	{"Loanpool_Redistribute", 0x10000B},
+	{"Loanpool_RequestApproval", 0x10000C},
+	{"Loanpool_ApproveRequest", 0x10000D},
+	{"Loanpool_RejectRequest", 0x10000E},
 
 	// Network (0x11)
 	{"NewNode", 0x110001},
