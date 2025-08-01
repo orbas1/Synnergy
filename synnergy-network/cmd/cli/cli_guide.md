@@ -36,6 +36,7 @@ The following command groups expose the same functionality available in the core
 - **resource** – Manage stored data and VM gas allocations.
 - **immutability** – Verify the chain against the genesis block.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **resource_allocation** – Manage per-contract gas limits.
 - **failover** – Manage ledger snapshots and coordinate recovery.
 - **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
@@ -381,6 +382,15 @@ needed in custom tooling.
 | `failover <addr>` | Force failover of a node. |
 | `predict <addr>` | Predict failure probability for a node. |
 
+### resource_allocation
+
+| Sub-command | Description |
+|-------------|-------------|
+| `set <addr> --limit=<n>` | Set gas limit for an address. |
+| `get <addr>` | Display current gas limit. |
+| `list` | List limits for all addresses. |
+| `consume <addr> --amt=<n>` | Deduct gas from an address limit. |
+| `transfer <from> <to> --amt=<n>` | Transfer limit between addresses. |
 ### failover
 
 | Sub-command | Description |

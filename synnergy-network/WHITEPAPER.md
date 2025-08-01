@@ -241,6 +241,9 @@ to guarantee mint limits are respected. Batch transfers are executed atomically
 and can be triggered via smart contracts through dedicated opcodes. This module
 simplifies rewarding validators and distributing governance tokens to new users.
 
+## Resource Allocation Management
+Each contract address on Synnergy maintains an adjustable gas allowance. The resource allocation manager stores these limits directly in the ledger and exposes opcodes so the VM can consume or transfer allowances during execution. Operators may update limits through CLI commands or automated governance proposals. This ensures predictable resource usage while integrating tightly with consensus and transaction validation.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 
