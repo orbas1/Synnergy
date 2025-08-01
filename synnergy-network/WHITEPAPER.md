@@ -17,6 +17,7 @@ The Synnergy ecosystem brings together several services:
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **AI Model Training** – On-chain jobs allow publishing datasets and training models collaboratively with escrowed payments.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
+- **DeFi Suite** – Insurance, lending and prediction markets built into the core stack.
 - **Employment Contracts** – Manage job agreements and salary payments on-chain.
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
 - **Warehouse Management** – On-chain inventory tracking for supply chains.
@@ -163,6 +164,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  DeFi
                                  0x1E  BinaryTree
                                  0x1E  Regulatory
                                  0x1E  Polls

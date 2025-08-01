@@ -115,6 +115,7 @@ all modules from the core library. Highlights include:
 - `tangible` – register and transfer tangible asset records
 - `warehouse` – manage on‑chain inventory records
 - `tokens` – ERC‑20 style token commands
+- `defi` – insurance, betting and other DeFi operations
 - `event_management` – record and query on-chain events
 - `token_management` – high level token creation and administration
 - `gaming` – create and join simple on-chain games

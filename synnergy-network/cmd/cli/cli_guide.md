@@ -68,6 +68,7 @@ The following command groups expose the same functionality available in the core
 - **healthcare** – Manage healthcare records and permissions.
 - **warehouse** – Manage on-chain inventory records.
 - **tokens** – Register new token types and move balances between accounts.
+- **defi** – Insurance policies and other DeFi utilities.
 - **event_management** – Emit and query custom events stored on chain.
 - **gaming** – Manage simple on-chain games.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
@@ -701,6 +702,12 @@ needed in custom tooling.
 | `approve <tok>` | Approve a spender allowance. |
 | `allowance <tok> <owner> <spender>` | Show current allowance. |
 
+### defi
+
+| Sub-command | Description |
+|-------------|-------------|
+| `insurance new <id> <holder> <premium> <payout>` | Create an insurance policy. |
+| `insurance claim <id>` | Claim a payout. |
 ### event_management
 
 | Sub-command | Description |

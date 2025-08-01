@@ -133,6 +133,7 @@ func wrap(name string) OpcodeFunc {
 //	0x0D GreenTech              0x1B Utilities
 //	0x0E Ledger                 0x1C VirtualMachine
 //	                            0x1D Wallet
+//	                             0x1E DeFi
 //				0x1E Swarm
 
 //	                                 0x1E Plasma
@@ -779,6 +780,26 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// DeFi (0x1E)
+	{"DeFi_CreateInsurance", 0x1E0001},
+	{"DeFi_ClaimInsurance", 0x1E0002},
+	{"DeFi_PlaceBet", 0x1E0003},
+	{"DeFi_SettleBet", 0x1E0004},
+	{"DeFi_StartCrowdfund", 0x1E0005},
+	{"DeFi_Contribute", 0x1E0006},
+	{"DeFi_FinalizeCrowdfund", 0x1E0007},
+	{"DeFi_CreatePrediction", 0x1E0008},
+	{"DeFi_VotePrediction", 0x1E0009},
+	{"DeFi_ResolvePrediction", 0x1E000A},
+	{"DeFi_RequestLoan", 0x1E000B},
+	{"DeFi_RepayLoan", 0x1E000C},
+	{"DeFi_StartYieldFarm", 0x1E000D},
+	{"DeFi_Stake", 0x1E000E},
+	{"DeFi_Unstake", 0x1E000F},
+	{"DeFi_CreateSynthetic", 0x1E0010},
+	{"DeFi_MintSynthetic", 0x1E0011},
+	{"DeFi_BurnSynthetic", 0x1E0012},
    {"RegisterIDWallet", 0x1D0007},
 	{"IsIDWalletRegistered", 0x1D0008},
 	{"NewOffChainWallet", 0x1D0007},

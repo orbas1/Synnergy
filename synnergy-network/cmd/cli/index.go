@@ -22,6 +22,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ReversalCmd,
 		TxDistributionCmd(),
 		WalletCmd,
+		DeFiCmd,
 		RegulatoryCmd,
 		FeedbackCmd,
 		AccountCmd,
