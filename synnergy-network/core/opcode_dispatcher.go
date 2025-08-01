@@ -323,6 +323,9 @@ var catalogue = []struct {
 	{"Replication_Start", 0x120005},
 	{"Stop", 0x120006},
 	{"Synchronize", 0x120007},
+	{"NewInitService", 0x120008},
+	{"BootstrapLedger", 0x120009},
+	{"ShutdownInitService", 0x12000A},
 
 	// Rollups (0x13)
 	{"NewAggregator", 0x130001},

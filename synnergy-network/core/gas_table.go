@@ -281,6 +281,9 @@ var gasTable map[Opcode]uint64
    RequestMissing: 4_000,
    Synchronize:    25_000,
    Stop:           3_000,
+   NewInitService:     8_000,
+   BootstrapLedger:    20_000,
+   ShutdownInitService: 3_000,
    // Hash & Start already priced
 
    // ----------------------------------------------------------------------
@@ -852,11 +855,14 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Replication / Data Availability
 	// ----------------------------------------------------------------------
-	"NewReplicator":  12_000,
-	"ReplicateBlock": 30_000,
-	"RequestMissing": 4_000,
-	"Synchronize":    25_000,
-	"Stop":           3_000,
+	"NewReplicator":       12_000,
+	"ReplicateBlock":      30_000,
+	"RequestMissing":      4_000,
+	"Synchronize":         25_000,
+	"Stop":                3_000,
+	"NewInitService":      8_000,
+	"BootstrapLedger":     20_000,
+	"ShutdownInitService": 3_000,
 	// Hash & Start already priced
 
 	// ----------------------------------------------------------------------

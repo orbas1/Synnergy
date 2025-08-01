@@ -24,6 +24,7 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+- **initrep** – Bootstrap a ledger via peer replication.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
 - **sharding** – Migrate data between shards and check shard status.
@@ -265,6 +266,13 @@ needed in custom tooling.
 | `replicate <block-hash>` | Gossip a known block. |
 | `request <block-hash>` | Request a block from peers. |
 | `sync` | Synchronize blocks from peers. |
+
+### initrep
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start` | Bootstrap the ledger and start replication. |
+| `stop` | Stop the initialization service. |
 
 ### rollups
 
