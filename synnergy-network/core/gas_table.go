@@ -1183,6 +1183,13 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// Biometrics Authentication
+	// ----------------------------------------------------------------------
+	"Bio_Enroll": 1_000,
+	"Bio_Verify": 800,
+	"Bio_Delete": 600,
 }
 
 func init() {

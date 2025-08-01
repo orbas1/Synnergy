@@ -15,6 +15,7 @@ The Synnergy ecosystem brings together several services:
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Biometric Authentication** – Optional module for on-chain identity verification.
 All services are optional and run as independent modules that plug into the core.
 
 ## Synnergy Network Architecture
@@ -95,6 +96,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Biometrics
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 

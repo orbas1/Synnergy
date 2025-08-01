@@ -26,6 +26,7 @@ The following command groups expose the same functionality available in the core
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
+- **biometrics** – Manage biometric authentication templates.
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
@@ -291,6 +292,14 @@ needed in custom tooling.
 | `dilithium-sign` | Sign a message with a Dilithium key. |
 | `dilithium-verify` | Verify a Dilithium signature. |
 | `anomaly-score` | Compute an anomaly z-score from data. |
+
+### biometrics
+
+| Sub-command | Description |
+|-------------|-------------|
+| `enroll <file>` | Enroll biometric data for an address. |
+| `verify <file>` | Verify biometric data against an address. |
+| `delete <addr>` | Remove stored biometric data. |
 
 ### sharding
 
