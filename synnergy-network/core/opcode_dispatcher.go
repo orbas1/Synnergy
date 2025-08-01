@@ -450,6 +450,12 @@ var catalogue = []struct {
 	{"Len_Tokens", 0x190019},
 	{"InitTokens", 0x19001A},
 	{"GetRegistryTokens", 0x19001B},
+	{"TokenManager_Create", 0x19001C},
+	{"TokenManager_Transfer", 0x19001D},
+	{"TokenManager_Mint", 0x19001E},
+	{"TokenManager_Burn", 0x19001F},
+	{"TokenManager_Approve", 0x190020},
+	{"TokenManager_BalanceOf", 0x190021},
 
 	// Transactions (0x1A)
 	{"Tx_Sign", 0x1A0001},

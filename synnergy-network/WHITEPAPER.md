@@ -80,6 +80,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `healthcare` – Manage healthcare records and permissions.
 - `tangible` – Track tangible asset ownership on-chain.
 - `tokens` – Issue and manage token contracts.
+- `token_management` – Advanced token lifecycle management.
 - `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
 - `devnet` – Spawn an in-memory developer network for rapid testing.

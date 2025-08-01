@@ -461,6 +461,12 @@ var gasTable map[Opcode]uint64
    Len:               200,
    InitTokens:        8_000,
    GetRegistryTokens: 400,
+   TokenManager_Create: 8_000,
+   TokenManager_Transfer: 2_100,
+   TokenManager_Mint: 2_100,
+   TokenManager_Burn: 2_100,
+   TokenManager_Approve: 800,
+   TokenManager_BalanceOf: 400,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1046,27 +1052,33 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Token Utilities
 	// ----------------------------------------------------------------------
-	"ID":                400,
-	"Meta":              400,
-	"Allowance":         400,
-	"Approve":           800,
-	"Add":               600,
-	"Sub":               600,
-	"Get":               400,
-	"transfer":          2_100, // lower-case ERC20 compatibility
-	"Calculate":         800,
-	"RegisterToken":     8_000,
-	"NewBalanceTable":   5_000,
-	"Set":               600,
-	"RefundGas":         100,
-	"PopUint32":         300,
-	"PopAddress":        300,
-	"PopUint64":         300,
-	"PushBool":          300,
-	"Push":              300,
-	"Len":               200,
-	"InitTokens":        8_000,
-	"GetRegistryTokens": 400,
+	"ID":                     400,
+	"Meta":                   400,
+	"Allowance":              400,
+	"Approve":                800,
+	"Add":                    600,
+	"Sub":                    600,
+	"Get":                    400,
+	"transfer":               2_100, // lower-case ERC20 compatibility
+	"Calculate":              800,
+	"RegisterToken":          8_000,
+	"NewBalanceTable":        5_000,
+	"Set":                    600,
+	"RefundGas":              100,
+	"PopUint32":              300,
+	"PopAddress":             300,
+	"PopUint64":              300,
+	"PushBool":               300,
+	"Push":                   300,
+	"Len":                    200,
+	"InitTokens":             8_000,
+	"GetRegistryTokens":      400,
+	"TokenManager_Create":    8000,
+	"TokenManager_Transfer":  2100,
+	"TokenManager_Mint":      2100,
+	"TokenManager_Burn":      2100,
+	"TokenManager_Approve":   800,
+	"TokenManager_BalanceOf": 400,
 
 	// ----------------------------------------------------------------------
 	// Transactions
