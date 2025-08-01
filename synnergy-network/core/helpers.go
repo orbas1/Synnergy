@@ -49,6 +49,12 @@ func (tfStubClient) FeeOpt(_ context.Context, _ *TFRequest) (*TFResponse, error)
 func (tfStubClient) Volume(_ context.Context, _ *TFRequest) (*TFResponse, error) {
 	return &TFResponse{}, nil
 }
+func (tfStubClient) Inference(_ context.Context, _ *TFRequest) (*TFResponse, error) {
+	return &TFResponse{}, nil
+}
+func (tfStubClient) Analyse(_ context.Context, _ *TFRequest) (*TFResponse, error) {
+	return &TFResponse{}, nil
+}
 
 // ------------------------------------------------------------------
 // Simple flat gas calculator used by CLI stubs
