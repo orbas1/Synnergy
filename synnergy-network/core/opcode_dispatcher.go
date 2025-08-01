@@ -348,6 +348,8 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"DeployGovContract", 0x0C000B},
+	{"InvokeGovContract", 0x0C000C},
 	{"AddReputation", 0x0C000B},
 	{"SubtractReputation", 0x0C000C},
 	{"ReputationOf", 0x0C000D},
