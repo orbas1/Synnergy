@@ -684,6 +684,11 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   SYN600_Stake:           2_000,
+   SYN600_Unstake:        2_000,
+   SYN600_AddEngagement:  500,
+   SYN600_EngagementOf:   400,
+   SYN600_DistributeRewards: 5_000,
    SYN800_RegisterAsset: 100,
    SYN800_UpdateValuation: 100,
    SYN800_GetAsset: 50,
@@ -1677,6 +1682,7 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Token Utilities
 	// ----------------------------------------------------------------------
+
 	"ID":                        40,
 	"Meta":                      40,
 	"Allowance":                 40,
@@ -1797,6 +1803,11 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":        0,
 	"TokenManager_Approve":     0,
 	"TokenManager_BalanceOf":   0,
+	"SYN600_Stake":             200,
+	"SYN600_Unstake":           200,
+	"SYN600_AddEngagement":     50,
+	"SYN600_EngagementOf":      40,
+	"SYN600_DistributeRewards": 500,
 	"SYN2100_RegisterDocument": 0,
 	"SYN2100_FinanceDocument":  0,
 	"SYN2100_GetDocument":      0,
