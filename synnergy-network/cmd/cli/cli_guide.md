@@ -354,6 +354,15 @@ needed in custom tooling.
 | `approve <tok>` | Approve a spender allowance. |
 | `allowance <tok> <owner> <spender>` | Show current allowance. |
 
+### tangible
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <id> <owner> <meta> <value>` | Register a new tangible asset. |
+| `transfer <id> <owner>` | Transfer ownership of an asset. |
+| `info <id>` | Display asset metadata. |
+| `list` | List all tangible assets. |
+
 ### transactions
 
 | Sub-command | Description |

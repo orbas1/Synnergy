@@ -68,6 +68,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `sidechain` – Launch or interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.
 - `storage` – Manage off-chain storage deals.
+- `tangible` – Track tangible asset ownership on-chain.
 - `tokens` – Issue and manage token contracts.
 - `transactions` – Build and broadcast transactions manually.
 - `utility_functions` – Miscellaneous support utilities.

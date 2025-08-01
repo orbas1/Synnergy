@@ -944,6 +944,11 @@ var gasNames = map[string]uint64{
 	"ListListings":  1_000,
 	"GetDeal":       1_000,
 	"ListDeals":     1_000,
+	// Tangible assets
+	"Assets_Register": 5_000,
+	"Assets_Transfer": 4_000,
+	"Assets_Get":      1_000,
+	"Assets_List":     1_000,
 	// Pin & Retrieve already priced
 
 	// ----------------------------------------------------------------------
