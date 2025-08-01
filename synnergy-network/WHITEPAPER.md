@@ -25,6 +25,7 @@ At a high level the network consists of:
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Plasma Bridge** – A lightweight bridge allows fast token transfers to and from child chains with an exit window for security.
 Each layer is intentionally separated so enterprises can replace components as needed (e.g., swap the consensus engine or choose a different storage back end).
 
 ## Synthron Coin
@@ -95,6 +96,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Plasma
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 

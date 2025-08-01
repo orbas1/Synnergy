@@ -19,6 +19,7 @@ The following command groups expose the same functionality available in the core
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **plasma** – Manage deposits and exits on the plasma bridge.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
@@ -315,6 +316,16 @@ needed in custom tooling.
 | `get-header` | Fetch a submitted side-chain header. |
 | `meta <chainID>` | Display side-chain metadata. |
 | `list` | List registered side-chains. |
+
+### plasma
+
+| Sub-command | Description |
+|-------------|-------------|
+| `deposit <from> <token> <amount>` | Deposit tokens into the plasma bridge. |
+| `exit <owner> <token> <amount>` | Start an exit from the bridge. |
+| `finalize <nonce>` | Finalize a pending exit. |
+| `get <nonce>` | Get details about an exit. |
+| `list <owner>` | List exits initiated by an address. |
 
 ### state_channel
 
