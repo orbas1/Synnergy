@@ -112,6 +112,31 @@ func wrap(name string) OpcodeFunc {
 //	0x0E Ledger                 0x1C VirtualMachine
 //	                            0x1D Wallet
 //				0x1E Swarm
+
+//	                                 0x1E Plasma
+//	                                 0x1D Wallet
+//		0x1E Workflows
+//		                            0x1D Wallet
+//	                                 0x1E Sensors
+//	     0x0E Ledger                 0x1C VirtualMachine
+//	                                 0x1D Wallet
+//	                                 0x1E RealEstate
+//		0x0E Ledger                 0x1C VirtualMachine
+//		                            0x1D Wallet
+//	                                 0x1E Employment
+//	                                 0x1E Escrow
+//	                                 0x1E Marketplace
+//	                                 0x1D Wallet
+//	                                 0x1E Faucet
+//		                            0x1D Wallet
+//	                                 0x1E SupplyChain
+//	                                 0x1E Healthcare
+//	                                 0x1E Immutability
+//	                                 0x1E Warehouse
+//	                                 0x1E Gaming
+//	0x1E Assets//				0x1E Event
+
+
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -239,6 +264,11 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"CreateDAO", 0x0C000B},
+	{"JoinDAO", 0x0C000C},
+	{"LeaveDAO", 0x0C000D},
+	{"DAOInfo", 0x0C000E},
+	{"ListDAOs", 0x0C000F},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},
@@ -315,6 +345,8 @@ var catalogue = []struct {
 	{"Dial", 0x11000A},
 	{"SetBroadcaster", 0x11000B},
 	{"GlobalBroadcast", 0x11000C},
+	{"StartDevNet", 0x11000D},
+	{"StartTestNet", 0x11000E},
 
 	// Replication (0x12)
 	{"NewReplicator", 0x120001},
@@ -431,6 +463,12 @@ var catalogue = []struct {
 	{"Len_Tokens", 0x190019},
 	{"InitTokens", 0x19001A},
 	{"GetRegistryTokens", 0x19001B},
+	{"TokenManager_Create", 0x19001C},
+	{"TokenManager_Transfer", 0x19001D},
+	{"TokenManager_Mint", 0x19001E},
+	{"TokenManager_Burn", 0x19001F},
+	{"TokenManager_Approve", 0x190020},
+	{"TokenManager_BalanceOf", 0x190021},
 
 	// Transactions (0x1A)
 	{"Tx_Sign", 0x1A0001},
@@ -440,6 +478,8 @@ var catalogue = []struct {
 	{"AddTx", 0x1A0005},
 	{"PickTxs", 0x1A0006},
 	{"TxPoolSnapshot", 0x1A0007},
+	{"NewTxDistributor", 0x1A0008},
+	{"DistributeFees", 0x1A0009},
 
 	// Utilities (0x1B) – EVM-compatible arithmetic & crypto
 	{"Short", 0x1B0001},
@@ -591,6 +631,114 @@ var catalogue = []struct {
 	{"Swarm_Start", 0x1E0005},
 	{"Swarm_Stop", 0x1E0006},
 	{"Swarm_Peers", 0x1E0007},
+	// Plasma (0x1E)
+	{"InitPlasma", 0x1E0001},
+	{"Plasma_Deposit", 0x1E0002},
+	{"Plasma_Withdraw", 0x1E0003},
+  // Workflows (0x1E)
+	{"NewWorkflow", 0x1E0001},
+	{"AddWorkflowAction", 0x1E0002},
+	{"SetWorkflowTrigger", 0x1E0003},
+	{"SetWebhook", 0x1E0004},
+	{"ExecuteWorkflow", 0x1E0005},
+	{"ListWorkflows", 0x1E0006},
+   {"CreateWallet", 0x1D0007},
+	{"ImportWallet", 0x1D0008},
+	{"WalletBalance", 0x1D0009},
+	{"WalletTransfer", 0x1D000A},
+  
+	// Sensors (0x1E)
+	{"RegisterSensor", 0x1E0001},
+	{"GetSensor", 0x1E0002},
+	{"ListSensors", 0x1E0003},
+	{"UpdateSensorValue", 0x1E0004},
+	{"PollSensor", 0x1E0005},
+	{"TriggerWebhook", 0x1E0006},
+
+  
+	// Real Estate (0x1D)
+	{"RegisterProperty", 0x1E0001},
+	{"TransferProperty", 0x1E0002},
+	{"GetProperty", 0x1E0003},
+	{"ListProperties", 0x1E0004},
+
+ 
+
+	// Event (0x1E)
+	{"InitEvents", 0x1E0001},
+	{"EmitEvent", 0x1E0002},
+	{"GetEvent", 0x1E0003},
+	{"ListEvents", 0x1E0004},
+
+  
+
+	// Employment (0x1E)
+	{"InitEmployment", 0x1E0001},
+	{"CreateJob", 0x1E0002},
+	{"SignJob", 0x1E0003},
+	{"RecordWork", 0x1E0004},
+	{"PaySalary", 0x1E0005},
+	{"GetJob", 0x1E0006},
+	// Escrow (0x1E)
+	{"Escrow_Create", 0x1E0001},
+	{"Escrow_Deposit", 0x1E0002},
+	{"Escrow_Release", 0x1E0003},
+	{"Escrow_Cancel", 0x1E0004},
+	{"Escrow_Get", 0x1E0005},
+	{"Escrow_List", 0x1E0006},
+	// Marketplace (0x1E)
+	{"CreateMarketListing", 0x1E0001},
+	{"PurchaseItem", 0x1E0002},
+	{"CancelListing", 0x1E0003},
+	{"ReleaseFunds", 0x1E0004},
+	{"GetMarketListing", 0x1E0005},
+	{"ListMarketListings", 0x1E0006},
+	{"GetMarketDeal", 0x1E0007},
+	{"ListMarketDeals", 0x1E0008},
+	// Faucet (0x1E)
+	{"NewFaucet", 0x1E0001},
+	{"Faucet_Request", 0x1E0002},
+	{"Faucet_Balance", 0x1E0003},
+	{"Faucet_SetAmount", 0x1E0004},
+	{"Faucet_SetCooldown", 0x1E0005},
+  // Supply Chain (0x1E)
+  {"RegisterItem", 0x1E0001},
+	{"UpdateLocation", 0x1E0002},
+	{"MarkStatus", 0x1E0003},
+	{"GetItem", 0x1E0004},
+
+	// Healthcare (0x1E)
+	{"InitHealthcare", 0x1E0001},
+	{"RegisterPatient", 0x1E0002},
+	{"AddHealthRecord", 0x1E0003},
+	{"GrantAccess", 0x1E0004},
+	{"RevokeAccess", 0x1E0005},
+	{"ListHealthRecords", 0x1E0006},
+
+  // Tangible (0x1E)
+	{"Assets_Register", 0x1E0001},
+	{"Assets_Transfer", 0x1E0002},
+	{"Assets_Get", 0x1E0003},
+	{"Assets_List", 0x1E0004},
+
+	// Immutability (0x1E)
+	{"InitImmutability", 0x1E0001},
+	{"VerifyChain", 0x1E0002},
+	{"RestoreChain", 0x1E0003},
+	// Warehouse (0x1E)
+	{"Warehouse_New", 0x1E0001},
+	{"Warehouse_AddItem", 0x1E0002},
+	{"Warehouse_RemoveItem", 0x1E0003},
+	{"Warehouse_MoveItem", 0x1E0004},
+	{"Warehouse_ListItems", 0x1E0005},
+	{"Warehouse_GetItem", 0x1E0006},
+
+	// Gaming (0x1E)
+	{"CreateGame", 0x1E0001},
+	{"JoinGame", 0x1E0002},
+	{"FinishGame", 0x1E0003},
+	{"GetGame", 0x1E0004},
+	{"ListGames", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.
