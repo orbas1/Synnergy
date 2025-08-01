@@ -112,6 +112,19 @@ Additional helper scripts live under `cmd/scripts`.  Running
 `start_synnergy_network.sh` will build the CLI, launch networking, consensus and
 other daemons, then run a demo security command.
 
+
+## Docker
+
+A `Dockerfile` at the repository root allows running Synnergy without a local Go installation.
+Build the image and start a node with:
+
+```bash
+docker build -t synnergy ..
+docker run --rm -it synnergy
+```
+
+The container launches networking, consensus, replication and VM services automatically.
+
 ## Testing
 
 Unit tests are located in the `tests` directory. Run them using:
