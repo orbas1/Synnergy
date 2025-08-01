@@ -71,6 +71,8 @@ all modules from the core library. Highlights include:
 - `sharding` – shard management
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
+- `loanpool` – submit loan proposals and disburse funds
+- `grant` – create and release loan pool grants
 - `storage` – interact with on‑chain storage providers
 - `tokens` – ERC‑20 style token commands
 - `transactions` – build and sign transactions

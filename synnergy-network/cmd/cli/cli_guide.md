@@ -29,6 +29,8 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **loanpool** – Submit loan proposals and manage disbursements.
+- **grant** – Create and release grants from the loan pool.
 - **storage** – Configure the backing key/value store and inspect content.
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
@@ -244,6 +246,14 @@ needed in custom tooling.
 | `tick` | Process proposals and update cycles. |
 | `get <id>` | Display a single proposal. |
 | `list` | List proposals in the pool. |
+
+### grant
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <recipient> <amount>` | Create a new grant funded from the loan pool. |
+| `release <id>` | Release funds for a grant. |
+| `get <id>` | Display a single grant record. |
 
 ### network
 
