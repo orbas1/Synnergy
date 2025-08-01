@@ -55,8 +55,9 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `cross_chain` – Bridge assets to and from external chains.
 - `data` – Low-level debugging of key/value storage and oracles.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
-- `governance` – Create proposals and cast votes.
-- `green_technology` – Manage energy tracking and carbon offsets.
+ - `governance` – Create proposals and cast votes.
+ - `token_vote` – Cast token weighted votes in governance.
+ - `green_technology` – Manage energy tracking and carbon offsets.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
 - `loanpool` – Submit loan requests and disburse funds.

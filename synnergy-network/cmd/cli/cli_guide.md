@@ -20,6 +20,7 @@ The following command groups expose the same functionality available in the core
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **token_vote** – Cast token weighted governance votes.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
@@ -199,6 +200,12 @@ needed in custom tooling.
 | `execute <proposal-id>` | Execute a proposal after the deadline. |
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
+
+### token_vote
+
+| Sub-command | Description |
+|-------------|-------------|
+| `cast <proposal-id> <voter> <token-id> <amount> [approve]` | Cast a token weighted vote on a proposal. |
 
 ### green_technology
 

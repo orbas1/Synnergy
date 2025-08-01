@@ -36,6 +36,7 @@ func RegisterRoutes(root *cobra.Command) {
 	root.AddCommand(
 		NewFaultToleranceCommand(),
 		NewGovernanceCommand(),
+		NewTokenVoteCommand(),
 		NewGreenCommand(),
 		NewLedgerCommand(),
 		NewReplicationCommand(),
