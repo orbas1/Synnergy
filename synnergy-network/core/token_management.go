@@ -37,6 +37,24 @@ func (tm *TokenManager) Create(meta Metadata, init map[Address]uint64) (TokenID,
 	return bt.id, nil
 }
 
+// CreateDataToken creates a SYN2400 data marketplace token with custom metadata.
+func (tm *TokenManager) CreateDataToken(meta Metadata, hash, desc string, price uint64, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	dt, err := NewDataMarketplaceToken(meta, hash, desc, price, init)
+	if err != nil {
+		return 0, err
+	}
+	bt := &dt.BaseToken
+	bt.ledger = tm.ledger
+	bt.gas = tm.gas
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[bt.id] = bt
+	return bt.id, nil
+}
+
 // Transfer moves balances between addresses for the given token.
 func (tm *TokenManager) Transfer(id TokenID, from, to Address, amount uint64) error {
 	tok, ok := GetToken(id)
