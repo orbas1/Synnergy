@@ -40,6 +40,24 @@ func (tm *TokenManager) Create(meta Metadata, init map[Address]uint64) (TokenID,
 	return bt.id, nil
 }
 
+// CreateDataToken creates a SYN2400 data marketplace token with custom metadata.
+func (tm *TokenManager) CreateDataToken(meta Metadata, hash, desc string, price uint64, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	dt, err := NewDataMarketplaceToken(meta, hash, desc, price, init)
+	if err != nil {
+		return 0, err
+	}
+	bt := &dt.BaseToken
+	bt.ledger = tm.ledger
+	bt.gas = tm.gas
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[bt.id] = bt
+	return bt.id, nil
+}
+
 // Transfer moves balances between addresses for the given token.
 func (tm *TokenManager) Transfer(id TokenID, from, to Address, amount uint64) error {
 	tok, ok := GetToken(id)
@@ -104,6 +122,20 @@ func (tm *TokenManager) CreateEducationToken(meta Metadata, init map[Address]uin
 
 // IssueEducationCredit adds a credit record to an education token.
 func (tm *TokenManager) IssueEducationCredit(id TokenID, credit Tokens.EducationCreditMetadata) error {
+// --- SYN2100 helpers ---
+func (tm *TokenManager) RegisterDocument(id TokenID, doc FinancialDocument) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.RegisterDocument(doc)
+}
+
+func (tm *TokenManager) FinanceDocument(id TokenID, docID string, financier Address) error {
 	tok, ok := GetToken(id)
 	if !ok {
 		return ErrInvalidAsset
@@ -130,6 +162,54 @@ func (tm *TokenManager) VerifyEducationCredit(id TokenID, creditID string) (bool
 
 // RevokeEducationCredit removes a credit from the token.
 func (tm *TokenManager) RevokeEducationCredit(id TokenID, creditID string) error {
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.FinanceDocument(docID, financier)
+}
+
+func (tm *TokenManager) GetDocument(id TokenID, docID string) (*FinancialDocument, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	doc, ok := sf.GetDocument(docID)
+	if !ok {
+		return nil, fmt.Errorf("not found")
+	}
+	return doc, nil
+}
+
+func (tm *TokenManager) ListDocuments(id TokenID) ([]FinancialDocument, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	return sf.ListDocuments(), nil
+}
+
+func (tm *TokenManager) AddLiquidity(id TokenID, from Address, amt uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.AddLiquidity(from, amt)
+}
+
+func (tm *TokenManager) RemoveLiquidity(id TokenID, to Address, amt uint64) error {
 	tok, ok := GetToken(id)
 	if !ok {
 		return ErrInvalidAsset
@@ -165,4 +245,61 @@ func (tm *TokenManager) ListEducationCredits(id TokenID, recipient string) ([]To
 		return nil, fmt.Errorf("not education token")
 	}
 	return et.ListCredits(recipient), nil
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.RemoveLiquidity(to, amt)
+}
+
+func (tm *TokenManager) LiquidityOf(id TokenID, addr Address) (uint64, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	return sf.LiquidityOf(addr), nil
+
+  // CreateSYN2200 creates a new SYN2200 real-time payment token.
+func (tm *TokenManager) CreateSYN2200(meta Metadata, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	tok, err := Tokens.NewSYN2200(meta, init, tm.ledger, tm.gas)
+	if err != nil {
+		return 0, err
+	}
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[tok.ID()] = tok
+	return tok.ID(), nil
+}
+
+// SendRealTimePayment executes an instant transfer using SYN2200 semantics.
+func (tm *TokenManager) SendRealTimePayment(id TokenID, from, to Address, amount uint64, currency string) (uint64, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	rtp, ok := tok.(*Tokens.SYN2200Token)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	return rtp.SendPayment(from, to, amount, currency)
+}
+
+// GetPaymentRecord fetches a payment record from a SYN2200 token.
+func (tm *TokenManager) GetPaymentRecord(id TokenID, pid uint64) (Tokens.PaymentRecord, bool) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return Tokens.PaymentRecord{}, false
+	}
+	rtp, ok := tok.(*Tokens.SYN2200Token)
+	if !ok {
+		return Tokens.PaymentRecord{}, false
+	}
+	return rtp.Payment(pid)
 }
