@@ -30,6 +30,7 @@ The following command groups expose the same functionality available in the core
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
+- **staking** – Stake and unstake tokens for DAO governance.
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
@@ -340,6 +341,15 @@ needed in custom tooling.
 | `deal:close` | Close a storage deal and release funds. |
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
+
+### staking
+
+| Sub-command | Description |
+|-------------|-------------|
+| `stake <addr> <amt>` | Stake tokens to participate in governance. |
+| `unstake <addr> <amt>` | Unstake previously locked tokens. |
+| `balance <addr>` | Show staked balance of an address. |
+| `total` | Display the total amount staked. |
 
 ### tokens
 
