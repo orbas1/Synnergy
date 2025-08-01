@@ -69,6 +69,7 @@ The following command groups expose the same functionality available in the core
 - **rollups** – Create rollup batches or inspect existing ones.
 - **compression** – Save and load compressed ledger snapshots.
 - **security** – Key generation, signing utilities and password helpers.
+- **firewall** – Manage address, token and IP block lists.
 - **biometrics** – Manage biometric authentication templates.
 - **sharding** – Migrate data between shards and check shard status.
  - **sidechain** – Launch, manage and interact with remote side‑chain nodes.
@@ -676,6 +677,17 @@ needed in custom tooling.
 | `dilithium-verify` | Verify a Dilithium signature. |
 | `anomaly-score` | Compute an anomaly z-score from data. |
 
+### firewall
+
+| Sub-command | Description |
+|-------------|-------------|
+| `block-address <addr>` | Block a wallet address. |
+| `unblock-address <addr>` | Remove an address from the block list. |
+| `block-token <id>` | Block transfers of a token id. |
+| `unblock-token <id>` | Allow transfers of a token id. |
+| `block-ip <ip>` | Block a peer IP address. |
+| `unblock-ip <ip>` | Unblock a peer IP address. |
+| `list` | Display current firewall rules. |
 ### biometrics
 
 | Sub-command | Description |

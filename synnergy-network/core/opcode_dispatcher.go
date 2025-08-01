@@ -858,6 +858,19 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// Firewall (0x1E)
+	{"NewFirewall", 0x1E0001},
+	{"Firewall_BlockAddress", 0x1E0002},
+	{"Firewall_UnblockAddress", 0x1E0003},
+	{"Firewall_IsAddressBlocked", 0x1E0004},
+	{"Firewall_BlockToken", 0x1E0005},
+	{"Firewall_UnblockToken", 0x1E0006},
+	{"Firewall_IsTokenBlocked", 0x1E0007},
+	{"Firewall_BlockIP", 0x1E0008},
+	{"Firewall_UnblockIP", 0x1E0009},
+	{"Firewall_IsIPBlocked", 0x1E000A},
+	{"Firewall_ListRules", 0x1E000B},
+	{"Firewall_CheckTx", 0x1E000C},
 	// Messaging (0x1E)
 	{"NewMessageQueue", 0x1E0001},
 	{"EnqueueMessage", 0x1E0002},

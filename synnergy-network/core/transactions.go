@@ -118,6 +118,11 @@ func (tp *TxPool) ValidateTx(tx *Transaction) error {
 	if err := tx.VerifySig(); err != nil {
 		return err
 	}
+	if fw := CurrentFirewall(); fw != nil {
+		if err := fw.CheckTx(tx); err != nil {
+			return err
+		}
+	}
 	// … other checks omitted …
 
 	if tx.Type == TxReversal {

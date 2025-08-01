@@ -25,6 +25,7 @@ The Synnergy ecosystem brings together several services:
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
 - **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Firewall** – Runtime block lists restrict malicious addresses, tokens and IPs.
 - **Regulatory Management** – Maintain regulator lists and enforce jurisdictional rules.
 - **Polls** – Lightweight polls let the community signal preferences off-chain.
 - **Reputation Voting** – Optional weighted voting using SYN-REP reputation tokens.
@@ -132,6 +133,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `synchronization` – Maintain ledger state via a dedicated sync manager.
 - `rollups` – Manage rollup batches and fraud proofs.
 - `security` – Generate keys and sign payloads.
+- `firewall` – Enforce address, token and IP restrictions.
 - `sharding` – Split the ledger into shards and coordinate cross-shard messages.
  - `sidechain` – Launch, manage and interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.

@@ -113,6 +113,7 @@ all modules from the core library. Highlights include:
 - `rollups` – manage rollup batches
 - `compression` – save and load compressed ledger snapshots
 - `security` – cryptographic utilities
+- `firewall` – manage block lists for addresses, tokens and peers
 - `biometrics` – manage biometric authentication templates
 - `sharding` – shard management
 - `sidechain` – launch, manage and interact with sidechains

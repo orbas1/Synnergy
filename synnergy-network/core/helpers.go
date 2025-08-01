@@ -79,6 +79,18 @@ func NewFlatGasCalculator(p uint64) *FlatGasCalculator { return &FlatGasCalculat
 func (f *FlatGasCalculator) Estimate(_ []byte) (uint64, error)     { return 0, nil }
 func (f *FlatGasCalculator) Calculate(_ string, amt uint64) uint64 { return f.Price * amt }
 
+var (
+	firewallOnce   sync.Once
+	globalFirewall *Firewall
+)
+
+// InitFirewall initialises the global firewall instance.
+func InitFirewall() {
+	firewallOnce.Do(func() { globalFirewall = NewFirewall() })
+}
+
+// CurrentFirewall returns the global firewall if initialised.
+func CurrentFirewall() *Firewall { return globalFirewall }
 // ------------------------------------------------------------------
 // DynamicGasCalculator parses bytecode and sums real gas costs
 // ------------------------------------------------------------------
