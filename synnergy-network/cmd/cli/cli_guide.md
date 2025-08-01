@@ -19,6 +19,7 @@ The following command groups expose the same functionality available in the core
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **failover** – Manage ledger snapshots and coordinate recovery.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
@@ -189,6 +190,15 @@ needed in custom tooling.
 | `restore <file>` | Restore ledger state from a snapshot. |
 | `failover <addr>` | Force failover of a node. |
 | `predict <addr>` | Predict failure probability for a node. |
+
+### failover
+
+| Sub-command | Description |
+|-------------|-------------|
+| `backup <path>` | Create a ledger snapshot. |
+| `restore <file>` | Restore ledger state from a snapshot file. |
+| `verify <file>` | Verify a snapshot against the current ledger. |
+| `node [reason]` | Trigger a view change. |
 
 ### governance
 
