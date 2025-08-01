@@ -1,13 +1,13 @@
 # Cross-Chain Management GUI
 
-This interface provides a simple dashboard for managing bridge configurations.
-It communicates with the cross-chain HTTP server located under `cmd/xchainserver`.
+This interface provides a dashboard for managing bridge configurations and testing cross-chain opcodes. It communicates with the HTTP server under `cmd/xchainserver`.
 
 ## Features
 
 - Register new bridge connections between chains
 - View all registered bridges
-- Authorize or revoke relayer addresses (via API)
+- Authorize or revoke relayer addresses
+- Trigger `LockAndMint` and `BurnAndRelease` operations for testing
 
 ## Development
 

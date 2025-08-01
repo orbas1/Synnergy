@@ -204,8 +204,11 @@ The current code base is a functional prototype.  The following additions would 
   -   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
      `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
      `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
-        - `cross-chain-management/` now provides a Bootstrap GUI and an HTTP
-          service (`cmd/xchainserver`) for managing bridges.
+        - `cross-chain-management/` now offers a Bootstrap 5 dashboard with
+          forms for bridge registration, relayer administration and opcode
+          testing. The backend service (`cmd/xchainserver`) exposes REST routes
+          with logging middleware and loads relayer config from `.env` or
+          `cmd/config/crosschain.yaml`.
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
 
