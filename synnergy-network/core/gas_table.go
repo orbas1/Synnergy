@@ -677,6 +677,12 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   // SYN721 specific operations
+   Mint721:            5_000,
+   Transfer721:        2_100,
+   Burn721:            2_100,
+   Metadata721:        400,
+   UpdateMetadata721:  800,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1628,6 +1634,11 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"Mint721":                0,
+	"Transfer721":            0,
+	"Burn721":                0,
+	"Metadata721":            0,
+	"UpdateMetadata721":      0,
 
 	// ----------------------------------------------------------------------
 	// Transactions

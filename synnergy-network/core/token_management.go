@@ -81,3 +81,69 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	}
 	return tok.BalanceOf(addr), nil
 }
+
+// Mint721 mints a new NFT with metadata and returns the NFT identifier.
+func (tm *TokenManager) Mint721(id TokenID, to Address, meta SYN721Metadata) (uint64, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	return nft.MintWithMeta(to, meta)
+}
+
+// Transfer721 transfers ownership of a specific NFT token.
+func (tm *TokenManager) Transfer721(id TokenID, from, to Address, nftID uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return nft.Transfer(from, to, nftID)
+}
+
+// Burn721 burns a specific NFT token.
+func (tm *TokenManager) Burn721(id TokenID, owner Address, nftID uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return nft.Burn(owner, nftID)
+}
+
+// Metadata721 retrieves metadata for a given NFT.
+func (tm *TokenManager) Metadata721(id TokenID, nftID uint64) (SYN721Metadata, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return SYN721Metadata{}, ErrInvalidAsset
+	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return SYN721Metadata{}, ErrInvalidAsset
+	}
+	m, _ := nft.MetadataOf(nftID)
+	return m, nil
+}
+
+// UpdateMetadata721 updates metadata for a given NFT.
+func (tm *TokenManager) UpdateMetadata721(id TokenID, nftID uint64, meta SYN721Metadata) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return nft.UpdateMetadata(nftID, meta)
+}
