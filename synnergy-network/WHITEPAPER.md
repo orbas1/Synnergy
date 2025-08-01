@@ -259,6 +259,8 @@ simplifies rewarding validators and distributing governance tokens to new users.
 ## Resource Allocation Management
 Each contract address on Synnergy maintains an adjustable gas allowance. The resource allocation manager stores these limits directly in the ledger and exposes opcodes so the VM can consume or transfer allowances during execution. Operators may update limits through CLI commands or automated governance proposals. This ensures predictable resource usage while integrating tightly with consensus and transaction validation.
 
+To improve operational awareness across clusters, a lightweight **Distributed Network Coordination** service periodically broadcasts the current ledger height and can distribute test tokens for bootstrap scenarios. This module hooks into the existing networking layer and ledger without introducing consensus dependencies. Enterprises can run the coordinator alongside replication to monitor progress and trigger synchronisation tasks.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 

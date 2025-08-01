@@ -107,6 +107,7 @@ all modules from the core library. Highlights include:
  - `rollups` – manage rollup batches
 - `plasma` – manage plasma deposits and exits
 - `replication` – snapshot and replicate data
+- `coordination` – coordinate distributed nodes and broadcast ledger state
  - `rollups` – manage rollup batches and aggregator state
 - `initrep` – bootstrap a new node by synchronizing the ledger
 - `synchronization` – manage blockchain catch-up and progress

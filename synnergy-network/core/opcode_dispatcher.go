@@ -143,6 +143,7 @@ func wrap(name string) OpcodeFunc {
 //	0x0D GreenTech              0x1B Utilities
 //	0x0E Ledger                 0x1C VirtualMachine
 //	                            0x1D Wallet
+//			0x1E Coordination
 //				0x1E Plasma
 //			0x1E SmartLegal
 //	                             0x1E DeFi
@@ -857,6 +858,12 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+	// Coordination (0x1E)
+	{"NewCoordinator", 0x1E0001},
+	{"StartCoordinator", 0x1E0002},
+	{"StopCoordinator", 0x1E0003},
+	{"BroadcastLedgerHeight", 0x1E0004},
+	{"DistributeToken", 0x1E0005},
 
 	// Firewall (0x1E)
 	{"NewFirewall", 0x1E0001},
