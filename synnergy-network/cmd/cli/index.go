@@ -64,6 +64,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ResourceCmd,
 		PlasmaCmd,
 		ChannelRoute,
+		ChannelMgmtRoute,
 		ZTChannelCmd,
 		StorageRoute,
 		IPFSRoute,

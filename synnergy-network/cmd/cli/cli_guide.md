@@ -63,6 +63,7 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **state_channel_mgmt** – Pause, resume and force-close channels.
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
 - **swarm** – Manage groups of nodes running together.
 - **storage** – Configure the backing key/value store and inspect content.
@@ -659,6 +660,14 @@ needed in custom tooling.
 | `status` | Show the current channel state. |
 | `list` | List all open channels. |
 
+### state_channel_mgmt
+
+| Sub-command | Description |
+|-------------|-------------|
+| `pause` | Pause a channel to block new updates. |
+| `resume` | Resume a paused channel. |
+| `cancel` | Cancel a pending close operation. |
+| `force-close` | Immediately settle a channel with a signed state. |
 ### zero_trust_data_channels
 
 | Sub-command | Description |
