@@ -1,7 +1,8 @@
-package core
+package core_test
 
 import (
 	"fmt"
+	core "synnergy-network/core"
 	"testing"
 )
 

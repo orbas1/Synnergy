@@ -1,4 +1,4 @@
-package core
+package core_test
 
 import (
 	"bytes"
@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"math/big"
 	"sync"
+	core "synnergy-network/core"
 	"testing"
 	"time"
 )

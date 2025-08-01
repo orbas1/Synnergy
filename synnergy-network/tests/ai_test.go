@@ -1,10 +1,11 @@
-package core
+package core_test
 
 import (
 	"context"
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
+	core "synnergy-network/core"
 	"testing"
 	"time"
 )
@@ -37,23 +38,23 @@ func (m *mockLedgerAI) GetState(key []byte) ([]byte, error) {
 }
 
 type mockClient struct {
-	anomalyResp *TFResponse
+	anomalyResp *core.TFResponse
 	anomalyErr  error
-	feeResp     *TFResponse
+	feeResp     *core.TFResponse
 	feeErr      error
-	volumeResp  *TFResponse
+	volumeResp  *core.TFResponse
 	volumeErr   error
 }
 
-func (m *mockClient) Anomaly(ctx context.Context, req *TFRequest) (*TFResponse, error) {
+func (m *mockClient) Anomaly(ctx context.Context, req *core.TFRequest) (*core.TFResponse, error) {
 	return m.anomalyResp, m.anomalyErr
 }
 
-func (m *mockClient) FeeOpt(ctx context.Context, req *TFRequest) (*TFResponse, error) {
+func (m *mockClient) FeeOpt(ctx context.Context, req *core.TFRequest) (*core.TFResponse, error) {
 	return m.feeResp, m.feeErr
 }
 
-func (m *mockClient) Volume(ctx context.Context, req *TFRequest) (*TFResponse, error) {
+func (m *mockClient) Volume(ctx context.Context, req *core.TFRequest) (*core.TFResponse, error) {
 	return m.volumeResp, m.volumeErr
 }
 
@@ -66,7 +67,7 @@ func TestPredictAnomaly(t *testing.T) {
 
 	led := &mockLedgerAI{}
 	client := &mockClient{
-		anomalyResp: &TFResponse{Score: 0.87, Result: []byte(modelCID)},
+		anomalyResp: &core.TFResponse{Score: 0.87, Result: []byte(modelCID)},
 	}
 	ei := &AIEngine{led: led, client: client, models: map[[32]byte]ModelMeta{
 		modelHash: {CID: modelCID, Creator: creator, RoyaltyBp: 100},
@@ -95,7 +96,7 @@ func TestOptimizeFees(t *testing.T) {
 	b, _ := json.Marshal(expected)
 
 	client := &mockClient{
-		feeResp: &TFResponse{Result: b},
+		feeResp: &core.TFResponse{Result: b},
 	}
 	ei := &AIEngine{client: client}
 
@@ -142,7 +143,7 @@ func TestPublishModel(t *testing.T) {
 func TestPredictVolume(t *testing.T) {
 	expected := uint64(99)
 	b, _ := json.Marshal(expected)
-	client := &mockClient{volumeResp: &TFResponse{Result: b}}
+	client := &mockClient{volumeResp: &core.TFResponse{Result: b}}
 	ai := &AIEngine{client: client}
 	vols := []TxVolume{{Timestamp: time.Now(), Count: 10}}
 	val, err := ai.PredictVolume(vols)

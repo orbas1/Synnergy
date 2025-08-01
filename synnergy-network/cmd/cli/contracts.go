@@ -30,6 +30,7 @@ package cli
 // ──────────────────────────────────────────────────────────────────────────────
 
 import (
+	"context"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -38,6 +39,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -52,12 +54,15 @@ import (
 // ──────────────────────────────────────────────────────────────────────────────
 
 var (
-	vmSvc core.VM
+	contractsLedger *core.Ledger
+	contractsLogger = logrus.StandardLogger()
+	contractsOnce   sync.Once
+	vmSvc           core.VM
 )
 
 func initContractsMiddleware(cmd *cobra.Command, _ []string) error {
 	var err error
-	once.Do(func() {
+	contractsOnce.Do(func() {
 		_ = godotenv.Load()
 
 		lvlStr := os.Getenv("LOG_LEVEL")
@@ -69,21 +74,21 @@ func initContractsMiddleware(cmd *cobra.Command, _ []string) error {
 			err = fmt.Errorf("invalid LOG_LEVEL: %w", e)
 			return
 		}
-		logger.SetLevel(lvl)
+		contractsLogger.SetLevel(lvl)
 
 		lp := os.Getenv("LEDGER_PATH")
 		if lp == "" {
 			err = fmt.Errorf("LEDGER_PATH env not set")
 			return
 		}
-		ledger, e = core.OpenLedger(lp)
-		if e != nil {
+		if e := core.InitLedger(lp); e != nil {
 			err = fmt.Errorf("open ledger: %w", e)
 			return
 		}
-
-		vmSvc = core.NewHeavyVM(ledger, core.NewGasMeter(8_000_000), wasmer.NewEngine())
-		core.InitContracts(ledger, vmSvc)
+		contractsLedger = core.CurrentLedger()
+		state, _ := core.NewInMemory()
+		vmSvc = core.NewHeavyVM(state, core.NewGasMeter(8_000_000), wasmer.NewEngine())
+		core.InitContracts(contractsLedger, vmSvc)
 	})
 	return err
 }
@@ -192,7 +197,7 @@ func handleInvoke(cmd *cobra.Command, args []string) error {
 
 func handleList(cmd *cobra.Command, _ []string) error {
 	for addr, sc := range core.GetContractRegistry().All() {
-		fmt.Fprintf(cmd.OutOrStdout(), "0x%x\t%x\tgas %d\n", addr[:], sc.Hash[:8], sc.GasLimit)
+		fmt.Fprintf(cmd.OutOrStdout(), "0x%x\t%x\tgas %d\n", addr[:], sc.CodeHash[:8], sc.GasLimit)
 	}
 	return nil
 }

@@ -1,4 +1,4 @@
-package core
+package core_test
 
 import (
 	"bytes"
@@ -10,6 +10,7 @@ import (
 	"encoding/pem"
 	"io/ioutil"
 	"os"
+	core "synnergy-network/core"
 	"testing"
 	"time"
 )

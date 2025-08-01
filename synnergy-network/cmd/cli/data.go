@@ -61,7 +61,11 @@ type DataController struct{}
 
 // CDN –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 func (c *DataController) RegisterNode(addr, host string, capMB int) error {
-	node := core.CDNNode{ID: core.Address(addr), Addr: host, CapacityMB: capMB}
+	a, err := core.ParseAddress(addr)
+	if err != nil {
+		return err
+	}
+	node := core.CDNNode{ID: a, Addr: host, CapacityMB: capMB}
 	return core.RegisterNode(node)
 }
 

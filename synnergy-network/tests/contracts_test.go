@@ -1,4 +1,4 @@
-package core
+package core_test
 
 import (
 	"crypto/sha256"
@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	core "synnergy-network/core"
 	"testing"
 )
 
