@@ -147,6 +147,25 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	return tok.BalanceOf(addr), nil
 }
 
+// NewLegalToken creates a SYN4700 legal token and registers it with the ledger.
+func (tm *TokenManager) NewLegalToken(meta Metadata, docType string, hash []byte, parties []Address, expiry time.Time, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	lt, err := NewLegalToken(meta, docType, hash, parties, expiry, init)
+	if err != nil {
+		return 0, err
+	}
+	lt.ledger = tm.ledger
+	lt.gas = tm.gas
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[lt.id] = lt
+	return lt.id, nil
+}
+
+// LegalAddSignature records a signature for a SYN4700 token.
+func (tm *TokenManager) LegalAddSignature(id TokenID, party Address, sig []byte) error {
 // SYN1600 specific helpers ----------------------------------------------------
 
 // AddRoyaltyRevenue records revenue against a SYN1600 token.
@@ -176,6 +195,16 @@ func (tm *TokenManager) RegisterDocument(id TokenID, doc FinancialDocument) erro
 	if !ok {
 		return ErrInvalidAsset
 	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.AddSignature(party, sig)
+	return nil
+}
+
+// LegalRevokeSignature removes a signature for a SYN4700 token.
+func (tm *TokenManager) LegalRevokeSignature(id TokenID, party Address) error {
 	sf, ok := tok.(*SupplyFinanceToken)
 	if !ok {
 		return ErrInvalidAsset
@@ -188,6 +217,30 @@ func (tm *TokenManager) FinanceDocument(id TokenID, docID string, financier Addr
 	if !ok {
 		return ErrInvalidAsset
 	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.RevokeSignature(party)
+	return nil
+}
+
+// LegalUpdateStatus updates the status field of a SYN4700 token.
+func (tm *TokenManager) LegalUpdateStatus(id TokenID, status string) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.UpdateStatus(status)
+	return nil
+}
+
+// LegalStartDispute marks a SYN4700 token as being in dispute.
+func (tm *TokenManager) LegalStartDispute(id TokenID) error {
 	et, ok := tok.(*EducationToken)
 	if !ok {
 		return fmt.Errorf("not education token")
@@ -272,6 +325,26 @@ func (tm *TokenManager) RemoveLiquidity(id TokenID, to Address, amt uint64) erro
 	if !ok {
 		return ErrInvalidAsset
 	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.StartDispute()
+	return nil
+}
+
+// LegalResolveDispute resolves a dispute for a SYN4700 token.
+func (tm *TokenManager) LegalResolveDispute(id TokenID, result string) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.ResolveDispute(result)
+	return nil
 	mr, ok := tok.(*SYN1600Token)
 	if !ok {
 		return fmt.Errorf("token is not SYN1600")
