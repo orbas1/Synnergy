@@ -117,7 +117,11 @@ var catalogue = []struct {
 	name string
 	op   Opcode
 }{
-	// AI (0x01) – pending implementation
+       // AI (0x01)
+       {"DeployAIContract", 0x010001},
+       {"InvokeAIContract", 0x010002},
+       {"UpdateAIModel", 0x010003},
+       {"GetAIModel", 0x010004},
 
 	// AMM (0x02)
 	{"SwapExactIn", 0x020001},

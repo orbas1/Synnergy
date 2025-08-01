@@ -52,6 +52,10 @@ var gasTable map[Opcode]uint64
    RentModel:      20_000,
    ReleaseEscrow:  12_000,
    PredictVolume:  15_000,
+   DeployAIContract: 50_000,
+   InvokeAIContract: 7_500,
+   UpdateAIModel:    20_000,
+   GetAIModel:       2_000,
 
    // ----------------------------------------------------------------------
    // Automated-Market-Maker
@@ -627,7 +631,11 @@ var gasNames = map[string]uint64{
 	"BuyModel":       30_000,
 	"RentModel":      20_000,
 	"ReleaseEscrow":  12_000,
-	"PredictVolume":  15_000,
+        "PredictVolume":  15_000,
+       "DeployAIContract": 50_000,
+       "InvokeAIContract": 7_500,
+       "UpdateAIModel":    20_000,
+       "GetAIModel":       2_000,
 
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker

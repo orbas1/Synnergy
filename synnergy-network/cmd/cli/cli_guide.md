@@ -9,6 +9,7 @@ Most commands require environment variables or a configuration file to be presen
 The following command groups expose the same functionality available in the core modules. Each can be mounted on a root [`cobra.Command`](https://github.com/spf13/cobra).
 
 - **ai** – Tools for publishing ML models and running anomaly detection jobs via gRPC to the AI service. Useful for training pipelines and on‑chain inference.
+- **ai_contract** – Deploy and interact with AI-enhanced smart contracts.
 - **amm** – Swap tokens and manage liquidity pools. Includes helpers to quote routes and add/remove liquidity.
 - **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
