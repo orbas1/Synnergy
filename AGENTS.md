@@ -239,6 +239,7 @@ This playbook should be kept up to date as the project evolves.  Check off files
 
 - Added basic Express server and UI for the AI Marketplace under `GUI/ai-marketplace`.
 - Implemented `AIServiceMarketplace` Solidity contract demonstrating use of opcode `VM_Transfer`.
+- Added `Faucet` smart contract implementing a rate limited token dispenser.
 
 \n### Recent Updates\n- Wallet GUI now includes a Go HTTP backend under `walletserver/` with REST routes and Bootstrap front-end.
 
