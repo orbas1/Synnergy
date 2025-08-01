@@ -56,13 +56,28 @@ const (
 // Aggregator engine
 //---------------------------------------------------------------------
 
-func NewAggregator(led StateRW) *Aggregator { return &Aggregator{led: led, nextID: 1} }
+func NewAggregator(led StateRW) *Aggregator {
+	paused := false
+	if b, _ := led.GetState(aggregatorPausedKey()); len(b) == 1 && b[0] == 1 {
+		paused = true
+	}
+	return &Aggregator{led: led, nextID: 1, paused: paused}
+}
 
 //---------------------------------------------------------------------
 // SubmitBatch – called by consensus when sub‑blocks reach threshold.
 //---------------------------------------------------------------------
 
 func (ag *Aggregator) SubmitBatch(submitter Address, txs [][]byte, preStateRoot [32]byte) (uint64, error) {
+	ag.mu.Lock()
+	if ag.paused {
+		ag.mu.Unlock()
+		return 0, errors.New("aggregator paused")
+	}
+	id := ag.nextID
+	ag.nextID++
+	ag.mu.Unlock()
+
 	if len(txs) == 0 {
 		return 0, errors.New("empty batch")
 	}
@@ -70,11 +85,6 @@ func (ag *Aggregator) SubmitBatch(submitter Address, txs [][]byte, preStateRoot 
 	txRoot := merkleRoot(txs)
 	// execute transactions in roll‑up VM (simplified – assume deterministic)
 	stateRoot := executeRollupState(preStateRoot, txs)
-
-	ag.mu.Lock()
-	id := ag.nextID
-	ag.nextID++
-	ag.mu.Unlock()
 	hdr := BatchHeader{BatchID: id, ParentID: id - 1, TxRoot: txRoot, StateRoot: stateRoot, Submitter: submitter, Timestamp: time.Now().Unix()}
 	blob, _ := json.Marshal(hdr)
 	ag.led.SetState(batchKey(id), blob)
