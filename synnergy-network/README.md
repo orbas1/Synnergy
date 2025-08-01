@@ -81,6 +81,7 @@ all modules from the core library. Highlights include:
 - `sharding` – shard management
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
+- `zero_trust_data_channels` – encrypted data channels with ledger-backed escrows
 - `swarm` – orchestrate groups of nodes for high availability
 - `storage` – interact with on‑chain storage providers
 - `sensor` – manage external sensor inputs and webhooks

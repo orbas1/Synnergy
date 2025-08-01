@@ -37,6 +37,7 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **zero_trust_data_channels** – Manage encrypted data channels with escrow.
 - **swarm** – Manage groups of nodes running together.
 - **storage** – Configure the backing key/value store and inspect content.
 - **sensor** – Manage external sensor inputs and webhooks.
@@ -415,6 +416,14 @@ needed in custom tooling.
 | `finalize` | Finalize and settle an expired channel. |
 | `status` | Show the current channel state. |
 | `list` | List all open channels. |
+
+### zero_trust_data_channels
+
+| Sub-command | Description |
+|-------------|-------------|
+| `open` | Open a new zero trust data channel. |
+| `send` | Send a hex encoded payload over the channel. |
+| `close` | Close the channel and release escrow. |
 
 ### storage
 
