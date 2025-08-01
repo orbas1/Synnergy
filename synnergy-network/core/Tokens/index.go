@@ -1,9 +1,9 @@
 package core
 
-
-import "time"
-
-
+import (
+	corepkg "synnergy-network/core"
+	"time"
+)
 
 // CarbonFootprintRecord represents a carbon footprint event recorded on-chain.
 type CarbonFootprintRecord struct {
@@ -23,13 +23,6 @@ type CarbonFootprintTokenAPI interface {
 	ListRecords(owner [20]byte) ([]CarbonFootprintRecord, error)
 }
 
-import core "synnergy-network/core"
-import "time"
-
-import "time"
-
-import "time"
-
 // TokenInterfaces consolidates token standard interfaces without core deps.
 // TokenInterfaces consolidates token standard interfaces without core deps.
 // TokenInterfaces consolidates token standard interfaces without core deps.
@@ -45,6 +38,7 @@ type TokenInterfaces interface {
 // lives in syn70.go and is kept light-weight to avoid importing the core
 // package.
 func NewSYN70() *SYN70Token { return NewSYN70Token() }
+
 // SYN300Interfaces exposes governance functionality while remaining decoupled
 // from the core package types.
 type SYN300Interfaces interface {
@@ -59,6 +53,7 @@ type SYN300Interfaces interface {
 	ProposalStatus(id uint64) (any, bool)
 	ListProposals() []any
 }
+
 // Address is a 20 byte array mirroring the core Address type.
 type Address [20]byte
 
@@ -101,6 +96,16 @@ type ForexToken interface {
 	Rate() float64
 	Pair() string
 }
+
+// CurrencyToken defines the interface for SYN3500 stablecoins.
+type CurrencyToken interface {
+	TokenInterfaces
+	UpdateRate(float64)
+	Info() (string, string, float64, time.Time)
+	MintCurrency(Address, uint64) error
+	RedeemCurrency(Address, uint64) error
+}
+
 // EmploymentContractMeta mirrors the on-chain metadata for employment tokens.
 type EmploymentContractMeta struct {
 	ContractID string
@@ -113,6 +118,7 @@ type EmploymentContractMeta struct {
 	End        int64
 	Active     bool
 }
+
 // Address mirrors the core.Address definition for cross-package usage.
 type Address [20]byte
 
@@ -123,6 +129,7 @@ type FuturesTokenInterface interface {
 	OpenPosition(addr Address, size, entryPrice uint64, long bool, margin uint64) error
 	ClosePosition(addr Address, exitPrice uint64) (int64, error)
 }
+
 // LegalTokenAPI describes the additional methods exposed by the SYN4700
 // legal token standard. The concrete implementation lives in the core package.
 type LegalTokenAPI interface {
@@ -133,6 +140,7 @@ type LegalTokenAPI interface {
 	StartDispute()
 	ResolveDispute(result string)
 }
+
 // RewardTokenInterface defines the extended methods of the SYN600
 // reward token standard without importing core types.
 type RewardTokenInterface interface {
@@ -173,6 +181,7 @@ type SYN700 interface {
 	RevokeLicense(id string, licensee any) error
 	RecordRoyalty(id string, licensee any, amount uint64) error
 }
+
 // Address mirrors core.Address to avoid circular dependency.
 type Address [20]byte
 
@@ -228,11 +237,13 @@ type RentalTokenAPI interface {
 
 // NewRentalToken returns a simple RentalToken with the provided metadata.
 func NewRentalToken(meta RentalTokenMetadata) RentalToken { return RentalToken{Metadata: meta} }
+
 // Reference types to ensure package consumers compile without manual imports.
 var (
 	_ InsuranceToken
 	_ InsurancePolicy
 )
+
 // SYN1967TokenInterface exposes additional commodity functions.
 type SYN1967TokenInterface interface {
 	TokenInterfaces
@@ -251,6 +262,7 @@ type Token1155 interface {
 	SetApprovalForAll(owner, operator []byte, approved bool)
 	IsApprovedForAll(owner, operator []byte) bool
 }
+
 // SYN131Interface defines advanced intangible asset operations.
 type SYN131Interface interface {
 	TokenInterfaces
@@ -260,6 +272,7 @@ type SYN131Interface interface {
 	IssueLicense(license any)
 	TransferShare(from, to string, share uint64)
 }
+
 // IndexComponent is a lightweight representation of an index element.
 type IndexComponent struct {
 	AssetID  uint32
@@ -274,6 +287,7 @@ type SYN3700Interface interface {
 	MarketValue() uint64
 	LastRebalance() time.Time
 }
+
 // SYN1600 defines the behaviour expected from music royalty tokens.
 type SYN1600 interface {
 	TokenInterfaces
@@ -282,6 +296,7 @@ type SYN1600 interface {
 	DistributeRoyalties(amount uint64) error
 	UpdateInfo(info any)
 }
+
 // EducationCreditMetadata captures the details of a single education credit.
 type EducationCreditMetadata struct {
 	CreditID       string
@@ -304,6 +319,7 @@ type PensionEngineInterface interface {
 	PlanInfo(id uint64) (any, bool)
 	ListPlans() ([]any, error)
 }
+
 // SYN1401Investment defines metadata for fixed-income investment tokens.
 type SYN1401Investment struct {
 	ID           string
@@ -321,6 +337,7 @@ type SYN1401 interface {
 	TokenInterfaces
 	Record(id string) (SYN1401Investment, bool)
 }
+
 // CourseRecord stores information about an education course.
 type CourseRecord struct {
 	ID          string
@@ -368,6 +385,7 @@ type EducationCreditTokenInterface interface {
 	GetCredit(string) (EducationCreditMetadata, bool)
 	ListCredits(string) []EducationCreditMetadata
 }
+
 // Address is a 20 byte account identifier used for cross-package compatibility.
 type Address [20]byte
 
@@ -398,6 +416,7 @@ type SupplyFinance interface {
 	RemoveLiquidity(addr Address, amount uint64) error
 	LiquidityOf(addr Address) uint64
 }
+
 // RealTimePayments defines the SYN2200 payment functions.
 type RealTimePayments interface {
 	SendPayment(from, to core.Address, amount uint64, currency string) (uint64, error)
@@ -408,6 +427,7 @@ type RealTimePayments interface {
 func NewSYN2200(meta core.Metadata, init map[core.Address]uint64, ledger *core.Ledger, gas core.GasCalculator) (*SYN2200Token, error) {
 	return NewSYN2200Token(meta, init, ledger, gas)
 }
+
 // DataMarketplace defines behaviour for SYN2400 tokens.
 type DataMarketplace interface {
 	TokenInterfaces
