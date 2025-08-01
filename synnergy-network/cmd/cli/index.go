@@ -118,6 +118,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),
+	) // includes sidechain management helpers
 		NewHealthCommand(),
 	)
 }

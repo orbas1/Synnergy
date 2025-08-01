@@ -63,7 +63,7 @@ The following command groups expose the same functionality available in the core
 - **security** – Key generation, signing utilities and password helpers.
 - **biometrics** – Manage biometric authentication templates.
 - **sharding** – Migrate data between shards and check shard status.
-- **sidechain** – Launch side chains or interact with remote side‑chain nodes.
+ - **sidechain** – Launch, manage and interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **state_channel_mgmt** – Pause, resume and force-close channels.
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
@@ -655,6 +655,10 @@ needed in custom tooling.
 | `get-header` | Fetch a submitted side-chain header. |
 | `meta <chainID>` | Display side-chain metadata. |
 | `list` | List registered side-chains. |
+| `pause <chainID>` | Pause a side-chain. |
+| `resume <chainID>` | Resume a paused side-chain. |
+| `update-validators` | Update side-chain validator set. |
+| `remove <chainID>` | Remove a side-chain and all data. |
 
 ### plasma
 

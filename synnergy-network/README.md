@@ -108,7 +108,7 @@ all modules from the core library. Highlights include:
 - `security` – cryptographic utilities
 - `biometrics` – manage biometric authentication templates
 - `sharding` – shard management
-- `sidechain` – launch and interact with sidechains
+- `sidechain` – launch, manage and interact with sidechains
 - `state_channel` – open and settle payment channels
 - `state_channel_mgmt` – pause, resume and force-close channels
 - `zero_trust_data_channels` – encrypted data channels with ledger-backed escrows

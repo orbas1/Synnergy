@@ -509,6 +509,7 @@ type Sidechain struct {
 	Validators [][]byte    `json:"validators"`
 	LastHeight uint64      `json:"last_height"`
 	LastRoot   [32]byte    `json:"last_state_root"`
+	Paused     bool        `json:"paused"`
 	Registered int64       `json:"registered_unix"`
 }
 
