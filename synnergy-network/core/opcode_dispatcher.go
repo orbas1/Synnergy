@@ -439,6 +439,7 @@ var catalogue = []struct {
 	{"AddTx", 0x1A0005},
 	{"PickTxs", 0x1A0006},
 	{"TxPoolSnapshot", 0x1A0007},
+	{"ReverseTransaction", 0x1A0008},
 
 	// Utilities (0x1B) – EVM-compatible arithmetic & crypto
 	{"Short", 0x1B0001},

@@ -32,6 +32,7 @@ The following command groups expose the same functionality available in the core
 - **storage** – Configure the backing key/value store and inspect content.
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
+- **transactionreversal** – Reverse confirmed transactions with authority approval.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
@@ -363,6 +364,12 @@ needed in custom tooling.
 | `verify` | Verify a signed transaction JSON. |
 | `submit` | Submit a signed transaction to the network. |
 | `pool` | List pending pool transaction hashes. |
+
+### transactionreversal
+
+| Sub-command | Description |
+|-------------|-------------|
+| `reversal` | Reverse a confirmed transaction. Requires authority signatures. |
 
 ### utility_functions
 
