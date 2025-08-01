@@ -45,6 +45,8 @@ All services are optional and run as independent modules that plug into the core
 ## Synnergy Network Architecture
 At a high level the network consists of:
 1. **Peer-to-Peer Network** – Validators communicate using libp2p with gossip-based transaction propagation.
+2.   Dedicated bootstrap nodes can be run using the CLI to help new peers discover the network.
+2. **Consensus Engine** – A hybrid approach combines Proof of History (PoH) and Proof of Stake (PoS) with pluggable modules for alternative algorithms.
 2. **Connection Pools** – Reusable outbound connections reduce handshake overhead and speed up cross-module communication.
 2. **NAT Traversal** – Nodes automatically open ports via UPnP or NAT-PMP so peers can reach them behind firewalls.
 3. **Consensus Engine** – A hybrid approach combines Proof of History (PoH) and Proof of Stake (PoS) with pluggable modules for alternative algorithms.

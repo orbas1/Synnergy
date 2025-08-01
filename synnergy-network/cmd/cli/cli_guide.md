@@ -67,6 +67,7 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **account** – manage accounts and balances
 - **network** – Manage peer connections and print networking statistics.
+- **bootstrap** – Start a dedicated bootstrap node for new peers.
 - **connpool** – Manage reusable outbound connections.
 - **nat** – Manage router port mappings for inbound connectivity.
 - **peer** – Discover peers, connect to them and advertise this node.
@@ -684,6 +685,13 @@ needed in custom tooling.
 | `broadcast <topic> <data>` | Publish data on the network. |
 | `subscribe <topic>` | Subscribe to a topic. |
 
+### bootstrap
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start` | Start the bootstrap node. |
+| `stop` | Stop the bootstrap node. |
+| `peers` | List peers connected to the bootstrap node. |
 ### connpool
 
 | Sub-command | Description |

@@ -112,6 +112,7 @@ all modules from the core library. Highlights include:
 - `loanpool` – submit loan proposals and disburse funds
 - `loanpool_apply` – manage loan applications with on-chain voting
 - `network` – libp2p networking helpers
+- `bootstrap` – run a dedicated bootstrap node for peers
 - `connpool` – manage reusable outbound connections
 - `peer` – peer discovery and connection utilities
  - `replication` – snapshot and replicate data
@@ -196,7 +197,7 @@ packages.
 Runtime settings are defined using YAML files in `cmd/config/`.  The CLI loads
 `default.yaml` by default and merges any environment specific file if the
 `SYNN_ENV` environment variable is set (for example `SYNN_ENV=prod`).
-`bootstrap.yaml` provides a template for running a dedicated bootstrap node.
+`bootstrap.yaml` provides a template for running a dedicated bootstrap node. You can launch it via `synnergy bootstrap start` and point other nodes to its address.
 The configuration schema is documented in [`cmd/config/config_guide.md`](cmd/config/config_guide.md).
 
 ## Running a Local Network
