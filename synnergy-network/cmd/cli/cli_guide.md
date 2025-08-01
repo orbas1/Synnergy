@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
+- **distribution** – Bulk token distribution and airdrop helpers.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
 
@@ -363,6 +364,13 @@ needed in custom tooling.
 | `verify` | Verify a signed transaction JSON. |
 | `submit` | Submit a signed transaction to the network. |
 | `pool` | List pending pool transaction hashes. |
+
+### distribution
+
+| Sub-command | Description |
+|-------------|-------------|
+| `airdrop` | Mint tokens to a list of recipients. |
+| `batch` | Transfer tokens from one account to many. |
 
 ### utility_functions
 

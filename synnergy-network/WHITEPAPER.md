@@ -119,6 +119,13 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+## Distribution Module
+The distribution service handles large scale token payouts such as staking
+rewards or promotional airdrops. It integrates with the ledger and coin modules
+to guarantee mint limits are respected. Batch transfers are executed atomically
+and can be triggered via smart contracts through dedicated opcodes. This module
+simplifies rewarding validators and distributing governance tokens to new users.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 

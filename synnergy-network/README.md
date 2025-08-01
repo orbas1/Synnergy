@@ -75,6 +75,7 @@ all modules from the core library. Highlights include:
 - `tokens` – ERC‑20 style token commands
 - `transactions` – build and sign transactions
 - `utility_functions` – assorted helpers
+- `distribution` – bulk token distribution and airdrops
 - `virtual_machine` – run the on‑chain VM service
 - `wallet` – mnemonic generation and signing
 
