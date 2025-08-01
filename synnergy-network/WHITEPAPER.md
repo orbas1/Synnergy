@@ -12,6 +12,7 @@ The Synnergy ecosystem brings together several services:
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain. A dedicated IPFS module broadcasts pinned CIDs through consensus and lets clients unpin data when no longer needed.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
+- **Messaging and Queue Management** – Internal queues coordinate messages across modules.
 - **Partitioning & Compression** – Blocks can be split into compressed segments for efficient archival.
 - **Data Operations** – Built-in tooling for normalization, sampling and provenance tracking of on-chain feeds.
 - **Zero Trust Data Channels** – Encrypted peer-to-peer channels secured by the ledger and consensus.
@@ -49,6 +50,8 @@ At a high level the network consists of:
 3. **Ledger** – Blocks contain sub-blocks that optimize for data availability. Smart contracts and token transfers are recorded here.
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
+6. **Messaging Queues** – Pending messages are ordered in queues before being processed by consensus and the VM.
+7. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
 7. **Plasma Bridge** – A lightweight bridge allows fast token transfers to and from child chains with an exit window for security.
 7. **Plasma Layer** – Optional plasma child chains handle high throughput transfers with periodic block roots posted to the ledger.

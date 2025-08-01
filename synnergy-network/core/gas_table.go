@@ -1825,6 +1825,17 @@ var gasNames = map[string]uint64{
 	"ListGames":  2_000,
 
 	// ----------------------------------------------------------------------
+	// Messaging / Queue Management
+	// ----------------------------------------------------------------------
+	"NewMessageQueue":      5_000,
+	"EnqueueMessage":       500,
+	"DequeueMessage":       500,
+	"BroadcastNextMessage": 1_000,
+	"ProcessNextMessage":   2_000,
+	"QueueLength":          100,
+	"ClearQueue":           200,
+
+	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
 	"NewRandomWallet":      10_000,

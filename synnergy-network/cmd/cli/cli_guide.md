@@ -30,6 +30,7 @@ The following command groups expose the same functionality available in the core
 - **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **messages** – Queue, process and broadcast network messages.
 - **partition** – Partition and compress data sets.
 - **data_ops** – Manage and transform on-chain data feeds.
 - **anomaly_detection** – Run anomaly analysis on transactions and list flagged hashes.
@@ -339,6 +340,13 @@ needed in custom tooling.
 | `oracle query <oracleID>` | Query the latest oracle value. |
 | `oracle list` | List registered oracles. |
 
+### messages
+
+| Sub-command | Description |
+|-------------|-------------|
+| `enqueue <src> <dst> <topic> <type> <payload>` | Queue a message for processing. |
+| `process` | Process the next queued message using the ledger. |
+| `broadcast` | Broadcast the next message to peers. |
 ### distribution
 
 | Sub-command | Description |

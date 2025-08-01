@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
+//	                                 0x1E Messaging
 //	                                 0x1E RPC
 //	                                 0x1E Plasma
 //	                                 0x1D Wallet
@@ -857,6 +858,14 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// Messaging (0x1E)
+	{"NewMessageQueue", 0x1E0001},
+	{"EnqueueMessage", 0x1E0002},
+	{"DequeueMessage", 0x1E0003},
+	{"BroadcastNextMessage", 0x1E0004},
+	{"ProcessNextMessage", 0x1E0005},
+	{"QueueLength", 0x1E0006},
+	{"ClearQueue", 0x1E0007},
 	// RPC (0x1E)
 	{"NewRPCWebRTC", 0x1E0001},
 	{"RPC_Serve", 0x1E0002},
