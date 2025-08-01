@@ -386,6 +386,10 @@ var catalogue = []struct {
 	{"Finalize", 0x170007},
 	{"GetChannel", 0x170008},
 	{"ListChannels", 0x170009},
+	{"PauseChannel", 0x17000A},
+	{"ResumeChannel", 0x17000B},
+	{"CancelClose", 0x17000C},
+	{"ForceClose", 0x17000D},
 
 	// Storage (0x18)
 	{"NewStorage", 0x180001},

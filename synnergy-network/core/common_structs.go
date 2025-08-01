@@ -549,6 +549,7 @@ type Channel struct {
 	BalanceB uint64    `json:"bal_b"`
 	Nonce    uint64    `json:"nonce"`
 	Closing  int64     `json:"closing_ts"`
+	Paused   bool      `json:"paused"`
 }
 
 type SignedState struct {

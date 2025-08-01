@@ -353,6 +353,10 @@ var gasTable map[Opcode]uint64
    Finalize:             5_000,
    GetChannel:           800,
    ListChannels:         1_200,
+   PauseChannel:         1_500,
+   ResumeChannel:        1_500,
+   CancelClose:          3_000,
+   ForceClose:           6_000,
 
    // ----------------------------------------------------------------------
    // Storage / Marketplace
@@ -929,6 +933,10 @@ var gasNames = map[string]uint64{
 	"Finalize":             5_000,
 	"GetChannel":           800,
 	"ListChannels":         1_200,
+	"PauseChannel":         1_500,
+	"ResumeChannel":        1_500,
+	"CancelClose":          3_000,
+	"ForceClose":           6_000,
 
 	// ----------------------------------------------------------------------
 	// Storage / Marketplace

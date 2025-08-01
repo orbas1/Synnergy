@@ -67,6 +67,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `sharding` – Split the ledger into shards and coordinate cross-shard messages.
 - `sidechain` – Launch or interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.
+- `state_channel_mgmt` – Pause, resume or force-close channels.
 - `storage` – Manage off-chain storage deals.
 - `tokens` – Issue and manage token contracts.
 - `transactions` – Build and broadcast transactions manually.
