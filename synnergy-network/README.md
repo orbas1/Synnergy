@@ -69,6 +69,7 @@ all modules from the core library. Highlights include:
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `distribution` – publish datasets and handle paid access
 - `oracle_management` – monitor oracle performance and sync feeds
 - `data_ops` – advanced data feed operations
 - `anomaly_detection` – analyse transactions for suspicious activity

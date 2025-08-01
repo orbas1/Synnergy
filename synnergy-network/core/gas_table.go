@@ -983,6 +983,7 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Data / Oracle / IPFS Integration
 	// ----------------------------------------------------------------------
+
 	"RegisterNode":       10_000,
 	"UploadAsset":        30_000,
 	"Pin":                5_000, // shared with Storage
@@ -1010,6 +1011,11 @@ var gasNames = map[string]uint64{
 	"ListCDNNodes":    3_000,
 	"ListOracles":     3_000,
 	"PushFeedSigned":  4_000,
+	"CreateDataSet":   8_000,
+	"PurchaseDataSet": 5_000,
+	"GetDataSet":      1_000,
+	"ListDataSets":    2_000,
+	"HasAccess":       1_000,
 	"CreateDataFeed":  6_000,
 	"QueryDataFeed":   3_000,
 	"ManageDataFeed":  5_000,
