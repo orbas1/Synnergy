@@ -18,8 +18,11 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **immutability** – Verify the chain against the genesis block.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
@@ -31,11 +34,24 @@ The following command groups expose the same functionality available in the core
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
+- **sensor** – Manage external sensor inputs and webhooks.
+- **real_estate** – Manage tokenised real estate assets.
+- **healthcare** – Manage healthcare records and permissions.
+- **warehouse** – Manage on-chain inventory records.
 - **tokens** – Register new token types and move balances between accounts.
+- **event_management** – Emit and query custom events stored on chain.
+- **gaming** – Manage simple on-chain games.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
+- **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
+- **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **workflow** – Build on-chain workflows using triggers and webhooks.
+- **wallet_mgmt** – Manage wallets and submit ledger transfers.
+- **devnet** – Launch a local multi-node developer network.
+- **testnet** – Start an ephemeral test network from a YAML config.
+- **faucet** – Dispense test funds with rate limiting.
 
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
@@ -179,6 +195,7 @@ needed in custom tooling.
 | `oracle list` | List registered oracles. |
 
 ### fault_tolerance
+- **employment** – Manage on-chain employment contracts and salaries.
 
 | Sub-command | Description |
 |-------------|-------------|
@@ -200,6 +217,16 @@ needed in custom tooling.
 | `execute <proposal-id>` | Execute a proposal after the deadline. |
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
+
+### dao
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <name> <creator>` | Create a new DAO. |
+| `join <dao-id> <addr>` | Join an existing DAO. |
+| `leave <dao-id> <addr>` | Leave a DAO. |
+| `info <dao-id>` | Display DAO information. |
+| `list` | List all DAOs. |
 
 ### green_technology
 
@@ -348,6 +375,54 @@ needed in custom tooling.
 | `deal:close` | Close a storage deal and release funds. |
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
+### real_estate
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register` | Register a new property. |
+| `transfer` | Transfer a property to another owner. |
+| `get` | Get property details. |
+| `list` | List properties, optionally by owner. |
+
+
+### escrow
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a new multi-party escrow |
+| `deposit` | Deposit additional funds |
+| `release` | Release funds to participants |
+| `cancel` | Cancel an escrow and refund |
+| `info` | Show escrow details |
+| `list` | List all escrows |
+### marketplace
+
+| Sub-command | Description |
+|-------------|-------------|
+| `listing:create <price> <metaJSON>` | Create a marketplace listing. |
+| `listing:get <id>` | Fetch a listing by ID. |
+| `listing:list` | List marketplace listings. |
+| `buy <id> <buyer>` | Purchase a listing via escrow. |
+| `cancel <id>` | Cancel an unsold listing. |
+| `release <escrow>` | Release escrow funds to seller. |
+| `deal:get <id>` | Retrieve deal details. |
+| `deal:list` | List marketplace deals. |
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <addr>` | Register a patient address. |
+| `grant <patient> <provider>` | Allow a provider to submit records. |
+| `revoke <patient> <provider>` | Revoke provider access. |
+| `add <patient> <provider> <cid>` | Add a record CID for a patient. |
+| `list <patient>` | List stored record IDs for a patient. |
+### warehouse
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add` | Add a new inventory item. |
+| `remove` | Delete an existing item. |
+| `move` | Transfer item ownership. |
+| `list` | List all warehouse items. |
 
 ### tokens
 
@@ -361,6 +436,38 @@ needed in custom tooling.
 | `burn <tok>` | Burn tokens from an address. |
 | `approve <tok>` | Approve a spender allowance. |
 | `allowance <tok> <owner> <spender>` | Show current allowance. |
+
+### event_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `emit <type> <data>` | Emit a new event and broadcast it. |
+| `list <type>` | List recent events of a given type. |
+| `get <type> <id>` | Fetch a specific event by ID. |
+### token_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a new token. |
+| `balance <id> <addr>` | Check balance for a token ID. |
+| `transfer <id>` | Transfer tokens between addresses. |
+### tangible
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <id> <owner> <meta> <value>` | Register a new tangible asset. |
+| `transfer <id> <owner>` | Transfer ownership of an asset. |
+| `info <id>` | Display asset metadata. |
+| `list` | List all tangible assets. |
+### gaming
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a new game. |
+| `join <id>` | Join an existing game. |
+| `finish <id>` | Finish a game and release funds. |
+| `get <id>` | Display a game record. |
+| `list` | List games. |
 
 ### transactions
 
@@ -380,6 +487,15 @@ needed in custom tooling.
 | `short-hash` | Shorten a 32-byte hash to first4..last4 format. |
 | `bytes2addr` | Convert big-endian bytes to an address. |
 
+### supply
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <id> <desc> <owner> <location>` | Register a new item on chain. |
+| `update-location <id> <location>` | Update item location. |
+| `status <id> <status>` | Update item status. |
+| `get <id>` | Fetch item metadata. |
+
 ### virtual_machine
 
 | Sub-command | Description |
@@ -396,3 +512,39 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### workflow
+
+| Sub-command | Description |
+|-------------|-------------|
+| `new` | Create a new workflow by ID. |
+| `add` | Append an opcode name to the workflow. |
+| `trigger` | Set a cron expression for execution. |
+| `webhook` | Register a webhook called after completion. |
+| `run` | Execute the workflow immediately. |
+
+### wallet_mgmt
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a wallet and print the mnemonic. |
+| `balance` | Show the SYNN balance for an address. |
+| `transfer` | Send SYNN from a mnemonic to a target address. |
+### devnet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start [nodes]` | Start a local developer network with the given number of nodes. |
+
+### testnet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start <config.yaml>` | Launch a testnet using the node definitions in the YAML file. |
+### faucet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `request <addr>` | Request faucet funds for an address. |
+| `balance` | Display remaining faucet balance. |
+| `config --amount <n> --cooldown <d>` | Update faucet parameters. |
