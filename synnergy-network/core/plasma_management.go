@@ -17,15 +17,15 @@ import (
 	"time"
 )
 
-// PlasmaBlock holds a minimal commitment for a plasma child-chain block.
-type PlasmaBlock struct {
+// PlasmaMetaBlock holds a minimal commitment for a plasma child-chain block.
+type PlasmaMetaBlock struct {
 	Height    uint64
 	Root      []byte // merkle root of transactions
 	Timestamp int64
 }
 
-// PlasmaDeposit records a deposit locked into the plasma contract.
-type PlasmaDeposit struct {
+// PlasmaDepositRecord records a deposit locked into the plasma contract.
+type PlasmaDepositRecord struct {
 	ID        uint64
 	From      Address
 	Token     TokenID
@@ -42,40 +42,40 @@ type PlasmaManager struct {
 
 	mu          sync.Mutex
 	nextDeposit uint64
-	blocks      []PlasmaBlock
+	blocks      []PlasmaMetaBlock
 }
 
 var (
-	plasmaOnce sync.Once
-	plasmaMgr  *PlasmaManager
+	plasmaMgrOnce sync.Once
+	plasmaMgr     *PlasmaManager
 )
 
-// InitPlasma initialises the plasma manager with a ledger and optional consensus engine.
-func InitPlasma(led StateRW, cons interface {
+// InitPlasmaManager initialises the plasma manager with a ledger and optional consensus engine.
+func InitPlasmaManager(led StateRW, cons interface {
 	Broadcast(string, interface{}) error
 }) {
-	plasmaOnce.Do(func() { plasmaMgr = &PlasmaManager{Ledger: led, Consensus: cons} })
+	plasmaMgrOnce.Do(func() { plasmaMgr = &PlasmaManager{Ledger: led, Consensus: cons} })
 }
 
 // Plasma returns the active plasma manager instance.
-func Plasma() *PlasmaManager { return plasmaMgr }
+func PlasmaManagerInstance() *PlasmaManager { return plasmaMgr }
 
 // Deposit locks tokens into the plasma contract and records the deposit.
-func (pm *PlasmaManager) Deposit(from Address, token TokenID, amount uint64) (PlasmaDeposit, error) {
+func (pm *PlasmaManager) Deposit(from Address, token TokenID, amount uint64) (PlasmaDepositRecord, error) {
 	if amount == 0 {
-		return PlasmaDeposit{}, errors.New("zero amount")
+		return PlasmaDepositRecord{}, errors.New("zero amount")
 	}
 	tok, ok := GetToken(token)
 	if !ok {
-		return PlasmaDeposit{}, errors.New("token unknown")
+		return PlasmaDepositRecord{}, errors.New("token unknown")
 	}
 	if err := tok.Transfer(from, plasmaAccount(token), amount); err != nil {
-		return PlasmaDeposit{}, err
+		return PlasmaDepositRecord{}, err
 	}
 	pm.mu.Lock()
 	defer pm.mu.Unlock()
 	pm.nextDeposit++
-	dep := PlasmaDeposit{ID: pm.nextDeposit, From: from, Token: token, Amount: amount, Timestamp: time.Now().Unix()}
+	dep := PlasmaDepositRecord{ID: pm.nextDeposit, From: from, Token: token, Amount: amount, Timestamp: time.Now().Unix()}
 	pm.Ledger.SetState(depKey(dep.ID), mustJSON(dep))
 	return dep, nil
 }
@@ -89,7 +89,7 @@ func (pm *PlasmaManager) Withdraw(id uint64, to Address) error {
 	if wd, _ := pm.Ledger.GetState(wdKey(id)); len(wd) != 0 {
 		return errors.New("already withdrawn")
 	}
-	var dep PlasmaDeposit
+	var dep PlasmaDepositRecord
 	_ = json.Unmarshal(raw, &dep)
 	tok, ok := GetToken(dep.Token)
 	if !ok {
@@ -103,13 +103,13 @@ func (pm *PlasmaManager) Withdraw(id uint64, to Address) error {
 }
 
 // SubmitBlock stores a plasma block commitment and broadcasts it via consensus.
-func (pm *PlasmaManager) SubmitBlock(root []byte) (PlasmaBlock, error) {
+func (pm *PlasmaManager) SubmitBlock(root []byte) (PlasmaMetaBlock, error) {
 	if len(root) == 0 {
-		return PlasmaBlock{}, errors.New("empty root")
+		return PlasmaMetaBlock{}, errors.New("empty root")
 	}
 	pm.mu.Lock()
 	defer pm.mu.Unlock()
-	blk := PlasmaBlock{Height: uint64(len(pm.blocks) + 1), Root: root, Timestamp: time.Now().Unix()}
+	blk := PlasmaMetaBlock{Height: uint64(len(pm.blocks) + 1), Root: root, Timestamp: time.Now().Unix()}
 	pm.blocks = append(pm.blocks, blk)
 	pm.Ledger.SetState(blockKey(blk.Height), mustJSON(blk))
 	if pm.Consensus != nil {
@@ -119,12 +119,12 @@ func (pm *PlasmaManager) SubmitBlock(root []byte) (PlasmaBlock, error) {
 }
 
 // GetBlock fetches a previously submitted plasma block.
-func (pm *PlasmaManager) GetBlock(h uint64) (PlasmaBlock, error) {
+func (pm *PlasmaManager) GetBlock(h uint64) (PlasmaMetaBlock, error) {
 	raw, _ := pm.Ledger.GetState(blockKey(h))
 	if len(raw) == 0 {
-		return PlasmaBlock{}, errors.New("unknown block")
+		return PlasmaMetaBlock{}, errors.New("unknown block")
 	}
-	var blk PlasmaBlock
+	var blk PlasmaMetaBlock
 	_ = json.Unmarshal(raw, &blk)
 	return blk, nil
 }

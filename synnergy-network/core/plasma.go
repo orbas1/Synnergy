@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-// PlasmaDeposit represents a deposit into the Plasma chain.
-type PlasmaDeposit struct {
+// SimplePlasmaDeposit represents a deposit into the Plasma chain.
+type SimplePlasmaDeposit struct {
 	Nonce     uint64  `json:"nonce"`
 	From      Address `json:"from"`
 	Amount    uint64  `json:"amount"`
@@ -17,7 +17,7 @@ type PlasmaDeposit struct {
 }
 
 // PlasmaExit records a finalised withdrawal from the Plasma chain.
-type PlasmaExit struct {
+type SimplePlasmaExit struct {
 	Nonce     uint64  `json:"nonce"`
 	To        Address `json:"to"`
 	Proof     []byte  `json:"proof"`
@@ -58,14 +58,14 @@ func (pc *PlasmaCoordinator) Deposit(from Address, amount uint64) (uint64, error
 	defer pc.mu.Unlock()
 	pc.nonce++
 	n := pc.nonce
-	dep := PlasmaDeposit{Nonce: n, From: from, Amount: amount, Timestamp: time.Now().Unix()}
+	dep := SimplePlasmaDeposit{Nonce: n, From: from, Amount: amount, Timestamp: time.Now().Unix()}
 	raw, _ := json.Marshal(dep)
 	_ = pc.Ledger.SetState(pc.depKey(n), raw)
 	return n, nil
 }
 
 // Withdraw finalises an exit by deleting the deposit record.
-func (pc *PlasmaCoordinator) Withdraw(exit PlasmaExit) error {
+func (pc *PlasmaCoordinator) Withdraw(exit SimplePlasmaExit) error {
 	if pc == nil {
 		return errors.New("plasma not initialised")
 	}

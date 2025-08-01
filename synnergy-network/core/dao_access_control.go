@@ -31,12 +31,12 @@ type DAOAccessControl struct {
 }
 
 var (
-	// ErrMemberExists is returned when attempting to add an address that already exists.
-	ErrMemberExists = errors.New("member already exists")
-	// ErrMemberNotFound is returned when a lookup fails.
-	ErrMemberNotFound = errors.New("member not found")
-	// ErrNotTokenHolder indicates the address does not hold the governance token.
-	ErrNotTokenHolder = errors.New("not DAO token holder")
+	// ErrACMemberExists is returned when attempting to add an address that already exists.
+	ErrACMemberExists = errors.New("member already exists")
+	// ErrACMemberNotFound is returned when a lookup fails.
+	ErrACMemberNotFound = errors.New("member not found")
+	// ErrACNotTokenHolder indicates the address does not hold the governance token.
+	ErrACNotTokenHolder = errors.New("not DAO token holder")
 )
 
 // NewDAOAccessControl returns a new access controller using the provided ledger.
@@ -54,10 +54,10 @@ func (d *DAOAccessControl) AddMember(addr Address, role DAORole) error {
 		return errors.New("ledger not set")
 	}
 	if !d.led.IsIDTokenHolder(addr) {
-		return ErrNotTokenHolder
+		return ErrACNotTokenHolder
 	}
 	if ok, _ := d.led.HasState(daoKey(addr)); ok {
-		return ErrMemberExists
+		return ErrACMemberExists
 	}
 	m := DAOMember{Addr: addr, Role: role, AddedAt: time.Now().UTC()}
 	raw, _ := json.Marshal(m)
@@ -72,18 +72,18 @@ func (d *DAOAccessControl) RemoveMember(addr Address) error {
 		return errors.New("ledger not set")
 	}
 	if ok, _ := d.led.HasState(daoKey(addr)); !ok {
-		return ErrMemberNotFound
+		return ErrACMemberNotFound
 	}
 	return d.led.DeleteState(daoKey(addr))
 }
 
-// RoleOf returns the role of an address or ErrMemberNotFound.
+// RoleOf returns the role of an address or ErrACMemberNotFound.
 func (d *DAOAccessControl) RoleOf(addr Address) (DAORole, error) {
 	d.mu.RLock()
 	defer d.mu.RUnlock()
 	raw, err := d.led.GetState(daoKey(addr))
 	if err != nil || len(raw) == 0 {
-		return 0, ErrMemberNotFound
+		return 0, ErrACMemberNotFound
 	}
 	var m DAOMember
 	if err := json.Unmarshal(raw, &m); err != nil {

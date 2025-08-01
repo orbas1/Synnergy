@@ -59,6 +59,8 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("WAL scan: %w", err)
 	}
+	// initialise global fee distributor for this ledger
+	InitTxDistributor(l)
 	return l, nil
 }
 
@@ -102,6 +104,7 @@ func OpenLedger(path string) (*Ledger, error) {
 		loaded.TokenBalances = l.TokenBalances
 		loaded.NodeLocations = l.NodeLocations
 	}
+	InitTxDistributor(loaded)
 	return loaded, nil
 }
 

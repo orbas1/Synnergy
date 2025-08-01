@@ -23,14 +23,14 @@ type IDRegistration struct {
 }
 
 var (
-	idOnce sync.Once
-	idReg  *IDRegistry
+	idRegOnce sync.Once
+	idReg     *IDRegistry
 )
 
 // InitIDRegistry wires the ledger and logger. It must be called
 // before invoking RegisterIDWallet or IsIDWalletRegistered.
 func InitIDRegistry(lg *logrus.Logger, led *Ledger) {
-	idOnce.Do(func() {
+	idRegOnce.Do(func() {
 		idReg = &IDRegistry{led: led, logger: lg}
 	})
 }
