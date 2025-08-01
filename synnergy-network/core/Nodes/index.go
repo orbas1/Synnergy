@@ -9,3 +9,13 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// StakingNodeInterface extends NodeInterface with staking-related actions.
+type StakingNodeInterface interface {
+	NodeInterface
+	Stake(addr string, amount uint64) error
+	Unstake(addr string, amount uint64) error
+	ProposeBlock(data []byte) error
+	ValidateBlock(data []byte) error
+	Status() string
+}
