@@ -238,6 +238,8 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"DeployGovContract", 0x0C000B},
+	{"InvokeGovContract", 0x0C000C},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},
