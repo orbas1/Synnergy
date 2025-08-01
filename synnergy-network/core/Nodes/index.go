@@ -9,3 +9,12 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// IndexingNodeInterface describes the additional capabilities provided by
+// indexing nodes in the network.
+type IndexingNodeInterface interface {
+	NodeInterface
+	AddBlock(b any)
+	QueryTxHistory(addr any) []any
+	QueryState(addr any, key string) (any, bool)
+}
