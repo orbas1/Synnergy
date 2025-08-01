@@ -75,6 +75,7 @@ all modules from the core library. Highlights include:
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
 - `storage` – interact with on‑chain storage providers
+- `real_estate` – manage tokenised real estate
 - `escrow` – manage multi-party escrow accounts
 - `marketplace` – buy and sell items using escrow
 - `healthcare` – manage on‑chain healthcare records
