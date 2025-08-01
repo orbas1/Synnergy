@@ -97,6 +97,7 @@ func RegisterRoutes(root *cobra.Command) {
 		DAOAccessCmd,
 		sensorCmd,
 		RealEstateCmd,
+		RentalTokenCmd,
 		EscrowRoute,
 		MarketplaceCmd,
 		HealthcareCmd,
@@ -146,7 +147,6 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),
-	) // includes sidechain management helpers
 		NewHealthCommand(),
-	)
+	) // includes sidechain management helpers
 }
