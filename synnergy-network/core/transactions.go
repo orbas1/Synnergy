@@ -18,7 +18,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	Tokens "synnergy-network/core/Tokens"
+	Tokens "synnergy-network/core/tokeninterfaces"
 )
 
 // Static check to ensure token interfaces are available

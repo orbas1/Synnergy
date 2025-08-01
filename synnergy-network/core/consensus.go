@@ -26,7 +26,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"math/big"
-	Tokens "synnergy-network/core/Tokens"
+	Tokens "synnergy-network/core/tokeninterfaces"
 	"time"
 )
 

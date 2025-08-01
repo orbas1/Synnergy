@@ -81,3 +81,43 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	}
 	return tok.BalanceOf(addr), nil
 }
+
+// UpdateExchangeRate updates the rate for a SYN3500 token.
+func (tm *TokenManager) UpdateExchangeRate(id TokenID, rate float64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	cTok, ok := tok.(*SYN3500Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	cTok.UpdateExchangeRate(rate)
+	return nil
+}
+
+// MintStable mints currency tokens pegged to fiat deposits.
+func (tm *TokenManager) MintStable(id TokenID, to Address, amount uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	cTok, ok := tok.(*SYN3500Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return cTok.MintStable(to, amount)
+}
+
+// RedeemStable burns currency tokens for fiat withdrawal.
+func (tm *TokenManager) RedeemStable(id TokenID, from Address, amount uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	cTok, ok := tok.(*SYN3500Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return cTok.Redeem(from, amount)
+}

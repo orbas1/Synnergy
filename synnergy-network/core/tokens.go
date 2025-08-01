@@ -13,7 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"sync"
-	Tokens "synnergy-network/core/Tokens"
+	Tokens "synnergy-network/core/tokeninterfaces"
 	"time"
 )
 
@@ -335,13 +335,28 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
-	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
-	for a, v := range init {
-		bt.balances.Set(bt.id, a, v)
-		bt.meta.TotalSupply += v
+
+	switch meta.Standard {
+	case StdSYN3500:
+		curMeta := CurrencyMetadata{
+			CurrencyCode: meta.Symbol,
+			Issuer:       "",
+			ExchangeRate: 1.0,
+			PegMechanism: "fiat-backed",
+			LastUpdate:   time.Now().UTC(),
+		}
+		tok := NewSYN3500Token(meta, init, curMeta)
+		RegisterToken(tok.BaseToken)
+		return tok, nil
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		for a, v := range init {
+			bt.balances.Set(bt.id, a, v)
+			bt.meta.TotalSupply += v
+		}
+		RegisterToken(bt)
+		return bt, nil
 	}
-	RegisterToken(bt)
-	return bt, nil
 }
 
 func NewBalanceTable() *BalanceTable {
