@@ -217,7 +217,9 @@ modules.
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
-**DAO Explorer** – frontend expanded with Tailwind components, Express backend and example smart contract interactions using opcodes from `opcode_dispatcher.go`.
+**DAO Explorer** – Tailwind frontend served from Express with controllers,
+services and smart contract bindings. Solidity contract now covers multiple
+governance opcodes and backend can interact with it via ethers.js.
 
 ---
 

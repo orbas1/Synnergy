@@ -6,12 +6,16 @@ An interface for browsing and interacting with DAO proposals on the Synnergy Net
 
 1. Install dependencies in the `backend` folder:
    ```bash
-   npm install express body-parser cors dotenv
+   npm install
    ```
-2. Start the API server:
+2. Start the API server (which also serves the static frontend from `views/`):
    ```bash
    node server.js
    ```
-3. Open `index.html` in a browser. The frontend communicates with the API under `/backend/api`.
+3. Open `views/index.html` in a browser. The frontend communicates with the API under `/backend/api`.
 
-This example stores proposals in memory but demonstrates how opcodes from `opcode_dispatcher.go` could be wired into smart contracts and exposed through a REST API.
+If `CONTRACT_ADDRESS` is set in `.env`, the backend uses `ethers.js` to send
+transactions to the `DAOExplorer` contract compiled from Solidity. Without a
+configured contract, an in-memory store is used for demo purposes. This setup
+demonstrates how opcodes from `opcode_dispatcher.go` can power smart-contract
+interactions exposed through a REST API.
