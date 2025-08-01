@@ -13,7 +13,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"sync"
-	Tokens "synnergy-network/core/Tokens"
 	"time"
 )
 
@@ -389,7 +388,6 @@ func init() {
 		{"Synnergy NFT Art", "SYNART", 0, StdSYN721, time.Time{}, false, 0},
 		{"Synnergy NFT Land", "SYNLAND", 0, StdSYN2369, time.Time{}, false, 0},
 		{"Synnergy Ticket", "SYNTIX", 0, StdSYN1700, time.Time{}, false, 0},
-		{"Synnergy Debt", "SYN-LOAN", 0, StdSYN845, time.Time{}, false, 0},
 		{"Synnergy Reward", "SYN-RWD", 18, StdSYN600, time.Time{}, false, 0},
 		{"Synnergy Utility", "SYN-UTIL", 18, StdSYN500, time.Time{}, false, 0},
 		{"Synnergy Game", "SYNGAME", 0, StdSYN70, time.Time{}, false, 0},
@@ -442,7 +440,11 @@ func init() {
 
 func registerTokenOpcodes() {
 	Register(0xB0, wrap("Tokens_Transfer"))
-	// Additional token opcodes omitted for brevity.
+	Register(0xB1, wrap("DebtToken_Issue"))
+	Register(0xB2, wrap("DebtToken_Payment"))
+	Register(0xB3, wrap("DebtToken_AdjustInterest"))
+	Register(0xB4, wrap("DebtToken_MarkDefault"))
+	Register(0xB5, wrap("DebtToken_History"))
 }
 
 func (ctx *Context) RefundGas(amount uint64) {
@@ -520,6 +522,3 @@ func (s *Stack) Push(v any) {
 func (s *Stack) Len() int {
 	return len(s.data)
 }
-
-// Reference to TokenInterfaces for package usage
-var _ Tokens.TokenInterfaces
