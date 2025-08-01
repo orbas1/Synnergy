@@ -5,16 +5,20 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
+
+	Tokens "synnergy-network/core/Tokens"
 )
 
 // CarbonProject represents a verified carbon offset project recorded on chain.
 type CarbonProject struct {
-	ID        uint64  `json:"id"`
-	Name      string  `json:"name"`
-	Owner     Address `json:"owner"`
-	Total     uint64  `json:"total"`
-	Remaining uint64  `json:"remaining"`
-	Verified  bool    `json:"verified"`
+	ID            uint64                      `json:"id"`
+	Name          string                      `json:"name"`
+	Owner         Address                     `json:"owner"`
+	Total         uint64                      `json:"total"`
+	Remaining     uint64                      `json:"remaining"`
+	Verified      bool                        `json:"verified"`
+	Verifications []Tokens.VerificationRecord `json:"verifications"`
 }
 
 // CarbonEngine manages carbon credit issuance and retirement. Projects are
@@ -120,6 +124,33 @@ func (e *CarbonEngine) RetireCredits(holder Address, amount uint64) error {
 		return fmt.Errorf("carbon credit token not found")
 	}
 	return tok.Burn(holder, amount)
+}
+
+// AddVerification records a verification entry for the specified project.
+func (e *CarbonEngine) AddVerification(id uint64, ver Tokens.VerificationRecord) error {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	proj, err := e.getProject(id)
+	if err != nil {
+		return err
+	}
+	proj.Verifications = append(proj.Verifications, ver)
+	if ver.Status == "verified" {
+		proj.Verified = true
+	}
+	blob, _ := json.Marshal(proj)
+	return e.ledger.SetState(e.projectKey(id), blob)
+}
+
+// ListVerifications returns verification records for a project.
+func (e *CarbonEngine) ListVerifications(id uint64) ([]Tokens.VerificationRecord, error) {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	proj, err := e.getProject(id)
+	if err != nil {
+		return nil, err
+	}
+	return proj.Verifications, nil
 }
 
 // ProjectInfo returns a project by id.
