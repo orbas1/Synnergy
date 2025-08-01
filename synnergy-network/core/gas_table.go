@@ -368,6 +368,15 @@ var gasTable map[Opcode]uint64
    ListListings:  1_000,
    GetDeal:       1_000,
    ListDeals:     1_000,
+        // General Marketplace
+        CreateMarketListing:  8_000,
+        PurchaseItem:        6_000,
+        CancelListing:       3_000,
+        ReleaseFunds:        2_000,
+        GetMarketListing:    1_000,
+        ListMarketListings:  1_000,
+        GetMarketDeal:       1_000,
+        ListMarketDeals:     1_000,
    // Pin & Retrieve already priced
 
    // ----------------------------------------------------------------------
@@ -944,6 +953,15 @@ var gasNames = map[string]uint64{
 	"ListListings":  1_000,
 	"GetDeal":       1_000,
 	"ListDeals":     1_000,
+	// General Marketplace
+	"CreateMarketListing": 8_000,
+	"PurchaseItem":        6_000,
+	"CancelListing":       3_000,
+	"ReleaseFunds":        2_000,
+	"GetMarketListing":    1_000,
+	"ListMarketListings":  1_000,
+	"GetMarketDeal":       1_000,
+	"ListMarketDeals":     1_000,
 	// Pin & Retrieve already priced
 
 	// ----------------------------------------------------------------------

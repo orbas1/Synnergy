@@ -341,6 +341,19 @@ needed in custom tooling.
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
 
+### marketplace
+
+| Sub-command | Description |
+|-------------|-------------|
+| `listing:create <price> <metaJSON>` | Create a marketplace listing. |
+| `listing:get <id>` | Fetch a listing by ID. |
+| `listing:list` | List marketplace listings. |
+| `buy <id> <buyer>` | Purchase a listing via escrow. |
+| `cancel <id>` | Cancel an unsold listing. |
+| `release <escrow>` | Release escrow funds to seller. |
+| `deal:get <id>` | Retrieve deal details. |
+| `deal:list` | List marketplace deals. |
+
 ### tokens
 
 | Sub-command | Description |
