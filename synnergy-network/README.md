@@ -74,6 +74,7 @@ all modules from the core library. Highlights include:
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
 - `storage` – interact with on‑chain storage providers
+- `marketplace` – buy and sell items using escrow
 - `healthcare` – manage on‑chain healthcare records
 - `tangible` – register and transfer tangible asset records
 - `warehouse` – manage on‑chain inventory records

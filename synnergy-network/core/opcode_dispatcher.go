@@ -110,6 +110,8 @@ func wrap(name string) OpcodeFunc {
 //		0x0C Governance             0x1A Transactions
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
+//		                            0x1D Wallet
+//	                                 0x1E Marketplace
 //	                                 0x1D Wallet
 //	                                 0x1E Faucet
 //		                            0x1D Wallet
@@ -595,6 +597,15 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// Marketplace (0x1E)
+	{"CreateMarketListing", 0x1E0001},
+	{"PurchaseItem", 0x1E0002},
+	{"CancelListing", 0x1E0003},
+	{"ReleaseFunds", 0x1E0004},
+	{"GetMarketListing", 0x1E0005},
+	{"ListMarketListings", 0x1E0006},
+	{"GetMarketDeal", 0x1E0007},
+	{"ListMarketDeals", 0x1E0008},
 	// Faucet (0x1E)
 	{"NewFaucet", 0x1E0001},
 	{"Faucet_Request", 0x1E0002},
