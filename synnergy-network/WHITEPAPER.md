@@ -14,6 +14,7 @@ The Synnergy ecosystem brings together several services:
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Firewall** – Runtime block lists restrict malicious addresses, tokens and IPs.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
 All services are optional and run as independent modules that plug into the core.
 
@@ -64,6 +65,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `replication` – Replicate and synchronize ledger data across nodes.
 - `rollups` – Manage rollup batches and fraud proofs.
 - `security` – Generate keys and sign payloads.
+- `firewall` – Enforce address, token and IP restrictions.
 - `sharding` – Split the ledger into shards and coordinate cross-shard messages.
 - `sidechain` – Launch or interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.

@@ -26,6 +26,7 @@ The following command groups expose the same functionality available in the core
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
+- **firewall** – Manage address, token and IP block lists.
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
@@ -291,6 +292,18 @@ needed in custom tooling.
 | `dilithium-sign` | Sign a message with a Dilithium key. |
 | `dilithium-verify` | Verify a Dilithium signature. |
 | `anomaly-score` | Compute an anomaly z-score from data. |
+
+### firewall
+
+| Sub-command | Description |
+|-------------|-------------|
+| `block-address <addr>` | Block a wallet address. |
+| `unblock-address <addr>` | Remove an address from the block list. |
+| `block-token <id>` | Block transfers of a token id. |
+| `unblock-token <id>` | Allow transfers of a token id. |
+| `block-ip <ip>` | Block a peer IP address. |
+| `unblock-ip <ip>` | Unblock a peer IP address. |
+| `list` | Display current firewall rules. |
 
 ### sharding
 

@@ -1183,6 +1183,22 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// Firewall
+	// ----------------------------------------------------------------------
+	"NewFirewall":               4_000,
+	"Firewall_BlockAddress":     1_000,
+	"Firewall_UnblockAddress":   1_000,
+	"Firewall_IsAddressBlocked": 500,
+	"Firewall_BlockToken":       1_000,
+	"Firewall_UnblockToken":     1_000,
+	"Firewall_IsTokenBlocked":   500,
+	"Firewall_BlockIP":          1_000,
+	"Firewall_UnblockIP":        1_000,
+	"Firewall_IsIPBlocked":      500,
+	"Firewall_ListRules":        1_000,
+	"Firewall_CheckTx":          2_000,
 }
 
 func init() {

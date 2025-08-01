@@ -68,6 +68,7 @@ all modules from the core library. Highlights include:
 - `replication` – snapshot and replicate data
 - `rollups` – manage rollup batches
 - `security` – cryptographic utilities
+- `firewall` – manage block lists for addresses, tokens and peers
 - `sharding` – shard management
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
