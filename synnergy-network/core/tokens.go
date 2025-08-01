@@ -323,6 +323,7 @@ func InitTokens(ledger *Ledger, vm VM, gas GasCalculator) {
 		tok.gas = gas
 		ledger.tokens[id] = tok
 	}
+	InitDAO2500(ledger)
 }
 
 //---------------------------------------------------------------------
@@ -335,13 +336,71 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+	// specialised token instantiation based on standard
+	if meta.Standard == StdSYN700 {
+		tok := NewSYN700Token(meta)
+		tok.BaseToken.id = deriveID(meta.Standard)
+		for a, v := range init {
+			tok.BaseToken.balances.Set(tok.ID(), a, v)
+			tok.BaseToken.meta.TotalSupply += v
+
+	// Specialised standards may require custom token structures.
+	if meta.Standard == StdSYN1600 {
+		tok, err := NewSYN1600Token(meta, init, MusicInfo{}, nil)
+		if err != nil {
+			return nil, err
+		}
+		RegisterToken(tok)
+		return tok, nil
+	}
+
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+	var tok Token
+	switch meta.Standard {
+	case StdSYN1800:
+		tok = NewCarbonFootprintToken(meta)
+	default:
+		tok = &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+	}
+
+	bt := tok.(*BaseToken)
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
-	RegisterToken(bt)
-	return bt, nil
+
+	// specialised token types based on standard
+	switch meta.Standard {
+	case StdSYN1300:
+		sct := NewSupplyChainToken(bt)
+		RegisterToken(sct)
+		return sct, nil
+	default:
+		RegisterToken(bt)
+		return bt, nil
+	}
+	case StdSYN2500:
+		dt := NewSYN2500Token(meta)
+		for a, v := range init {
+			dt.balances.Set(dt.id, a, v)
+			dt.meta.TotalSupply += v
+		}
+		tok = dt
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		for a, v := range init {
+			bt.balances.Set(bt.id, a, v)
+			bt.meta.TotalSupply += v
+		}
+		tok = bt
+	}
+	var tok Token = bt
+	if meta.Standard == StdSYN2100 {
+		tok = &SupplyFinanceToken{BaseToken: bt, documents: make(map[string]*FinancialDocument), liquidity: make(map[Address]uint64)}
+	}
+
+	RegisterToken(tok)
+	return tok, nil
 }
 
 func NewBalanceTable() *BalanceTable {
@@ -442,7 +501,10 @@ func init() {
 
 func registerTokenOpcodes() {
 	Register(0xB0, wrap("Tokens_Transfer"))
-	// Additional token opcodes omitted for brevity.
+	Register(0xB1, wrap("Tokens_RecordEmission"))
+	Register(0xB2, wrap("Tokens_RecordOffset"))
+	Register(0xB3, wrap("Tokens_NetBalance"))
+	Register(0xB4, wrap("Tokens_ListRecords"))
 }
 
 func (ctx *Context) RefundGas(amount uint64) {
@@ -523,3 +585,21 @@ func (s *Stack) Len() int {
 
 // Reference to TokenInterfaces for package usage
 var _ Tokens.TokenInterfaces
+
+// Tokens_CreateSYN2200 is a VM-accessible helper to mint a SYN2200 token.
+func Tokens_CreateSYN2200(meta Metadata, init map[Address]uint64) (TokenID, error) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.CreateSYN2200(meta, init)
+}
+
+// Tokens_SendPayment performs an instant payment via a SYN2200 token.
+func Tokens_SendPayment(id TokenID, from, to Address, amount uint64, currency string) (uint64, error) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.SendRealTimePayment(id, from, to, amount, currency)
+}
+
+// Tokens_GetPayment retrieves a payment record from a SYN2200 token.
+func Tokens_GetPayment(id TokenID, pid uint64) (Tokens.PaymentRecord, bool) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.GetPaymentRecord(id, pid)
+}
