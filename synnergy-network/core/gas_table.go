@@ -1912,6 +1912,16 @@ var gasNames = map[string]uint64{
 	"ProjectInfo":      100,
 	"ListProjects":     100,
 	// ----------------------------------------------------------------------
+	// Energy Token System
+	// ----------------------------------------------------------------------
+	"InitEnergyEngine":     800,
+	"Energy":               200,
+	"RegisterEnergyAsset":  500,
+	"TransferEnergyAsset":  300,
+	"RecordSustainability": 100,
+	"EnergyAssetInfo":      100,
+	"ListEnergyAssets":     100,
+	// ----------------------------------------------------------------------
 	// Finalization Management
 	// ----------------------------------------------------------------------
 	"NewFinalizationManager": 800,
