@@ -136,8 +136,8 @@ func initTxMiddleware(cmd *cobra.Command, _ []string) error {
 		// 6. Authority (for tx reversal checks)
 		authSvc := core.NewAuthoritySet(txLogger, txLedger)
 
-		// 7. Gas calculator – placeholder flat gas until economics stabilises
-		gasCalc := core.NewFlatGasCalculator(10) // 10 wei per gas unit
+		// 7. Gas calculator – dynamic gas based on opcode costs
+		gasCalc := core.NewDynamicGasCalculator()
 
 		// 8. TxPool
 		txPoolSvc = core.NewTxPool(nil, txLedger, authSvc, gasCalc, p2pSvc, 0)
