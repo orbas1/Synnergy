@@ -177,6 +177,16 @@ needed in custom tooling.
 | `oracle query <oracleID>` | Query the latest oracle value. |
 | `oracle list` | List registered oracles. |
 
+**Oracle management**
+
+| Sub-command | Description |
+|-------------|-------------|
+| `oracle_mgmt metrics <oracleID>` | Show performance metrics. |
+| `oracle_mgmt request <oracleID>` | Fetch value and record latency. |
+| `oracle_mgmt sync <oracleID>` | Sync local oracle data. |
+| `oracle_mgmt update <oracleID> <source>` | Update oracle source. |
+| `oracle_mgmt remove <oracleID>` | Remove oracle configuration. |
+
 ### fault_tolerance
 
 | Sub-command | Description |
