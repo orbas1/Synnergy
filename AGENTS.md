@@ -201,12 +201,14 @@ The current code base is a functional prototype.  The following additions would 
 - `cmd/authority_apply/` – validator application workflow
 - `internal/` packages for shared utilities and cross‑package helpers
 - `GUI/` – web interfaces for wallet management, explorers and marketplaces
--   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
-    `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
-    `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
-    - The smart-contract marketplace now includes an Express backend with REST
-      routes, controllers and services. The frontend loads components dynamically
-      and supports contract detail pages.
+  -   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
+     `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
+     `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
+        - `cross-chain-management/` now offers a Bootstrap 5 dashboard with
+          forms for bridge registration, relayer administration and opcode
+          testing. The backend service (`cmd/xchainserver`) exposes REST routes
+          with logging middleware and loads relayer config from `.env` or
+          `cmd/config/crosschain.yaml`.
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
 
