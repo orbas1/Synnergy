@@ -23,8 +23,9 @@ The following command groups expose the same functionality available in the core
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
-- **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
-- **rollups** – Create rollup batches or inspect existing ones.
+ - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+ - **high_availability** – Manage standby nodes and promote backups.
+ - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
@@ -265,6 +266,16 @@ needed in custom tooling.
 | `replicate <block-hash>` | Gossip a known block. |
 | `request <block-hash>` | Request a block from peers. |
 | `sync` | Synchronize blocks from peers. |
+
+### high_availability
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <addr>` | Register a standby node. |
+| `remove <addr>` | Remove a standby node. |
+| `list` | List registered standby nodes. |
+| `promote <addr>` | Promote a standby to leader via view change. |
+| `snapshot [path]` | Write a ledger snapshot to disk. |
 
 ### rollups
 

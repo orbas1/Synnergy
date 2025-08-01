@@ -179,6 +179,11 @@ var gasTable map[Opcode]uint64
    FailoverNode:     8_000,
    PredictFailure:   1_000,
    AdjustResources:  1_500,
+   HA_Register:      1_000,
+   HA_Remove:        1_000,
+   HA_List:          500,
+   HA_Sync:          20_000,
+   HA_Promote:       8_000,
 
    // ----------------------------------------------------------------------
    // Governance
@@ -755,6 +760,11 @@ var gasNames = map[string]uint64{
 	"FailoverNode":     8_000,
 	"PredictFailure":   1_000,
 	"AdjustResources":  1_500,
+	"HA_Register":      1_000,
+	"HA_Remove":        1_000,
+	"HA_List":          500,
+	"HA_Sync":          20_000,
+	"HA_Promote":       8_000,
 
 	// ----------------------------------------------------------------------
 	// Governance

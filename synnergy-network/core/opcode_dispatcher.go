@@ -226,6 +226,11 @@ var catalogue = []struct {
 	{"FailoverNode", 0x0B000C},
 	{"PredictFailure", 0x0B000D},
 	{"AdjustResources", 0x0B000E},
+	{"HA_Register", 0x0B000F},
+	{"HA_Remove", 0x0B0010},
+	{"HA_List", 0x0B0011},
+	{"HA_Sync", 0x0B0012},
+	{"HA_Promote", 0x0B0013},
 
 	// Governance (0x0C)
 	{"UpdateParam", 0x0C0001},

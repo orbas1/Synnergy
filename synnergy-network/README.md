@@ -65,8 +65,9 @@ all modules from the core library. Highlights include:
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
 - `network` – libp2p networking helpers
-- `replication` – snapshot and replicate data
-- `rollups` – manage rollup batches
+ - `replication` – snapshot and replicate data
+ - `high_availability` – manage standby nodes and promote backups
+ - `rollups` – manage rollup batches
 - `security` – cryptographic utilities
 - `sharding` – shard management
 - `sidechain` – launch and interact with sidechains
