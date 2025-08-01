@@ -368,6 +368,7 @@ type Ledger struct {
 	// NodeLocations stores optional geolocation metadata for peers.
 	NodeLocations    map[NodeID]Location
 	pendingSubBlocks []SubBlock // <- store sub-blocks here
+	holoData         map[Hash][]byte
 }
 
 //---------------------------------------------------------------------
