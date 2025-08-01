@@ -102,6 +102,7 @@ func RegisterRoutes(root *cobra.Command) {
 		StorageRoute,
 		FirewallCmd,
 		IPFSRoute,
+		ContentNodeCmd,
 		ResourceCmd,
 		DAOAccessCmd,
 		sensorCmd,
