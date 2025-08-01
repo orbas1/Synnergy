@@ -98,6 +98,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `timelock` – Delay proposal execution via a queue.
 - `dao` – Create DAOs and manage their members.
 - `green_technology` – Manage energy tracking and carbon offsets.
+- `energy_efficiency` – Measure transaction energy use and compute efficiency scores.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
 - `loanpool` – Submit loan requests and disburse funds.

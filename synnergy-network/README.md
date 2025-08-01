@@ -87,6 +87,7 @@ all modules from the core library. Highlights include:
 - `timelock` – schedule and execute delayed proposals
 - `dao` – create and manage DAOs
 - `green_technology` – sustainability features
+- `energy_efficiency` – track transaction energy usage and efficiency metrics
 - `ledger` – low level ledger inspection
 - `account` – manage basic accounts and balances
 - `loanpool` – submit loan proposals and disburse funds

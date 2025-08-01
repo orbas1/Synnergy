@@ -44,6 +44,7 @@ The following command groups expose the same functionality available in the core
 - **timelock** – Manage delayed proposal execution.
 - **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
+- **energy_efficiency** – Record transaction counts and compute efficiency scores.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **account** – manage accounts and balances
 - **network** – Manage peer connections and print networking statistics.
@@ -455,6 +456,14 @@ needed in custom tooling.
 | `cert <validator-addr>` | Show the sustainability certificate. |
 | `throttle <validator-addr>` | Check if a validator should be throttled. |
 | `list` | List certificates for all validators. |
+
+### energy_efficiency
+
+| Sub-command | Description |
+|-------------|-------------|
+| `record <validator-addr>` | Record processed transactions and energy use. |
+| `efficiency <validator-addr>` | Show tx per kWh for a validator. |
+| `network` | Display the network average efficiency. |
 
 ### ledger
 
