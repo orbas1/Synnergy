@@ -187,7 +187,7 @@ The current code base is a functional prototype.  The following additions would 
 - **Faucet Contract** – simple token dispenser with rate limiting
 - **DAO Governance Contract** – on‑chain voting and proposal execution
 - **Marketplace Contract** – buy and sell digital goods using SYNN tokens
-- **Storage Marketplace Contract** – pay for decentralized storage
+ - **Storage Marketplace Contract** – pay for decentralized storage ✅
 - **LoanPool Application Contract** – terms negotiation and repayment logic
 - **Authority Node Application Contract** – stake tokens to join the validator set
 
@@ -202,7 +202,7 @@ The current code base is a functional prototype.  The following additions would 
 - `internal/` packages for shared utilities and cross‑package helpers
 - `GUI/` – web interfaces for wallet management, explorers and marketplaces
 -   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
-    `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
+    `storage-marketplace/` ✅, `dao-explorer/`, `token-creation-tool/`,
     `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
