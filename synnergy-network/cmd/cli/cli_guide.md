@@ -245,6 +245,17 @@ needed in custom tooling.
 | `get <id>` | Display a single proposal. |
 | `list` | List proposals in the pool. |
 
+### loanpool_apply
+
+| Sub-command | Description |
+|-------------|-------------|
+| `submit <applicant> <amount> <termMonths> <purpose>` | Submit a loan application. |
+| `vote <voter> <id>` | Vote on an application. |
+| `process` | Finalise pending applications. |
+| `disburse <id>` | Disburse an approved application. |
+| `get <id>` | Display a single application. |
+| `list` | List loan applications. |
+
 ### network
 
 | Sub-command | Description |
