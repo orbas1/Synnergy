@@ -52,6 +52,7 @@ The following command groups expose the same functionality available in the core
  - **rollups** – Create rollup batches or inspect existing ones.
 - **plasma** – Deposit into and withdraw from the Plasma chain.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+- **initrep** – Bootstrap a ledger via peer replication.
 - **synchronization** – Coordinate block download and verification.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **compression** – Save and load compressed ledger snapshots.
@@ -522,6 +523,12 @@ needed in custom tooling.
 | `request <block-hash>` | Request a block from peers. |
 | `sync` | Synchronize blocks from peers. |
 
+### initrep
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start` | Bootstrap the ledger and start replication. |
+| `stop` | Stop the initialization service. |
 ### synchronization
 
 | Sub-command | Description |
