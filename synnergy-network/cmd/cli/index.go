@@ -22,6 +22,7 @@ func RegisterRoutes(root *cobra.Command) {
 		CentralBankCmd,
 		NatCmd,
 		PeerCmd,
+		ExperimentalCmd,
 		ConsensusCmd,
 		ConsensusHopCmd,
 		AdaptiveCmd,
