@@ -30,6 +30,7 @@ func RegisterRoutes(root *cobra.Command) {
 		DataCmd,
 		ChannelRoute,
 		StorageRoute,
+		HealthcareCmd,
 		UtilityRoute,
 		TangibleCmd,
 		WarehouseCmd,

@@ -1198,14 +1198,27 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
+	"NewRandomWallet":     10_000,
+	"WalletFromMnemonic":  5_000,
+	"NewHDWalletFromSeed": 6_000,
+	"PrivateKey":          400,
+	"NewAddress":          500,
+	"SignTx":              3_000,
 
+	// ----------------------------------------------------------------------
+	// Healthcare Records
+	// ----------------------------------------------------------------------
+	"InitHealthcare":    8_000,
+	"RegisterPatient":   3_000,
+	"AddHealthRecord":   4_000,
+	"GrantAccess":       1_500,
+	"RevokeAccess":      1_000,
+	"ListHealthRecords": 2_000,
 
-"NewRandomWallet":      10_000,
-	"WalletFromMnemonic":   5_000,
-	"NewHDWalletFromSeed":  6_000,
-	"PrivateKey":           400,
-	"NewAddress":           500,
-	"SignTx":               3_000,
+	// ----------------------------------------------------------------------
+	// Warehouse Records
+	// ----------------------------------------------------------------------
+
 	"Warehouse_New":        10_000,
 	"Warehouse_AddItem":    2_000,
 	"Warehouse_RemoveItem": 2_000,

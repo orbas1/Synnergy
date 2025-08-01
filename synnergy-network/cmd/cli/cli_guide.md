@@ -31,6 +31,7 @@ The following command groups expose the same functionality available in the core
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
+- **healthcare** – Manage healthcare records and permissions.
 - **warehouse** – Manage on-chain inventory records.
 - **tokens** – Register new token types and move balances between accounts.
 - **gaming** – Manage simple on-chain games.
@@ -344,6 +345,15 @@ needed in custom tooling.
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
 
+### healthcare
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <addr>` | Register a patient address. |
+| `grant <patient> <provider>` | Allow a provider to submit records. |
+| `revoke <patient> <provider>` | Revoke provider access. |
+| `add <patient> <provider> <cid>` | Add a record CID for a patient. |
+| `list <patient>` | List stored record IDs for a patient. |
 ### warehouse
 
 | Sub-command | Description |

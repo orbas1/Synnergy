@@ -16,6 +16,7 @@ The Synnergy ecosystem brings together several services:
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
 - **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
 All services are optional and run as independent modules that plug into the core.
 
@@ -70,6 +71,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `sidechain` – Launch or interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.
 - `storage` – Manage off-chain storage deals.
+- `healthcare` – Manage healthcare records and permissions.
 - `tangible` – Track tangible asset ownership on-chain.
 - `tokens` – Issue and manage token contracts.
 - `gaming` – Lightweight on-chain gaming sessions.
@@ -99,6 +101,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Healthcare
                                  0x1E  Immutability
                                  0x1E  Warehouse
                                  0x1E  Gaming
