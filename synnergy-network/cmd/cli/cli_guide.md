@@ -58,6 +58,7 @@ The following command groups expose the same functionality available in the core
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
 - **swarm** – Manage groups of nodes running together.
 - **storage** – Configure the backing key/value store and inspect content.
+- **dao_access** – Manage DAO membership roles.
 - **sensor** – Manage external sensor inputs and webhooks.
 - **real_estate** – Manage tokenised real estate assets.
 - **healthcare** – Manage healthcare records and permissions.
@@ -331,6 +332,14 @@ needed in custom tooling.
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
 
+### dao_access
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <addr> <role>` | Add a DAO member with role `member` or `admin`. |
+| `remove <addr>` | Remove a DAO member. |
+| `role <addr>` | Display the member role. |
+| `list` | List all DAO members. |
 ### polls_management
 
 | Sub-command | Description |

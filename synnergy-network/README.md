@@ -100,6 +100,7 @@ all modules from the core library. Highlights include:
 - `zero_trust_data_channels` – encrypted data channels with ledger-backed escrows
 - `swarm` – orchestrate groups of nodes for high availability
 - `storage` – interact with on‑chain storage providers
+- `dao_access` – manage DAO membership roles
 - `sensor` – manage external sensor inputs and webhooks
 - `real_estate` – manage tokenised real estate
 - `escrow` – manage multi-party escrow accounts
