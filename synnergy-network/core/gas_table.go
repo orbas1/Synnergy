@@ -193,6 +193,10 @@ var gasTable map[Opcode]uint64
    ExecuteProposal: 15_000,
    GetProposal:     1_000,
    ListProposals:   2_000,
+   AddDAOMember:    1_200,
+   RemoveDAOMember: 1_200,
+   RoleOfMember:    500,
+   ListDAOMembers:  1_000,
 
    // ----------------------------------------------------------------------
    // Green Technology
@@ -769,6 +773,10 @@ var gasNames = map[string]uint64{
 	"ExecuteProposal": 15_000,
 	"GetProposal":     1_000,
 	"ListProposals":   2_000,
+	"AddDAOMember":    1_200,
+	"RemoveDAOMember": 1_200,
+	"RoleOfMember":    500,
+	"ListDAOMembers":  1_000,
 
 	// ----------------------------------------------------------------------
 	// Green Technology

@@ -30,6 +30,7 @@ The following command groups expose the same functionality available in the core
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
+- **dao_access** – Manage DAO membership roles.
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
@@ -199,6 +200,15 @@ needed in custom tooling.
 | `execute <proposal-id>` | Execute a proposal after the deadline. |
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
+
+### dao_access
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <addr> <role>` | Add a DAO member with role `member` or `admin`. |
+| `remove <addr>` | Remove a DAO member. |
+| `role <addr>` | Display the member role. |
+| `list` | List all DAO members. |
 
 ### green_technology
 
