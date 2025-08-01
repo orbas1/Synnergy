@@ -32,6 +32,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
+- **cross_chain_connection** – Create and monitor links between chains.
 - **cross_chain_agnostic_protocols** – Register cross-chain protocols.
 - **cross_chain_bridge** – Manage cross-chain token transfers.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
@@ -357,6 +358,15 @@ needed in custom tooling.
 | `claim <transfer_id> <proof.json>` | Release assets using a proof. |
 | `get <id>` | Show a transfer record. |
 | `list` | List all transfers. |
+
+### cross_chain_connection
+
+| Sub-command | Description |
+|-------------|-------------|
+| `open <local_chain> <remote_chain>` | Establish a new connection. |
+| `close <connection_id>` | Terminate a connection. |
+| `get <connection_id>` | Retrieve connection details. |
+| `list` | List active and historic connections. |
 
 ### data
 
