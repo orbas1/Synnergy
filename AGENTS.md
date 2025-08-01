@@ -217,6 +217,8 @@ modules.
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
+**DAO Explorer** – frontend expanded with Tailwind components, Express backend and example smart contract interactions using opcodes from `opcode_dispatcher.go`.
+
 ---
 
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
