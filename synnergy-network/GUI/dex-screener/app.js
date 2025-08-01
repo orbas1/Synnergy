@@ -1,3 +1,7 @@
-// DEX Screener GUI
-// Displays charts and allows creation of liquidity pools via amm.go
-console.log('DEX Screener loaded');
+import { renderPools } from './components/poolTable.js';
+
+function init() {
+    renderPools();
+}
+
+window.onload = init;
