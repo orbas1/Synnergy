@@ -139,6 +139,7 @@ all modules from the core library. Highlights include:
 - `zero_trust_data_channels` – encrypted data channels with ledger-backed escrows
 - `swarm` – orchestrate groups of nodes for high availability
 - `storage` – interact with on‑chain storage providers
+- `loanpool` – submit, vote on and manage loan proposals
 - `legal` – manage Ricardian contracts and signatures
 - `ipfs` – manage IPFS pins and retrieval through the gateway
 - `resource` – rent computing resources via the marketplace

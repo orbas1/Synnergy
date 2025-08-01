@@ -543,6 +543,8 @@ var catalogue = []struct {
 	{"Loanpool_GetProposal", 0x100009},
 	{"Loanpool_ListProposals", 0x10000A},
 	{"Loanpool_Redistribute", 0x10000B},
+	{"Loanpool_CancelProposal", 0x10000C},
+	{"Loanpool_ExtendProposal", 0x10000D},
 	{"NewLoanPoolManager", 0x10000C},
 	{"Loanpool_Pause", 0x10000D},
 	{"Loanpool_Resume", 0x10000E},

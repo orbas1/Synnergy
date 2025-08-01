@@ -134,6 +134,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `energy_efficiency` – Measure transaction energy use and compute efficiency scores.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
+- `loanpool` – Submit, vote on, cancel or extend loan proposals before funds are disbursed.
 - `loanpool` – Submit loan requests and disburse funds.
 - `loanmgr` – Pause or resume the loan pool and query stats.
 - `loanpool_apply` – Apply for loans with on-chain voting.
