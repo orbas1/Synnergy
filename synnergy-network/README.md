@@ -73,6 +73,7 @@ all modules from the core library. Highlights include:
 - `fault_tolerance` – simulate faults and backups
 - `employment` – manage on-chain employment contracts and salaries
 - `governance` – DAO style governance commands
+- `timelock` – schedule and execute delayed proposals
 - `dao` – create and manage DAOs
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection

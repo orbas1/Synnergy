@@ -76,6 +76,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `anomaly_detection` – Detect suspicious transactions using the built-in AI.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
+- `timelock` – Delay proposal execution via a queue.
 - `dao` – Create DAOs and manage their members.
 - `green_technology` – Manage energy tracking and carbon offsets.
 - `ledger` – Inspect blocks, accounts, and token metrics.

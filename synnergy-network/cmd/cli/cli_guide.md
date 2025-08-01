@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **timelock** – Manage delayed proposal execution.
 - **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
@@ -318,6 +319,14 @@ needed in custom tooling.
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
 
+### timelock
+
+| Sub-command | Description |
+|-------------|-------------|
+| `queue <proposal-id>` | Queue a proposal with a delay. |
+| `cancel <proposal-id>` | Remove a queued proposal. |
+| `execute` | Execute all due proposals. |
+| `list` | List queued proposals. |
 ### dao
 
 | Sub-command | Description |
