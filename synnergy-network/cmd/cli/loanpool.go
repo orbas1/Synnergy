@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -33,7 +34,8 @@ func ensureLoanPool(cmd *cobra.Command, _ []string) error {
 	if led == nil {
 		return errors.New("ledger not initialised")
 	}
-	loanPool = core.NewLoanPool(logrus.StandardLogger(), led, lpElector{}, &core.LoanPool{})
+	stdlog := log.New(logrus.StandardLogger().Out, "", log.LstdFlags)
+	loanPool = core.NewLoanPool(stdlog, led, lpElector{}, &core.LoanPool{})
 	return nil
 }
 
