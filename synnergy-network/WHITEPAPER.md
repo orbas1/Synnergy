@@ -20,6 +20,7 @@ The Synnergy ecosystem brings together several services:
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
 - **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Polls** – Lightweight polls let the community signal preferences off-chain.
 - **Reputation Voting** – Optional weighted voting using SYN-REP reputation tokens.
 - **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
 - **Healthcare Data** – Patients control medical records stored via on-chain permissions.
@@ -78,6 +79,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `anomaly_detection` – Detect suspicious transactions using the built-in AI.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
+- `polls_management` – Lightweight polls for community feedback.
 - `governance_management` – Register governance contracts and manage them.
 - `timelock` – Delay proposal execution via a queue.
 - `dao` – Create DAOs and manage their members.
@@ -145,6 +147,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Polls
                                  0x1E  Biometrics
                                  0x1E  SystemHealth
 0x1E  Employment           

@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **polls_management** – Create and vote on community polls.
 - **governance_management** – Manage governance contracts on chain.
 - **reputation_voting** – Reputation weighted governance commands.
 - **timelock** – Manage delayed proposal execution.
@@ -322,6 +323,15 @@ needed in custom tooling.
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
 
+### polls_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a new poll. |
+| `vote <id>` | Cast a vote on a poll. |
+| `close <id>` | Close a poll immediately. |
+| `get <id>` | Display a poll. |
+| `list` | List existing polls. |
 ### governance_management
 
 | Sub-command | Description |
