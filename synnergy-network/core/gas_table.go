@@ -3042,6 +3042,15 @@ var gasNames = map[string]uint64{
 	"RetireCredits":    300,
 	"ProjectInfo":      100,
 	"ListProjects":     100,
+	// Pension Token System
+	// ---------------------------------------------------------------------
+	"InitPensionEngine": 800,
+	"Pension":           200,
+	"RegisterPlan":      500,
+	"Contribute":        500,
+	"Withdraw":          300,
+	"PlanInfo":          100,
+	"ListPlans":         100,
 	// Government Grant Tokens
 	// ---------------------------------------------------------------------
 	"InitGrantEngine":     800,
