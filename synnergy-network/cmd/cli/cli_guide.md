@@ -21,6 +21,7 @@ The following command groups expose the same functionality available in the core
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
+- **carbon_credit_system** – Manage carbon offset projects and credits.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
@@ -210,6 +211,16 @@ needed in custom tooling.
 | `cert <validator-addr>` | Show the sustainability certificate. |
 | `throttle <validator-addr>` | Check if a validator should be throttled. |
 | `list` | List certificates for all validators. |
+
+### carbon_credit_system
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <owner> <name> <total>` | Register a carbon offset project. |
+| `issue <projectID> <to> <amount>` | Issue credits from a project. |
+| `retire <holder> <amount>` | Burn carbon credits permanently. |
+| `info <projectID>` | Show details of a project. |
+| `list` | List all projects. |
 
 ### ledger
 

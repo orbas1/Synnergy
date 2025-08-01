@@ -1183,6 +1183,17 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ---------------------------------------------------------------------
+	// Carbon Credit System
+	// ---------------------------------------------------------------------
+	"InitCarbonEngine": 8_000,
+	"Carbon":           2_000,
+	"RegisterProject":  5_000,
+	"IssueCredits":     5_000,
+	"RetireCredits":    3_000,
+	"ProjectInfo":      1_000,
+	"ListProjects":     1_000,
 }
 
 func init() {
