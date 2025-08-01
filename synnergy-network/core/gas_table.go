@@ -161,6 +161,9 @@ var gasTable map[Opcode]uint64
    ListCDNNodes:   3_000,
    ListOracles:    3_000,
    PushFeedSigned: 4_000,
+   ZTDC_Open:      6_000,
+   ZTDC_Send:      2_000,
+   ZTDC_Close:     4_000,
 
    // ----------------------------------------------------------------------
    // Fault-Tolerance / Health-Checker
@@ -737,6 +740,9 @@ var gasNames = map[string]uint64{
 	"ListCDNNodes":   3_000,
 	"ListOracles":    3_000,
 	"PushFeedSigned": 4_000,
+	"ZTDC_Open":      6_000,
+	"ZTDC_Send":      2_000,
+	"ZTDC_Close":     4_000,
 
 	// ----------------------------------------------------------------------
 	// Fault-Tolerance / Health-Checker

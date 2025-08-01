@@ -210,6 +210,9 @@ var catalogue = []struct {
 	{"ListCDNNodes", 0x0A0009},
 	{"ListOracles", 0x0A000A},
 	{"PushFeedSigned", 0x0A000B},
+	{"ZTDC_Open", 0x0A000C},
+	{"ZTDC_Send", 0x0A000D},
+	{"ZTDC_Close", 0x0A000E},
 
 	// Fault-Tolerance (0x0B)
 	{"NewHealthChecker", 0x0B0001},
