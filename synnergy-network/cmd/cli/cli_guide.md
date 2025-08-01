@@ -20,6 +20,7 @@ The following command groups expose the same functionality available in the core
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **governance_management** – Manage governance contracts on chain.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
@@ -199,6 +200,17 @@ needed in custom tooling.
 | `execute <proposal-id>` | Execute a proposal after the deadline. |
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
+
+### governance_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `contract:add <addr> <name>` | Register a governance contract. |
+| `contract:enable <addr>` | Enable a contract for voting. |
+| `contract:disable <addr>` | Disable a contract. |
+| `contract:get <addr>` | Display contract information. |
+| `contract:list` | List registered contracts. |
+| `contract:rm <addr>` | Remove a contract from the registry. |
 
 ### green_technology
 

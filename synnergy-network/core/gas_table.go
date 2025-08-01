@@ -193,6 +193,11 @@ var gasTable map[Opcode]uint64
    ExecuteProposal: 15_000,
    GetProposal:     1_000,
    ListProposals:   2_000,
+   RegisterGovContract: 8_000,
+   GetGovContract:      1_000,
+   ListGovContracts:    2_000,
+   EnableGovContract:   1_000,
+   DeleteGovContract:   1_000,
 
    // ----------------------------------------------------------------------
    // Green Technology
@@ -759,16 +764,21 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Governance
 	// ----------------------------------------------------------------------
-	"UpdateParam":     5_000,
-	"ProposeChange":   10_000,
-	"VoteChange":      3_000,
-	"EnactChange":     8_000,
-	"SubmitProposal":  10_000,
-	"BalanceOfAsset":  600,
-	"CastVote":        3_000,
-	"ExecuteProposal": 15_000,
-	"GetProposal":     1_000,
-	"ListProposals":   2_000,
+	"UpdateParam":         5_000,
+	"ProposeChange":       10_000,
+	"VoteChange":          3_000,
+	"EnactChange":         8_000,
+	"SubmitProposal":      10_000,
+	"BalanceOfAsset":      600,
+	"CastVote":            3_000,
+	"ExecuteProposal":     15_000,
+	"GetProposal":         1_000,
+	"ListProposals":       2_000,
+	"RegisterGovContract": 8_000,
+	"GetGovContract":      1_000,
+	"ListGovContracts":    2_000,
+	"EnableGovContract":   1_000,
+	"DeleteGovContract":   1_000,
 
 	// ----------------------------------------------------------------------
 	// Green Technology
