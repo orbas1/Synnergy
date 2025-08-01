@@ -73,6 +73,7 @@ all modules from the core library. Highlights include:
 - `contracts` – deploy and invoke smart contracts
 - `contractops` – administrative tasks such as pausing and upgrading contracts
 - `cross_chain` – configure asset bridges
+- `cross_chain_bridge` – manage cross-chain transfers
 - `data` – inspect and manage raw data storage
 - `fork` – inspect and resolve chain forks
 - `messages` – queue, process and broadcast network messages

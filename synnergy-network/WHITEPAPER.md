@@ -109,6 +109,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `oracle_management` – Monitor oracle performance and synchronize feeds.
 - `anomaly_detection` – Detect suspicious transactions using the built-in AI.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
+- `cross_chain_bridge` – Manage cross-chain transfers.
 - `failover` – Manage ledger snapshots and coordinate recovery.
  - `governance` – Create proposals and cast votes.
  - `token_vote` – Cast token weighted votes in governance.
