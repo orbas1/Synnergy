@@ -3,10 +3,7 @@ package cli
 import "github.com/spf13/cobra"
 
 // RegisterRoutes attaches every command group defined in the cli package
-// to the provided root command. Each module exposes its own root command
-// (e.g. NetworkCmd) which aggregates all micro routes such as ~start and
-// ~stop. Calling RegisterRoutes(root) makes all commands available from
-// the main binary so they can be invoked like `synnergy ~network ~start`.
+// to the provided root command.
 func RegisterRoutes(root *cobra.Command) {
 	// modules with exported command variables
 	root.AddCommand(
@@ -18,6 +15,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ConsensusHopCmd,
 		AdaptiveCmd,
 		TokensCmd,
+		Syn1401Cmd,
 		TokenMgmtCmd,
 		CoinCmd,
 		ContractsCmd,
@@ -146,7 +144,6 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),
-	) // includes sidechain management helpers
 		NewHealthCommand(),
 	)
 }

@@ -434,6 +434,7 @@ func init() {
 	}
 
 	registerTokenOpcodes()
+	registerSYN1401Opcodes()
 }
 
 //---------------------------------------------------------------------
@@ -523,3 +524,4 @@ func (s *Stack) Len() int {
 
 // Reference to TokenInterfaces for package usage
 var _ Tokens.TokenInterfaces
+var _ Tokens.SYN1401

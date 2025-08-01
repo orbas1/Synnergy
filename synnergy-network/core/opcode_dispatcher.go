@@ -1096,6 +1096,10 @@ var catalogue = []struct {
 	{"FinishGame", 0x1E0003},
 	{"GetGame", 0x1E0004},
 	{"ListGames", 0x1E0005},
+	{"SYN1401_Issue", 0x1E0001},
+	{"SYN1401_Accrue", 0x1E0002},
+	{"SYN1401_Redeem", 0x1E0003},
+	{"SYN1401_Info", 0x1E0004},
 }
 
 // init wires the catalogue into the live dispatcher.
