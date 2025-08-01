@@ -53,6 +53,7 @@ all modules from the core library. Highlights include:
 - `ai` – publish models and run inference jobs
 - `amm` – swap tokens and manage liquidity pools
 - `authority_node` – validator registration and voting
+- `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
@@ -60,24 +61,49 @@ all modules from the core library. Highlights include:
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `immutability` – verify the canonical chain state
 - `fault_tolerance` – simulate faults and backups
+- `employment` – manage on-chain employment contracts and salaries
 - `governance` – DAO style governance commands
+- `dao` – create and manage DAOs
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
 - `account` – manage basic accounts and balances
+- `loanpool` – submit loan proposals and disburse funds
+- `loanpool_apply` – manage loan applications with on-chain voting
 - `network` – libp2p networking helpers
+- `plasma` – manage plasma deposits and exits
 - `replication` – snapshot and replicate data
 - `rollups` – manage rollup batches
 - `security` – cryptographic utilities
 - `sharding` – shard management
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
+- `swarm` – orchestrate groups of nodes for high availability
 - `storage` – interact with on‑chain storage providers
+- `sensor` – manage external sensor inputs and webhooks
+- `real_estate` – manage tokenised real estate
+- `escrow` – manage multi-party escrow accounts
+- `marketplace` – buy and sell items using escrow
+- `healthcare` – manage on‑chain healthcare records
+- `tangible` – register and transfer tangible asset records
+- `warehouse` – manage on‑chain inventory records
 - `tokens` – ERC‑20 style token commands
+- `event_management` – record and query on-chain events
+- `token_management` – high level token creation and administration
+- `gaming` – create and join simple on-chain games
 - `transactions` – build and sign transactions
+- `transaction_distribution` – split transaction fees between miner and treasury
+- `faucet` – dispense test tokens or coins with rate limits
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service
+- `workflow` – automate multi-step tasks with triggers and webhooks
+- `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
+- `idwallet` – register ID-token wallets and verify status
+- `offwallet` – offline wallet utilities
+- `recovery` – register and invoke account recovery
+- `wallet_mgmt` – manage wallets and send SYNN directly via the ledger
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.
 
@@ -112,6 +138,12 @@ synnergy network start &
 Additional helper scripts live under `cmd/scripts`.  Running
 `start_synnergy_network.sh` will build the CLI, launch networking, consensus and
 other daemons, then run a demo security command.
+
+Two top level scripts provide larger network setups:
+`scripts/devnet_start.sh` spins up a local multi-node developer network, while
+`scripts/testnet_start.sh` starts an ephemeral testnet defined by a YAML
+configuration. Both build the CLI automatically and clean up all processes on
+`Ctrl+C`.
 
 
 ## Docker
