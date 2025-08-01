@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
+//	                                 0x1E Forum
 //	                                 0x1E Compression
 //	                                 0x1E Biometrics
 //	                                 0x1E SystemHealth
@@ -688,7 +689,7 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
-  {"RegisterIDWallet", 0x1D0007},
+   {"RegisterIDWallet", 0x1D0007},
 	{"IsIDWalletRegistered", 0x1D0008},
 	{"NewOffChainWallet", 0x1D0007},
 	{"OffChainWalletFromMnemonic", 0x1D0008},
@@ -698,6 +699,14 @@ var catalogue = []struct {
 	{"BroadcastSignedTx", 0x1D000C},
 	{"RegisterRecovery", 0x1D0007},
 	{"RecoverAccount", 0x1D0008},
+
+	// Forum (0x1E)
+	{"Forum_CreateThread", 0x1E0001},
+	{"Forum_GetThread", 0x1E0002},
+	{"Forum_ListThreads", 0x1E0003},
+	{"Forum_AddComment", 0x1E0004},
+	{"Forum_ListComments", 0x1E0005},
+ 
 	// Compression (0x1E)
 	{"CompressLedger", 0x1E0001},
 	{"DecompressLedger", 0x1E0002},
