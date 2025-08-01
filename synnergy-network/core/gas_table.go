@@ -271,6 +271,10 @@ var gasTable map[Opcode]uint64
    Dial:            2_000,
    SetBroadcaster:  500,
    GlobalBroadcast: 1_000,
+   DiscoverPeers:  1_000,
+   Connect:        1_500,
+   Disconnect:     1_000,
+   AdvertiseSelf:  800,
    // Broadcast & Subscribe already priced
 
    // ----------------------------------------------------------------------
@@ -847,6 +851,10 @@ var gasNames = map[string]uint64{
 	"Dial":            2_000,
 	"SetBroadcaster":  500,
 	"GlobalBroadcast": 1_000,
+	"DiscoverPeers":   1_000,
+	"Connect":         1_500,
+	"Disconnect":      1_000,
+	"AdvertiseSelf":   800,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------
