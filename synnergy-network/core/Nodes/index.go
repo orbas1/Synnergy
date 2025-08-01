@@ -9,3 +9,14 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// FullNodeAPI exposes the extended functionality provided by a Synnergy
+// FullNode. It embeds NodeInterface and adds lifecycle helpers and
+// accessors required by higher-level modules.
+type FullNodeAPI interface {
+	NodeInterface
+	Start()
+	Stop() error
+	Ledger() any
+	Mode() uint8
+}
