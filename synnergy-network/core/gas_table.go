@@ -1183,6 +1183,28 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ---------------------------------------------------------------------
+	// DeFi
+	// ---------------------------------------------------------------------
+	"DeFi_CreateInsurance":   8_000,
+	"DeFi_ClaimInsurance":    5_000,
+	"DeFi_PlaceBet":          3_000,
+	"DeFi_SettleBet":         3_000,
+	"DeFi_StartCrowdfund":    6_000,
+	"DeFi_Contribute":        2_000,
+	"DeFi_FinalizeCrowdfund": 4_000,
+	"DeFi_CreatePrediction":  6_000,
+	"DeFi_VotePrediction":    2_500,
+	"DeFi_ResolvePrediction": 4_000,
+	"DeFi_RequestLoan":       5_000,
+	"DeFi_RepayLoan":         3_000,
+	"DeFi_StartYieldFarm":    6_000,
+	"DeFi_Stake":             2_500,
+	"DeFi_Unstake":           2_500,
+	"DeFi_CreateSynthetic":   6_000,
+	"DeFi_MintSynthetic":     3_000,
+	"DeFi_BurnSynthetic":     3_000,
 }
 
 func init() {
