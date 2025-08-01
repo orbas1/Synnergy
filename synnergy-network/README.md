@@ -20,6 +20,7 @@ The repository is organised as follows:
 |------|-------------|
 | `core/` | Core blockchain modules such as consensus, storage and smart contract logic. A detailed list is available in [`core/module_guide.md`](core/module_guide.md). |
 | `cmd/` | Command line sources, configuration files and helper scripts. CLI modules live under `cmd/cli`. |
+| `core/binary_tree_operations.go` | Ledger-backed binary search tree implementation with CLI and VM opcodes. |
 | `tests/` | Go unit tests covering each module. Run with `go test ./...`. |
 | `third_party/` | Vendored dependencies such as a libp2p fork used during early development. |
 | `setup_synn.sh` | Convenience script that installs Go and builds the CLI. |
@@ -51,32 +52,117 @@ Each file in `cmd/cli` registers its own group of commands with the root
 all modules from the core library. Highlights include:
 
 - `ai` – publish models and run inference jobs
+- `ai_contract` – manage AI enhanced contracts with risk checks
+- `ai-train` – manage on-chain AI model training
+- `ai_mgmt` – manage AI model marketplace listings
+- `ai_infer` – advanced inference and transaction analysis
 - `amm` – swap tokens and manage liquidity pools
 - `authority_node` – validator registration and voting
+- `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
+- `audit` – manage on-chain audit logs
+- `compliance_management` – suspend or whitelist addresses
 - `consensus` – control the consensus engine
+- `adaptive` – dynamically adjust consensus weights
+- `stake` – adjust validator stake and record penalties
 - `contracts` – deploy and invoke smart contracts
+- `contractops` – administrative tasks such as pausing and upgrading contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `partition` – partition data and apply compression
+- `distribution` – publish datasets and handle paid access
+- `oracle_management` – monitor oracle performance and sync feeds
+- `data_ops` – advanced data feed operations
+- `anomaly_detection` – analyse transactions for suspicious activity
+- `resource` – manage stored data and VM gas allocations
+- `immutability` – verify the canonical chain state
 - `fault_tolerance` – simulate faults and backups
+- `plasma` – deposit tokens and process exits on the plasma bridge
+- `resource_allocation` – manage per-contract gas limits
+- `failover` – manage ledger snapshots and trigger recovery
+- `employment` – manage on-chain employment contracts and salaries
 - `governance` – DAO style governance commands
+- `token_vote` – cast token weighted governance votes
+- `qvote` – quadratic voting on governance proposals
+- `polls_management` – create and vote on community polls
+- `governance_management` – register and control governance contracts
+- `reputation_voting` – weighted voting using SYN-REP tokens
+- `timelock` – schedule and execute delayed proposals
+- `dao` – create and manage DAOs
 - `green_technology` – sustainability features
+- `resource_management` – track and charge node resources
+- `carbon_credit_system` – manage carbon offset projects and credits
+- `energy_efficiency` – track transaction energy usage and efficiency metrics
 - `ledger` – low level ledger inspection
+- `account` – manage basic accounts and balances
+- `loanpool` – submit loan proposals and disburse funds
+- `loanpool_apply` – manage loan applications with on-chain voting
 - `network` – libp2p networking helpers
+ - `replication` – snapshot and replicate data
+ - `high_availability` – manage standby nodes and promote backups
+ - `rollups` – manage rollup batches
+- `plasma` – manage plasma deposits and exits
 - `replication` – snapshot and replicate data
+ - `rollups` – manage rollup batches and aggregator state
+- `initrep` – bootstrap a new node by synchronizing the ledger
+- `synchronization` – manage blockchain catch-up and progress
 - `rollups` – manage rollup batches
+- `compression` – save and load compressed ledger snapshots
 - `security` – cryptographic utilities
+- `biometrics` – manage biometric authentication templates
 - `sharding` – shard management
-- `sidechain` – launch and interact with sidechains
+- `sidechain` – launch, manage and interact with sidechains
 - `state_channel` – open and settle payment channels
+- `plasma` – manage plasma deposits and block commitments
+- `state_channel_mgmt` – pause, resume and force-close channels
+- `zero_trust_data_channels` – encrypted data channels with ledger-backed escrows
+- `swarm` – orchestrate groups of nodes for high availability
 - `storage` – interact with on‑chain storage providers
+- `legal` – manage Ricardian contracts and signatures
+- `ipfs` – manage IPFS pins and retrieval through the gateway
+- `resource` – rent computing resources via the marketplace
+- `staking` – lock and release tokens for governance
+- `dao_access` – manage DAO membership roles
+- `sensor` – manage external sensor inputs and webhooks
+- `real_estate` – manage tokenised real estate
+- `escrow` – manage multi-party escrow accounts
+- `marketplace` – buy and sell items using escrow
+- `healthcare` – manage on‑chain healthcare records
+- `tangible` – register and transfer tangible asset records
+- `warehouse` – manage on‑chain inventory records
 - `tokens` – ERC‑20 style token commands
+- `defi` – insurance, betting and other DeFi operations
+- `event_management` – record and query on-chain events
+- `token_management` – high level token creation and administration
+- `gaming` – create and join simple on-chain games
 - `transactions` – build and sign transactions
+- `private_tx` – encrypt and submit private transactions
+- `transactionreversal` – request authority-backed reversals
+- `transaction_distribution` – split transaction fees between miner and treasury
+- `faucet` – dispense test tokens or coins with rate limits
 - `utility_functions` – assorted helpers
+- `distribution` – bulk token distribution and airdrops
+- `finalization_management` – finalize blocks, rollup batches and channels
+- `quorum` – simple quorum tracker management
 - `virtual_machine` – run the on‑chain VM service
+- `sandbox` – manage VM sandboxes
+- `workflow` – automate multi-step tasks with triggers and webhooks
+- `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
+- `execution` – orchestrate block creation and transaction execution
+- `regulator` – manage approved regulators and enforce rules
+- `feedback` – submit and query user feedback
+- `system_health` – monitor runtime metrics and write logs
+- `idwallet` – register ID-token wallets and verify status
+- `offwallet` – offline wallet utilities
+- `recovery` – register and invoke account recovery
+- `wallet_mgmt` – manage wallets and send SYNN directly via the ledger
+
+Quadratic voting allows token holders to weight their governance votes by the
+square root of the staked amount. The `qvote` command submits these weighted
+votes and queries results alongside standard governance commands.
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.
 
@@ -111,6 +197,12 @@ synnergy network start &
 Additional helper scripts live under `cmd/scripts`.  Running
 `start_synnergy_network.sh` will build the CLI, launch networking, consensus and
 other daemons, then run a demo security command.
+
+Two top level scripts provide larger network setups:
+`scripts/devnet_start.sh` spins up a local multi-node developer network, while
+`scripts/testnet_start.sh` starts an ephemeral testnet defined by a YAML
+configuration. Both build the CLI automatically and clean up all processes on
+`Ctrl+C`.
 
 
 ## Docker
