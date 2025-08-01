@@ -27,6 +27,7 @@ type AuditNodeInterface interface {
 	LogAudit(addr Address, event string, meta map[string]string) error
 	AuditEvents(addr Address) ([]LedgerAuditEvent, error)
 
+
   // AutonomousAgent defines additional behaviour for autonomous nodes.
 type AutonomousAgent interface {
 	NodeInterface
