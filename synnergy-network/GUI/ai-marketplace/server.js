@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.json());
@@ -16,7 +17,8 @@ app.post('/api/purchase', (req, res) => {
   const { id } = req.body;
   const svc = services.find(s => s.id === id);
   if (!svc) return res.status(404).json({ error: 'Service not found' });
-  // In a real implementation this would trigger a smart contract call.
+
+  // TODO: integrate with AIServiceMarketplace smart contract
   console.log(`Purchased service ${id}`);
   res.json({ status: 'ok' });
 });
