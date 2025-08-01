@@ -177,6 +177,7 @@ func RegisterRoutes(root *cobra.Command) {
 		TangibleCmd,
 		Syn800Cmd,
 		WarehouseCmd,
+		AgricultureCmd,
 		MusicRoyaltyCmd,
 		GamingCmd,
 		WatchtowerCmd,

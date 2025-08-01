@@ -258,19 +258,19 @@ func getRegistry() *ContractRegistry {
 			reg = &ContractRegistry{
 				Registry: &Registry{
 					Entries: make(map[string][]byte),
-					tokens:  make(map[TokenID]*BaseToken),
+					tokens:  make(map[TokenID]Token),
 				},
 				byAddr: make(map[Address]*SmartContract),
 			}
 		} else {
 			if reg.Registry == nil {
-				reg.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]*BaseToken)}
+				reg.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]Token)}
 			}
 			if reg.byAddr == nil {
 				reg.byAddr = make(map[Address]*SmartContract)
 			}
 			if reg.Registry.tokens == nil {
-				reg.Registry.tokens = make(map[TokenID]*BaseToken)
+				reg.Registry.tokens = make(map[TokenID]Token)
 			}
 		}
 	})
@@ -281,12 +281,12 @@ func RegisterToken(t Token) {
 	r := getRegistry()
 	r.mu.Lock()
 	if r.Registry == nil {
-		r.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]*BaseToken)}
+		r.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]Token)}
 	}
 	if r.Registry.tokens == nil {
-		r.Registry.tokens = make(map[TokenID]*BaseToken)
+		r.Registry.tokens = make(map[TokenID]Token)
 	}
-	r.Registry.tokens[t.ID()] = t.(*BaseToken)
+	r.Registry.tokens[t.ID()] = t
 	r.mu.Unlock()
 	log.WithField("symbol", t.Meta().Symbol).Info("token registered")
 }
@@ -299,15 +299,15 @@ func GetToken(id TokenID) (Token, bool) {
 	return tok, ok
 }
 
-func GetRegistryTokens() []*BaseToken {
+func GetRegistryTokens() []Token {
 	r := getRegistry()
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	list := make([]*BaseToken, 0, len(r.Registry.tokens))
+	list := make([]Token, 0, len(r.Registry.tokens))
 	for _, t := range r.Registry.tokens {
 		list = append(list, t)
 	}
-	sort.Slice(list, func(i, j int) bool { return list[i].id < list[j].id })
+	sort.Slice(list, func(i, j int) bool { return list[i].ID() < list[j].ID() })
 	return list
 }
 
@@ -336,6 +336,9 @@ type Factory struct{}
 func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
+	}
+	if meta.Standard == StdSYN4900 {
+		return NewSyn4900Token(meta, init)
 	}
 
 	// Use specialised token structs per standard when required.
