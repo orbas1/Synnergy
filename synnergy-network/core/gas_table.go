@@ -1030,12 +1030,16 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Transactions
 	// ----------------------------------------------------------------------
-	"VerifySig":      3_500,
-	"ValidateTx":     5_000,
-	"NewTxPool":      12_000,
-	"AddTx":          6_000,
-	"PickTxs":        1_500,
-	"TxPoolSnapshot": 800,
+	"VerifySig":        3_500,
+	"ValidateTx":       5_000,
+	"NewTxPool":        12_000,
+	"AddTx":            6_000,
+	"PickTxs":          1_500,
+	"TxPoolSnapshot":   800,
+	"InitTxFeeManager": 8_000,
+	"CollectFee":       300,
+	"DistributeFees":   5_000,
+	"PendingFees":      100,
 	// Sign already priced
 
 	// ----------------------------------------------------------------------

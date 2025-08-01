@@ -153,7 +153,16 @@ func (l *Ledger) EmitTransfer(tokenID TokenID, from, to Address, amount uint64) 
 }
 
 func (l *Ledger) DeductGas(addr Address, amount uint64) {
-	fmt.Printf("[DeductGas] from: %v, gas: %d\n", addr, amount)
+	l.mu.Lock()
+	if l.TokenBalances[addr.String()] < amount {
+		l.mu.Unlock()
+		return
+	}
+	l.TokenBalances[addr.String()] -= amount
+	l.mu.Unlock()
+	if mgr := CurrentTxFeeManager(); mgr != nil {
+		mgr.Collect(addr, amount)
+	}
 }
 
 func (l *Ledger) WithinBlock(fn func() error) error {
