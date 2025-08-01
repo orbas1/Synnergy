@@ -1183,6 +1183,14 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ------------------------------------------------------------------
+	// Blockchain Compression
+	// ------------------------------------------------------------------
+	"CompressLedger":         6_000,
+	"DecompressLedger":       6_000,
+	"SaveCompressedSnapshot": 8_000,
+	"LoadCompressedSnapshot": 8_000,
 }
 
 func init() {
