@@ -18,6 +18,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **partition** – Partition and compress data sets.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
@@ -340,6 +341,14 @@ needed in custom tooling.
 | `deal:close` | Close a storage deal and release funds. |
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
+
+### partition
+
+| Sub-command | Description |
+|-------------|-------------|
+| `split <file>` | Split a file into equally sized chunks. |
+| `compress <file>` | Compress a file and print base64 output. |
+| `decompress <b64>` | Decompress base64 input and print bytes. |
 
 ### tokens
 

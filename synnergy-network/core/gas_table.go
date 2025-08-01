@@ -324,6 +324,9 @@ var gasTable map[Opcode]uint64
    GossipTx:            5_000,
    RebalanceShards:     8_000,
    VerticalPartition:   2_000,
+   HorizontalPartition: 2_000,
+   CompressData:        4_000,
+   DecompressData:      4_000,
    // Broadcast already priced
 
    // ----------------------------------------------------------------------
@@ -900,6 +903,9 @@ var gasNames = map[string]uint64{
 	"GossipTx":            5_000,
 	"RebalanceShards":     8_000,
 	"VerticalPartition":   2_000,
+	"HorizontalPartition": 2_000,
+	"CompressData":        4_000,
+	"DecompressData":      4_000,
 	// Broadcast already priced
 
 	// ----------------------------------------------------------------------

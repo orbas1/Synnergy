@@ -362,6 +362,9 @@ var catalogue = []struct {
 	{"GossipTx", 0x150009},
 	{"RebalanceShards", 0x15000A},
 	{"VerticalPartition", 0x15000B},
+	{"HorizontalPartition", 0x15000C},
+	{"CompressData", 0x15000D},
+	{"DecompressData", 0x15000E},
 
 	// Sidechains (0x16)
 	{"InitSidechains", 0x160001},
