@@ -116,6 +116,8 @@ For a full table of over 200 operations see the gas schedule file. This ensures 
 ## Consensus Guide
 Synnergy employs a hybrid consensus combining Proof of History for ordering and Proof of Stake for finality. Validators produce PoH hashes to create a verifiable sequence of events. At defined intervals a committee of stakers signs sub-blocks which are then sealed into main blocks using a lightweight Proof of Work puzzle for spam prevention. This design allows fast block times while providing strong security guarantees. Future versions may enable hot-swappable consensus modules so enterprises can adopt algorithms that suit their regulatory environment.
 
+Stake levels for validators are tracked on-chain using the **StakePenaltyManager**. This subsystem allows dynamic adjustments to bonded stake and records penalty points for misbehaviour. Consensus rules may slash or temporarily disable validators when their penalty level exceeds safe limits. Administrators can query and update stakes through CLI commands or smart contracts, ensuring transparent enforcement of network rules.
+
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 

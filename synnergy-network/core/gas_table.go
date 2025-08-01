@@ -704,6 +704,8 @@ var gasNames = map[string]uint64{
 	"DistributeRewards":     10_000,
 	"CalculateWeights":      8_000,
 	"ComputeThreshold":      6_000,
+	"AdjustStake":           3_000,
+	"PenalizeValidator":     4_000,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
