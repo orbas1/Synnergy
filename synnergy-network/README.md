@@ -63,6 +63,7 @@ all modules from the core library. Highlights include:
 - `fault_tolerance` – simulate faults and backups
 - `governance` – DAO style governance commands
 - `green_technology` – sustainability features
+- `energy_efficiency` – track transaction energy usage and efficiency metrics
 - `ledger` – low level ledger inspection
 - `network` – libp2p networking helpers
 - `replication` – snapshot and replicate data
