@@ -96,6 +96,7 @@ all modules from the core library. Highlights include:
 - `workflow` – automate multi-step tasks with triggers and webhooks
 - `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
+- `offwallet` – offline wallet utilities
 - `recovery` – register and invoke account recovery
 - `wallet_mgmt` – manage wallets and send SYNN directly via the ledger
 

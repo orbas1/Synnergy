@@ -48,6 +48,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **offwallet** – Offline wallet utilities.
 - **recovery** – Manage account recovery registration and execution.
 - **workflow** – Build on-chain workflows using triggers and webhooks.
 - **wallet_mgmt** – Manage wallets and submit ledger transfers.
@@ -526,6 +527,12 @@ needed in custom tooling.
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
 
+### offwallet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create an offline wallet file. |
+| `sign` | Sign a transaction offline using the wallet. |
 ### recovery
 
 | Sub-command | Description |

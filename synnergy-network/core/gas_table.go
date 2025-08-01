@@ -1271,6 +1271,18 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
+	"NewRandomWallet":            10_000,
+	"WalletFromMnemonic":         5_000,
+	"NewHDWalletFromSeed":        6_000,
+	"PrivateKey":                 400,
+	"NewAddress":                 500,
+	"SignTx":                     3_000,
+	"NewOffChainWallet":          8_000,
+	"OffChainWalletFromMnemonic": 5_000,
+	"SignOffline":                2_500,
+	"StoreSignedTx":              300,
+	"LoadSignedTx":               300,
+	"BroadcastSignedTx":          1_000,
 	"NewRandomWallet":     10_000,
 	"WalletFromMnemonic":  5_000,
 	"NewHDWalletFromSeed": 6_000,

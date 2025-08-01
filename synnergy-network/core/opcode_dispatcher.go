@@ -622,6 +622,12 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+	{"NewOffChainWallet", 0x1D0007},
+	{"OffChainWalletFromMnemonic", 0x1D0008},
+	{"SignOffline", 0x1D0009},
+	{"StoreSignedTx", 0x1D000A},
+	{"LoadSignedTx", 0x1D000B},
+	{"BroadcastSignedTx", 0x1D000C},
 	{"RegisterRecovery", 0x1D0007},
 	{"RecoverAccount", 0x1D0008},
 
