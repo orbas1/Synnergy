@@ -2826,6 +2826,19 @@ var gasNames = map[string]uint64{
 	"BankNode_SubmitTx":         300,
 
 	// ---------------------------------------------------------------------
+	// Custodial Node
+	// ---------------------------------------------------------------------
+	"NewCustodialNode":   2000,
+	"Custodial_Start":    500,
+	"Custodial_Stop":     500,
+	"Custodial_Register": 300,
+	"Custodial_Deposit":  500,
+	"Custodial_Withdraw": 500,
+	"Custodial_Transfer": 800,
+	"Custodial_Balance":  200,
+	"Custodial_Audit":    1000,
+
+	// ---------------------------------------------------------------------
 	// Immutability Enforcement
 	// ---------------------------------------------------------------------
 	"InitImmutability": 800,
