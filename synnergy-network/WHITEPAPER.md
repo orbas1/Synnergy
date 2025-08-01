@@ -107,6 +107,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `contracts` – Deploy and invoke smart contracts.
 - `contractops` – Pause, upgrade and transfer ownership of contracts.
 - `cross_chain` – Bridge assets to and from external chains.
+- `ccsn` – Coordinate cross-consensus scaling networks.
 - `cross_tx` – Execute cross-chain lock/mint and burn/release transfers.
 - `cross_chain_agnostic_protocols` – Register cross-chain protocols.
 - `data` – Low-level debugging of key/value storage and oracles.

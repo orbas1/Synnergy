@@ -889,6 +889,12 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// CrossConsensus (0x1E)
+	{"RegisterCCSNetwork", 0x1E0001},
+	{"ListCCSNetworks", 0x1E0002},
+	{"GetCCSNetwork", 0x1E0003},
+	{"CCSLockAndTransfer", 0x1E0004},
+	{"CCSBurnAndRelease", 0x1E0005},
 	// AccessControl (0x1E)
 	{"GrantRole", 0x1E0001},
 	{"RevokeRole", 0x1E0002},

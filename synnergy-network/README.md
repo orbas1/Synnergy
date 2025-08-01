@@ -73,6 +73,7 @@ all modules from the core library. Highlights include:
 - `contracts` – deploy and invoke smart contracts
 - `contractops` – administrative tasks such as pausing and upgrading contracts
 - `cross_chain` – configure asset bridges
+- `ccsn` – manage cross-consensus scaling networks
 - `xcontract` – register cross-chain contract mappings
 - `cross_tx` – execute cross-chain transfers
 - `cross_chain_connection` – manage chain-to-chain links

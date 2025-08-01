@@ -33,6 +33,7 @@ responsibilities and dependencies of that module.
   virtual machine.  Contracts are stored on chain and invoked by transactions.
 - **cross_chain.go** – Utilities for bridging assets between other chains.  This
   includes proof verification and lock/release semantics.
+- **cross_consensus_scaling_networks.go** – Bridges assets across different consensus systems and coordinates scaling.
 - **data.go** – Low level helpers for reading and writing on‑chain data.  Other
   modules depend on this for simple key/value access.
 - **fault_tolerance.go** – Structures for Byzantine fault detection and recovery
