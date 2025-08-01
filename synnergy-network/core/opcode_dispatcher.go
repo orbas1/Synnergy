@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
+//	                                 0x1E Immutability
 //	                                 0x1E Warehouse
 //	                                 0x1E Gaming
 //
@@ -583,6 +584,11 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Immutability (0x1E)
+	{"InitImmutability", 0x1E0001},
+	{"VerifyChain", 0x1E0002},
+	{"RestoreChain", 0x1E0003},
 	// Warehouse (0x1E)
 	{"Warehouse_New", 0x1E0001},
 	{"Warehouse_AddItem", 0x1E0002},
