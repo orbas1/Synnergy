@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
+- **geolocation** – Manage node geolocation data.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
 

@@ -1183,6 +1183,14 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// Geolocation Network
+	// ----------------------------------------------------------------------
+	"RegisterLocation": 2_000,
+	"GetLocation":      500,
+	"ListLocations":    1_000,
+	"NodesInRadius":    1_500,
 }
 
 func init() {

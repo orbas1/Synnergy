@@ -34,6 +34,7 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 		TokenBalances:    make(map[string]uint64),
 		lpBalances:       make(map[Address]map[PoolID]uint64),
 		nonces:           make(map[Address]uint64),
+		NodeLocations:    make(map[NodeID]Location),
 		walFile:          wal,
 		snapshotPath:     cfg.SnapshotPath,
 		snapshotInterval: cfg.SnapshotInterval,
@@ -99,6 +100,7 @@ func OpenLedger(path string) (*Ledger, error) {
 		loaded.TxPool = l.TxPool
 		loaded.Contracts = l.Contracts
 		loaded.TokenBalances = l.TokenBalances
+		loaded.NodeLocations = l.NodeLocations
 	}
 	return loaded, nil
 }
@@ -648,4 +650,33 @@ func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 	cost := uint64(bytes)
 	zero := Address{}
 	return l.Transfer(addr, zero, cost)
+}
+
+// SetNodeLocation stores geolocation information for a node.
+func (l *Ledger) SetNodeLocation(id NodeID, loc Location) {
+	l.mu.Lock()
+	if l.NodeLocations == nil {
+		l.NodeLocations = make(map[NodeID]Location)
+	}
+	l.NodeLocations[id] = loc
+	l.mu.Unlock()
+}
+
+// GetNodeLocation returns the location for a node if known.
+func (l *Ledger) GetNodeLocation(id NodeID) (Location, bool) {
+	l.mu.RLock()
+	loc, ok := l.NodeLocations[id]
+	l.mu.RUnlock()
+	return loc, ok
+}
+
+// AllNodeLocations returns a copy of the node location table.
+func (l *Ledger) AllNodeLocations() map[NodeID]Location {
+	l.mu.RLock()
+	out := make(map[NodeID]Location, len(l.NodeLocations))
+	for id, loc := range l.NodeLocations {
+		out[id] = loc
+	}
+	l.mu.RUnlock()
+	return out
 }

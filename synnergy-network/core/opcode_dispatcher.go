@@ -581,6 +581,12 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Geolocation (0x1E)
+	{"RegisterLocation", 0x1E0001},
+	{"GetLocation", 0x1E0002},
+	{"ListLocations", 0x1E0003},
+	{"NodesInRadius", 0x1E0004},
 }
 
 // init wires the catalogue into the live dispatcher.
