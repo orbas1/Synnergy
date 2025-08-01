@@ -26,13 +26,8 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"math/big"
-	Tokens "synnergy-network/core/Tokens"
 	"time"
 )
-
-// Compile-time assertion to ensure the token interfaces are linked
-// Reference to TokenInterfaces for package usage
-var _ Tokens.TokenInterfaces
 
 // ---------------------------------------------------------------------
 // Consensus constants
