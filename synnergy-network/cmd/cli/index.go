@@ -49,6 +49,7 @@ func RegisterRoutes(root *cobra.Command) {
 		Syn11Cmd,
 		SYN70Cmd,
 		SYN600Cmd,
+		Syn1000Cmd,
 		Syn1200Cmd,
 		TokenMgmtCmd,
 		ForexTokenCmd,
