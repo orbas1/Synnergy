@@ -1451,6 +1451,15 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Transactions
 	// ----------------------------------------------------------------------
+	"VerifySig":      3_500,
+	"ValidateTx":     5_000,
+	"NewTxPool":      12_000,
+	"AddTx":          6_000,
+	"PickTxs":        1_500,
+	"TxPoolSnapshot": 800,
+	"Exec_Begin":     1_000,
+	"Exec_RunTx":     2_000,
+	"Exec_Finalize":  5_000,
 	"VerifySig":          3_500,
 	"ValidateTx":         5_000,
 	"NewTxPool":          12_000,

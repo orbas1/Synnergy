@@ -79,6 +79,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **execution** – Manage block execution and transaction pipelines.
 - **binarytree** – Manage ledger-backed binary search trees.
 - **regulator** – Manage on-chain regulators and rule checks.
 - **feedback** – Submit and review on‑chain user feedback.
@@ -808,6 +809,14 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### execution
+
+| Sub-command | Description |
+|-------------|-------------|
+| `begin` | Begin a new block at a given height. |
+| `run <tx.json>` | Execute a transaction JSON file. |
+| `finalize` | Finalize the current block and output it. |
 ### binarytree
 
 | Sub-command | Description |

@@ -133,6 +133,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `account` – basic account management and balance queries.
 - `wallet` – Create wallets and sign transfers.
+- `execution` – Manage block execution and transaction pipelines.
 - `system_health` – Monitor runtime metrics and emit logs.
 - `idwallet` – Register ID-token wallets and verify status.
 - `offwallet` – Manage offline wallets and signed transactions.
