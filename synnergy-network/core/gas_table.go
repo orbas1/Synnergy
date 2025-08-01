@@ -1911,6 +1911,12 @@ var gasNames = map[string]uint64{
 	"RetireCredits":    300,
 	"ProjectInfo":      100,
 	"ListProjects":     100,
+	"InitSYN10":        800,
+	"SYN10":            200,
+	"SYN10_UpdateRate": 100,
+	"SYN10_Info":       50,
+	"SYN10_Mint":       200,
+	"SYN10_Burn":       200,
 	// ----------------------------------------------------------------------
 	// Finalization Management
 	// ----------------------------------------------------------------------
