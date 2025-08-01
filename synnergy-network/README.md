@@ -66,7 +66,7 @@ all modules from the core library. Highlights include:
 - `ledger` – low level ledger inspection
 - `network` – libp2p networking helpers
 - `replication` – snapshot and replicate data
-- `rollups` – manage rollup batches
+ - `rollups` – manage rollup batches and aggregator state
 - `security` – cryptographic utilities
 - `sharding` – shard management
 - `sidechain` – launch and interact with sidechains

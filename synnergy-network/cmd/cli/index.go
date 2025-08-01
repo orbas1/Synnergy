@@ -39,7 +39,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewGreenCommand(),
 		NewLedgerCommand(),
 		NewReplicationCommand(),
-		NewRollupCommand(),
+		NewRollupCommand(), // includes rollup management
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),

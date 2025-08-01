@@ -24,7 +24,7 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
-- **rollups** – Create rollup batches or inspect existing ones.
+ - **rollups** – Create rollup batches, inspect existing ones and control the aggregator state.
 - **security** – Key generation, signing utilities and password helpers.
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
@@ -276,6 +276,9 @@ needed in custom tooling.
 | `info <batchID>` | Display batch header and state. |
 | `list` | List recent batches. |
 | `txs <batchID>` | List transactions in a batch. |
+| `pause` | Pause the rollup aggregator. |
+| `resume` | Resume the rollup aggregator. |
+| `status` | Show current aggregator status. |
 
 ### security
 

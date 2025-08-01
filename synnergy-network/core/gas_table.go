@@ -294,6 +294,9 @@ var gasTable map[Opcode]uint64
    BatchState:        300,
    BatchTransactions: 1_000,
    ListBatches:       2_000,
+   PauseAggregator:   500,
+   ResumeAggregator:  500,
+   AggregatorStatus:  200,
 
    // ----------------------------------------------------------------------
    // Security / Cryptography
@@ -870,6 +873,9 @@ var gasNames = map[string]uint64{
 	"BatchState":        300,
 	"BatchTransactions": 1_000,
 	"ListBatches":       2_000,
+	"PauseAggregator":   500,
+	"ResumeAggregator":  500,
+	"AggregatorStatus":  200,
 
 	// ----------------------------------------------------------------------
 	// Security / Cryptography
