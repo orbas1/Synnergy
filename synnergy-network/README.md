@@ -108,6 +108,8 @@ all modules from the core library. Highlights include:
 - `carbon_credit_system` – manage carbon offset projects and credits
 - `energy_efficiency` – track transaction energy usage and efficiency metrics
 - `ledger` – low level ledger inspection
+- `loanpool` – create and vote on proposals
+- `loanmgr` – manage the loan pool (pause, resume, stats)
 - `account` – manage basic accounts and balances
 - `loanpool` – submit loan proposals and disburse funds
 - `loanpool_apply` – manage loan applications with on-chain voting
