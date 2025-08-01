@@ -335,6 +335,13 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+
+	// special handling for SYN223 which requires the custom struct
+	if meta.Standard == StdSYN223 {
+		tok := NewSYN223Token(meta, init)
+		return tok, nil
+	}
+
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
