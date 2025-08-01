@@ -31,6 +31,8 @@ type AIStubClient interface {
 	Anomaly(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	FeeOpt(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	Volume(ctx context.Context, req *TFRequest) (*TFResponse, error)
+	Inference(ctx context.Context, req *TFRequest) (*TFResponse, error)
+	Analyse(ctx context.Context, req *TFRequest) (*TFResponse, error)
 }
 
 //---------------------------------------------------------------------
