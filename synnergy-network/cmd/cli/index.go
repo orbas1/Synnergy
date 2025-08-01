@@ -119,6 +119,7 @@ func RegisterRoutes(root *cobra.Command) {
 		FootprintCmd,
 		EnergyCmd,
 		InitRepCmd,
+		ReputationCmd,
 		FinalizationCmd,
 		StakingCmd,
 		BinaryTreeCmd,
