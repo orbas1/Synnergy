@@ -27,6 +27,41 @@
         </div>
     </div>
 
+    <div class="card mb-3">
+        <div class="card-header">Derive Address</div>
+        <div class="card-body">
+            <textarea id="walletJson" class="form-control mb-2" rows="3" placeholder="Wallet JSON"></textarea>
+            <div class="row g-2 mb-2">
+                <div class="col">
+                    <input id="account" type="number" class="form-control" placeholder="Account" value="0">
+                </div>
+                <div class="col">
+                    <input id="index" type="number" class="form-control" placeholder="Index" value="0">
+                </div>
+            </div>
+            <button id="addressBtn" class="btn btn-primary">Get Address</button>
+            <pre id="addressOutput" class="mt-2"></pre>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Sign Transaction</div>
+        <div class="card-body">
+            <textarea id="txJson" class="form-control mb-2" rows="3" placeholder="Transaction JSON"></textarea>
+            <button id="signBtn" class="btn btn-primary">Sign</button>
+            <pre id="signOutput" class="mt-2"></pre>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Wallet Opcodes</div>
+        <div class="card-body">
+            <button id="opcodesBtn" class="btn btn-secondary">Load Opcodes</button>
+            <pre id="opcodesOutput" class="mt-2"></pre>
+        </div>
+    </div>
+
+
     <script src="../components/wallet.js"></script>
 </body>
 </html>

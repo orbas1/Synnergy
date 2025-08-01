@@ -5,3 +5,9 @@ body {
     height: 30px;
     margin-right: 8px;
 }
+
+pre {
+    max-height: 300px;
+    overflow: auto;
+}
+
