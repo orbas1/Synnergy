@@ -37,3 +37,8 @@ func (n *NodeAdapter) Peers() []string {
 
 // Ensure NodeAdapter implements the interface
 var _ Nodes.NodeInterface = (*NodeAdapter)(nil)
+
+// AsLightNode returns a light node wrapper around this Node instance.
+func (n *Node) AsLightNode() *Nodes.LightNode {
+	return Nodes.NewLightNode(&NodeAdapter{n})
+}

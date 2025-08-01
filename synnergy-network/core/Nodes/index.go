@@ -9,3 +9,11 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// LightNodeInterface extends NodeInterface with header specific accessors.
+// Light nodes only maintain block headers and request full blocks on demand.
+type LightNodeInterface interface {
+	NodeInterface
+	StoreHeader(h BlockHeader)
+	Headers() []BlockHeader
+}
