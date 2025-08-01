@@ -60,6 +60,7 @@ all modules from the core library. Highlights include:
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `anomaly_detection` – analyse transactions for suspicious activity
 - `fault_tolerance` – simulate faults and backups
 - `governance` – DAO style governance commands
 - `green_technology` – sustainability features

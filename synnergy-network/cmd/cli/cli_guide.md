@@ -18,6 +18,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **anomaly_detection** – Run anomaly analysis on transactions and list flagged hashes.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
@@ -119,6 +120,13 @@ needed in custom tooling.
 | `audit <address>` | Display the audit trail for an address. |
 | `monitor <tx.json> <threshold>` | Run anomaly detection on a transaction. |
 | `verifyzkp <blob.bin> <commitmentHex> <proofHex>` | Verify a zero‑knowledge proof. |
+
+### anomaly_detection
+
+| Sub-command | Description |
+|-------------|-------------|
+| `analyze <tx.json>` | Run anomaly detection on a transaction. |
+| `list` | List flagged transactions. |
 
 ### consensus
 

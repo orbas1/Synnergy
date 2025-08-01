@@ -54,6 +54,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `contracts` – Deploy and invoke smart contracts.
 - `cross_chain` – Bridge assets to and from external chains.
 - `data` – Low-level debugging of key/value storage and oracles.
+- `anomaly_detection` – Detect suspicious transactions using the built-in AI.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
 - `green_technology` – Manage energy tracking and carbon offsets.
