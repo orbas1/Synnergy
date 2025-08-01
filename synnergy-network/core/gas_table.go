@@ -170,6 +170,10 @@ var gasTable map[Opcode]uint64
    GetValidator:          1_000,
    ListValidators:        2_000,
    IsValidator:           800,
+   StartValidatorNode:    10_000,
+   StopValidatorNode:     8_000,
+   ProposeBlock:          12_000,
+   VoteBlock:             4_000,
 
    // ----------------------------------------------------------------------
    // Contracts (WASM / EVM‐compat)
@@ -1289,6 +1293,10 @@ var gasNames = map[string]uint64{
 	"GetValidator":                100,
 	"ListValidators":              200,
 	"IsValidator":                 80,
+	"StartValidatorNode":          1000,
+	"StopValidatorNode":           800,
+	"ProposeBlock":                1200,
+	"VoteBlock":                   400,
         "ConsensusNode_Start":         500,
         "ConsensusNode_Stop":          500,
         "ConsensusNode_SubmitBlock":   800,

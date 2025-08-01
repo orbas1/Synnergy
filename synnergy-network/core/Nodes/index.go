@@ -18,6 +18,19 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// ValidatorNodeInterface extends NodeInterface with validator specific actions.
+// It provides hooks for toggling individual consensus mechanisms and for
+// participating in block production.
+type ValidatorNodeInterface interface {
+	NodeInterface
+	EnablePoH(bool)
+	EnablePoS(bool)
+	EnablePoW(bool)
+	Start()
+	Stop() error
+	ValidateTx([]byte) error
+	ProposeBlock() error
+	VoteBlock([]byte, []byte) error
 // FullNodeAPI exposes the extended functionality provided by a Synnergy
 // FullNode. It embeds NodeInterface and adds lifecycle helpers and
 // accessors required by higher-level modules.
