@@ -26,6 +26,7 @@ func RegisterRoutes(root *cobra.Command) {
 		RecoveryCmd,
 		WalletMgmtCmd,
 		AICmd,
+		AIInferenceCmd,
 		AMMCmd,
 		PoolsCmd,
 		AuthCmd,
