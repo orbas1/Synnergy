@@ -2268,6 +2268,12 @@ var gasNames = map[string]uint64{
 	"Assets_Transfer": 0,
 	"Assets_Get":      0,
 	"Assets_List":     0,
+
+	// SYN1401 investment tokens
+	"SYN1401_Issue":  0,
+	"SYN1401_Accrue": 0,
+	"SYN1401_Redeem": 0,
+	"SYN1401_Info":   0,
 	// Pin & Retrieve already priced
 	// ----------------------------------------------------------------------
 	// Identity Verification

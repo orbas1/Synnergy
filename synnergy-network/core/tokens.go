@@ -594,6 +594,7 @@ func init() {
 	}
 
 	registerTokenOpcodes()
+	registerSYN1401Opcodes()
 }
 
 //---------------------------------------------------------------------
@@ -686,6 +687,7 @@ func (s *Stack) Len() int {
 
 // Reference to TokenInterfaces for package usage
 var _ Tokens.TokenInterfaces
+var _ Tokens.SYN1401
 
 // Tokens_CreateSYN2200 is a VM-accessible helper to mint a SYN2200 token.
 func Tokens_CreateSYN2200(meta Metadata, init map[Address]uint64) (TokenID, error) {

@@ -26,6 +26,8 @@ type CarbonFootprintTokenAPI interface {
 import core "synnergy-network/core"
 import "time"
 
+import "time"
+
 // TokenInterfaces consolidates token standard interfaces without core deps.
 // TokenInterfaces consolidates token standard interfaces without core deps.
 // TokenInterfaces consolidates token standard interfaces without core deps.
@@ -233,6 +235,23 @@ type EducationCreditMetadata struct {
 	Signature      []byte
 }
 
+// SYN1401Investment defines metadata for fixed-income investment tokens.
+type SYN1401Investment struct {
+	ID           string
+	Owner        any
+	Principal    uint64
+	InterestRate float64
+	StartDate    time.Time
+	MaturityDate time.Time
+	Accrued      uint64
+	Redeemed     bool
+}
+
+// SYN1401 provides an interface for SYN1401 compliant managers.
+type SYN1401 interface {
+	TokenInterfaces
+	Record(id string) (SYN1401Investment, bool)
+}
 // CourseRecord stores information about an education course.
 type CourseRecord struct {
 	ID          string
