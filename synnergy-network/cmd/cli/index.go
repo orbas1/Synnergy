@@ -132,6 +132,7 @@ func RegisterRoutes(root *cobra.Command) {
 		HealthcareCmd,
 		UtilityRoute,
 		GeoCmd,
+		GeoNodeCmd,
 		KademliaCmd,
 		ResourceCmd,
 		DistributionCmd,

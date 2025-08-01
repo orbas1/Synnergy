@@ -1316,6 +1316,13 @@ var catalogue = []struct {
 	{"FinishGame", 0x1E0003},
 	{"GetGame", 0x1E0004},
 	{"ListGames", 0x1E0005},
+	// Geospatial Node (0x1F)
+	{"NewGeospatialNode", 0x1F0001},
+	{"RegisterGeoData", 0x1F0002},
+	{"TransformCoordinates", 0x1F0003},
+	{"AddGeofence", 0x1F0004},
+	{"InGeofence", 0x1F0005},
+	{"QueryGeoData", 0x1F0006},
 	{"NewCustodialNode", 0x1F0001},
 	{"Custodial_Start", 0x1F0002},
 	{"Custodial_Stop", 0x1F0003},

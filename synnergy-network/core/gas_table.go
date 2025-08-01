@@ -2529,6 +2529,14 @@ var gasNames = map[string]uint64{
 	"GetLocation":      50,
 	"ListLocations":    100,
 	"NodesInRadius":    150,
+	// Geospatial Node
+	// ---------------------------------------------------------------------
+	"NewGeospatialNode":    1000,
+	"RegisterGeoData":      200,
+	"TransformCoordinates": 300,
+	"AddGeofence":          150,
+	"InGeofence":           100,
+	"QueryGeoData":         200,
 	// Firewall
 	// ----------------------------------------------------------------------
 	"NewFirewall":               400,
