@@ -1190,6 +1190,11 @@ var catalogue = []struct {
 	{"Warehouse_MoveItem", 0x1E0004},
 	{"Warehouse_ListItems", 0x1E0005},
 	{"Warehouse_GetItem", 0x1E0006},
+
+	{"InitOptimization", 0x1E0001},
+	{"OptimizeTransactions", 0x1E0002},
+	{"BalanceLoad", 0x1E0003},
+
 	{"CreateGame", 0x1E0001},
 	{"JoinGame", 0x1E0002},
 	{"FinishGame", 0x1E0003},
