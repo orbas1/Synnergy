@@ -138,6 +138,14 @@ var gasTable map[Opcode]uint64
    DistributeRewards:     10_000,
    CalculateWeights:      8_000,
    ComputeThreshold:      6_000,
+   RegisterValidator:     8_000,
+   DeregisterValidator:   6_000,
+   StakeValidator:        2_000,
+   UnstakeValidator:      2_000,
+   SlashValidator:        3_000,
+   GetValidator:          1_000,
+   ListValidators:        2_000,
+   IsValidator:           800,
 
    // ----------------------------------------------------------------------
    // Contracts (WASM / EVM‐compat)
@@ -815,6 +823,14 @@ var gasNames = map[string]uint64{
 	"DistributeRewards":     10_000,
 	"CalculateWeights":      8_000,
 	"ComputeThreshold":      6_000,
+	"RegisterValidator":     8_000,
+	"DeregisterValidator":   6_000,
+	"StakeValidator":        2_000,
+	"UnstakeValidator":      2_000,
+	"SlashValidator":        3_000,
+	"GetValidator":          1_000,
+	"ListValidators":        2_000,
+	"IsValidator":           800,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
