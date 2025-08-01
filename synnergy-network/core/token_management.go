@@ -99,3 +99,44 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	}
 	return tok.BalanceOf(addr), nil
 }
+
+// CreateSYN2200 creates a new SYN2200 real-time payment token.
+func (tm *TokenManager) CreateSYN2200(meta Metadata, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	tok, err := Tokens.NewSYN2200(meta, init, tm.ledger, tm.gas)
+	if err != nil {
+		return 0, err
+	}
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[tok.ID()] = tok
+	return tok.ID(), nil
+}
+
+// SendRealTimePayment executes an instant transfer using SYN2200 semantics.
+func (tm *TokenManager) SendRealTimePayment(id TokenID, from, to Address, amount uint64, currency string) (uint64, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	rtp, ok := tok.(*Tokens.SYN2200Token)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	return rtp.SendPayment(from, to, amount, currency)
+}
+
+// GetPaymentRecord fetches a payment record from a SYN2200 token.
+func (tm *TokenManager) GetPaymentRecord(id TokenID, pid uint64) (Tokens.PaymentRecord, bool) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return Tokens.PaymentRecord{}, false
+	}
+	rtp, ok := tok.(*Tokens.SYN2200Token)
+	if !ok {
+		return Tokens.PaymentRecord{}, false
+	}
+	return rtp.Payment(pid)
+}
