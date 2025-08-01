@@ -96,21 +96,22 @@ func wrap(name string) OpcodeFunc {
 //
 // Category map:
 //
-//	0x01 AI                     0x0F Liquidity
-//	0x02 AMM                    0x10 Loanpool
-//	0x03 Authority              0x11 Network
-//	0x04 Charity                0x12 Replication
-//	0x05 Coin                   0x13 Rollups
-//	0x06 Compliance             0x14 Security
-//	0x07 Consensus              0x15 Sharding
-//	0x08 Contracts              0x16 Sidechains
-//	0x09 CrossChain             0x17 StateChannel
-//	0x0A Data                   0x18 Storage
-//	0x0B FaultTolerance         0x19 Tokens
-//	0x0C Governance             0x1A Transactions
-//	0x0D GreenTech              0x1B Utilities
-//	0x0E Ledger                 0x1C VirtualMachine
-//	                            0x1D Wallet
+//		0x01 AI                     0x0F Liquidity
+//		0x02 AMM                    0x10 Loanpool
+//		0x03 Authority              0x11 Network
+//		0x04 Charity                0x12 Replication
+//		0x05 Coin                   0x13 Rollups
+//		0x06 Compliance             0x14 Security
+//		0x07 Consensus              0x15 Sharding
+//		0x08 Contracts              0x16 Sidechains
+//		0x09 CrossChain             0x17 StateChannel
+//		0x0A Data                   0x18 Storage
+//		0x0B FaultTolerance         0x19 Tokens
+//		0x0C Governance             0x1A Transactions
+//		0x0D GreenTech              0x1B Utilities
+//		0x0E Ledger                 0x1C VirtualMachine
+//		                            0x1D Wallet
+//	                                 0x1E Sensors
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -581,6 +582,14 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Sensors (0x1E)
+	{"RegisterSensor", 0x1E0001},
+	{"GetSensor", 0x1E0002},
+	{"ListSensors", 0x1E0003},
+	{"UpdateSensorValue", 0x1E0004},
+	{"PollSensor", 0x1E0005},
+	{"TriggerWebhook", 0x1E0006},
 }
 
 // init wires the catalogue into the live dispatcher.
