@@ -64,6 +64,7 @@ all modules from the core library. Highlights include:
 - `governance` – DAO style governance commands
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
+- `account` – manage basic accounts and balances
 - `network` – libp2p networking helpers
 - `replication` – snapshot and replicate data
 - `rollups` – manage rollup batches

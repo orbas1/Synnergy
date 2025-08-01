@@ -810,6 +810,10 @@ var gasNames = map[string]uint64{
 	"AppendSubBlock":      8_000,
 	"Transfer":            2_100, // shared with VM & Tokens
 	"Burn":                2_100, // shared with VM & Tokens
+	"Account_Create":      500,
+	"Account_Delete":      400,
+	"Account_Balance":     200,
+	"Account_Transfer":    2_100,
 
 	// ----------------------------------------------------------------------
 	// Liquidity Manager (high-level AMM façade)
