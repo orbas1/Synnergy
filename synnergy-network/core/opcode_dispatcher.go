@@ -537,6 +537,7 @@ var catalogue = []struct {
 	{"AddTx", 0x1A0005},
 	{"PickTxs", 0x1A0006},
 	{"TxPoolSnapshot", 0x1A0007},
+	{"ReverseTransaction", 0x1A0008},
 	{"NewTxDistributor", 0x1A0008},
 	{"DistributeFees", 0x1A0009},
 

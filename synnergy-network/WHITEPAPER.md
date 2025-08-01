@@ -97,6 +97,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `token_management` – Advanced token lifecycle management.
 - `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
+- `transactionreversal` – Reverse erroneous payments with authority approval.
 - `devnet` – Spawn an in-memory developer network for rapid testing.
 - `testnet` – Launch a configurable test network from a YAML file.
 - `supply` – Track supply chain assets and logistics.
@@ -162,6 +163,7 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+Reversals of fraudulent payments are handled via special `TxReversal` records. At least three authority nodes must co-sign the reversal. The recipient sends back the original amount minus a 2.5% fee and the VM refunds any unused gas.
 Synnergy includes a dedicated **Transaction Distribution** module that automatically splits each transaction fee once a block is committed. Half of the fee rewards the block producer while the remainder is allocated between the LoanPool and community CharityPool. This mechanism keeps incentives aligned and channels a portion of every transaction toward ecosystem development and philanthropic efforts.
 ## Event Management
 Modules emit structured events whenever notable actions occur such as token transfers or contract executions. The Event Manager records these entries in the ledger state and broadcasts them so external services can react in real time. Events are addressed by deterministic hashes and can be queried via the CLI or from smart contracts. This design keeps observers in sync without polling full blocks.
@@ -170,7 +172,7 @@ Modules emit structured events whenever notable actions occur such as token tran
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 
 ### Network Growth Model
-- **Year 1**: Target 50 validator nodes and 100,000 daily transactions. Estimated 10 million THRON in circulation with modest staking rewards.
+- **Year 1**: Target 50 validator nodes and 100,000 daily transactions. Estimated 10 million SYNTHRON in circulation with modest staking rewards.
 - **Year 2**: Expand to 200 validators and introduce sharding. Daily volume expected to exceed 500,000 transactions. Circulating supply projected at 12 million THRON.
 - **Year 3**: Full ecosystem of sidechains and rollups. Goal of 1 million transactions per day and 15 million THRON in circulation. Increased staking and governance participation anticipated.
 

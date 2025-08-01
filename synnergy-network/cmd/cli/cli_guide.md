@@ -50,6 +50,7 @@ The following command groups expose the same functionality available in the core
 - **event_management** – Emit and query custom events stored on chain.
 - **gaming** – Manage simple on-chain games.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
+- **transactionreversal** – Reverse confirmed transactions with authority approval.
 - **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
@@ -559,6 +560,12 @@ needed in custom tooling.
 | `verify` | Verify a signed transaction JSON. |
 | `submit` | Submit a signed transaction to the network. |
 | `pool` | List pending pool transaction hashes. |
+
+### transactionreversal
+
+| Sub-command | Description |
+|-------------|-------------|
+| `reversal` | Reverse a confirmed transaction. Requires authority signatures. |
 
 ### utility_functions
 

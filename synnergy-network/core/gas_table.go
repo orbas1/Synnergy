@@ -497,6 +497,7 @@ var gasTable map[Opcode]uint64
    AddTx:          6_000,
    PickTxs:        1_500,
    TxPoolSnapshot: 800,
+   ReverseTransaction: 10_000,
    NewTxDistributor: 8_000,
    DistributeFees:   1_500,
    // Sign already priced
@@ -1191,6 +1192,13 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Transactions
 	// ----------------------------------------------------------------------
+	"VerifySig":          3_500,
+	"ValidateTx":         5_000,
+	"NewTxPool":          12_000,
+	"AddTx":              6_000,
+	"PickTxs":            1_500,
+	"TxPoolSnapshot":     800,
+	"ReverseTransaction": 10_000,
 	"VerifySig":        3_500,
 	"ValidateTx":       5_000,
 	"NewTxPool":        12_000,
