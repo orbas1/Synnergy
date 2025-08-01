@@ -2321,11 +2321,17 @@ var gasNames = map[string]uint64{
 	// ---------------------------------------------------------------------
 	// Regulatory Management
 	// ---------------------------------------------------------------------
-	"InitRegulatory":    400,
-	"RegisterRegulator": 600,
-	"GetRegulator":      200,
-	"ListRegulators":    200,
-	"EvaluateRuleSet":   500,
+	"InitRegulatory":           400,
+	"RegisterRegulator":        600,
+	"GetRegulator":             200,
+	"ListRegulators":           200,
+	"EvaluateRuleSet":          500,
+	"NewGovAuthorityNode":      1000,
+	"Gov_CheckCompliance":      500,
+	"Gov_EnforceRegulation":    700,
+	"Gov_InterfaceRegulator":   400,
+	"Gov_UpdateLegalFramework": 800,
+	"Gov_AuditTrail":           300,
 
 	// ----------------------------------------------------------------------
 	// Polls Management
