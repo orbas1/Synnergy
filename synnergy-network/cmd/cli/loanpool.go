@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"time"
 
@@ -34,7 +35,7 @@ func ensureLoanPool(cmd *cobra.Command, _ []string) error {
 	if led == nil {
 		return errors.New("ledger not initialised")
 	}
-	stdlog := log.New(logrus.StandardLogger().Out, "", log.LstdFlags)
+	stdlog := log.New(os.Stdout, "loanpool: ", log.LstdFlags)
 	loanPool = core.NewLoanPool(stdlog, led, lpElector{}, &core.LoanPool{})
 	return nil
 }

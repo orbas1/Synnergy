@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **reputation_voting** – Reputation weighted governance commands.
 - **timelock** – Manage delayed proposal execution.
 - **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
@@ -319,6 +320,16 @@ needed in custom tooling.
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
 
+### reputation_voting
+
+| Sub-command | Description |
+|-------------|-------------|
+| `propose` | Submit a new reputation proposal. |
+| `vote <proposal-id>` | Cast a weighted vote using SYN-REP. |
+| `execute <proposal-id>` | Execute a reputation proposal. |
+| `get <proposal-id>` | Display a reputation proposal. |
+| `list` | List all reputation proposals. |
+| `balance <addr>` | Show reputation balance. |
 ### timelock
 
 | Sub-command | Description |

@@ -80,6 +80,7 @@ func RegisterRoutes(root *cobra.Command) {
 	root.AddCommand(
 		NewFaultToleranceCommand(),
 		NewGovernanceCommand(),
+		NewRepGovCommand(),
 		NewGreenCommand(),
 		NewLedgerCommand(),
 		NewReplicationCommand(),

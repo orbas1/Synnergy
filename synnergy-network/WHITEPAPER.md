@@ -20,6 +20,7 @@ The Synnergy ecosystem brings together several services:
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
 - **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Reputation Voting** – Optional weighted voting using SYN-REP reputation tokens.
 - **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
 - **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
@@ -46,6 +47,7 @@ The native asset powering the network is `SYNTHRON` (ticker: SYNN). It has three
 - **Payment and Transaction Fees** – Every on-chain action consumes gas priced in SYNN.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
+- **Reputation Voting** – SYN-REP tokens weight votes for advanced governance scenarios.
 - **DAO Module** – Users can create independent DAOs and manage membership directly on-chain.
 
 ### Token Distribution
