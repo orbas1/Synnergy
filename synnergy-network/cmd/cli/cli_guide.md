@@ -19,6 +19,7 @@ The following command groups expose the same functionality available in the core
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
@@ -178,6 +179,7 @@ needed in custom tooling.
 | `oracle list` | List registered oracles. |
 
 ### fault_tolerance
+- **employment** – Manage on-chain employment contracts and salaries.
 
 | Sub-command | Description |
 |-------------|-------------|
