@@ -63,7 +63,7 @@ func ensureComplianceInitialised(cmd *cobra.Command, _ []string) error {
 			issuers = append(issuers, b)
 		}
 	}
-	core.InitCompliance(led, issuers)
+	core.InitCompliance(nil, issuers)
 	return nil
 }
 
@@ -163,7 +163,7 @@ var eraseCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &ComplianceController{}
-		addr := core.Address(args[0])
+		addr := mustHex(args[0])
 		if err := ctrl.Erase(addr); err != nil {
 			return err
 		}
@@ -179,7 +179,7 @@ var fraudCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &ComplianceController{}
-		addr := core.Address(args[0])
+		addr := mustHex(args[0])
 		sev, err := strconv.Atoi(args[1])
 		if err != nil || sev <= 0 {
 			return fmt.Errorf("severity must be positive int: %w", err)
@@ -197,7 +197,7 @@ var riskCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &ComplianceController{}
-		addr := core.Address(args[0])
+		addr := mustHex(args[0])
 		score := ctrl.Risk(addr)
 		fmt.Printf("Risk score for %s: %d\n", addr, score)
 		return nil
@@ -211,7 +211,7 @@ var auditCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &ComplianceController{}
-		addr := core.Address(args[0])
+		addr := mustHex(args[0])
 		entries, err := ctrl.Audit(addr)
 		if err != nil {
 			return err

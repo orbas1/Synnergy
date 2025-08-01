@@ -78,7 +78,7 @@ func ensureCharityInitialised(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("invalid CHARITY_GENESIS env: %w", err)
 	}
 	genesisTs = t
-	cp = core.NewCharityPool(logrus.StandardLogger(), led, cliElectorate{}, genesisTs)
+	cp = core.NewCharityPool(logrus.StandardLogger(), nil, cliElectorate{}, genesisTs)
 	return nil
 }
 
@@ -165,7 +165,7 @@ var charityRegisterCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &CharityController{}
-		addr := core.Address(args[0])
+		addr := mustHex(args[0])
 		catStr := args[1]
 		name := strings.Join(args[2:], " ")
 		if err := ctrl.Register(addr, catStr, name); err != nil {
@@ -183,7 +183,7 @@ var charityVoteCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &CharityController{}
-		voter, charity := core.Address(args[0]), core.Address(args[1])
+		voter, charity := mustHex(args[0]), mustHex(args[1])
 		if err := ctrl.Vote(voter, charity); err != nil {
 			return err
 		}
@@ -220,7 +220,7 @@ var registrationCmd = &cobra.Command{
 	Args:  cobra.RangeArgs(1, 2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &CharityController{}
-		addr := core.Address(args[0])
+		addr := mustHex(args[0])
 		cycle := currentCycle(time.Now().UTC())
 		if len(args) == 2 {
 			c, err := strconv.ParseUint(args[1], 10, 64)

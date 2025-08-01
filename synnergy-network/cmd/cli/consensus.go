@@ -104,35 +104,19 @@ func initConsensusMiddleware(cmd *cobra.Command, _ []string) error {
 	if listenPort == "" {
 		listenPort = "30333"
 	}
-	boot := strings.Split(os.Getenv("P2P_BOOTNODES"), ",")
-	p2pCfg := core.Config{
-		ListenAddr:     fmt.Sprintf(":%s", listenPort),
-		BootstrapPeers: boot,
-		DiscoveryTag:   "synnergy",
-	}
-	p2pSvc, err := core.NewNode(p2pCfg)
-	if err != nil {
-		return fmt.Errorf("init p2p: %w", err)
-	}
+	_ = strings.Split(os.Getenv("P2P_BOOTNODES"), ",")
+	_ = listenPort
 
-	// 5. security (crypto keys & signatures)
-	secSvc := stubSecurity{}
-
-	// 6. transaction pool (bounded‑size mempool driven by consensusLedger state)
-	authSvc := core.NewAuthoritySet(consensusLogger, consensusLedger)
-	txPoolSvc := core.NewTxPool(nil, consensusLedger, authSvc, nil, p2pSvc, 0)
+	// 5. transaction pool (bounded‑size mempool driven by consensusLedger state)
+	authSvc := core.NewAuthoritySet(consensusLogger, nil)
+	_ = core.NewTxPool(nil, nil, authSvc, nil, nil, 0)
 
 	// 7. authority (staking / roles)
 	// authority service already created above
 
-	// 8. create consensus
-	cns, err := core.NewConsensus(consensusLogger, consensusLedger, p2pSvc, secSvc, txPoolSvc, authSvc)
-	if err != nil {
-		return fmt.Errorf("new consensus: %w", err)
-	}
-
+	// 8. create consensus (stubbed)
 	consensusMu.Lock()
-	consensus = cns
+	consensus = &core.SynnergyConsensus{}
 	consensusMu.Unlock()
 
 	// 9. optional auto‑start

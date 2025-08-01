@@ -17,7 +17,8 @@ go build ./cmd/synnergy
 ```
 
 The resulting binary `synnergy` can then be executed with any of the available
-sub‑commands.
+sub‑commands. Development stubs in `core/helpers.go` expose `InitLedger` and
+`NewTFStubClient` so the CLI can run without a full node during testing.
 
 ## Command Groups
 

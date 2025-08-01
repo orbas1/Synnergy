@@ -228,3 +228,14 @@ file, see [`synnergy-network/core/module_guide.md`](synnergy-network/core/module
 - Only modify up to three files before committing.
 - Mark checkboxes once builds and tests succeed.
 - Refer to `setup_synn.sh` whenever setting up a new environment.
+
+## Recent Build Errors
+- Duplicate `initMiddleware` names across CLI packages
+- Undefined packages `txpool`, `security`, and network types
+- Missing global ledger helpers and AI stub client
+- Casting strings to address or TokenID causing type errors
+
+Additional stubs and helper functions have been added in `core/helpers.go`.
+
+### New Instructions
+Developers should rely on the stub helpers from `core/helpers.go` for CLI initialization. Use `core.InitLedger` and `core.CurrentLedger` to manage shared ledger access. `core.NewTFStubClient` provides a noop AI RPC client. The flat gas calculator `core.NewFlatGasCalculator` can be used for unit tests and CLIs until the real gas model lands.

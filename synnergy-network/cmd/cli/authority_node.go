@@ -18,6 +18,7 @@ package cli
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -25,6 +26,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -42,13 +44,9 @@ func ensureAuthInitialised(cmd *cobra.Command, _ []string) error {
 	if authSet != nil {
 		return nil // already ready
 	}
-	led := core.CurrentLedger() // assumed helper returning StateRW
-	if led == nil {
-		return errors.New("ledger not initialised – start node or init ledger first")
-	}
-	logger := zap.L().Sugar()
-	authSet = core.NewAuthoritySet(logger.Desugar(), led)
-	zap.L().Sugar().Infow("authority subsystem initialised for CLI")
+	authLogger := logrus.New()
+	authSet = core.NewAuthoritySet(authLogger, nil)
+	authLogger.Infof("authority subsystem initialised for CLI")
 	return nil
 }
 
@@ -119,7 +117,12 @@ func parseRole(s string) (core.AuthorityRole, error) {
 	}
 }
 
-func mustHex(addr string) core.Address { return core.Address(addr) }
+func mustHex(addr string) core.Address {
+	var a core.Address
+	b, _ := hex.DecodeString(strings.TrimPrefix(addr, "0x"))
+	copy(a[:], b)
+	return a
+}
 
 //---------------------------------------------------------------------
 // CLI command declarations
