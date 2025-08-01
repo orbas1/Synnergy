@@ -214,6 +214,8 @@ contains a basic HTML page, a JavaScript stub and a README to bootstrap
 interfaces such as the wallet, explorer and various marketplaces. These
 projects are designed for web hosting and will evolve alongside the core
 modules.
+Recent work added an Express-based backend and modular Bootstrap frontend for the token-creation-tool GUI.
+Further expanded the token-creation-tool with a TokenFactory contract, new API routes and a token list component.
 - Explorer GUI implemented with backend server `cmd/explorer` and sample
   smart contract `explorer_utils.sol`.
 
