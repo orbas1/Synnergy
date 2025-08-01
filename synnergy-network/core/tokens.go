@@ -346,6 +346,7 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		}
 		RegisterToken(ct)
 		return ct, nil
+
 	if meta.Standard == StdSYN4900 {
 		return NewSyn4900Token(meta, init)
 	}

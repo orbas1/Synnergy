@@ -148,6 +148,7 @@ type SupplyChainToken interface {
 	Asset(id string) (SupplyChainAsset, bool)
 	Events(id string) []SupplyChainEvent
 }
+
 // SYN1600 defines the behaviour expected from music royalty tokens.
 type SYN1600 interface {
 	TokenInterfaces
@@ -192,6 +193,7 @@ type CharityTokenInterface interface {
 	Release([20]byte, uint64) error
 	Progress() float64
 }
+
 // RecipientRecord stores recipient metadata.
 type RecipientRecord struct {
 	ID   string
