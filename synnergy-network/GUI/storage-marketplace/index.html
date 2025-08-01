@@ -74,6 +74,30 @@
         </form>
     </section>
 
+    <section id="files" class="mt-5">
+        <h2>Pinned Files</h2>
+        <table class="table table-bordered" id="pinsTable">
+            <thead class="table-light">
+                <tr>
+                    <th>CID</th>
+                    <th>Pinned</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h3>Pin File</h3>
+        <form id="pinForm" class="row g-3">
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="cid" placeholder="CID" required>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-secondary" type="submit">Pin</button>
+            </div>
+        </form>
+    </section>
+
+
     <script type="module" src="app.js"></script>
 </body>
 </html>
