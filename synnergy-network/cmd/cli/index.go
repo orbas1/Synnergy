@@ -10,6 +10,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NetworkCmd,
 		MobileMinerCmd,
 		BootstrapCmd,
+		CentralBankCmd,
 		NatCmd,
 		PeerCmd,
 		ConsensusCmd,
