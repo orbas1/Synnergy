@@ -13,6 +13,14 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// StakingNodeInterface extends NodeInterface with staking-related actions.
+type StakingNodeInterface interface {
+	NodeInterface
+	Stake(addr string, amount uint64) error
+	Unstake(addr string, amount uint64) error
+	ProposeBlock(data []byte) error
+	ValidateBlock(data []byte) error
+	Status() string
 // LightNodeInterface extends NodeInterface with header specific accessors.
 // Light nodes only maintain block headers and request full blocks on demand.
 type LightNodeInterface interface {
