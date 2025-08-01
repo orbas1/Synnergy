@@ -38,6 +38,9 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **account** – manage accounts and balances
 - **network** – Manage peer connections and print networking statistics.
+ - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+ - **high_availability** – Manage standby nodes and promote backups.
+ - **rollups** – Create rollup batches or inspect existing ones.
 - **plasma** – Deposit into and withdraw from the Plasma chain.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **rollups** – Create rollup batches or inspect existing ones.
@@ -410,6 +413,16 @@ needed in custom tooling.
 | `replicate <block-hash>` | Gossip a known block. |
 | `request <block-hash>` | Request a block from peers. |
 | `sync` | Synchronize blocks from peers. |
+
+### high_availability
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <addr>` | Register a standby node. |
+| `remove <addr>` | Remove a standby node. |
+| `list` | List registered standby nodes. |
+| `promote <addr>` | Promote a standby to leader via view change. |
+| `snapshot [path]` | Write a ledger snapshot to disk. |
 
 ### rollups
 

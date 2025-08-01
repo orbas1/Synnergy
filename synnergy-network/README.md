@@ -80,6 +80,9 @@ all modules from the core library. Highlights include:
 - `loanpool` – submit loan proposals and disburse funds
 - `loanpool_apply` – manage loan applications with on-chain voting
 - `network` – libp2p networking helpers
+ - `replication` – snapshot and replicate data
+ - `high_availability` – manage standby nodes and promote backups
+ - `rollups` – manage rollup batches
 - `plasma` – manage plasma deposits and exits
 - `replication` – snapshot and replicate data
 - `rollups` – manage rollup batches
