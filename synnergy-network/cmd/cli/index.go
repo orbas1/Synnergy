@@ -19,6 +19,7 @@ func RegisterRoutes(root *cobra.Command) {
 		AdaptiveCmd,
 		TokensCmd,
 		TokenMgmtCmd,
+		TicketCmd,
 		Syn1900Cmd,
 		Syn2100Cmd,
 		Syn2200Cmd,
