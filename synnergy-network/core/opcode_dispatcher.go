@@ -112,6 +112,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
 //	                                 0x1E Warehouse
+//	                                 0x1E Gaming
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -589,6 +590,13 @@ var catalogue = []struct {
 	{"Warehouse_MoveItem", 0x1E0004},
 	{"Warehouse_ListItems", 0x1E0005},
 	{"Warehouse_GetItem", 0x1E0006},
+
+	// Gaming (0x1E)
+	{"CreateGame", 0x1E0001},
+	{"JoinGame", 0x1E0002},
+	{"FinishGame", 0x1E0003},
+	{"GetGame", 0x1E0004},
+	{"ListGames", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.
