@@ -81,3 +81,90 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	}
 	return tok.BalanceOf(addr), nil
 }
+
+// NewLegalToken creates a SYN4700 legal token and registers it with the ledger.
+func (tm *TokenManager) NewLegalToken(meta Metadata, docType string, hash []byte, parties []Address, expiry time.Time, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	lt, err := NewLegalToken(meta, docType, hash, parties, expiry, init)
+	if err != nil {
+		return 0, err
+	}
+	lt.ledger = tm.ledger
+	lt.gas = tm.gas
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[lt.id] = lt
+	return lt.id, nil
+}
+
+// LegalAddSignature records a signature for a SYN4700 token.
+func (tm *TokenManager) LegalAddSignature(id TokenID, party Address, sig []byte) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.AddSignature(party, sig)
+	return nil
+}
+
+// LegalRevokeSignature removes a signature for a SYN4700 token.
+func (tm *TokenManager) LegalRevokeSignature(id TokenID, party Address) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.RevokeSignature(party)
+	return nil
+}
+
+// LegalUpdateStatus updates the status field of a SYN4700 token.
+func (tm *TokenManager) LegalUpdateStatus(id TokenID, status string) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.UpdateStatus(status)
+	return nil
+}
+
+// LegalStartDispute marks a SYN4700 token as being in dispute.
+func (tm *TokenManager) LegalStartDispute(id TokenID) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.StartDispute()
+	return nil
+}
+
+// LegalResolveDispute resolves a dispute for a SYN4700 token.
+func (tm *TokenManager) LegalResolveDispute(id TokenID, result string) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt, ok := tok.(*LegalToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	lt.ResolveDispute(result)
+	return nil
+}
