@@ -18,6 +18,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ConsensusHopCmd,
 		AdaptiveCmd,
 		TokensCmd,
+		Syn1200Cmd,
 		TokenMgmtCmd,
 		IPTokenCmd,
 		TicketCmd,

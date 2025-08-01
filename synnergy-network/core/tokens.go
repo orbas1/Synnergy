@@ -13,7 +13,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"sync"
-	Tokens "synnergy-network/core/Tokens"
 	"time"
 )
 
@@ -487,6 +486,12 @@ func init() {
 	}
 
 	for _, m := range canon {
+		if m.Standard == StdSYN1200 {
+			if _, err := NewSYN1200(m, map[Address]uint64{AddressZero: 0}); err != nil {
+				panic(err)
+			}
+			continue
+		}
 		if _, err := f.Create(m, map[Address]uint64{AddressZero: 0}); err != nil {
 			panic(err)
 		}

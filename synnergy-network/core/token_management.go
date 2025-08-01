@@ -17,6 +17,41 @@ type TokenManager struct {
 	mu     sync.RWMutex
 }
 
+func (tm *TokenManager) AddBridge(id TokenID, chain string, addr Address) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	if syn, ok := tok.(*SYN1200Token); ok {
+		syn.AddBridge(chain, addr)
+		return nil
+	}
+	return fmt.Errorf("token %d not SYN1200", id)
+}
+
+func (tm *TokenManager) AtomicSwap(id TokenID, swapID, chain string, from, to Address, amt uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	if syn, ok := tok.(*SYN1200Token); ok {
+		return syn.AtomicSwap(swapID, chain, from, to, amt)
+	}
+	return fmt.Errorf("token %d not SYN1200", id)
+}
+
+func (tm *TokenManager) SwapStatus(id TokenID, swapID string) (*SwapRecord, bool, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return nil, false, ErrInvalidAsset
+	}
+	if syn, ok := tok.(*SYN1200Token); ok {
+		rec, ok2 := syn.GetSwap(swapID)
+		return rec, ok2, nil
+	}
+	return nil, false, fmt.Errorf("token %d not SYN1200", id)
+}
+
 // NewTokenManager initialises a manager bound to the given ledger and gas model.
 func NewTokenManager(l *Ledger, g GasCalculator) *TokenManager {
 	return &TokenManager{ledger: l, gas: g}
