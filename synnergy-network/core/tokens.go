@@ -344,6 +344,27 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	return bt, nil
 }
 
+// CreateFutures returns a FuturesToken adhering to the SYN3600 standard.
+func (Factory) CreateFutures(meta Metadata, contract FuturesContract, init map[Address]uint64) (*FuturesToken, error) {
+	if meta.Standard == 0 {
+		meta.Standard = StdSYN3600
+	}
+	if meta.Created.IsZero() {
+		meta.Created = time.Now().UTC()
+	}
+	ft := &FuturesToken{
+		BaseToken: &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()},
+		Contract:  contract,
+		Positions: make(map[Address]*FuturesPosition),
+	}
+	for a, v := range init {
+		ft.balances.Set(ft.id, a, v)
+		ft.meta.TotalSupply += v
+	}
+	RegisterToken(ft.BaseToken)
+	return ft, nil
+}
+
 func NewBalanceTable() *BalanceTable {
 	return &BalanceTable{
 		balances: make(map[TokenID]map[Address]uint64),
@@ -428,6 +449,12 @@ func init() {
 	}
 
 	for _, m := range canon {
+		if m.Standard == StdSYN3600 {
+			if _, err := f.CreateFutures(m, FuturesContract{}, map[Address]uint64{AddressZero: 0}); err != nil {
+				panic(err)
+			}
+			continue
+		}
 		if _, err := f.Create(m, map[Address]uint64{AddressZero: 0}); err != nil {
 			panic(err)
 		}
