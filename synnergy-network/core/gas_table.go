@@ -1283,6 +1283,8 @@ var gasNames = map[string]uint64{
 	"ExecuteWorkflow":     5_000,
 	"ListWorkflows":       500,
 	"SignTx":              3_000,
+	"RegisterRecovery":    5_000,
+	"RecoverAccount":      8_000,
 
 	// ------------------------------------------------------------------
 	// Swarm

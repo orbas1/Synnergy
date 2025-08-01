@@ -48,6 +48,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **recovery** – Manage account recovery registration and execution.
 - **workflow** – Build on-chain workflows using triggers and webhooks.
 - **wallet_mgmt** – Manage wallets and submit ledger transfers.
 - **devnet** – Launch a local multi-node developer network.
@@ -525,6 +526,12 @@ needed in custom tooling.
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
 
+### recovery
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register` | Register recovery credentials for an address. |
+| `recover` | Restore an address by proving three credentials. |
 ### workflow
 
 | Sub-command | Description |
