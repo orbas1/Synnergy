@@ -839,6 +839,11 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// Resource Management (0x1E)
+	{"SetQuota", 0x1E0001},
+	{"GetQuota", 0x1E0002},
+	{"ChargeResources", 0x1E0003},
+	{"ReleaseResources", 0x1E0004},
 	// Distribution (0x1E)
 	{"NewDistributor", 0x1E0001},
 	{"BatchTransfer", 0x1E0002},

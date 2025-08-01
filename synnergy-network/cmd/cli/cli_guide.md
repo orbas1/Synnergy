@@ -47,6 +47,7 @@ The following command groups expose the same functionality available in the core
 - **timelock** – Manage delayed proposal execution.
 - **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
+- **resource_management** – Manage VM resource quotas and usage.
 - **carbon_credit_system** – Manage carbon offset projects and credits.
 - **energy_efficiency** – Record transaction counts and compute efficiency scores.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
@@ -477,6 +478,13 @@ needed in custom tooling.
 | `throttle <validator-addr>` | Check if a validator should be throttled. |
 | `list` | List certificates for all validators. |
 
+### resource_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `set <addr> <cpu> <mem> <store>` | Set resource quota for an address. |
+| `show <addr>` | Display quota and current usage. |
+| `charge <addr> <cpu> <mem> <store>` | Charge and record consumed resources. |
 ### carbon_credit_system
 
 | Sub-command | Description |

@@ -103,6 +103,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `timelock` – Delay proposal execution via a queue.
 - `dao` – Create DAOs and manage their members.
 - `green_technology` – Manage energy tracking and carbon offsets.
+- `resource_management` – Track quotas and deduct fees for resource usage.
 - `carbon_credit_system` – Track carbon projects and issue credits.
 - `energy_efficiency` – Measure transaction energy use and compute efficiency scores.
 - `ledger` – Inspect blocks, accounts, and token metrics.
@@ -180,6 +181,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  ResourceMgmt
                                  0x1E  CarbonCredit
                                  0x1E  DeFi
                                  0x1E  BinaryTree

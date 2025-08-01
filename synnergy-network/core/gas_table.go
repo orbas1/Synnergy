@@ -773,6 +773,12 @@ var gasTable map[Opcode]uint64
    SignTx:              3_000,
 
    // ----------------------------------------------------------------------
+   // Resource Management
+   // ----------------------------------------------------------------------
+   SetQuota:         1_000,
+   GetQuota:         500,
+   ChargeResources:  2_000,
+   ReleaseResources: 1_000,
    // Finalization Management
    // ----------------------------------------------------------------------
    NewFinalizationManager: 8_000,
@@ -1810,6 +1816,12 @@ var gasNames = map[string]uint64{
 	"SignTx":              3_000,
 
 	// ---------------------------------------------------------------------
+	// Resource Management
+	// ---------------------------------------------------------------------
+	"SetQuota":         1_000,
+	"GetQuota":         500,
+	"ChargeResources":  2_000,
+	"ReleaseResources": 1_000,
 	// Distribution
 	// ---------------------------------------------------------------------
 	"NewDistributor": 1_000,
