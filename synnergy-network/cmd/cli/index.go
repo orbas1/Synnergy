@@ -141,6 +141,7 @@ func RegisterRoutes(root *cobra.Command) {
 		WarehouseCmd,
 		MusicRoyaltyCmd,
 		GamingCmd,
+		WatchtowerCmd,
 	)
 
 	// modules that expose constructors

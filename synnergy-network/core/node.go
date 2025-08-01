@@ -37,3 +37,4 @@ func (n *NodeAdapter) Peers() []string {
 
 // Ensure NodeAdapter implements the interface
 var _ Nodes.NodeInterface = (*NodeAdapter)(nil)
+var _ Nodes.Watchtower = (*WatchtowerNode)(nil)

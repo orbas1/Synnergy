@@ -9,3 +9,11 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// Watchtower exposes the interface implemented by watchtower nodes.
+type Watchtower interface {
+	NodeInterface
+	Start()
+	Stop() error
+	Alerts() <-chan string
+}
