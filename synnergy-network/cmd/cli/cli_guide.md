@@ -530,6 +530,7 @@ needed in custom tooling.
 | `stop` | Stop the sync manager. |
 | `status` | Show sync progress. |
 | `once` | Perform one synchronization round. |
+
 ### high_availability
 
 | Sub-command | Description |
