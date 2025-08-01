@@ -314,6 +314,11 @@ var catalogue = []struct {
 	{"Dial", 0x11000A},
 	{"SetBroadcaster", 0x11000B},
 	{"GlobalBroadcast", 0x11000C},
+	{"NewBootstrapNode", 0x11000D},
+	{"Bootstrap_Start", 0x11000E},
+	{"Bootstrap_Stop", 0x11000F},
+	{"Bootstrap_Peers", 0x110010},
+	{"Bootstrap_DialSeed", 0x110011},
 
 	// Replication (0x12)
 	{"NewReplicator", 0x120001},

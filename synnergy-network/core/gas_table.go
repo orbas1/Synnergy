@@ -271,6 +271,11 @@ var gasTable map[Opcode]uint64
    Dial:            2_000,
    SetBroadcaster:  500,
    GlobalBroadcast: 1_000,
+   NewBootstrapNode: 20_000,
+   Bootstrap_Start: 8_000,
+   Bootstrap_Stop: 4_000,
+   Bootstrap_Peers: 500,
+   Bootstrap_DialSeed: 2_000,
    // Broadcast & Subscribe already priced
 
    // ----------------------------------------------------------------------
@@ -837,16 +842,21 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Networking
 	// ----------------------------------------------------------------------
-	"NewNode":         18_000,
-	"HandlePeerFound": 1_500,
-	"DialSeed":        2_000,
-	"ListenAndServe":  8_000,
-	"Close":           500,
-	"Peers":           400,
-	"NewDialer":       2_000,
-	"Dial":            2_000,
-	"SetBroadcaster":  500,
-	"GlobalBroadcast": 1_000,
+	"NewNode":            18_000,
+	"HandlePeerFound":    1_500,
+	"DialSeed":           2_000,
+	"ListenAndServe":     8_000,
+	"Close":              500,
+	"Peers":              400,
+	"NewDialer":          2_000,
+	"Dial":               2_000,
+	"SetBroadcaster":     500,
+	"GlobalBroadcast":    1_000,
+	"NewBootstrapNode":   20_000,
+	"Bootstrap_Start":    8_000,
+	"Bootstrap_Stop":     4_000,
+	"Bootstrap_Peers":    500,
+	"Bootstrap_DialSeed": 2_000,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------

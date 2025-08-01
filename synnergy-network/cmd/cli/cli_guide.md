@@ -23,6 +23,7 @@ The following command groups expose the same functionality available in the core
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
+- **bootstrap** – Start a dedicated bootstrap node for new peers.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
@@ -254,6 +255,14 @@ needed in custom tooling.
 | `peers` | List connected peers. |
 | `broadcast <topic> <data>` | Publish data on the network. |
 | `subscribe <topic>` | Subscribe to a topic. |
+
+### bootstrap
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start` | Start the bootstrap node. |
+| `stop` | Stop the bootstrap node. |
+| `peers` | List peers connected to the bootstrap node. |
 
 ### replication
 
