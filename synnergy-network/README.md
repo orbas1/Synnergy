@@ -20,6 +20,7 @@ The repository is organised as follows:
 |------|-------------|
 | `core/` | Core blockchain modules such as consensus, storage and smart contract logic. A detailed list is available in [`core/module_guide.md`](core/module_guide.md). |
 | `cmd/` | Command line sources, configuration files and helper scripts. CLI modules live under `cmd/cli`. |
+| `core/binary_tree_operations.go` | Ledger-backed binary search tree implementation with CLI and VM opcodes. |
 | `tests/` | Go unit tests covering each module. Run with `go test ./...`. |
 | `third_party/` | Vendored dependencies such as a libp2p fork used during early development. |
 | `setup_synn.sh` | Convenience script that installs Go and builds the CLI. |
