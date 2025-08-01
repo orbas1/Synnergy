@@ -135,6 +135,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewFailoverCommand(),
 		NewGovernanceCommand(),
 		NewTokenVoteCommand(),
+		NewSYN300Command(),
 		NewGovernanceManagementCommand(),
 		NewRepGovCommand(),
 		NewGreenCommand(),
@@ -142,11 +143,9 @@ func RegisterRoutes(root *cobra.Command) {
 		NewReplicationCommand(),
 		NewRollupCommand(), // includes rollup management
 		NewSyncCommand(),
-		NewRollupCommand(),
 		NewSecurityCommand(),
 		NewShardingCommand(),
-		NewSidechainCommand(),
-	) // includes sidechain management helpers
+		NewSidechainCommand(), // includes sidechain management helpers
 		NewHealthCommand(),
 	)
 }

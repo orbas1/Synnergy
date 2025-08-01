@@ -335,13 +335,26 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
-	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+
+	// Use specialised token structs per standard when required.
+	var tok Token
+	switch meta.Standard {
+	case StdSYN300:
+		g := NewSYN300(meta)
+		tok = g
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		tok = bt
+	}
+
+	bt := tok.(*BaseToken)
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
+
 	RegisterToken(bt)
-	return bt, nil
+	return tok, nil
 }
 
 func NewBalanceTable() *BalanceTable {
