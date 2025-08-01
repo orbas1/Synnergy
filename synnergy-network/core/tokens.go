@@ -13,7 +13,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"sync"
-	Tokens "synnergy-network/core/Tokens"
 	"time"
 )
 
@@ -86,7 +85,9 @@ const (
 	StdSYN4700 byte = 0x86
 	StdSYN4900 byte = 0x87
 	StdSYN5000 byte = 0x88
+	StdSYN12   byte = 0x8A
 	StdSYN10   byte = 0x0A
+	StdSYN11   byte = 0x0B
 )
 
 //---------------------------------------------------------------------
@@ -257,19 +258,19 @@ func getRegistry() *ContractRegistry {
 			reg = &ContractRegistry{
 				Registry: &Registry{
 					Entries: make(map[string][]byte),
-					tokens:  make(map[TokenID]*BaseToken),
+					tokens:  make(map[TokenID]Token),
 				},
 				byAddr: make(map[Address]*SmartContract),
 			}
 		} else {
 			if reg.Registry == nil {
-				reg.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]*BaseToken)}
+				reg.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]Token)}
 			}
 			if reg.byAddr == nil {
 				reg.byAddr = make(map[Address]*SmartContract)
 			}
 			if reg.Registry.tokens == nil {
-				reg.Registry.tokens = make(map[TokenID]*BaseToken)
+				reg.Registry.tokens = make(map[TokenID]Token)
 			}
 		}
 	})
@@ -280,12 +281,22 @@ func RegisterToken(t Token) {
 	r := getRegistry()
 	r.mu.Lock()
 	if r.Registry == nil {
-		r.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]*BaseToken)}
+		r.Registry = &Registry{Entries: make(map[string][]byte), tokens: make(map[TokenID]Token)}
 	}
 	if r.Registry.tokens == nil {
-		r.Registry.tokens = make(map[TokenID]*BaseToken)
+		r.Registry.tokens = make(map[TokenID]Token)
 	}
-	r.Registry.tokens[t.ID()] = t.(*BaseToken)
+	switch v := t.(type) {
+	case *BaseToken:
+		r.Registry.tokens[t.ID()] = v
+	case interface{ Base() *BaseToken }:
+		r.Registry.tokens[t.ID()] = v.Base()
+	default:
+		r.mu.Unlock()
+		log.WithField("symbol", t.Meta().Symbol).Warn("token registration failed: incompatible type")
+		return
+	}
+	r.Registry.tokens[t.ID()] = t
 	r.mu.Unlock()
 	log.WithField("symbol", t.Meta().Symbol).Info("token registered")
 }
@@ -298,15 +309,15 @@ func GetToken(id TokenID) (Token, bool) {
 	return tok, ok
 }
 
-func GetRegistryTokens() []*BaseToken {
+func GetRegistryTokens() []Token {
 	r := getRegistry()
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	list := make([]*BaseToken, 0, len(r.Registry.tokens))
+	list := make([]Token, 0, len(r.Registry.tokens))
 	for _, t := range r.Registry.tokens {
 		list = append(list, t)
 	}
-	sort.Slice(list, func(i, j int) bool { return list[i].id < list[j].id })
+	sort.Slice(list, func(i, j int) bool { return list[i].ID() < list[j].ID() })
 	return list
 }
 
@@ -323,6 +334,7 @@ func InitTokens(ledger *Ledger, vm VM, gas GasCalculator) {
 		tok.gas = gas
 		ledger.tokens[id] = tok
 	}
+	InitDAO2500(ledger)
 }
 
 //---------------------------------------------------------------------
@@ -335,13 +347,126 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+
+	// specialised handling for SYN3900 benefit tokens
+	if meta.Standard == StdSYN3900 {
+		bt := NewBenefitToken(meta)
+		for a, v := range init {
+			bt.balances.Set(bt.id, a, v)
+			bt.meta.TotalSupply += v
+		}
+		RegisterToken(bt)
+		return bt, nil
+	// Specialised token standards
+	if meta.Standard == StdSYN4200 {
+		ct := &Tokens.CharityToken{BaseToken: &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}}
+		for a, v := range init {
+			ct.balances.Set(ct.id, a, v)
+			ct.meta.TotalSupply += v
+		}
+		RegisterToken(ct)
+		return ct, nil
+
+	if meta.Standard == StdSYN4900 {
+		return NewSyn4900Token(meta, init)
+	}
+
+	// Use specialised token structs per standard when required.
+	var tok Token
+	switch meta.Standard {
+	case StdSYN300:
+		g := NewSYN300(meta)
+		tok = g
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		tok = bt
+	// specialised token instantiation based on standard
+	if meta.Standard == StdSYN700 {
+		tok := NewSYN700Token(meta)
+		tok.BaseToken.id = deriveID(meta.Standard)
+		for a, v := range init {
+			tok.BaseToken.balances.Set(tok.ID(), a, v)
+			tok.BaseToken.meta.TotalSupply += v
+
+	// Specialised standards may require custom token structures.
+	if meta.Standard == StdSYN1600 {
+		tok, err := NewSYN1600Token(meta, init, MusicInfo{}, nil)
+		if err != nil {
+			return nil, err
+		}
+		RegisterToken(tok)
+		return tok, nil
+	}
+
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+	var tok Token
+	switch meta.Standard {
+	case StdSYN1800:
+		tok = NewCarbonFootprintToken(meta)
+	default:
+		tok = &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+	}
+
+	bt := tok.(*BaseToken)
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
+
 	RegisterToken(bt)
-	return bt, nil
+	// specialised token types based on standard
+	switch meta.Standard {
+	case StdSYN1300:
+		sct := NewSupplyChainToken(bt)
+		RegisterToken(sct)
+		return sct, nil
+	default:
+		RegisterToken(bt)
+		return bt, nil
+	}
+	case StdSYN2500:
+		dt := NewSYN2500Token(meta)
+		for a, v := range init {
+			dt.balances.Set(dt.id, a, v)
+			dt.meta.TotalSupply += v
+		}
+		tok = dt
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		for a, v := range init {
+			bt.balances.Set(bt.id, a, v)
+			bt.meta.TotalSupply += v
+		}
+		tok = bt
+	}
+	var tok Token = bt
+	if meta.Standard == StdSYN2100 {
+		tok = &SupplyFinanceToken{BaseToken: bt, documents: make(map[string]*FinancialDocument), liquidity: make(map[Address]uint64)}
+	}
+
+	RegisterToken(tok)
+	return tok, nil
+}
+
+// CreateFutures returns a FuturesToken adhering to the SYN3600 standard.
+func (Factory) CreateFutures(meta Metadata, contract FuturesContract, init map[Address]uint64) (*FuturesToken, error) {
+	if meta.Standard == 0 {
+		meta.Standard = StdSYN3600
+	}
+	if meta.Created.IsZero() {
+		meta.Created = time.Now().UTC()
+	}
+	ft := &FuturesToken{
+		BaseToken: &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()},
+		Contract:  contract,
+		Positions: make(map[Address]*FuturesPosition),
+	}
+	for a, v := range init {
+		ft.balances.Set(ft.id, a, v)
+		ft.meta.TotalSupply += v
+	}
+	RegisterToken(ft.BaseToken)
+	return ft, nil
 }
 
 func NewBalanceTable() *BalanceTable {
@@ -398,7 +523,6 @@ func init() {
 		{"Synnergy Tangible", "SYN-TANG", 0, StdSYN130, time.Time{}, false, 0},
 		{"Synnergy Intangible", "SYN-INTANG", 0, StdSYN131, time.Time{}, false, 0},
 		{"Synnergy SafeTransfer", "SYN223", 18, StdSYN223, time.Time{}, false, 0},
-		{"Synnergy Identity", "SYN-ID", 0, StdSYN900, time.Time{}, false, 0},
 		{"Synnergy CBDC", "SYN-CBDC", 2, StdSYN10, time.Time{}, false, 0},
 		{"Synnergy Asset‑Backed", "SYN-ASSET", 0, StdSYN800, time.Time{}, false, 0},
 		{"Synnergy ETF", "SYN-ETF", 0, StdSYN3300, time.Time{}, false, 0},
@@ -428,6 +552,14 @@ func init() {
 	}
 
 	for _, m := range canon {
+		if m.Standard == StdSYN3600 {
+			if _, err := f.CreateFutures(m, FuturesContract{}, map[Address]uint64{AddressZero: 0}); err != nil {
+		if m.Standard == StdSYN1200 {
+			if _, err := NewSYN1200(m, map[Address]uint64{AddressZero: 0}); err != nil {
+				panic(err)
+			}
+			continue
+		}
 		if _, err := f.Create(m, map[Address]uint64{AddressZero: 0}); err != nil {
 			panic(err)
 		}
@@ -442,7 +574,10 @@ func init() {
 
 func registerTokenOpcodes() {
 	Register(0xB0, wrap("Tokens_Transfer"))
-	// Additional token opcodes omitted for brevity.
+	Register(0xB1, wrap("Tokens_RecordEmission"))
+	Register(0xB2, wrap("Tokens_RecordOffset"))
+	Register(0xB3, wrap("Tokens_NetBalance"))
+	Register(0xB4, wrap("Tokens_ListRecords"))
 }
 
 func (ctx *Context) RefundGas(amount uint64) {
@@ -523,3 +658,21 @@ func (s *Stack) Len() int {
 
 // Reference to TokenInterfaces for package usage
 var _ Tokens.TokenInterfaces
+
+// Tokens_CreateSYN2200 is a VM-accessible helper to mint a SYN2200 token.
+func Tokens_CreateSYN2200(meta Metadata, init map[Address]uint64) (TokenID, error) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.CreateSYN2200(meta, init)
+}
+
+// Tokens_SendPayment performs an instant payment via a SYN2200 token.
+func Tokens_SendPayment(id TokenID, from, to Address, amount uint64, currency string) (uint64, error) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.SendRealTimePayment(id, from, to, amount, currency)
+}
+
+// Tokens_GetPayment retrieves a payment record from a SYN2200 token.
+func Tokens_GetPayment(id TokenID, pid uint64) (Tokens.PaymentRecord, bool) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.GetPaymentRecord(id, pid)
+}
