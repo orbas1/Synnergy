@@ -1183,6 +1183,15 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// RPC / WebRTC
+	// ----------------------------------------------------------------------
+	"NewRPCWebRTC":    10_000,
+	"RPC_Serve":       5_000,
+	"RPC_Close":       1_000,
+	"RPC_ConnectPeer": 3_000,
+	"RPC_Broadcast":   1_500,
 }
 
 func init() {
