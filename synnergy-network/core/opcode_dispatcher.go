@@ -581,6 +581,13 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Polls Management (0x1E)
+	{"CreatePoll", 0x1E0001},
+	{"VotePoll", 0x1E0002},
+	{"ClosePoll", 0x1E0003},
+	{"GetPoll", 0x1E0004},
+	{"ListPolls", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.
