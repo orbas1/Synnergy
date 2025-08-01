@@ -1,7 +1,11 @@
 package core
 
 import (
+	"fmt"
 	"sync"
+	"time"
+
+	tokenif "synnergy-network/core/tokeninterfaces"
 )
 
 // TokenManager provides high level helpers for creating and manipulating tokens
@@ -80,4 +84,30 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 		return 0, ErrInvalidAsset
 	}
 	return tok.BalanceOf(addr), nil
+}
+
+// IssueDebt creates a new debt schedule for the borrower on a SYN845 token.
+func (tm *TokenManager) IssueDebt(id TokenID, borrower Address, amount uint64, period time.Duration) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	dt, ok := tok.(tokenif.SYN845Interface)
+	if !ok {
+		return fmt.Errorf("token does not support SYN845 features")
+	}
+	return dt.Issue(borrower, amount, int64(period))
+}
+
+// MakeDebtPayment records a repayment on a SYN845 token.
+func (tm *TokenManager) MakeDebtPayment(id TokenID, borrower Address, amount uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	dt, ok := tok.(tokenif.SYN845Interface)
+	if !ok {
+		return fmt.Errorf("token does not support SYN845 features")
+	}
+	return dt.MakePayment(borrower, amount)
 }
