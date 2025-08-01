@@ -9,3 +9,13 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// RegulatoryNodeInterface extends NodeInterface with compliance helpers.
+type RegulatoryNodeInterface interface {
+	NodeInterface
+	VerifyTransaction([]byte) error
+	VerifyKYC([]byte) error
+	EraseKYC(string) error
+	RiskScore(string) int
+	GenerateReport() ([]byte, error)
+}
