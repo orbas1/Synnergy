@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/hex"
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -16,11 +14,12 @@ import (
 type Server struct {
 	router     *mux.Router
 	httpServer *http.Server
+	service    *LedgerService
 }
 
 // NewServer constructs the router and HTTP server.
-func NewServer(addr string) *Server {
-	s := &Server{router: mux.NewRouter()}
+func NewServer(addr string, svc *LedgerService) *Server {
+	s := &Server{router: mux.NewRouter(), service: svc}
 	s.routes()
 	s.httpServer = &http.Server{Addr: addr, Handler: s.router}
 	return s
@@ -33,6 +32,9 @@ func (s *Server) routes() {
 	s.router.HandleFunc("/api/blocks", s.handleBlocks).Methods("GET")
 	s.router.HandleFunc("/api/blocks/{height:[0-9]+}", s.handleBlock).Methods("GET")
 	s.router.HandleFunc("/api/tx/{id}", s.handleTx).Methods("GET")
+	s.router.HandleFunc("/api/balance/{addr}", s.handleBalance).Methods("GET")
+	s.router.HandleFunc("/api/info", s.handleInfo).Methods("GET")
+
 	// serve static GUI
 	s.router.PathPrefix("/").Handler(http.FileServer(http.Dir("GUI/explorer")))
 }
@@ -64,8 +66,7 @@ func (s *Server) handleBlocks(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleBlock(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	h, _ := strconv.ParseUint(vars["height"], 10, 64)
-	led := core.CurrentLedger()
-	blk, err := led.GetBlock(h)
+	blk, err := s.service.BlockByHeight(h)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -75,21 +76,26 @@ func (s *Server) handleBlock(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) handleTx(w http.ResponseWriter, r *http.Request) {
 	idHex := mux.Vars(r)["id"]
-	id, err := hex.DecodeString(idHex)
+	tx, err := s.service.TxByID(idHex)
 	if err != nil {
-		http.Error(w, "bad tx id", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	led := core.CurrentLedger()
-	for _, blk := range led.Blocks {
-		for _, tx := range blk.Transactions {
-			if string(tx.ID()[:]) == string(id) {
-				writeJSON(w, tx)
-				return
-			}
-		}
+	writeJSON(w, tx)
+}
+
+func (s *Server) handleBalance(w http.ResponseWriter, r *http.Request) {
+	addr := mux.Vars(r)["addr"]
+	bal, err := s.service.Balance(addr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
-	http.Error(w, "tx not found", http.StatusNotFound)
+	writeJSON(w, map[string]interface{}{"balance": bal})
+}
+
+func (s *Server) handleInfo(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, s.service.Info())
 }
 
 func writeJSON(w http.ResponseWriter, v interface{}) {
