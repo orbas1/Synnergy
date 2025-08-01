@@ -114,6 +114,7 @@ func wrap(name string) OpcodeFunc {
 //	                                 0x1E Immutability
 //	                                 0x1E Warehouse
 //	                                 0x1E Gaming
+//	0x1E Assets
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -584,6 +585,12 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+  // Tangible (0x1E)
+	{"Assets_Register", 0x1E0001},
+	{"Assets_Transfer", 0x1E0002},
+	{"Assets_Get", 0x1E0003},
+	{"Assets_List", 0x1E0004},
 
 	// Immutability (0x1E)
 	{"InitImmutability", 0x1E0001},
