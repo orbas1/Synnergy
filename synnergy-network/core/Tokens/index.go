@@ -25,6 +25,7 @@ import "time"
 
 // TokenInterfaces consolidates token standard interfaces without core deps.
 // TokenInterfaces consolidates token standard interfaces without core deps.
+// TokenInterfaces consolidates token standard interfaces without core deps.
 type TokenInterfaces interface {
 	Meta() any
 }

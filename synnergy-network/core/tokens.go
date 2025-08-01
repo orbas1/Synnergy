@@ -377,6 +377,7 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
+
 	RegisterToken(bt)
 	// specialised token types based on standard
 	switch meta.Standard {
