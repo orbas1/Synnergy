@@ -60,6 +60,7 @@ func RegisterRoutes(root *cobra.Command) {
 		CrossChainCmd,
 		ImmutabilityCmd,
 		DataCmd,
+		ForkCmd,
 		CoordinationCmd,
 		MessagesCmd,
 		PlasmaRoute,

@@ -30,6 +30,7 @@ The following command groups expose the same functionality available in the core
 - **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **fork** – Manage chain forks and resolve competing branches.
 - **messages** – Queue, process and broadcast network messages.
 - **partition** – Partition and compress data sets.
 - **data_ops** – Manage and transform on-chain data feeds.
@@ -541,6 +542,12 @@ needed in custom tooling.
 | `mint <addr>` | Mint tokens to an address. |
 | `transfer <from> <to>` | Transfer tokens between addresses. |
 
+### fork
+
+| Sub-command | Description |
+|-------------|-------------|
+| `list` | Show currently tracked forks. |
+| `resolve` | Resolve forks extending the tip. |
 ### account
 
 | Sub-command | Description |

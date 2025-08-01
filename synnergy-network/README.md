@@ -71,6 +71,7 @@ all modules from the core library. Highlights include:
 - `contractops` – administrative tasks such as pausing and upgrading contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `fork` – inspect and resolve chain forks
 - `messages` – queue, process and broadcast network messages
 - `partition` – partition data and apply compression
 - `distribution` – publish datasets and handle paid access

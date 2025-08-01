@@ -328,6 +328,10 @@ var gasTable map[Opcode]uint64
    AppendSubBlock:      8_000,
    Transfer:            2_100, // shared with VM & Tokens
    Burn:                2_100, // shared with VM & Tokens
+   InitForkManager:     5_000,
+   AddForkBlock:        7_000,
+   ResolveForks:        12_000,
+   ListForks:           2_000,
 
    // ----------------------------------------------------------------------
    // Liquidity Manager (high-level AMM façade)
@@ -1336,6 +1340,10 @@ var gasNames = map[string]uint64{
 	"AppendSubBlock":      8_000,
 	"Transfer":            2_100, // shared with VM & Tokens
 	"Burn":                2_100, // shared with VM & Tokens
+	"InitForkManager":     5_000,
+	"AddForkBlock":        7_000,
+	"ResolveForks":        12_000,
+	"ListForks":           2_000,
 	"Account_Create":      500,
 	"Account_Delete":      400,
 	"Account_Balance":     200,
