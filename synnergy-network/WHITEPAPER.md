@@ -204,6 +204,12 @@ Stake levels for validators are tracked on-chain using the **StakePenaltyManager
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+### Finalization Management
+The `FinalizationManager` component coordinates finalization of rollup batches,
+state channels and ledger blocks. It acts as a glue layer between consensus and
+the ledger, ensuring results become canonical once challenge periods expire. CLI
+commands expose these helpers so operators can finalize a batch or channel with
+a single call.
 Reversals of fraudulent payments are handled via special `TxReversal` records. At least three authority nodes must co-sign the reversal. The recipient sends back the original amount minus a 2.5% fee and the VM refunds any unused gas.
 Synnergy includes a dedicated **Transaction Distribution** module that automatically splits each transaction fee once a block is committed. Half of the fee rewards the block producer while the remainder is allocated between the LoanPool and community CharityPool. This mechanism keeps incentives aligned and channels a portion of every transaction toward ecosystem development and philanthropic efforts.
 ## Event Management

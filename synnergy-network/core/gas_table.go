@@ -724,6 +724,12 @@ var gasTable map[Opcode]uint64
    SignTx:              3_000,
 
    // ----------------------------------------------------------------------
+   // Finalization Management
+   // ----------------------------------------------------------------------
+   NewFinalizationManager: 8_000,
+   FinalizeBlock:         4_000,
+   FinalizeBatchManaged:  3_500,
+   FinalizeChannelManaged: 3_500,
    // System Health & Logging
    // ----------------------------------------------------------------------
    NewHealthLogger: 8_000,
@@ -1657,6 +1663,14 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// Finalization Management
+	// ----------------------------------------------------------------------
+	"NewFinalizationManager": 8_000,
+	"FinalizeBlock":          4_000,
+	"FinalizeBatchManaged":   3_500,
+	"FinalizeChannelManaged": 3_500,
    "SignTx":              3_000,
 	"RegisterRecovery":    5_000,
 	"RecoverAccount":      8_000,

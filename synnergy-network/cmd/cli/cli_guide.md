@@ -75,6 +75,7 @@ The following command groups expose the same functionality available in the core
 - **transactionreversal** – Reverse confirmed transactions with authority approval.
 - **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
+- **finalization_management** – Finalize blocks, batches and channels.
 - **quorum** – Manage quorum trackers for proposals or validation.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
@@ -765,6 +766,13 @@ needed in custom tooling.
 | `short-hash` | Shorten a 32-byte hash to first4..last4 format. |
 | `bytes2addr` | Convert big-endian bytes to an address. |
 
+### finalization_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `block <file>` | Finalize a block from JSON. |
+| `batch <batchID>` | Finalize a rollup batch. |
+| `channel <channelID>` | Finalize a state channel. |
 ### quorum
 
 | Sub-command | Description |
