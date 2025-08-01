@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -100,7 +101,95 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	return tok.BalanceOf(addr), nil
 }
 
-// CreateSYN2200 creates a new SYN2200 real-time payment token.
+// --- SYN2100 helpers ---
+func (tm *TokenManager) RegisterDocument(id TokenID, doc FinancialDocument) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.RegisterDocument(doc)
+}
+
+func (tm *TokenManager) FinanceDocument(id TokenID, docID string, financier Address) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.FinanceDocument(docID, financier)
+}
+
+func (tm *TokenManager) GetDocument(id TokenID, docID string) (*FinancialDocument, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	doc, ok := sf.GetDocument(docID)
+	if !ok {
+		return nil, fmt.Errorf("not found")
+	}
+	return doc, nil
+}
+
+func (tm *TokenManager) ListDocuments(id TokenID) ([]FinancialDocument, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	return sf.ListDocuments(), nil
+}
+
+func (tm *TokenManager) AddLiquidity(id TokenID, from Address, amt uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.AddLiquidity(from, amt)
+}
+
+func (tm *TokenManager) RemoveLiquidity(id TokenID, to Address, amt uint64) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return sf.RemoveLiquidity(to, amt)
+}
+
+func (tm *TokenManager) LiquidityOf(id TokenID, addr Address) (uint64, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	sf, ok := tok.(*SupplyFinanceToken)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	return sf.LiquidityOf(addr), nil
+
+  // CreateSYN2200 creates a new SYN2200 real-time payment token.
 func (tm *TokenManager) CreateSYN2200(meta Metadata, init map[Address]uint64) (TokenID, error) {
 	tm.mu.Lock()
 	defer tm.mu.Unlock()
