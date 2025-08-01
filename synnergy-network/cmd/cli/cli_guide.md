@@ -35,6 +35,7 @@ The following command groups expose the same functionality available in the core
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **idwallet** – Register ID-token wallets and verify status.
 
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
@@ -388,3 +389,10 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### idwallet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <address> <info>` | Register wallet and mint a SYN-ID token. |
+| `check <address>` | Verify registration status. |
