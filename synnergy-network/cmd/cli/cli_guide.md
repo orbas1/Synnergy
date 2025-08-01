@@ -35,6 +35,7 @@ The following command groups expose the same functionality available in the core
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **workflow** – Build on-chain workflows using triggers and webhooks.
 
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
@@ -388,3 +389,14 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### workflow
+
+| Sub-command | Description |
+|-------------|-------------|
+| `new` | Create a new workflow by ID. |
+| `add` | Append an opcode name to the workflow. |
+| `trigger` | Set a cron expression for execution. |
+| `webhook` | Register a webhook called after completion. |
+| `run` | Execute the workflow immediately. |
+

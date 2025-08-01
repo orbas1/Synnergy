@@ -14,6 +14,7 @@ The Synnergy ecosystem brings together several services:
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
 All services are optional and run as independent modules that plug into the core.
 
