@@ -110,6 +110,7 @@ func RegisterRoutes(root *cobra.Command) {
 		CarbonCmd,
 		EnergyCmd,
 		InitRepCmd,
+		ReputationCmd,
 		FinalizationCmd,
 		StakingCmd,
 		BinaryTreeCmd,
@@ -145,8 +146,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewRollupCommand(),
 		NewSecurityCommand(),
 		NewShardingCommand(),
-		NewSidechainCommand(),
-	) // includes sidechain management helpers
+		NewSidechainCommand(), // includes sidechain management helpers
 		NewHealthCommand(),
 	)
 }
