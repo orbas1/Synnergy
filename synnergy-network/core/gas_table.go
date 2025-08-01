@@ -128,6 +128,8 @@ var gasTable map[Opcode]uint64
    DistributeRewards:     10_000,
    CalculateWeights:      8_000,
    ComputeThreshold:      6_000,
+   Status:                1_000,
+   SetDifficulty:         2_000,
 
    // ----------------------------------------------------------------------
    // Contracts (WASM / EVM‐compat)
@@ -704,6 +706,8 @@ var gasNames = map[string]uint64{
 	"DistributeRewards":     10_000,
 	"CalculateWeights":      8_000,
 	"ComputeThreshold":      6_000,
+	"Status":                1_000,
+	"SetDifficulty":         2_000,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
