@@ -21,6 +21,7 @@ The Synnergy ecosystem brings together several services:
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **AI Model Training** – On-chain jobs allow publishing datasets and training models collaboratively with escrowed payments.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
+- **Cross-Chain Contracts** – Register mappings to call contracts across chains.
 - **Cross-Chain Connections** – Built-in tools maintain links to external chains for
   asset bridging and data sharing.
 - **DeFi Suite** – Insurance, lending and prediction markets built into the core stack.

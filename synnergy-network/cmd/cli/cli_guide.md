@@ -32,6 +32,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
+- **xcontract** – Register and query cross-chain contract mappings.
 - **cross_tx** – Execute cross-chain lock/mint and burn/release transfers.
 - **cross_chain_connection** – Create and monitor links between chains.
 - **cross_chain_agnostic_protocols** – Register cross-chain protocols.
@@ -377,6 +378,15 @@ needed in custom tooling.
 | `burnrelease <bridge_id> <to> <asset_id> <amount>` | Burn wrapped tokens and release native assets. |
 | `list` | List cross-chain transfer records. |
 | `get <tx_id>` | Retrieve a cross-chain transfer by ID. |
+
+### xcontract
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <local_addr> <remote_chain> <remote_addr>` | Register a contract mapping. |
+| `list` | List registered mappings. |
+| `get <local_addr>` | Retrieve mapping info. |
+| `remove <local_addr>` | Delete a mapping. |
 
 ### data
 
