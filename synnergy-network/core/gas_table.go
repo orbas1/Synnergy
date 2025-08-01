@@ -607,6 +607,14 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+
+   // ----------------------------------------------------------------------
+   // Event Management
+   // ----------------------------------------------------------------------
+   InitEvents: 5_000,
+   EmitEvent: 400,
+   GetEvent:  800,
+   ListEvents: 1_000,
 */
 
 // gasNames holds the gas cost associated with each opcode name. During init()
@@ -1183,6 +1191,14 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// Event Management
+	// ----------------------------------------------------------------------
+	"InitEvents": 5_000,
+	"EmitEvent":  400,
+	"GetEvent":   800,
+	"ListEvents": 1_000,
 }
 
 func init() {

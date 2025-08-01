@@ -119,6 +119,9 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+## Event Management
+Modules emit structured events whenever notable actions occur such as token transfers or contract executions. The Event Manager records these entries in the ledger state and broadcasts them so external services can react in real time. Events are addressed by deterministic hashes and can be queried via the CLI or from smart contracts. This design keeps observers in sync without polling full blocks.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 
