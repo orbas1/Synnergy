@@ -607,6 +607,13 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+
+   // ----------------------------------------------------------------------
+   // Immutability Enforcement
+   // ----------------------------------------------------------------------
+   InitImmutability: 8_000,
+   VerifyChain:     4_000,
+   RestoreChain:    6_000,
 */
 
 // gasNames holds the gas cost associated with each opcode name. During init()
@@ -1183,6 +1190,13 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ---------------------------------------------------------------------
+	// Immutability Enforcement
+	// ---------------------------------------------------------------------
+	"InitImmutability": 8_000,
+	"VerifyChain":      4_000,
+	"RestoreChain":     6_000,
 }
 
 func init() {
