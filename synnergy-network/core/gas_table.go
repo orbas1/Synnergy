@@ -785,17 +785,20 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Data / Oracle / IPFS Integration
 	// ----------------------------------------------------------------------
-	"RegisterNode":   10_000,
-	"UploadAsset":    30_000,
-	"Pin":            5_000, // shared with Storage
-	"Retrieve":       4_000, // shared with Storage
-	"RetrieveAsset":  4_000,
-	"RegisterOracle": 10_000,
-	"PushFeed":       3_000,
-	"QueryOracle":    3_000,
-	"ListCDNNodes":   3_000,
-	"ListOracles":    3_000,
-	"PushFeedSigned": 4_000,
+	"RegisterNode":      10_000,
+	"UploadAsset":       30_000,
+	"Pin":               5_000, // shared with Storage
+	"Retrieve":          4_000, // shared with Storage
+	"RetrieveAsset":     4_000,
+	"RegisterOracle":    10_000,
+	"PushFeed":          3_000,
+	"QueryOracle":       3_000,
+	"ListCDNNodes":      3_000,
+	"ListOracles":       3_000,
+	"PushFeedSigned":    4_000,
+	"StoreManagedData":  8_000,
+	"LoadManagedData":   3_000,
+	"DeleteManagedData": 2_000,
 
 	// ---------------------------------------------------------------------
 	// External Sensors

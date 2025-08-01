@@ -19,6 +19,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **resource** – Manage stored data and VM gas allocations.
 - **immutability** – Verify the chain against the genesis block.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **employment** – Manage on-chain employment contracts and salaries.
@@ -210,6 +211,14 @@ needed in custom tooling.
 | `oracle push <oracleID> <value>` | Push a value to an oracle feed. |
 | `oracle query <oracleID>` | Query the latest oracle value. |
 | `oracle list` | List registered oracles. |
+
+### resource
+
+| Sub-command | Description |
+|-------------|-------------|
+| `store <owner> <key> <file> <gas>` | Store data and set a gas limit. |
+| `load <owner> <key> [out|-]` | Load data for a key. |
+| `delete <owner> <key>` | Remove stored data and reset the limit. |
 
 ### fault_tolerance
 - **employment** – Manage on-chain employment contracts and salaries.
