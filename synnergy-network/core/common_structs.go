@@ -45,6 +45,7 @@ type AIEngine struct {
 	client AIStubClient // manually defined interface
 	mu     sync.RWMutex
 	models map[[32]byte]ModelMeta
+	jobs   map[string]TrainingJob
 }
 
 type ModelMeta struct {
@@ -473,6 +474,7 @@ type Aggregator struct {
 	led    StateRW
 	mu     sync.Mutex
 	nextID uint64
+	paused bool
 }
 
 //---------------------------------------------------------------------
@@ -509,6 +511,7 @@ type Sidechain struct {
 	Validators [][]byte    `json:"validators"`
 	LastHeight uint64      `json:"last_height"`
 	LastRoot   [32]byte    `json:"last_state_root"`
+	Paused     bool        `json:"paused"`
 	Registered int64       `json:"registered_unix"`
 }
 
@@ -550,6 +553,7 @@ type Channel struct {
 	BalanceB uint64    `json:"bal_b"`
 	Nonce    uint64    `json:"nonce"`
 	Closing  int64     `json:"closing_ts"`
+	Paused   bool      `json:"paused"`
 }
 
 type SignedState struct {

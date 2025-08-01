@@ -51,10 +51,12 @@ responsibilities and dependencies of that module.
   token module.
 - **network.go** – libp2p networking stack with pub‑sub gossip and peer discovery.
 - **nat_traversal.go** – NAT-PMP and UPnP helpers to map ports and expose nodes.
+- **plasma.go** – Simple Plasma coordinator handling deposits and exits.
 - **opcode_dispatcher.go** – Maps transaction opcodes to virtual machine handlers
   at runtime.
 - **replication.go** – Block propagation utilities and snapshot distribution to
   new nodes.
+- **resource_allocation_management.go** – Tracks and enforces per-contract gas limits stored in the ledger.
 - **rollups.go** – Support for batching transactions into rollups that settle on
   the main chain.
 - **security.go** – Ed25519 key management, signature helpers and basic crypto

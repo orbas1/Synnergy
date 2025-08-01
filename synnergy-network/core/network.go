@@ -16,6 +16,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	Nodes "synnergy-network/core/Nodes"
 )
 
 func NewNode(cfg Config) (*Node, error) {
@@ -72,6 +73,9 @@ func NewNode(cfg Config) (*Node, error) {
 
 // Ensure Node implements mdns.Notifee
 var _ mdns.Notifee = (*Node)(nil)
+
+// Ensure Node conforms to the common node interface
+var _ Nodes.NodeInterface = (*NodeAdapter)(nil)
 
 // HandlePeerFound implements mdns.Notifee: connect to discovered peer.
 func (n *Node) HandlePeerFound(info peer.AddrInfo) {
