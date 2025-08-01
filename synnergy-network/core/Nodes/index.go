@@ -9,3 +9,12 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// AutonomousAgent defines additional behaviour for autonomous nodes.
+type AutonomousAgent interface {
+	NodeInterface
+	AddRule(rule interface{})
+	RemoveRule(id string)
+	Start()
+	Stop() error
+}
