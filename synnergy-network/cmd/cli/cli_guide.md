@@ -32,6 +32,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
+- **cross_tx** – Execute cross-chain lock/mint and burn/release transfers.
 - **cross_chain_connection** – Create and monitor links between chains.
 - **cross_chain_agnostic_protocols** – Register cross-chain protocols.
 - **cross_chain_bridge** – Manage cross-chain token transfers.
@@ -367,6 +368,15 @@ needed in custom tooling.
 | `close <connection_id>` | Terminate a connection. |
 | `get <connection_id>` | Retrieve connection details. |
 | `list` | List active and historic connections. |
+
+### cross_tx
+
+| Sub-command | Description |
+|-------------|-------------|
+| `lockmint <bridge_id> <asset_id> <amount> <proof>` | Lock native assets and mint wrapped tokens. |
+| `burnrelease <bridge_id> <to> <asset_id> <amount>` | Burn wrapped tokens and release native assets. |
+| `list` | List cross-chain transfer records. |
+| `get <tx_id>` | Retrieve a cross-chain transfer by ID. |
 
 ### data
 

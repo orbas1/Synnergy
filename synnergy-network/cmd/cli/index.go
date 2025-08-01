@@ -61,6 +61,7 @@ func RegisterRoutes(root *cobra.Command) {
 		AuditCmd,
 		ComplianceMgmtCmd,
 		CrossChainCmd,
+		CrossChainTxCmd,
 		XConnCmd,
 		CrossProtoCmd,
 		XBridgeCmd,

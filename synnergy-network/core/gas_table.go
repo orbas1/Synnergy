@@ -191,6 +191,9 @@ var gasTable map[Opcode]uint64
    LockAndMint:    30_000,
    BurnAndRelease: 30_000,
    GetBridge:      1_000,
+   RecordCrossChainTx: 25_000,
+   GetCrossChainTx:    2_000,
+   ListCrossChainTx:   3_000,
    OpenChainConnection:  10_000,
    CloseChainConnection: 5_000,
    GetChainConnection:   1_000,
@@ -1089,6 +1092,15 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Cross-Chain
 	// ----------------------------------------------------------------------
+	"RegisterBridge":     20_000,
+	"AssertRelayer":      5_000,
+	"Iterator":           2_000,
+	"LockAndMint":        30_000,
+	"BurnAndRelease":     30_000,
+	"GetBridge":          1_000,
+	"RecordCrossChainTx": 25_000,
+	"GetCrossChainTx":    2_000,
+	"ListCrossChainTx":   3_000,
 	"RegisterBridge":       20_000,
 	"AssertRelayer":        5_000,
 	"Iterator":             2_000,
