@@ -1183,6 +1183,15 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ---------------------------------------------------------------------
+	// Forum
+	// ---------------------------------------------------------------------
+	"Forum_CreateThread": 5_000,
+	"Forum_GetThread":    500,
+	"Forum_ListThreads":  1_000,
+	"Forum_AddComment":   2_000,
+	"Forum_ListComments": 1_000,
 }
 
 func init() {
