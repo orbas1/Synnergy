@@ -1628,6 +1628,11 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"RegisterIPAsset":        800,
+	"TransferIPOwnership":    300,
+	"CreateLicense":          400,
+	"RevokeLicense":          200,
+	"RecordRoyalty":          100,
 
 	// ----------------------------------------------------------------------
 	// Transactions
