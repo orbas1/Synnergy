@@ -14,6 +14,7 @@ The following command groups expose the same functionality available in the core
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
+- **audit** – Manage on-chain audit logs.
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
@@ -119,6 +120,13 @@ needed in custom tooling.
 | `audit <address>` | Display the audit trail for an address. |
 | `monitor <tx.json> <threshold>` | Run anomaly detection on a transaction. |
 | `verifyzkp <blob.bin> <commitmentHex> <proofHex>` | Verify a zero‑knowledge proof. |
+
+### audit
+
+| Sub-command | Description |
+|-------------|-------------|
+| `log <addr> <event> [meta.json]` | Record an audit event. |
+| `list <addr>` | List audit events for an address. |
 
 ### consensus
 

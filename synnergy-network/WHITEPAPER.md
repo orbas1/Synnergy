@@ -50,6 +50,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `charity_pool` – Contribute to or distribute from community charity funds.
 - `coin` – Mint, transfer, and burn the base asset.
 - `compliance` – Perform KYC/AML verification and auditing.
+- `audit` – Manage ledger-backed audit logs for transparency.
 - `consensus` – Start or inspect the consensus node.
 - `contracts` – Deploy and invoke smart contracts.
 - `cross_chain` – Bridge assets to and from external chains.

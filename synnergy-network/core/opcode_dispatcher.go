@@ -163,6 +163,10 @@ var catalogue = []struct {
 	{"Compliance_AuditTrail", 0x060006},
 	{"Compliance_MonitorTx", 0x060007},
 	{"Compliance_VerifyZKP", 0x060008},
+	{"Audit_Init", 0x060009},
+	{"Audit_Log", 0x06000A},
+	{"Audit_Events", 0x06000B},
+	{"Audit_Close", 0x06000C},
 
 	// Consensus (0x07)
 	{"Pick", 0x070001},

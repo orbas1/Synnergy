@@ -106,6 +106,10 @@ var gasTable map[Opcode]uint64
    Compliance_AuditTrail: 3_000,
    Compliance_MonitorTx:  5_000,
    Compliance_VerifyZKP:  12_000,
+   Audit_Init:           5_000,
+   Audit_Log:            2_000,
+   Audit_Events:         3_000,
+   Audit_Close:          1_000,
 
    // ----------------------------------------------------------------------
    // Consensus Core
@@ -682,6 +686,10 @@ var gasNames = map[string]uint64{
 	"Compliance_AuditTrail": 3_000,
 	"Compliance_MonitorTx":  5_000,
 	"Compliance_VerifyZKP":  12_000,
+	"Audit_Init":            5_000,
+	"Audit_Log":             2_000,
+	"Audit_Events":          3_000,
+	"Audit_Close":           1_000,
 
 	// ----------------------------------------------------------------------
 	// Consensus Core

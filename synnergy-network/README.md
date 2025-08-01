@@ -56,6 +56,7 @@ all modules from the core library. Highlights include:
 - `charity_pool` – query and disburse community funds
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
+- `audit` – manage on-chain audit logs
 - `consensus` – control the consensus engine
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
