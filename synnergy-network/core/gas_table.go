@@ -701,6 +701,13 @@ var gasTable map[Opcode]uint64
   SYN500_Usage:         400,
   SYN500_AccessInfo:    400,
    TokenManager_BalanceOf: 400,
+   // SYN70 Token Standard operations
+   SYN70_RegisterAsset:   1_000,
+   SYN70_TransferAsset:   800,
+   SYN70_UpdateAttributes: 500,
+   SYN70_RecordAchievement: 300,
+   SYN70_GetAsset:        200,
+   SYN70_ListAssets:      200,
    SYN600_Stake:           2_000,
    SYN600_Unstake:        2_000,
    SYN600_AddEngagement:  500,
@@ -1758,7 +1765,6 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Token Utilities
 	// ----------------------------------------------------------------------
-
 	"ID":                        40,
 	"Meta":                      40,
 	"Allowance":                 40,
@@ -1849,6 +1855,12 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":       0,
 	"TokenManager_Approve":    0,
 	"TokenManager_BalanceOf":  0,
+	"SYN70_RegisterAsset":     0,
+	"SYN70_TransferAsset":     0,
+	"SYN70_UpdateAttributes":  0,
+	"SYN70_RecordAchievement": 0,
+	"SYN70_GetAsset":          0,
+	"SYN70_ListAssets":        0,
 	"MusicRoyalty_AddRevenue": 80,
 	"MusicRoyalty_Distribute": 100,
 	"MusicRoyalty_UpdateInfo": 50,
