@@ -13,8 +13,13 @@ The Synnergy ecosystem brings together several services:
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
+- **Employment Contracts** – Manage job agreements and salary payments on-chain.
+- **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
+- **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Faucet Service** – Dispense test coins and tokens to developers with rate limits.
 All services are optional and run as independent modules that plug into the core.
 
 ## Synnergy Network Architecture
@@ -32,6 +37,7 @@ The native asset powering the network is `SYNTHRON` (ticker: THRON). It has thre
 - **Payment and Transaction Fees** – Every on-chain action consumes gas priced in THRON.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
+- **DAO Module** – Users can create independent DAOs and manage membership directly on-chain.
 
 ### Token Distribution
 Initial supply is minted at genesis with a gradual release schedule:
@@ -56,6 +62,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `data` – Low-level debugging of key/value storage and oracles.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
+- `dao` – Create DAOs and manage their members.
 - `green_technology` – Manage energy tracking and carbon offsets.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
@@ -69,11 +76,21 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `state_channel` – Open and settle payment channels.
 - `storage` – Manage off-chain storage deals.
 - `real_estate` – Tokenise and trade real-world property.
+- `escrow` – Multi-party escrow management.
+- `marketplace` – General on-chain marketplace for digital goods.
+- `healthcare` – Manage healthcare records and permissions.
+- `tangible` – Track tangible asset ownership on-chain.
 - `tokens` – Issue and manage token contracts.
+- `token_management` – Advanced token lifecycle management.
+- `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
+- `devnet` – Spawn an in-memory developer network for rapid testing.
+- `testnet` – Launch a configurable test network from a YAML file.
+- `supply` – Track supply chain assets and logistics.
 - `utility_functions` – Miscellaneous support utilities.
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `wallet` – Create wallets and sign transfers.
+- `wallet_mgmt` – High level wallet manager for ledger payments.
 Each command group supports a help flag to display the individual sub-commands and options.
 
 ## Full Opcode and Operand Code Guide
@@ -96,6 +113,12 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+0x1E  Employment           
+                                 0x1E  SupplyChain
+                                 0x1E  Healthcare
+                                 0x1E  Immutability
+                                 0x1E  Warehouse
+                                 0x1E  Gaming
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 
@@ -119,6 +142,9 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
+
+## Event Management
+Modules emit structured events whenever notable actions occur such as token transfers or contract executions. The Event Manager records these entries in the ledger state and broadcasts them so external services can react in real time. Events are addressed by deterministic hashes and can be queried via the CLI or from smart contracts. This design keeps observers in sync without polling full blocks.
 
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
