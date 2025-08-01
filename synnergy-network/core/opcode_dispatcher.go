@@ -1195,6 +1195,11 @@ var catalogue = []struct {
 	{"FinishGame", 0x1E0003},
 	{"GetGame", 0x1E0004},
 	{"ListGames", 0x1E0005},
+	{"NewMiningNode", 0x200001},
+	{"StartMining", 0x200002},
+	{"StopMining", 0x200003},
+	{"AddTransaction", 0x200004},
+	{"SolvePuzzle", 0x200005},
 }
 
 // init wires the catalogue into the live dispatcher.
