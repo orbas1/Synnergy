@@ -2703,6 +2703,15 @@ var gasNames = map[string]uint64{
 	"Warehouse_GetItem":    0,
 
 	// ----------------------------------------------------------------------
+	// Integration Node
+	// ----------------------------------------------------------------------
+	"IntRegisterAPI":     1000,
+	"IntRemoveAPI":       1000,
+	"IntListAPIs":        200,
+	"IntConnectChain":    1500,
+	"IntDisconnectChain": 1500,
+	"IntListChains":      200,
+	"IntRelayTx":         1000,
 	// Bank Institutional Node
 	// ----------------------------------------------------------------------
 	"NewBankInstitutionalNode":  1500,

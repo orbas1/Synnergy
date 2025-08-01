@@ -13,6 +13,17 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// IntegrationNodeInterface extends NodeInterface with integration specific
+// management helpers. It deliberately avoids referencing core types to keep the
+// package dependency hierarchy simple.
+type IntegrationNodeInterface interface {
+	NodeInterface
+	RegisterAPI(name, endpoint string) error
+	RemoveAPI(name string) error
+	ListAPIs() []string
+	ConnectChain(id, endpoint string) error
+	DisconnectChain(id string) error
+	ListChains() []string
 // RegulatoryNodeInterface extends NodeInterface with compliance helpers.
 type RegulatoryNodeInterface interface {
 	NodeInterface
