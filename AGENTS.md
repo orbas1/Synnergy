@@ -218,6 +218,7 @@ modules.
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
 - Added `cmd/dexserver` and expanded `GUI/dex-screener` with Tailwind interface and pool API integration.
+- Integrated Lightweight Charts in `dex-screener` for interactive TradingView-style graphs.
 
 ---
 

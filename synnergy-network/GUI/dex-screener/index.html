@@ -6,10 +6,11 @@
     <title>DEX Screener</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@3.7.0/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body class="p-4">
     <h1 class="text-2xl font-bold mb-4">DEX Screener</h1>
-    <table id="pool-table" class="min-w-full text-left">
+    <table id="pool-table" class="min-w-full text-left mb-8">
         <thead>
             <tr>
                 <th>ID</th>
@@ -21,6 +22,8 @@
         </thead>
         <tbody id="pools"></tbody>
     </table>
+
+    <div id="chart" class="w-full h-96 border"></div>
     <script type="module" src="app.js"></script>
 </body>
 </html>
