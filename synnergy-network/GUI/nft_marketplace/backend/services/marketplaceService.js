@@ -1,13 +1,4 @@
-// Placeholder service interacting with the NFTMarketplace smart contract
-async function listNFT(tokenId, price) {
-  console.log(`Listing token ${tokenId} for price ${price}`);
-  // TODO: Integrate with CLI or blockchain RPC
-}
-
-async function buyNFT(id) {
-  console.log(`Purchasing listing ${id}`);
-  // TODO: Integrate with CLI or blockchain RPC
-}
+const { listNFT, buyNFT } = require('../contracts/contractService');
 
 const listings = [];
 

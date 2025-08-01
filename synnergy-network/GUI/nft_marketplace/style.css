@@ -9,3 +9,7 @@ body {
     padding: 0.5rem;
     border-bottom: 1px solid #e5e7eb;
 }
+
+nav img {
+    height: 2rem;
+}
