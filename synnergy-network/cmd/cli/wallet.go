@@ -52,13 +52,13 @@ import (
 // ──────────────────────────────────────────────────────────────────────────────
 
 var (
-	logger = logrus.StandardLogger()
-	once   sync.Once
+	walletLogger = logrus.StandardLogger()
+	walletOnce   sync.Once
 )
 
 func initWalletMiddleware(cmd *cobra.Command, _ []string) error {
 	var err error
-	once.Do(func() {
+	walletOnce.Do(func() {
 		_ = godotenv.Load()
 		lvl := os.Getenv("LOG_LEVEL")
 		if lvl == "" {
@@ -69,8 +69,8 @@ func initWalletMiddleware(cmd *cobra.Command, _ []string) error {
 			err = e
 			return
 		}
-		logger.SetLevel(l)
-		core.SetWalletLogger(logger)
+		walletLogger.SetLevel(l)
+		core.SetWalletLogger(walletLogger)
 	})
 	return err
 }
@@ -228,7 +228,7 @@ func loadWallet(path, pwd string) (*core.HDWallet, error) {
 	if err != nil {
 		return nil, err
 	}
-	return core.NewHDWalletFromSeed(seed, logger)
+	return core.NewHDWalletFromSeed(seed, walletLogger)
 }
 
 func handleAddress(cmd *cobra.Command, _ []string) error {

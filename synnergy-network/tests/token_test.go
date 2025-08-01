@@ -1,7 +1,8 @@
-package core
+package core_test
 
 import (
 	"sync"
+	core "synnergy-network/core"
 	"testing"
 	"time"
 )

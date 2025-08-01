@@ -42,8 +42,8 @@ func (lpController) Remove(pid core.PoolID, provider core.Address, lp uint64) (u
 	return core.Manager().RemoveLiquidity(pid, provider, lp)
 }
 
-func (lpController) Pool(pid core.PoolID) (core.Pool, error) { return core.Manager().Pool(pid) }
-func (lpController) Pools() []core.Pool                      { return core.Manager().Pools() }
+func (lpController) Pool(pid core.PoolID) (*core.Pool, error) { return core.Manager().Pool(pid) }
+func (lpController) Pools() []*core.Pool                      { return core.Manager().Pools() }
 
 func mustAddr(hexStr string) core.Address {
 	var a core.Address
@@ -63,7 +63,15 @@ var poolCreateCmd = &cobra.Command{
 	Args:  cobra.RangeArgs(2, 3),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctl := lpController{}
-		tA, tB := core.TokenID(args[0]), core.TokenID(args[1])
+		aID, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return err
+		}
+		bID, err := strconv.ParseUint(args[1], 10, 32)
+		if err != nil {
+			return err
+		}
+		tA, tB := core.TokenID(aID), core.TokenID(bID)
 		fee := uint16(0)
 		if len(args) == 3 {
 			f, err := strconv.ParseUint(args[2], 10, 16)
@@ -87,7 +95,11 @@ var poolAddCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(4),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctl := lpController{}
-		pid := core.PoolID(args[0])
+		pidInt, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return err
+		}
+		pid := core.PoolID(pidInt)
 		provider := mustAddr(args[1])
 		aAmt, err := strconv.ParseUint(args[2], 10, 64)
 		if err != nil {
@@ -112,9 +124,17 @@ var poolSwapCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(5),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctl := lpController{}
-		pid := core.PoolID(args[0])
+		pidInt, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return err
+		}
+		pid := core.PoolID(pidInt)
 		trader := mustAddr(args[1])
-		inTok := core.TokenID(args[2])
+		tokID, err := strconv.ParseUint(args[2], 10, 32)
+		if err != nil {
+			return err
+		}
+		inTok := core.TokenID(tokID)
 		inAmt, err := strconv.ParseUint(args[3], 10, 64)
 		if err != nil {
 			return err
@@ -138,7 +158,11 @@ var poolRemoveCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctl := lpController{}
-		pid := core.PoolID(args[0])
+		pidInt, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return err
+		}
+		pid := core.PoolID(pidInt)
 		provider := mustAddr(args[1])
 		lpAmt, err := strconv.ParseUint(args[2], 10, 64)
 		if err != nil {
@@ -159,7 +183,11 @@ var poolInfoCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctl := lpController{}
-		pid := core.PoolID(args[0])
+		pidInt, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return err
+		}
+		pid := core.PoolID(pidInt)
 		p, err := ctl.Pool(pid)
 		if err != nil {
 			return err

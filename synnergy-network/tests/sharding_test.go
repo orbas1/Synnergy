@@ -1,10 +1,11 @@
-package core
+package core_test
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"sync"
+	core "synnergy-network/core"
 	"testing"
 )
 

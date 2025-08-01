@@ -137,7 +137,8 @@ func UploadAsset(data []byte) (string, error) {
 	return cid, nil
 }
 
-const CDNReplicationFactor = 3
+var CDNReplicationFactor = 3
+
 const TopicCDNReplication = "cdn:replication"
 const TopicCDNNodeRegistry = "cdn:node:registry"
 

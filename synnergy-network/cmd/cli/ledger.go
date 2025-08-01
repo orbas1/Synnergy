@@ -311,7 +311,7 @@ var utxoCmd = &cobra.Command{
 		}
 		for _, u := range list {
 			txid := hex.EncodeToString(u.TxID[:])
-			fmt.Printf("%s:%d  value=%d\n", txid, u.Index, u.Output.Value)
+			fmt.Printf("%s:%d  value=%d\n", txid, u.Index, u.Output.Amount)
 		}
 		return nil
 	},

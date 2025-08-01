@@ -101,7 +101,10 @@ var xchainRegisterCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &XChainController{}
 		src, tgt := args[0], args[1]
-		rel := core.Address(args[2])
+		rel, err := core.ParseAddress(args[2])
+		if err != nil {
+			return err
+		}
 		b, err := ctrl.Register(src, tgt, rel)
 		if err != nil {
 			return err

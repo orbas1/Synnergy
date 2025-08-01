@@ -1,9 +1,10 @@
-package core
+package core_test
 
 import (
 	"crypto/sha256"
 	"encoding/json"
 	"sync"
+	core "synnergy-network/core"
 	"testing"
 	"time"
 )

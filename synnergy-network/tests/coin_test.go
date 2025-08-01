@@ -1,10 +1,11 @@
-package core
+package core_test
 
 import (
 	"errors"
 	"fmt"
 	"math/big"
 	"sync"
+	core "synnergy-network/core"
 	"testing"
 )
 

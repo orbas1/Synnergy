@@ -1,8 +1,9 @@
-package core
+package core_test
 
 import (
 	"encoding/json"
 	"errors"
+	core "synnergy-network/core"
 	"testing"
 	"time"
 )
