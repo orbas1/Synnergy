@@ -375,6 +375,9 @@ var gasTable map[Opcode]uint64
    GetProposal:   1_000,
    ListProposals: 1_500,
    Redistribute:  5_000,
+   RequestApproval: 3_000,
+   ApproveRequest:  4_000,
+   RejectRequest:   4_000,
    NewLoanPoolApply:   20_000,
    LoanApply_Submit:   3_000,
    LoanApply_Vote:     3_000,
@@ -1457,6 +1460,15 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Loan-Pool
 	// ----------------------------------------------------------------------
+	"NewLoanPool":              20_000,
+	"Submit":                   3_000,
+	"Disburse":                 8_000,
+	"Loanpool_GetProposal":     1_000,
+	"Loanpool_ListProposals":   1_500,
+	"Redistribute":             5_000,
+	"Loanpool_RequestApproval": 3_000,
+	"Loanpool_ApproveRequest":  4_000,
+	"Loanpool_RejectRequest":   4_000,
 	"NewLoanPool":            20_000,
 	"Submit":                 3_000,
 	"Disburse":               8_000,
