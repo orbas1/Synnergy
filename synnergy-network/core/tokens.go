@@ -323,6 +323,7 @@ func InitTokens(ledger *Ledger, vm VM, gas GasCalculator) {
 		tok.gas = gas
 		ledger.tokens[id] = tok
 	}
+	InitDAO2500(ledger)
 }
 
 //---------------------------------------------------------------------
@@ -335,13 +336,27 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
-	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
-	for a, v := range init {
-		bt.balances.Set(bt.id, a, v)
-		bt.meta.TotalSupply += v
+
+	var tok Token
+	switch meta.Standard {
+	case StdSYN2500:
+		dt := NewSYN2500Token(meta)
+		for a, v := range init {
+			dt.balances.Set(dt.id, a, v)
+			dt.meta.TotalSupply += v
+		}
+		tok = dt
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		for a, v := range init {
+			bt.balances.Set(bt.id, a, v)
+			bt.meta.TotalSupply += v
+		}
+		tok = bt
 	}
-	RegisterToken(bt)
-	return bt, nil
+
+	RegisterToken(tok)
+	return tok, nil
 }
 
 func NewBalanceTable() *BalanceTable {

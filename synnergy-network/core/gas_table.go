@@ -297,6 +297,13 @@ var gasTable map[Opcode]uint64
    RemoveDAOMember: 1_200,
    RoleOfMember:    500,
    ListDAOMembers:  1_000,
+   AddSYN2500Member:    1_200,
+   RemoveSYN2500Member: 1_200,
+   DelegateSYN2500Vote: 800,
+   SYN2500VotingPower:  500,
+   CastSYN2500Vote:     1_500,
+   SYN2500MemberInfo:   500,
+   ListSYN2500Members:  1_000,
    RegisterGovContract: 8_000,
    GetGovContract:      1_000,
    ListGovContracts:    2_000,
@@ -680,6 +687,10 @@ var gasTable map[Opcode]uint64
    Tokens_CreateSYN2200: 8_000,
    Tokens_SendPayment: 2_100,
    Tokens_GetPayment: 400,
+   DataToken_UpdateMeta: 500,
+   DataToken_SetPrice: 400,
+   DataToken_GrantAccess: 400,
+   DataToken_RevokeAccess: 300,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1229,6 +1240,13 @@ var gasNames = map[string]uint64{
 	"RemoveDAOMember":       120,
 	"RoleOfMember":          50,
 	"ListDAOMembers":        100,
+	"AddSYN2500Member":      120,
+	"RemoveSYN2500Member":   120,
+	"DelegateSYN2500Vote":   80,
+	"SYN2500VotingPower":    50,
+	"CastSYN2500Vote":       150,
+	"SYN2500MemberInfo":     50,
+	"ListSYN2500Members":    100,
 	"NewTimelock":           400,
 	"QueueProposal":         300,
 	"CancelProposal":        300,
@@ -1634,6 +1652,10 @@ var gasNames = map[string]uint64{
 	"Tokens_CreateSYN2200":   0,
 	"Tokens_SendPayment":     0,
 	"Tokens_GetPayment":      0,
+	"DataToken_UpdateMeta":   0,
+	"DataToken_SetPrice":     0,
+	"DataToken_GrantAccess":  0,
+	"DataToken_RevokeAccess": 0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
