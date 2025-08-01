@@ -31,6 +31,8 @@ func RegisterRoutes(root *cobra.Command) {
 		ChannelRoute,
 		StorageRoute,
 		UtilityRoute,
+		WarehouseCmd,
+		GamingCmd,
 	)
 
 	// modules that expose constructors
