@@ -74,6 +74,7 @@ all modules from the core library. Highlights include:
 - `fault_tolerance` – simulate faults and backups
 - `employment` – manage on-chain employment contracts and salaries
 - `governance` – DAO style governance commands
+- `qvote` – quadratic voting on governance proposals
 - `polls_management` – create and vote on community polls
 - `governance_management` – register and control governance contracts
 - `reputation_voting` – weighted voting using SYN-REP tokens
@@ -129,6 +130,10 @@ all modules from the core library. Highlights include:
 - `offwallet` – offline wallet utilities
 - `recovery` – register and invoke account recovery
 - `wallet_mgmt` – manage wallets and send SYNN directly via the ledger
+
+Quadratic voting allows token holders to weight their governance votes by the
+square root of the staked amount. The `qvote` command submits these weighted
+votes and queries results alongside standard governance commands.
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.
 

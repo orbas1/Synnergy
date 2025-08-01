@@ -237,6 +237,10 @@ var gasTable map[Opcode]uint64
    ExecuteProposal: 15_000,
    GetProposal:     1_000,
    ListProposals:   2_000,
+   // Quadratic Voting
+   SubmitQuadraticVote: 3_500,
+   QuadraticResults:    2_000,
+   QuadraticWeight:     50,
    AddDAOMember:    1_200,
    RemoveDAOMember: 1_200,
    RoleOfMember:    500,
@@ -995,6 +999,7 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Governance
 	// ----------------------------------------------------------------------
+
 	"UpdateParam":      5_000,
 	"ProposeChange":    10_000,
 	"VoteChange":       3_000,
@@ -1019,6 +1024,9 @@ var gasNames = map[string]uint64{
 	"ExecuteProposal":     15_000,
 	"GetProposal":         1_000,
 	"ListProposals":       2_000,
+	"SubmitQuadraticVote": 3_500,
+	"QuadraticResults":    2_000,
+	"QuadraticWeight":     50,
 	"RegisterGovContract": 8_000,
 	"GetGovContract":      1_000,
 	"ListGovContracts":    2_000,
