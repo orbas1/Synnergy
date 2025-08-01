@@ -8,8 +8,12 @@ func RegisterRoutes(root *cobra.Command) {
 	// modules with exported command variables
 	root.AddCommand(
 		NetworkCmd,
+		WarfareCmd,
+		MobileMinerCmd,
 		BootstrapCmd,
 		MolecularCmd,
+		BankNodeCmd,
+		CentralBankCmd,
 		NatCmd,
 		PeerCmd,
 		ConsensusCmd,
@@ -58,6 +62,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ConnPoolCmd,
 		PollsCmd,
 		BioCmd,
+		BioNodeCmd,
 		AuthCmd,
 		AuthorityApplyCmd,
 		CharityCmd,
@@ -142,6 +147,7 @@ func RegisterRoutes(root *cobra.Command) {
 		WarehouseCmd,
 		MusicRoyaltyCmd,
 		GamingCmd,
+		WitnessCmd,
 	)
 
 	// modules that expose constructors
