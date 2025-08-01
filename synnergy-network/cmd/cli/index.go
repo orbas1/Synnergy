@@ -17,6 +17,7 @@ func RegisterRoutes(root *cobra.Command) {
 		TokenMgmtCmd,
 		CoinCmd,
 		ContractsCmd,
+		ContractMgmtCmd,
 		VMCmd,
 		TransactionsCmd,
 		PrivateTxCmd,

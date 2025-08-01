@@ -27,6 +27,7 @@ The following command groups expose the same functionality available in the core
 - **adaptive** – Manage adaptive consensus weights.
 - **stake** – Adjust validator stakes and record penalties.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
+- **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **data_ops** – Manage and transform on-chain data feeds.
@@ -283,6 +284,16 @@ needed in custom tooling.
 | `invoke <address>` | Invoke a contract method. |
 | `list` | List deployed contracts. |
 | `info <address>` | Show Ricardian manifest for a contract. |
+
+### contractops
+
+| Sub-command | Description |
+|-------------|-------------|
+| `transfer <addr> <newOwner>` | Transfer contract ownership. |
+| `pause <addr>` | Pause contract execution. |
+| `resume <addr>` | Resume a paused contract. |
+| `upgrade <addr> <wasm>` | Replace contract bytecode. |
+| `info <addr>` | Display owner and paused status. |
 
 ### cross_chain
 

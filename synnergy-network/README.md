@@ -68,6 +68,7 @@ all modules from the core library. Highlights include:
 - `adaptive` – dynamically adjust consensus weights
 - `stake` – adjust validator stake and record penalties
 - `contracts` – deploy and invoke smart contracts
+- `contractops` – administrative tasks such as pausing and upgrading contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
 - `distribution` – publish datasets and handle paid access
