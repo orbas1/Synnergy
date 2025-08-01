@@ -1409,6 +1409,15 @@ var gasNames = map[string]uint64{
 	"RegisterRecovery":    5_000,
 	"RecoverAccount":      8_000,
 
+	// ------------------------------------------------------------------
+	// Blockchain Compression
+	// ------------------------------------------------------------------
+	"CompressLedger":         6_000,
+	"DecompressLedger":       6_000,
+	"SaveCompressedSnapshot": 8_000,
+	"LoadCompressedSnapshot": 8_000,
+  
+
 	// ----------------------------------------------------------------------
 	// Biometrics Authentication
 	// ----------------------------------------------------------------------

@@ -80,6 +80,7 @@ all modules from the core library. Highlights include:
 - `plasma` – manage plasma deposits and exits
 - `replication` – snapshot and replicate data
 - `rollups` – manage rollup batches
+- `compression` – save and load compressed ledger snapshots
 - `security` – cryptographic utilities
 - `biometrics` – manage biometric authentication templates
 - `sharding` – shard management

@@ -35,13 +35,14 @@ At a high level the network consists of:
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Blockchain Compression** – Snapshots can be gzipped and restored on demand to reduce storage costs.
 7. **Zero Trust Data Channels** – End-to-end encrypted channels leverage the token ledger for escrowed access control.
 7. **Swarm Manager** – Coordinates multiple nodes as a high-availability cluster.
 Each layer is intentionally separated so enterprises can replace components as needed (e.g., swap the consensus engine or choose a different storage back end).
 
 ## Synthron Coin
-The native asset powering the network is `SYNTHRON` (ticker: THRON). It has three main functions:
-- **Payment and Transaction Fees** – Every on-chain action consumes gas priced in THRON.
+The native asset powering the network is `SYNTHRON` (ticker: SYNN). It has three main functions:
+- **Payment and Transaction Fees** – Every on-chain action consumes gas priced in SYNN.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
 - **DAO Module** – Users can create independent DAOs and manage membership directly on-chain.

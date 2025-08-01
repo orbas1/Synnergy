@@ -36,6 +36,7 @@ The following command groups expose the same functionality available in the core
 - **plasma** – Deposit into and withdraw from the Plasma chain.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **rollups** – Create rollup batches or inspect existing ones.
+- **compression** – Save and load compressed ledger snapshots.
 - **security** – Key generation, signing utilities and password helpers.
 - **biometrics** – Manage biometric authentication templates.
 - **sharding** – Migrate data between shards and check shard status.
@@ -388,6 +389,13 @@ needed in custom tooling.
 | `info <batchID>` | Display batch header and state. |
 | `list` | List recent batches. |
 | `txs <batchID>` | List transactions in a batch. |
+
+### compression
+
+| Sub-command | Description |
+|-------------|-------------|
+| `save <file>` | Write a compressed ledger snapshot. |
+| `load <file>` | Load a compressed snapshot and display the height. |
 
 ### security
 
