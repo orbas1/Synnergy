@@ -58,6 +58,7 @@ all modules from the core library. Highlights include:
 - `compliance` – perform KYC/AML checks
 - `consensus` – control the consensus engine
 - `contracts` – deploy and invoke smart contracts
+- `contractops` – administrative tasks such as pausing and upgrading contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
 - `fault_tolerance` – simulate faults and backups

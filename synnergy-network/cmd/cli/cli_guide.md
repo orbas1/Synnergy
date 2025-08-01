@@ -16,6 +16,7 @@ The following command groups expose the same functionality available in the core
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
+- **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
@@ -141,6 +142,16 @@ needed in custom tooling.
 | `invoke <address>` | Invoke a contract method. |
 | `list` | List deployed contracts. |
 | `info <address>` | Show Ricardian manifest for a contract. |
+
+### contractops
+
+| Sub-command | Description |
+|-------------|-------------|
+| `transfer <addr> <newOwner>` | Transfer contract ownership. |
+| `pause <addr>` | Pause contract execution. |
+| `resume <addr>` | Resume a paused contract. |
+| `upgrade <addr> <wasm>` | Replace contract bytecode. |
+| `info <addr>` | Display owner and paused status. |
 
 ### cross_chain
 

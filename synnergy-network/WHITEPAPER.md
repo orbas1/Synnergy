@@ -52,6 +52,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `compliance` – Perform KYC/AML verification and auditing.
 - `consensus` – Start or inspect the consensus node.
 - `contracts` – Deploy and invoke smart contracts.
+- `contractops` – Pause, upgrade and transfer ownership of contracts.
 - `cross_chain` – Bridge assets to and from external chains.
 - `data` – Low-level debugging of key/value storage and oracles.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.

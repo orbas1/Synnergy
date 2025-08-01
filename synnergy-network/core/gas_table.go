@@ -136,6 +136,11 @@ var gasTable map[Opcode]uint64
    CompileWASM:   45_000,
    Invoke:        7_000,
    Deploy:        25_000,
+   TransferOwnership: 5_000,
+   PauseContract:     3_000,
+   ResumeContract:    3_000,
+   UpgradeContract:   20_000,
+   ContractInfo:      1_000,
 
    // ----------------------------------------------------------------------
    // Cross-Chain
@@ -708,10 +713,15 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
 	// ----------------------------------------------------------------------
-	"InitContracts": 15_000,
-	"CompileWASM":   45_000,
-	"Invoke":        7_000,
-	"Deploy":        25_000,
+	"InitContracts":     15_000,
+	"CompileWASM":       45_000,
+	"Invoke":            7_000,
+	"Deploy":            25_000,
+	"TransferOwnership": 5_000,
+	"PauseContract":     3_000,
+	"ResumeContract":    3_000,
+	"UpgradeContract":   20_000,
+	"ContractInfo":      1_000,
 
 	// ----------------------------------------------------------------------
 	// Cross-Chain
