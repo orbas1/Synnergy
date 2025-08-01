@@ -595,6 +595,7 @@ var gasTable map[Opcode]uint64
    // Token Standards (constants – zero-cost markers)
    // ----------------------------------------------------------------------
    StdSYN10:   0,
+   StdSYN12:   0,
    StdSYN20:   0,
    StdSYN70:   0,
    StdSYN130:  0,
@@ -1546,6 +1547,7 @@ var gasNames = map[string]uint64{
 	// Token Standards (constants – zero-cost markers)
 	// ----------------------------------------------------------------------
 	"StdSYN10":   1,
+	"StdSYN12":   12,
 	"StdSYN20":   2,
 	"StdSYN70":   7,
 	"StdSYN130":  13,
