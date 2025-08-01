@@ -242,3 +242,5 @@ This playbook should be kept up to date as the project evolves.  Check off files
 
 \n## Progress\n- Added full NFT Marketplace GUI with backend service and Solidity contract.\n
 
+
+- Upcoming PR will cover the Nodes module, Authority Nodes module and Tokens module directories in full.
