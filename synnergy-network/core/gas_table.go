@@ -531,6 +531,14 @@ var gasTable map[Opcode]uint64
         GetMarketDeal:       1_000,
         ListMarketDeals:     1_000,
    // Pin & Retrieve already priced
+   // ----------------------------------------------------------------------
+   // Identity Verification
+   // ----------------------------------------------------------------------
+   RegisterIdentity: 5_000,
+   VerifyIdentity:   1_000,
+   RemoveIdentity:   2_000,
+   ListIdentities:   2_000,
+
 
    // ----------------------------------------------------------------------
    // Resource Marketplace
@@ -1563,6 +1571,13 @@ var gasNames = map[string]uint64{
 	"Assets_Get":      1_000,
 	"Assets_List":     1_000,
 	// Pin & Retrieve already priced
+	// ----------------------------------------------------------------------
+	// Identity Verification
+	// ----------------------------------------------------------------------
+	"RegisterIdentity": 5_000,
+	"VerifyIdentity":   1_000,
+	"RemoveIdentity":   2_000,
+	"ListIdentities":   2_000,
 
 	// ----------------------------------------------------------------------
 	// Resource Marketplace

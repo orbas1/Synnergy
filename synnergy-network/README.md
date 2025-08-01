@@ -60,6 +60,7 @@ all modules from the core library. Highlights include:
 - `authority_node` – validator registration and voting
 - `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
+- `identity` – manage verified addresses
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
 - `audit` – manage on-chain audit logs

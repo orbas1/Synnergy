@@ -17,6 +17,7 @@ The following command groups expose the same functionality available in the core
 - **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
 - **authority_apply** – Submit and vote on authority node applications.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
+- **identity** – Register and verify user identities.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
  - **compliance** – Run KYC/AML checks on addresses and export audit reports.
  - **compliance_management** – Manage suspensions and whitelists for addresses.
