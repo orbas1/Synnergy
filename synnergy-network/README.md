@@ -60,6 +60,7 @@ all modules from the core library. Highlights include:
 - `charity_pool` – query and disburse community funds
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
+- `compliance_management` – suspend or whitelist addresses
 - `consensus` – control the consensus engine
 - `adaptive` – dynamically adjust consensus weights
 - `stake` – adjust validator stake and record penalties
