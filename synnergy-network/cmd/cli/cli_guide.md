@@ -34,6 +34,7 @@ The following command groups expose the same functionality available in the core
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **token_vote** – Cast token weighted governance votes.
 - **qvote** – Submit quadratic votes and view weighted results.
 - **polls_management** – Create and vote on community polls.
 - **governance_management** – Manage governance contracts on chain.
@@ -333,6 +334,12 @@ needed in custom tooling.
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
 
+### token_vote
+
+| Sub-command | Description |
+|-------------|-------------|
+| `cast <proposal-id> <voter> <token-id> <amount> [approve]` | Cast a token weighted vote on a proposal. |
+=======
 ### qvote
 
 | Sub-command | Description |

@@ -80,6 +80,9 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `data` – Low-level debugging of key/value storage and oracles.
 - `anomaly_detection` – Detect suspicious transactions using the built-in AI.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
+ - `governance` – Create proposals and cast votes.
+ - `token_vote` – Cast token weighted votes in governance.
+ - `green_technology` – Manage energy tracking and carbon offsets.
 - `governance` – Create proposals and cast votes.
 - `qvote` – Cast weighted quadratic votes on proposals.
 - `polls_management` – Lightweight polls for community feedback.
