@@ -147,6 +147,21 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	return tok.BalanceOf(addr), nil
 }
 
+// Mint721 mints a new NFT with metadata and returns the NFT identifier.
+func (tm *TokenManager) Mint721(id TokenID, to Address, meta SYN721Metadata) (uint64, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	return nft.MintWithMeta(to, meta)
+}
+
+// Transfer721 transfers ownership of a specific NFT token.
+func (tm *TokenManager) Transfer721(id TokenID, from, to Address, nftID uint64) error {
 // NewLegalToken creates a SYN4700 legal token and registers it with the ledger.
 func (tm *TokenManager) NewLegalToken(meta Metadata, docType string, hash []byte, parties []Address, expiry time.Time, init map[Address]uint64) (TokenID, error) {
 	tm.mu.Lock()
@@ -303,6 +318,15 @@ func (tm *TokenManager) AddLiquidity(id TokenID, from Address, amt uint64) error
 	if !ok {
 		return ErrInvalidAsset
 	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return nft.Transfer(from, to, nftID)
+}
+
+// Burn721 burns a specific NFT token.
+func (tm *TokenManager) Burn721(id TokenID, owner Address, nftID uint64) error {
 	mr, ok := tok.(*SYN1600Token)
 	if !ok {
 		return fmt.Errorf("token is not SYN1600")
@@ -325,6 +349,29 @@ func (tm *TokenManager) RemoveLiquidity(id TokenID, to Address, amt uint64) erro
 	if !ok {
 		return ErrInvalidAsset
 	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return nft.Burn(owner, nftID)
+}
+
+// Metadata721 retrieves metadata for a given NFT.
+func (tm *TokenManager) Metadata721(id TokenID, nftID uint64) (SYN721Metadata, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return SYN721Metadata{}, ErrInvalidAsset
+	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return SYN721Metadata{}, ErrInvalidAsset
+	}
+	m, _ := nft.MetadataOf(nftID)
+	return m, nil
+}
+
+// UpdateMetadata721 updates metadata for a given NFT.
+func (tm *TokenManager) UpdateMetadata721(id TokenID, nftID uint64, meta SYN721Metadata) error {
 	lt, ok := tok.(*LegalToken)
 	if !ok {
 		return ErrInvalidAsset
@@ -358,6 +405,11 @@ func (tm *TokenManager) UpdateRoyaltyInfo(id TokenID, info MusicInfo) error {
 	if !ok {
 		return ErrInvalidAsset
 	}
+	nft, ok := tok.(*SYN721Token)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return nft.UpdateMetadata(nftID, meta)
 	mr, ok := tok.(*SYN1600Token)
 	if !ok {
 		return fmt.Errorf("token is not SYN1600")

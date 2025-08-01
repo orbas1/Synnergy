@@ -347,6 +347,19 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+	// Special case for SYN721 NFT tokens which require unique handling
+	if meta.Standard == StdSYN721 {
+		nft := NewSYN721Token(meta)
+		for addr, v := range init {
+			// mint "v" NFTs with empty metadata for the address
+			for i := uint64(0); i < v; i++ {
+				if _, err := nft.MintWithMeta(addr, SYN721Metadata{}); err != nil {
+					return nil, err
+				}
+			}
+		}
+		RegisterToken(&nft.BaseToken)
+		return nft, nil
 
 	// special handling for SYN223 which requires the custom struct
 	if meta.Standard == StdSYN223 {
