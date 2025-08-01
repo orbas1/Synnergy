@@ -95,6 +95,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `utility_functions` – Miscellaneous support utilities.
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `wallet` – Create wallets and sign transfers.
+- `idwallet` – Register ID-token wallets and verify status.
 - `offwallet` – Manage offline wallets and signed transactions.
 - `recovery` – Multi-factor account recovery leveraging SYN900 tokens.
 - `wallet_mgmt` – High level wallet manager for ledger payments.

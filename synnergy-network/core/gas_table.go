@@ -626,6 +626,8 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+   RegisterIDWallet:    8_000,
+   IsIDWalletRegistered: 500,
 
    // ----------------------------------------------------------------------
    // Event Management
@@ -1271,6 +1273,14 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
+	"NewRandomWallet":      10_000,
+	"WalletFromMnemonic":   5_000,
+	"NewHDWalletFromSeed":  6_000,
+	"PrivateKey":           400,
+	"NewAddress":           500,
+	"SignTx":               3_000,
+	"RegisterIDWallet":     8_000,
+	"IsIDWalletRegistered": 500,
 	"NewRandomWallet":            10_000,
 	"WalletFromMnemonic":         5_000,
 	"NewHDWalletFromSeed":        6_000,
@@ -1288,15 +1298,21 @@ var gasNames = map[string]uint64{
 	"NewHDWalletFromSeed": 6_000,
 	"PrivateKey":          400,
 	"NewAddress":          500,
+  "SignTx":              3_000,
+	"RegisterRecovery":    5_000,
+	"RecoverAccount":      8_000,
+  
+  
+  // ----------------------------------------------------------------------
+	// Workflow / Key-Management
+	// ----------------------------------------------------------------------
 	"NewWorkflow":         15_000,
 	"AddWorkflowAction":   2_000,
 	"SetWorkflowTrigger":  1_000,
 	"SetWebhook":          1_000,
 	"ExecuteWorkflow":     5_000,
 	"ListWorkflows":       500,
-	"SignTx":              3_000,
-	"RegisterRecovery":    5_000,
-	"RecoverAccount":      8_000,
+	
 
 	// ------------------------------------------------------------------
 	// Swarm
