@@ -277,6 +277,10 @@ var catalogue = []struct {
 	{"Ledger_Transfer", 0x0E0019},
 	{"Ledger_Mint", 0x0E001A},
 	{"Ledger_Burn", 0x0E001B},
+	{"InitForkManager", 0x0E001C},
+	{"AddForkBlock", 0x0E001D},
+	{"ResolveForks", 0x0E001E},
+	{"ListForks", 0x0E001F},
 
 	// Liquidity (0x0F)
 	{"InitAMM", 0x0F0001},

@@ -18,6 +18,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **fork** – Manage chain forks and resolve competing branches.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
@@ -222,6 +223,13 @@ needed in custom tooling.
 | `pool` | List mem-pool transactions. |
 | `mint <addr>` | Mint tokens to an address. |
 | `transfer <from> <to>` | Transfer tokens between addresses. |
+
+### fork
+
+| Sub-command | Description |
+|-------------|-------------|
+| `list` | Show currently tracked forks. |
+| `resolve` | Resolve forks extending the tip. |
 
 ### liquidity_pools
 
