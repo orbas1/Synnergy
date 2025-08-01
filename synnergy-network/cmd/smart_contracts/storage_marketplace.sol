@@ -18,6 +18,7 @@ contract StorageMarketplace {
     bytes4 private constant GET_DEAL       = 0x18000C;
     bytes4 private constant LIST_DEALS     = 0x18000D;
 
+
     /// @notice Create a new storage listing on-chain.
     /// @param listingData ABI-encoded struct expected by the storage module.
     function createListing(bytes memory listingData) external {
@@ -142,4 +143,5 @@ contract StorageMarketplace {
             out := mload(0x0)
         }
     }
+
 }

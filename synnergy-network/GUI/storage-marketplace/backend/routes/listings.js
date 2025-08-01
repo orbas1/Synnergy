@@ -5,4 +5,5 @@ router.get('/', controller.getListings);
 router.post('/', controller.createListing);
 router.get('/:id', controller.getListing);
 
+
 module.exports = router;

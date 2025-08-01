@@ -2,11 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const { dataPath } = require('../config');
 
+
 function load() {
   try {
     return JSON.parse(fs.readFileSync(dataPath, 'utf8'));
   } catch {
     return { listings: [], deals: [], files: [], storages: [] };
+
   }
 }
 
@@ -102,4 +104,5 @@ exports.listStorages = async () => {
   const db = load();
   return db.storages;
 };
+
 

@@ -214,9 +214,28 @@ contains a basic HTML page, a JavaScript stub and a README to bootstrap
 interfaces such as the wallet, explorer and various marketplaces. These
 projects are designed for web hosting and will evolve alongside the core
 modules.
+- Explorer GUI expanded with forms to query balances and transactions.
+  Backend server `cmd/explorer` now exposes JSON APIs and uses
+  `LedgerService`. Smart contracts demonstrate opcode usage via
+  `explorer_utils.sol` and `ledger_inspector.sol`.
+
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
+
+**DAO Explorer** – Tailwind frontend served from Express with controllers,
+services and smart contract bindings. Solidity contract now covers multiple
+governance opcodes and backend can interact with it via ethers.js.
+
 
 ---
 
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
+
+## Progress Log
+
+- Added basic Express server and UI for the AI Marketplace under `GUI/ai-marketplace`.
+- Implemented `AIServiceMarketplace` Solidity contract demonstrating use of opcode `VM_Transfer`.
+
+\n### Recent Updates\n- Wallet GUI now includes a Go HTTP backend under `walletserver/` with REST routes and Bootstrap front-end.
+
+\n## Progress\n- Added full NFT Marketplace GUI with backend service and Solidity contract.\n

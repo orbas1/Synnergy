@@ -1,0 +1,13 @@
+body {
+    padding-top: 60px;
+}
+.navbar-brand img {
+    height: 30px;
+    margin-right: 8px;
+}
+
+pre {
+    max-height: 300px;
+    overflow: auto;
+}
+
