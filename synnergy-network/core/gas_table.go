@@ -1183,6 +1183,10 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+	"GetItem":             1_000,
+	"RegisterItem":        10_000,
+	"UpdateLocation":      5_000,
+	"MarkStatus":          5_000,
 }
 
 func init() {
