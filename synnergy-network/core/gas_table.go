@@ -847,6 +847,10 @@ var gasNames = map[string]uint64{
 	"Dial":            2_000,
 	"SetBroadcaster":  500,
 	"GlobalBroadcast": 1_000,
+	"NewNATManager":   5_000,
+	"NAT_Map":         1_000,
+	"NAT_Unmap":       1_000,
+	"NAT_ExternalIP":  500,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------

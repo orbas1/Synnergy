@@ -108,6 +108,10 @@ synnergy ledger init --path ./ledger.db
 synnergy network start &
 ```
 
+By default the node attempts to open the listening port on your router using
+UPnP or NAT‑PMP. You can inspect and manage these mappings with the new `nat`
+command group.
+
 Additional helper scripts live under `cmd/scripts`.  Running
 `start_synnergy_network.sh` will build the CLI, launch networking, consensus and
 other daemons, then run a demo security command.

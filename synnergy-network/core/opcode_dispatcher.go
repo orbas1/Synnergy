@@ -314,6 +314,10 @@ var catalogue = []struct {
 	{"Dial", 0x11000A},
 	{"SetBroadcaster", 0x11000B},
 	{"GlobalBroadcast", 0x11000C},
+	{"NewNATManager", 0x11000D},
+	{"NAT_Map", 0x11000E},
+	{"NAT_Unmap", 0x11000F},
+	{"NAT_ExternalIP", 0x110010},
 
 	// Replication (0x12)
 	{"NewReplicator", 0x120001},

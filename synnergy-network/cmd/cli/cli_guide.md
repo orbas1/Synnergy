@@ -23,6 +23,7 @@ The following command groups expose the same functionality available in the core
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
+- **nat** – Manage router port mappings for inbound connectivity.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **rollups** – Create rollup batches or inspect existing ones.
 - **security** – Key generation, signing utilities and password helpers.
@@ -254,6 +255,14 @@ needed in custom tooling.
 | `peers` | List connected peers. |
 | `broadcast <topic> <data>` | Publish data on the network. |
 | `subscribe <topic>` | Subscribe to a topic. |
+
+### nat
+
+| Sub-command | Description |
+|-------------|-------------|
+| `map <port>` | Open a port on the router via UPnP/NAT-PMP. |
+| `unmap` | Remove the current port mapping. |
+| `ip` | Show the discovered external IP address. |
 
 ### replication
 

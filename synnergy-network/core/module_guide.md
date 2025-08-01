@@ -50,6 +50,7 @@ responsibilities and dependencies of that module.
 - **loanpool.go** – Simple collateralised loan mechanics built on top of the
   token module.
 - **network.go** – libp2p networking stack with pub‑sub gossip and peer discovery.
+- **nat_traversal.go** – NAT-PMP and UPnP helpers to map ports and expose nodes.
 - **opcode_dispatcher.go** – Maps transaction opcodes to virtual machine handlers
   at runtime.
 - **replication.go** – Block propagation utilities and snapshot distribution to
