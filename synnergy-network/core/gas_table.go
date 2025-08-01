@@ -1592,6 +1592,15 @@ var gasNames = map[string]uint64{
  "SignTx":              3_000,
 	"RegisterRecovery":    5_000,
 	"RecoverAccount":      8_000,
+	// ----------------------------------------------------------------------
+	// Binary Tree Operations
+	// ----------------------------------------------------------------------
+	"BinaryTreeNew":     5_000,
+	"BinaryTreeInsert":  6_000,
+	"BinaryTreeSearch":  4_000,
+	"BinaryTreeDelete":  6_000,
+	"BinaryTreeInOrder": 3_000,
+
 	// ---------------------------------------------------------------------
 	// Regulatory Management
 	// ---------------------------------------------------------------------

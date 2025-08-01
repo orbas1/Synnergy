@@ -110,6 +110,8 @@ func wrap(name string) OpcodeFunc {
 //		0x0C Governance             0x1A Transactions
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
+//	                                 0x1D Wallet
+//	                                 0x1E BinaryTree
 //		                            0x1D Wallet
 //	                                 0x1E Regulatory
 //	                                 0x1E Forum
@@ -769,6 +771,14 @@ var catalogue = []struct {
 	{"BroadcastSignedTx", 0x1D000C},
 	{"RegisterRecovery", 0x1D0007},
 	{"RecoverAccount", 0x1D0008},
+
+	// BinaryTree (0x1E)
+	{"BinaryTreeNew", 0x1E0001},
+	{"BinaryTreeInsert", 0x1E0002},
+	{"BinaryTreeSearch", 0x1E0003},
+	{"BinaryTreeDelete", 0x1E0004},
+	{"BinaryTreeInOrder", 0x1E0005},
+  
 	// Regulatory (0x1E)
 	{"InitRegulatory", 0x1E0001},
 	{"RegisterRegulator", 0x1E0002},

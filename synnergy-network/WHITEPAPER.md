@@ -39,6 +39,7 @@ At a high level the network consists of:
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Binary Trees** – Ledger-backed search trees provide efficient on-chain indexing for smart contracts and services.
 7. **Blockchain Compression** – Snapshots can be gzipped and restored on demand to reduce storage costs.
 7. **Zero Trust Data Channels** – End-to-end encrypted channels leverage the token ledger for escrowed access control.
 7. **Swarm Manager** – Coordinates multiple nodes as a high-availability cluster.
@@ -159,6 +160,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  BinaryTree
                                  0x1E  Regulatory
                                  0x1E  Polls
                                  0x1E  Biometrics

@@ -77,6 +77,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **binarytree** – Manage ledger-backed binary search trees.
 - **regulator** – Manage on-chain regulators and rule checks.
 - **feedback** – Submit and review on‑chain user feedback.
 - **system_health** – Monitor node metrics and emit log entries.
@@ -773,6 +774,16 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+### binarytree
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <name>` | Create a new binary tree bound to the ledger. |
+| `insert <tree> <key> <value>` | Insert or update a key. Value may be hex encoded. |
+| `search <tree> <key>` | Retrieve a value by key. |
+| `delete <tree> <key>` | Remove a key from the tree. |
+| `list <tree>` | List all keys in order. |
+
 
 ### system_health
 
