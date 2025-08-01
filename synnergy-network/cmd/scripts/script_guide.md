@@ -169,4 +169,18 @@ Pin a file in the storage subsystem.
 ./storage_pin.sh <file>
 ```
 
+### ../../scripts/devnet_start.sh
+Spin up a multi-node developer network. Example:
+
+```bash
+../../scripts/devnet_start.sh 3
+```
+
+### ../../scripts/testnet_start.sh
+Launch a testnet from a YAML config:
+
+```bash
+../../scripts/testnet_start.sh path/to/testnet.yaml
+```
+
 These scripts are intentionally minimal to keep the focus on demonstrating CLI usage. Feel free to modify them or combine commands to suit your workflow.
