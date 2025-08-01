@@ -210,6 +210,11 @@ var catalogue = []struct {
 	{"ListCDNNodes", 0x0A0009},
 	{"ListOracles", 0x0A000A},
 	{"PushFeedSigned", 0x0A000B},
+	{"CreateDataSet", 0x0A000C},
+	{"PurchaseDataSet", 0x0A000D},
+	{"GetDataSet", 0x0A000E},
+	{"ListDataSets", 0x0A000F},
+	{"HasAccess", 0x0A0010},
 
 	// Fault-Tolerance (0x0B)
 	{"NewHealthChecker", 0x0B0001},

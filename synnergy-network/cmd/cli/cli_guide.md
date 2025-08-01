@@ -177,6 +177,15 @@ needed in custom tooling.
 | `oracle query <oracleID>` | Query the latest oracle value. |
 | `oracle list` | List registered oracles. |
 
+### distribution
+
+| Sub-command | Description |
+|-------------|-------------|
+| `distribution create <owner> <cid> <price>` | Register a dataset for sale. |
+| `distribution buy <datasetID> <buyer>` | Purchase dataset access. |
+| `distribution info <datasetID>` | Show dataset metadata. |
+| `distribution list` | List all datasets. |
+
 ### fault_tolerance
 
 | Sub-command | Description |
