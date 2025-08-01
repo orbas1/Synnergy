@@ -193,6 +193,42 @@ func sidechainListRPC(ctx context.Context) ([]map[string]any, error) {
 	return resp.List, nil
 }
 
+func pauseRPC(ctx context.Context, id uint32) error {
+	cli, err := newSCClient(ctx)
+	if err != nil {
+		return err
+	}
+	defer cli.Close()
+	return cli.writeJSON(map[string]any{"action": "pause", "id": id})
+}
+
+func resumeRPC(ctx context.Context, id uint32) error {
+	cli, err := newSCClient(ctx)
+	if err != nil {
+		return err
+	}
+	defer cli.Close()
+	return cli.writeJSON(map[string]any{"action": "resume", "id": id})
+}
+
+func updateValsRPC(ctx context.Context, id uint32, thr uint8, vals []string) error {
+	cli, err := newSCClient(ctx)
+	if err != nil {
+		return err
+	}
+	defer cli.Close()
+	return cli.writeJSON(map[string]any{"action": "update", "id": id, "threshold": thr, "validators": vals})
+}
+
+func removeRPC(ctx context.Context, id uint32) error {
+	cli, err := newSCClient(ctx)
+	if err != nil {
+		return err
+	}
+	defer cli.Close()
+	return cli.writeJSON(map[string]any{"action": "remove", "id": id})
+}
+
 // -----------------------------------------------------------------------------
 // Top-level cobra tree
 // -----------------------------------------------------------------------------
@@ -378,6 +414,77 @@ var sideListCmd = &cobra.Command{
 	},
 }
 
+// pause ----------------------------------------------------------------------
+var pauseCmd = &cobra.Command{
+	Use:   "pause [chainID]",
+	Short: "Pause a side-chain",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		idU, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return fmt.Errorf("invalid chainID: %w", err)
+		}
+		ctx, cancel := context.WithTimeout(cmd.Context(), 2*time.Second)
+		defer cancel()
+		return pauseRPC(ctx, uint32(idU))
+	},
+}
+
+// resume ----------------------------------------------------------------------
+var resumeCmd = &cobra.Command{
+	Use:   "resume [chainID]",
+	Short: "Resume a paused side-chain",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		idU, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return fmt.Errorf("invalid chainID: %w", err)
+		}
+		ctx, cancel := context.WithTimeout(cmd.Context(), 2*time.Second)
+		defer cancel()
+		return resumeRPC(ctx, uint32(idU))
+	},
+}
+
+// update-validators -----------------------------------------------------------
+var updateValsCmd = &cobra.Command{
+	Use:   "update-validators",
+	Short: "Update validator set for a side-chain",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		idU, _ := cmd.Flags().GetUint32("id")
+		thrU, _ := cmd.Flags().GetUint("threshold")
+		valsStr, _ := cmd.Flags().GetString("validators")
+		if valsStr == "" {
+			return errors.New("--validators required")
+		}
+		vals := strings.Split(valsStr, ",")
+		for _, v := range vals {
+			if _, err := hex.DecodeString(v); err != nil {
+				return fmt.Errorf("invalid validator pubkey: %w", err)
+			}
+		}
+		ctx, cancel := context.WithTimeout(cmd.Context(), 3*time.Second)
+		defer cancel()
+		return updateValsRPC(ctx, idU, uint8(thrU), vals)
+	},
+}
+
+// remove ---------------------------------------------------------------------
+var scRemoveCmd = &cobra.Command{
+	Use:   "remove [chainID]",
+	Short: "Remove a side-chain and its data",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		idU, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			return fmt.Errorf("invalid chainID: %w", err)
+		}
+		ctx, cancel := context.WithTimeout(cmd.Context(), 3*time.Second)
+		defer cancel()
+		return removeRPC(ctx, uint32(idU))
+	},
+}
+
 // -----------------------------------------------------------------------------
 // init – config & route wiring
 // -----------------------------------------------------------------------------
@@ -423,6 +530,10 @@ func init() {
 	getHeaderCmd.Flags().Uint32("chain", 0, "chainID")
 	getHeaderCmd.Flags().Uint64("height", 0, "header height")
 
+	updateValsCmd.Flags().Uint32("id", 0, "side-chain ID")
+	updateValsCmd.Flags().Uint("threshold", 67, "BLS threshold percent")
+	updateValsCmd.Flags().String("validators", "", "comma-separated BLS pubkeys hex")
+
 	// route wiring
 	scCmd.AddCommand(sideRegisterCmd)
 	scCmd.AddCommand(headerCmd)
@@ -431,6 +542,10 @@ func init() {
 	scCmd.AddCommand(getHeaderCmd)
 	scCmd.AddCommand(metaCmd)
 	scCmd.AddCommand(sideListCmd)
+	scCmd.AddCommand(pauseCmd)
+	scCmd.AddCommand(resumeCmd)
+	scCmd.AddCommand(updateValsCmd)
+	scCmd.AddCommand(scRemoveCmd)
 }
 
 // NewSidechainCommand exposes the consolidated CLI route.
