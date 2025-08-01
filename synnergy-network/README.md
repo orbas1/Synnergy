@@ -51,6 +51,7 @@ Each file in `cmd/cli` registers its own group of commands with the root
 all modules from the core library. Highlights include:
 
 - `ai` – publish models and run inference jobs
+- `ai_mgmt` – manage AI model marketplace listings
 - `amm` – swap tokens and manage liquidity pools
 - `authority_node` – validator registration and voting
 - `charity_pool` – query and disburse community funds

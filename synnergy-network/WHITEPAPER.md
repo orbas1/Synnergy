@@ -45,6 +45,7 @@ The supply inflates annually by 2% to maintain incentives and fund new initiativ
 ## Full CLI Guide and Index
 Synnergy comes with a powerful CLI built using the Cobra framework. Commands are grouped into modules mirroring the codebase. Below is a concise index; see `cmd/cli/cli_guide.md` for the detailed usage of each command group:
 - `ai` – Publish machine learning models and run inference jobs.
+- `ai_mgmt` – Manage listings in the AI model marketplace.
 - `amm` – Swap tokens and manage liquidity pools.
 - `authority_node` – Register validators and manage the authority set.
 - `charity_pool` – Contribute to or distribute from community charity funds.

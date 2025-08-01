@@ -616,18 +616,22 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// AI
 	// ----------------------------------------------------------------------
-	"InitAI":         50_000,
-	"AI":             40_000,
-	"PredictAnomaly": 35_000,
-	"OptimizeFees":   25_000,
-	"PublishModel":   45_000,
-	"FetchModel":     15_000,
-	"ListModel":      8_000,
-	"ValidateKYC":    1_000,
-	"BuyModel":       30_000,
-	"RentModel":      20_000,
-	"ReleaseEscrow":  12_000,
-	"PredictVolume":  15_000,
+	"InitAI":             50_000,
+	"AI":                 40_000,
+	"PredictAnomaly":     35_000,
+	"OptimizeFees":       25_000,
+	"PublishModel":       45_000,
+	"FetchModel":         15_000,
+	"ListModel":          8_000,
+	"ValidateKYC":        1_000,
+	"BuyModel":           30_000,
+	"RentModel":          20_000,
+	"ReleaseEscrow":      12_000,
+	"PredictVolume":      15_000,
+	"GetModelListing":    1_000,
+	"ListModelListings":  2_000,
+	"UpdateListingPrice": 2_000,
+	"RemoveListing":      2_000,
 
 	// ----------------------------------------------------------------------
 	// Automated-Market-Maker
