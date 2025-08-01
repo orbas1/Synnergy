@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
+//	                                 0x1E RPC
 //	                                 0x1E Plasma
 //	                                 0x1D Wallet
 //	                                 0x1E CarbonCredit
@@ -848,6 +849,12 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// RPC (0x1E)
+	{"NewRPCWebRTC", 0x1E0001},
+	{"RPC_Serve", 0x1E0002},
+	{"RPC_Close", 0x1E0003},
+	{"RPC_ConnectPeer", 0x1E0004},
+	{"RPC_Broadcast", 0x1E0005},
 	// Plasma (0x1E)
 	{"InitPlasma", 0x1E0001},
 	{"Plasma_Deposit", 0x1E0002},
