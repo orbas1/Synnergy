@@ -13,7 +13,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"sync"
-	Tokens "synnergy-network/core/Tokens"
 	"time"
 )
 
@@ -424,6 +423,7 @@ func init() {
 		{"Synnergy Insurance", "SYN-INSUR", 0, StdSYN2900, time.Time{}, false, 0},
 		{"Synnergy Rental", "SYN-RENT", 0, StdSYN3000, time.Time{}, false, 0},
 		{"Synnergy Employment", "SYN-EMP", 0, StdSYN3100, time.Time{}, false, 0},
+		{"Synnergy Dual Mode", "SYN722", 0, StdSYN722, time.Time{}, false, 0},
 		{"Synnergy Bill", "SYN-BILL", 0, StdSYN3200, time.Time{}, false, 0},
 	}
 

@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -80,4 +81,35 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 		return 0, ErrInvalidAsset
 	}
 	return tok.BalanceOf(addr), nil
+}
+
+// SetSYN722Mode switches fungibility mode for SYN722 tokens.
+func (tm *TokenManager) SetSYN722Mode(id TokenID, nonFungible bool) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	s, ok := tok.(*SYN722Token)
+	if !ok {
+		return fmt.Errorf("token is not SYN722")
+	}
+	if nonFungible {
+		s.SetNonFungible()
+	} else {
+		s.SetFungible()
+	}
+	return nil
+}
+
+// GetSYN722Mode retrieves current mode for SYN722 tokens.
+func (tm *TokenManager) GetSYN722Mode(id TokenID) (tokens.Mode, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return 0, ErrInvalidAsset
+	}
+	s, ok := tok.(*SYN722Token)
+	if !ok {
+		return 0, fmt.Errorf("token is not SYN722")
+	}
+	return s.Mode(), nil
 }
