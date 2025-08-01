@@ -12,6 +12,7 @@ The Synnergy ecosystem brings together several services:
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
+- **AI Model Training** – On-chain jobs allow publishing datasets and training models collaboratively with escrowed payments.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.

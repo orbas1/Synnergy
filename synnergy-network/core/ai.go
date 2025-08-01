@@ -55,6 +55,7 @@ func InitAI(led StateRW, grpcEndpoint string, client AIStubClient) error {
 			conn:   conn,
 			client: client,
 			models: make(map[[32]byte]ModelMeta),
+			jobs:   make(map[string]TrainingJob),
 		}
 	})
 	return err
