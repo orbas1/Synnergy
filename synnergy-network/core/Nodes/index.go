@@ -10,6 +10,16 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// EnvironmentalMonitoringInterface extends NodeInterface with sensor management
+// and conditional triggers.
+type EnvironmentalMonitoringInterface interface {
+	NodeInterface
+	RegisterSensor(id, endpoint string) error
+	RemoveSensor(id string) error
+	ListSensors() ([]string, error)
+	AddTrigger(id string, threshold float64, action string) error
+	Start()
+	Stop() error
 // MolecularNodeFactory returns a MolecularNodeInterface. Actual constructor lives
 // in the core package.
 type MolecularNodeFactory func(cfg interface{}) (MolecularNodeInterface, error)

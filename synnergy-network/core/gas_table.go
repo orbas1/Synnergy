@@ -1264,6 +1264,15 @@ var gasNames = map[string]uint64{
 	"UpdateSensorValue": 150,
 	"PollSensor":        500,
 	"TriggerWebhook":    500,
+	// ---------------------------------------------------------------------
+	// Environmental Monitoring Node
+	// ---------------------------------------------------------------------
+	"NewEnvironmentalNode":  2000,
+	"EnvNode_AddTrigger":    500,
+	"EnvNode_RemoveTrigger": 300,
+	"EnvNode_Start":         300,
+	"EnvNode_Stop":          300,
+	"EnvNode_ListSensors":   100,
 
 	// ----------------------------------------------------------------------
 	// Fault-Tolerance / Health-Checker

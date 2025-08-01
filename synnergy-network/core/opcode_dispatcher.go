@@ -1232,6 +1232,12 @@ var catalogue = []struct {
 	{"FinishGame", 0x1E0003},
 	{"GetGame", 0x1E0004},
 	{"ListGames", 0x1E0005},
+	{"NewEnvironmentalNode", 0x1E0001},
+	{"EnvNode_AddTrigger", 0x1E0002},
+	{"EnvNode_RemoveTrigger", 0x1E0003},
+	{"EnvNode_Start", 0x1E0004},
+	{"EnvNode_Stop", 0x1E0005},
+	{"EnvNode_ListSensors", 0x1E0006},
 	// Archival Witness Node (0x1F)
 	{"NewArchivalWitnessNode", 0x1F0001},
 	{"Witness_NotarizeTx", 0x1F0002},
