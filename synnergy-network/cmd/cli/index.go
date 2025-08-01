@@ -39,6 +39,7 @@ func RegisterRoutes(root *cobra.Command) {
 		AdaptiveCmd,
 		ConsensusNodeCmd,
 		TokensCmd,
+		LifeCmd,
 		Syn1401Cmd,
 		SYN223Cmd,
 		Syn131Cmd,
