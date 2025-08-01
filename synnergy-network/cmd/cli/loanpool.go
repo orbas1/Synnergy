@@ -10,6 +10,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"log"
 
 	core "synnergy-network/core"
 )
@@ -33,7 +34,8 @@ func ensureLoanPool(cmd *cobra.Command, _ []string) error {
 	if led == nil {
 		return errors.New("ledger not initialised")
 	}
-	loanPool = core.NewLoanPool(logrus.StandardLogger(), led, lpElector{}, &core.LoanPool{})
+	stdlg := log.New(logrus.StandardLogger().Out, "", log.LstdFlags)
+	loanPool = core.NewLoanPool(stdlg, led, lpElector{}, &core.LoanPool{})
 	return nil
 }
 

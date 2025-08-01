@@ -59,6 +59,7 @@ all modules from the core library. Highlights include:
 - `consensus` – control the consensus engine
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
+- `xcontract` – register cross-chain contract mappings
 - `data` – inspect and manage raw data storage
 - `fault_tolerance` – simulate faults and backups
 - `governance` – DAO style governance commands
