@@ -105,6 +105,7 @@ func RegisterRoutes(root *cobra.Command) {
 		OracleMgmtCmd,
 		DataOpsCmd,
 		HACmd,
+		DisasterNodeCmd,
 		CompressionCmd,
 		AnomalyCmd,
 		ResourceCmd,
@@ -163,6 +164,7 @@ func RegisterRoutes(root *cobra.Command) {
 	root.AddCommand(
 		NewFaultToleranceCommand(),
 		NewFailoverCommand(),
+		NewDisasterRecoveryCommand(),
 		NewGovernanceCommand(),
 		NewTokenVoteCommand(),
 		NewSYN300Command(),
