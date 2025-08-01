@@ -624,6 +624,14 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+
+   // ----------------------------------------------------------------------
+   // Event Management
+   // ----------------------------------------------------------------------
+   InitEvents: 5_000,
+   EmitEvent: 400,
+   GetEvent:  800,
+   ListEvents: 1_000,
    CreateWallet:        10_000,
    ImportWallet:        5_000,
    WalletBalance:       400,
@@ -1249,6 +1257,14 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// Event Management
+	// ----------------------------------------------------------------------
+	"InitEvents": 5_000,
+	"EmitEvent":  400,
+	"GetEvent":   800,
+	"ListEvents": 1_000,
 	"CreateWallet":        10_000,
 	"ImportWallet":        5_000,
 	"WalletBalance":       400,

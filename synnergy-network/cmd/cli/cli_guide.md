@@ -36,6 +36,7 @@ The following command groups expose the same functionality available in the core
 - **healthcare** – Manage healthcare records and permissions.
 - **warehouse** – Manage on-chain inventory records.
 - **tokens** – Register new token types and move balances between accounts.
+- **event_management** – Emit and query custom events stored on chain.
 - **gaming** – Manage simple on-chain games.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
@@ -415,6 +416,13 @@ needed in custom tooling.
 | `approve <tok>` | Approve a spender allowance. |
 | `allowance <tok> <owner> <spender>` | Show current allowance. |
 
+### event_management
+
+| Sub-command | Description |
+|-------------|-------------|
+| `emit <type> <data>` | Emit a new event and broadcast it. |
+| `list <type>` | List recent events of a given type. |
+| `get <type> <id>` | Fetch a specific event by ID. |
 ### token_management
 
 | Sub-command | Description |
