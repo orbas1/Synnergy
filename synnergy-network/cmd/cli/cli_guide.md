@@ -68,6 +68,7 @@ The following command groups expose the same functionality available in the core
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
 - **swarm** – Manage groups of nodes running together.
 - **storage** – Configure the backing key/value store and inspect content.
+- **legal** – Manage Ricardian contracts and sign agreements.
 - **resource** – Manage compute resource rentals.
 - **staking** – Stake and unstake tokens for DAO governance.
 - **dao_access** – Manage DAO membership roles.
@@ -776,6 +777,16 @@ needed in custom tooling.
 | `add` | Add a file to the configured IPFS gateway. |
 | `get` | Fetch a CID and write to stdout or a file. |
 | `unpin` | Remove a CID from the gateway pinset. |
+
+### legal
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <addr> <json>` | Register a Ricardian contract. |
+| `sign <contract> <party>` | Sign a contract as a party. |
+| `revoke <contract> <party>` | Revoke a signature. |
+| `info <addr>` | Show contract and signers. |
+| `list` | List all registered legal contracts. |
 
 ### tokens
 
