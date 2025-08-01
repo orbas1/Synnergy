@@ -26,11 +26,15 @@ func RegisterRoutes(root *cobra.Command) {
 		LoanCmd,
 		ComplianceCmd,
 		CrossChainCmd,
+		ImmutabilityCmd,
 		DataCmd,
 		ChannelRoute,
 		StorageRoute,
 		HealthcareCmd,
 		UtilityRoute,
+		TangibleCmd,
+		WarehouseCmd,
+		GamingCmd,
 	)
 
 	// modules that expose constructors

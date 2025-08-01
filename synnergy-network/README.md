@@ -60,6 +60,7 @@ all modules from the core library. Highlights include:
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `immutability` – verify the canonical chain state
 - `fault_tolerance` – simulate faults and backups
 - `governance` – DAO style governance commands
 - `green_technology` – sustainability features
@@ -73,7 +74,10 @@ all modules from the core library. Highlights include:
 - `state_channel` – open and settle payment channels
 - `storage` – interact with on‑chain storage providers
 - `healthcare` – manage on‑chain healthcare records
+- `tangible` – register and transfer tangible asset records
+- `warehouse` – manage on‑chain inventory records
 - `tokens` – ERC‑20 style token commands
+- `gaming` – create and join simple on-chain games
 - `transactions` – build and sign transactions
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service

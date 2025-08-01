@@ -112,6 +112,10 @@ func wrap(name string) OpcodeFunc {
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
 //	                                 0x1E Healthcare
+//	                                 0x1E Immutability
+//	                                 0x1E Warehouse
+//	                                 0x1E Gaming
+//	0x1E Assets
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -590,6 +594,31 @@ var catalogue = []struct {
 	{"GrantAccess", 0x1E0004},
 	{"RevokeAccess", 0x1E0005},
 	{"ListHealthRecords", 0x1E0006},
+
+  // Tangible (0x1E)
+	{"Assets_Register", 0x1E0001},
+	{"Assets_Transfer", 0x1E0002},
+	{"Assets_Get", 0x1E0003},
+	{"Assets_List", 0x1E0004},
+
+	// Immutability (0x1E)
+	{"InitImmutability", 0x1E0001},
+	{"VerifyChain", 0x1E0002},
+	{"RestoreChain", 0x1E0003},
+	// Warehouse (0x1E)
+	{"Warehouse_New", 0x1E0001},
+	{"Warehouse_AddItem", 0x1E0002},
+	{"Warehouse_RemoveItem", 0x1E0003},
+	{"Warehouse_MoveItem", 0x1E0004},
+	{"Warehouse_ListItems", 0x1E0005},
+	{"Warehouse_GetItem", 0x1E0006},
+
+	// Gaming (0x1E)
+	{"CreateGame", 0x1E0001},
+	{"JoinGame", 0x1E0002},
+	{"FinishGame", 0x1E0003},
+	{"GetGame", 0x1E0004},
+	{"ListGames", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.

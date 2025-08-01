@@ -13,6 +13,8 @@ The Synnergy ecosystem brings together several services:
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
+- **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
+- **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
 - **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
@@ -70,7 +72,9 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `state_channel` – Open and settle payment channels.
 - `storage` – Manage off-chain storage deals.
 - `healthcare` – Manage healthcare records and permissions.
+- `tangible` – Track tangible asset ownership on-chain.
 - `tokens` – Issue and manage token contracts.
+- `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
 - `utility_functions` – Miscellaneous support utilities.
 - `virtual_machine` – Execute VM-level operations for debugging.
@@ -98,6 +102,9 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
                                  0x1E  Healthcare
+                                 0x1E  Immutability
+                                 0x1E  Warehouse
+                                 0x1E  Gaming
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 
