@@ -112,6 +112,16 @@ func wrap(name string) OpcodeFunc {
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
 //	                                 0x1E Escrow
+//	                                 0x1E Marketplace
+//	                                 0x1D Wallet
+//	                                 0x1E Faucet
+//		                            0x1D Wallet
+//	                                 0x1E SupplyChain
+//	                                 0x1E Healthcare
+//	                                 0x1E Immutability
+//	                                 0x1E Warehouse
+//	                                 0x1E Gaming
+//	0x1E Assets
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -239,6 +249,11 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"CreateDAO", 0x0C000B},
+	{"JoinDAO", 0x0C000C},
+	{"LeaveDAO", 0x0C000D},
+	{"DAOInfo", 0x0C000E},
+	{"ListDAOs", 0x0C000F},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},
@@ -590,6 +605,59 @@ var catalogue = []struct {
 	{"Escrow_Cancel", 0x1E0004},
 	{"Escrow_Get", 0x1E0005},
 	{"Escrow_List", 0x1E0006},
+	// Marketplace (0x1E)
+	{"CreateMarketListing", 0x1E0001},
+	{"PurchaseItem", 0x1E0002},
+	{"CancelListing", 0x1E0003},
+	{"ReleaseFunds", 0x1E0004},
+	{"GetMarketListing", 0x1E0005},
+	{"ListMarketListings", 0x1E0006},
+	{"GetMarketDeal", 0x1E0007},
+	{"ListMarketDeals", 0x1E0008},
+	// Faucet (0x1E)
+	{"NewFaucet", 0x1E0001},
+	{"Faucet_Request", 0x1E0002},
+	{"Faucet_Balance", 0x1E0003},
+	{"Faucet_SetAmount", 0x1E0004},
+	{"Faucet_SetCooldown", 0x1E0005},
+  // Supply Chain (0x1E)
+  {"RegisterItem", 0x1E0001},
+	{"UpdateLocation", 0x1E0002},
+	{"MarkStatus", 0x1E0003},
+	{"GetItem", 0x1E0004},
+
+	// Healthcare (0x1E)
+	{"InitHealthcare", 0x1E0001},
+	{"RegisterPatient", 0x1E0002},
+	{"AddHealthRecord", 0x1E0003},
+	{"GrantAccess", 0x1E0004},
+	{"RevokeAccess", 0x1E0005},
+	{"ListHealthRecords", 0x1E0006},
+
+  // Tangible (0x1E)
+	{"Assets_Register", 0x1E0001},
+	{"Assets_Transfer", 0x1E0002},
+	{"Assets_Get", 0x1E0003},
+	{"Assets_List", 0x1E0004},
+
+	// Immutability (0x1E)
+	{"InitImmutability", 0x1E0001},
+	{"VerifyChain", 0x1E0002},
+	{"RestoreChain", 0x1E0003},
+	// Warehouse (0x1E)
+	{"Warehouse_New", 0x1E0001},
+	{"Warehouse_AddItem", 0x1E0002},
+	{"Warehouse_RemoveItem", 0x1E0003},
+	{"Warehouse_MoveItem", 0x1E0004},
+	{"Warehouse_ListItems", 0x1E0005},
+	{"Warehouse_GetItem", 0x1E0006},
+
+	// Gaming (0x1E)
+	{"CreateGame", 0x1E0001},
+	{"JoinGame", 0x1E0002},
+	{"FinishGame", 0x1E0003},
+	{"GetGame", 0x1E0004},
+	{"ListGames", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.
