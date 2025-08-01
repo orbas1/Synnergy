@@ -26,3 +26,4 @@ window.addEventListener('load', () => {
         document.getElementById('bal-result').textContent = bal !== null ? bal : 'Not found';
     });
 });
+

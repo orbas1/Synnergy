@@ -1,0 +1,6 @@
+# Configuration for the cross-chain HTTP server
+server:
+  listen: ":8082"
+relayers:
+  - relayer1
+  - relayer2

@@ -6,6 +6,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+
+	core "synnergy-network/core"
 )
 
 // Server exposes ledger data over a small HTTP API.
@@ -32,13 +34,33 @@ func (s *Server) routes() {
 	s.router.HandleFunc("/api/tx/{id}", s.handleTx).Methods("GET")
 	s.router.HandleFunc("/api/balance/{addr}", s.handleBalance).Methods("GET")
 	s.router.HandleFunc("/api/info", s.handleInfo).Methods("GET")
+
 	// serve static GUI
 	s.router.PathPrefix("/").Handler(http.FileServer(http.Dir("GUI/explorer")))
 }
 
 func (s *Server) handleBlocks(w http.ResponseWriter, r *http.Request) {
-	blocks := s.service.LatestBlocks(10)
-	writeJSON(w, blocks)
+	led := core.CurrentLedger()
+	if led == nil {
+		http.Error(w, "ledger not initialised", http.StatusInternalServerError)
+		return
+	}
+	blocks := led.Blocks
+	n := len(blocks)
+	start := n - 10
+	if start < 0 {
+		start = 0
+	}
+	out := make([]map[string]interface{}, 0, n-start)
+	for i := start; i < n; i++ {
+		blk := blocks[i]
+		out = append(out, map[string]interface{}{
+			"height": blk.Header.Height,
+			"hash":   blk.Hash().Hex(),
+			"txs":    len(blk.Transactions),
+		})
+	}
+	writeJSON(w, out)
 }
 
 func (s *Server) handleBlock(w http.ResponseWriter, r *http.Request) {

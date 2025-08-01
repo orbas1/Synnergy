@@ -36,6 +36,7 @@ func main() {
 	}
 
 	srv := NewServer(addr, svc)
+
 	log.Printf("Explorer listening on %s", addr)
 	if err := srv.Start(); err != nil {
 		log.Fatalf("server: %v", err)

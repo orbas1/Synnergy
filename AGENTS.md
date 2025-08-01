@@ -187,7 +187,7 @@ The current code base is a functional prototype.  The following additions would 
 - **Faucet Contract** – simple token dispenser with rate limiting
 - **DAO Governance Contract** – on‑chain voting and proposal execution
 - **Marketplace Contract** – buy and sell digital goods using SYNN tokens
-- **Storage Marketplace Contract** – pay for decentralized storage
+ - **Storage Marketplace Contract** – pay for decentralized storage ✅
 - **LoanPool Application Contract** – terms negotiation and repayment logic
 - **Authority Node Application Contract** – stake tokens to join the validator set
 
@@ -201,9 +201,14 @@ The current code base is a functional prototype.  The following additions would 
 - `cmd/authority_apply/` – validator application workflow
 - `internal/` packages for shared utilities and cross‑package helpers
 - `GUI/` – web interfaces for wallet management, explorers and marketplaces
--   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
-    `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
-    `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
+  -   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
+     `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
+     `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
+        - `cross-chain-management/` now offers a Bootstrap 5 dashboard with
+          forms for bridge registration, relayer administration and opcode
+          testing. The backend service (`cmd/xchainserver`) exposes REST routes
+          with logging middleware and loads relayer config from `.env` or
+          `cmd/config/crosschain.yaml`.
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
 
@@ -219,8 +224,23 @@ modules.
   `LedgerService`. Smart contracts demonstrate opcode usage via
   `explorer_utils.sol` and `ledger_inspector.sol`.
 
+
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
+
+**DAO Explorer** – Tailwind frontend served from Express with controllers,
+services and smart contract bindings. Solidity contract now covers multiple
+governance opcodes and backend can interact with it via ethers.js.
+
 
 ---
 
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
+
+## Progress Log
+
+- Added basic Express server and UI for the AI Marketplace under `GUI/ai-marketplace`.
+- Implemented `AIServiceMarketplace` Solidity contract demonstrating use of opcode `VM_Transfer`.
+
+\n### Recent Updates\n- Wallet GUI now includes a Go HTTP backend under `walletserver/` with REST routes and Bootstrap front-end.
+
+\n## Progress\n- Added full NFT Marketplace GUI with backend service and Solidity contract.\n
