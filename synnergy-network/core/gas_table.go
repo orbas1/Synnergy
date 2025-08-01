@@ -193,6 +193,11 @@ var gasTable map[Opcode]uint64
    ExecuteProposal: 15_000,
    GetProposal:     1_000,
    ListProposals:   2_000,
+   NewTimelock:     4_000,
+   QueueProposal:   3_000,
+   CancelProposal:  3_000,
+   ExecuteReady:    5_000,
+   ListTimelocks:   1_000,
 
    // ----------------------------------------------------------------------
    // Green Technology
@@ -769,6 +774,11 @@ var gasNames = map[string]uint64{
 	"ExecuteProposal": 15_000,
 	"GetProposal":     1_000,
 	"ListProposals":   2_000,
+	"NewTimelock":     4_000,
+	"QueueProposal":   3_000,
+	"CancelProposal":  3_000,
+	"ExecuteReady":    5_000,
+	"ListTimelocks":   1_000,
 
 	// ----------------------------------------------------------------------
 	// Green Technology

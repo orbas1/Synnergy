@@ -56,6 +56,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `data` – Low-level debugging of key/value storage and oracles.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
+- `timelock` – Delay proposal execution via a queue.
 - `green_technology` – Manage energy tracking and carbon offsets.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
