@@ -473,6 +473,9 @@ var gasTable map[Opcode]uint64
    ListListings:  1_000,
    GetDeal:       1_000,
    ListDeals:     1_000,
+   IPFS_Add:     5_000,
+   IPFS_Get:     4_000,
+   IPFS_Unpin:   3_000,
         // General Marketplace
         CreateMarketListing:  8_000,
         PurchaseItem:        6_000,
@@ -1401,6 +1404,9 @@ var gasNames = map[string]uint64{
 	"ListListings":  1_000,
 	"GetDeal":       1_000,
 	"ListDeals":     1_000,
+	"IPFS_Add":      5_000,
+	"IPFS_Get":      4_000,
+	"IPFS_Unpin":    3_000,
 
   // General Marketplace
 	"CreateMarketListing": 8_000,
