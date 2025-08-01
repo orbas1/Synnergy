@@ -2116,13 +2116,15 @@ var gasNames = map[string]uint64{
 	"DistributeEven": 200,
 	// Carbon Credit System
 	// ---------------------------------------------------------------------
-	"InitCarbonEngine": 800,
-	"Carbon":           200,
-	"RegisterProject":  500,
-	"IssueCredits":     500,
-	"RetireCredits":    300,
-	"ProjectInfo":      100,
-	"ListProjects":     100,
+	"InitCarbonEngine":  800,
+	"Carbon":            200,
+	"RegisterProject":   500,
+	"IssueCredits":      500,
+	"RetireCredits":     300,
+	"ProjectInfo":       100,
+	"ListProjects":      100,
+	"AddVerification":   200,
+	"ListVerifications": 100,
 	// ----------------------------------------------------------------------
 	// Finalization Management
 	// ----------------------------------------------------------------------

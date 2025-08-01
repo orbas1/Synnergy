@@ -115,6 +115,7 @@ func RegisterRoutes(root *cobra.Command) {
 		SandboxCmd,
 		LegalCmd,
 		CarbonCmd,
+		SYN200Cmd,
 		FootprintCmd,
 		EnergyCmd,
 		InitRepCmd,
