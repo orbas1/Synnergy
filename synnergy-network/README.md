@@ -61,6 +61,7 @@ all modules from the core library. Highlights include:
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
 - `consensus` – control the consensus engine
+- `stake` – adjust validator stake and record penalties
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage

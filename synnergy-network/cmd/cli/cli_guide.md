@@ -19,6 +19,7 @@ The following command groups expose the same functionality available in the core
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
+- **stake** – Adjust validator stakes and record penalties.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
@@ -206,6 +207,14 @@ needed in custom tooling.
 | `threshold <demand> <stake>` | Compute the consensus switch threshold. |
 | `set-weight-config <alpha> <beta> <gamma> <dmax> <smax>` | Update weight coefficients. |
 | `get-weight-config` | Display current weight configuration. |
+
+### stake
+
+| Sub-command | Description |
+|-------------|-------------|
+| `adjust <addr> <delta>` | Increase or decrease stake for a validator. |
+| `penalize <addr> <points> [reason]` | Record penalty points against a validator. |
+| `info <addr>` | Display stake and penalty totals. |
 
 ### contracts
 

@@ -258,6 +258,8 @@ var catalogue = []struct {
 	{"DistributeRewards", 0x070010},
 	{"CalculateWeights", 0x070011},
 	{"ComputeThreshold", 0x070012},
+	{"AdjustStake", 0x070013},
+	{"PenalizeValidator", 0x070014},
 	{"RegisterValidator", 0x070013},
 	{"DeregisterValidator", 0x070014},
 	{"StakeValidator", 0x070015},
