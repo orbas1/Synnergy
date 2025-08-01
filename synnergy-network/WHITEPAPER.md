@@ -11,6 +11,7 @@ The Synnergy ecosystem brings together several services:
 - **Core Ledger and Consensus** – The canonical ledger stores blocks and coordinates the validator set.
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
+- **Data Operations** – Built-in tooling for normalization, sampling and provenance tracking of on-chain feeds.
 - **Zero Trust Data Channels** – Encrypted peer-to-peer channels secured by the ledger and consensus.
 - **Data & Resource Management** – Tracks stored blobs and dynamically allocates gas limits.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
