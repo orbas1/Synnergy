@@ -201,9 +201,11 @@ The current code base is a functional prototype.  The following additions would 
 - `cmd/authority_apply/` – validator application workflow
 - `internal/` packages for shared utilities and cross‑package helpers
 - `GUI/` – web interfaces for wallet management, explorers and marketplaces
--   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
-    `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
-    `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
+  -   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
+     `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
+     `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
+        - `cross-chain-management/` now provides a Bootstrap GUI and an HTTP
+          service (`cmd/xchainserver`) for managing bridges.
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
 
