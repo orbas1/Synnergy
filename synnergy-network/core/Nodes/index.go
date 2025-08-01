@@ -9,3 +9,10 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// APINodeInterface extends NodeInterface with HTTP API controls.
+type APINodeInterface interface {
+	NodeInterface
+	APINode_Start(addr string) error
+	APINode_Stop() error
+}
