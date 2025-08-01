@@ -77,6 +77,7 @@ The following command groups expose the same functionality available in the core
 - **event_management** – Emit and query custom events stored on chain.
 - **gaming** – Manage simple on-chain games.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
+- **private_tx** – Encrypt data and submit private transactions.
 - **transactionreversal** – Reverse confirmed transactions with authority approval.
 - **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
@@ -809,6 +810,13 @@ needed in custom tooling.
 | `submit` | Submit a signed transaction to the network. |
 | `pool` | List pending pool transaction hashes. |
 
+### private_tx
+
+| Sub-command | Description |
+|-------------|-------------|
+| `encrypt` | Encrypt transaction payload bytes. |
+| `decrypt` | Decrypt previously encrypted payload. |
+| `send` | Submit an encrypted transaction JSON file. |
 ### transactionreversal
 
 | Sub-command | Description |

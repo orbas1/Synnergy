@@ -129,6 +129,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `token_management` – Advanced token lifecycle management.
 - `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
+- `private_tx` – Tools for encrypting data and submitting private transactions.
 - `transactionreversal` – Reverse erroneous payments with authority approval.
 - `devnet` – Spawn an in-memory developer network for rapid testing.
 - `testnet` – Launch a configurable test network from a YAML file.

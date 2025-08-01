@@ -126,6 +126,7 @@ all modules from the core library. Highlights include:
 - `token_management` – high level token creation and administration
 - `gaming` – create and join simple on-chain games
 - `transactions` – build and sign transactions
+- `private_tx` – encrypt and submit private transactions
 - `transactionreversal` – request authority-backed reversals
 - `transaction_distribution` – split transaction fees between miner and treasury
 - `faucet` – dispense test tokens or coins with rate limits
