@@ -26,6 +26,14 @@ type TokenInterfaces interface {
 	Meta() any
 }
 
+// SYN1600 defines the behaviour expected from music royalty tokens.
+type SYN1600 interface {
+	TokenInterfaces
+	AddRevenue(amount uint64, txID string)
+	RevenueHistory() []any
+	DistributeRoyalties(amount uint64) error
+	UpdateInfo(info any)
+}
 // EducationCreditMetadata captures the details of a single education credit.
 type EducationCreditMetadata struct {
 	CreditID       string
@@ -79,7 +87,6 @@ type EducationCreditTokenInterface interface {
 	GetCredit(string) (EducationCreditMetadata, bool)
 	ListCredits(string) []EducationCreditMetadata
 }
-=======
 // Address is a 20 byte account identifier used for cross-package compatibility.
 type Address [20]byte
 

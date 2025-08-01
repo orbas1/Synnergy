@@ -103,6 +103,10 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	return tok.BalanceOf(addr), nil
 }
 
+// SYN1600 specific helpers ----------------------------------------------------
+
+// AddRoyaltyRevenue records revenue against a SYN1600 token.
+func (tm *TokenManager) AddRoyaltyRevenue(id TokenID, amount uint64, txID string) error {
 // CreateEducationToken creates a SYN1900-compliant token.
 func (tm *TokenManager) CreateEducationToken(meta Metadata, init map[Address]uint64) (TokenID, error) {
 	tm.mu.Lock()
@@ -202,6 +206,16 @@ func (tm *TokenManager) AddLiquidity(id TokenID, from Address, amt uint64) error
 	if !ok {
 		return ErrInvalidAsset
 	}
+	mr, ok := tok.(*SYN1600Token)
+	if !ok {
+		return fmt.Errorf("token is not SYN1600")
+	}
+	mr.AddRevenue(amount, txID)
+	return nil
+}
+
+// DistributeRoyalties triggers royalty distribution for a SYN1600 token.
+func (tm *TokenManager) DistributeRoyalties(id TokenID, amount uint64) error {
 	sf, ok := tok.(*SupplyFinanceToken)
 	if !ok {
 		return ErrInvalidAsset
@@ -214,6 +228,25 @@ func (tm *TokenManager) RemoveLiquidity(id TokenID, to Address, amt uint64) erro
 	if !ok {
 		return ErrInvalidAsset
 	}
+	mr, ok := tok.(*SYN1600Token)
+	if !ok {
+		return fmt.Errorf("token is not SYN1600")
+	}
+	return mr.DistributeRoyalties(amount)
+}
+
+// UpdateRoyaltyInfo updates music metadata of a SYN1600 token.
+func (tm *TokenManager) UpdateRoyaltyInfo(id TokenID, info MusicInfo) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	mr, ok := tok.(*SYN1600Token)
+	if !ok {
+		return fmt.Errorf("token is not SYN1600")
+	}
+	mr.UpdateInfo(info)
+	return nil
 	et, ok := tok.(*EducationToken)
 	if !ok {
 		return fmt.Errorf("not education token")

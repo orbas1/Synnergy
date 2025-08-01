@@ -133,6 +133,7 @@ func RegisterRoutes(root *cobra.Command) {
 		SupplyCmd,
 		TangibleCmd,
 		WarehouseCmd,
+		MusicRoyaltyCmd,
 		GamingCmd,
 	)
 
