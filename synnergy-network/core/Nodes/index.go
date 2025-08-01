@@ -13,6 +13,12 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// EnergyNodeInterface extends NodeInterface with energy tracking methods.
+type EnergyNodeInterface interface {
+	NodeInterface
+	RecordUsage(txs uint64, kwh float64) error
+	Efficiency() (float64, error)
+	NetworkAverage() (float64, error)
 // IntegrationNodeInterface extends NodeInterface with integration specific
 // management helpers. It deliberately avoids referencing core types to keep the
 // package dependency hierarchy simple.

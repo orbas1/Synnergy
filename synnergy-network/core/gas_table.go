@@ -1509,12 +1509,18 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Energy Efficiency
 	// ----------------------------------------------------------------------
-	"InitEnergyEfficiency": 800,
-	"EnergyEff":            200,
-	"RecordStats":          300,
-	"EfficiencyOf":         50,
-	"NetworkAverage":       100,
-	"ListEfficiency":       100,
+	"InitEnergyEfficiency":  800,
+	"EnergyEff":             200,
+	"RecordStats":           300,
+	"EfficiencyOf":          50,
+	"NetworkAverage":        100,
+	"ListEfficiency":        100,
+	"NewEnergyNode":         2000,
+	"EnergyNode_Start":      50,
+	"EnergyNode_Stop":       50,
+	"EnergyNode_Record":     300,
+	"EnergyNode_Efficiency": 100,
+	"EnergyNode_NetworkAvg": 100,
 
 	// ----------------------------------------------------------------------
 	// Ledger / UTXO / Account-Model
