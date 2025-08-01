@@ -96,6 +96,7 @@ all modules from the core library. Highlights include:
  - `rollups` – manage rollup batches
 - `plasma` – manage plasma deposits and exits
 - `replication` – snapshot and replicate data
+- `synchronization` – manage blockchain catch-up and progress
 - `rollups` – manage rollup batches
 - `compression` – save and load compressed ledger snapshots
 - `security` – cryptographic utilities

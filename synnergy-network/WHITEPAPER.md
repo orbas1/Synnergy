@@ -107,6 +107,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
  - `rollups` – Manage rollup batches and fraud proofs.
 - `plasma` – Manage Plasma deposits and exits.
 - `replication` – Replicate and synchronize ledger data across nodes.
+- `synchronization` – Maintain ledger state via a dedicated sync manager.
 - `rollups` – Manage rollup batches and fraud proofs.
 - `security` – Generate keys and sign payloads.
 - `sharding` – Split the ledger into shards and coordinate cross-shard messages.
