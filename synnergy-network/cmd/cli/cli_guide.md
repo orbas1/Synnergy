@@ -59,6 +59,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **feedback** – Submit and review on‑chain user feedback.
 - **system_health** – Monitor node metrics and emit log entries.
 - **idwallet** – Register ID-token wallets and verify status.
 - **offwallet** – Offline wallet utilities.

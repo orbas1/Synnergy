@@ -1405,9 +1405,18 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
-   "SignTx":              3_000,
+ "SignTx":              3_000,
 	"RegisterRecovery":    5_000,
 	"RecoverAccount":      8_000,
+	// ---------------------------------------------------------------------
+	// Feedback System
+	// ---------------------------------------------------------------------
+	"InitFeedback":    8_000,
+	"Feedback_Submit": 2_000,
+	"Feedback_Get":    1_000,
+	"Feedback_List":   1_500,
+	"Feedback_Reward": 2_500,
+  
 
 	// ---------------------------------------------------------------------
 	// Forum

@@ -23,6 +23,7 @@ The Synnergy ecosystem brings together several services:
 - **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
 - **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Feedback System** – Users can submit and browse feedback directly on chain, enabling transparent improvement cycles.
 - **Biometric Authentication** – module for on-chain identity verification.
 - **Faucet Service** – Dispense test coins and tokens to developers with rate limits.
 All services are optional and run as independent modules that plug into the core.
@@ -189,5 +190,5 @@ Assuming gradual adoption and comparable DeFi activity:
 These estimates rely on continued development, security audits, and ecosystem partnerships.
 
 ## Conclusion
-Synnergy Network aims to deliver a modular, enterprise-ready blockchain platform that blends advanced compliance, scalable architecture, and developer-friendly tools. The project is moving from early research into production and welcomes community feedback. For source code, development guides, and further documentation visit the repository.
+Synnergy Network aims to deliver a modular, enterprise-ready blockchain platform that blends advanced compliance, scalable architecture, and developer-friendly tools. The project is moving from early research into production and welcomes community feedback. A built-in on-chain feedback system allows suggestions to be recorded transparently. For source code, development guides, and further documentation visit the repository.
 

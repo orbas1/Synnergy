@@ -689,7 +689,7 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
-   {"RegisterIDWallet", 0x1D0007},
+    {"RegisterIDWallet", 0x1D0007},
 	{"IsIDWalletRegistered", 0x1D0008},
 	{"NewOffChainWallet", 0x1D0007},
 	{"OffChainWalletFromMnemonic", 0x1D0008},
@@ -699,6 +699,14 @@ var catalogue = []struct {
 	{"BroadcastSignedTx", 0x1D000C},
 	{"RegisterRecovery", 0x1D0007},
 	{"RecoverAccount", 0x1D0008},
+
+	// Feedback (0x1E)
+	{"InitFeedback", 0x1E0001},
+	{"Feedback_Submit", 0x1E0002},
+	{"Feedback_Get", 0x1E0003},
+	{"Feedback_List", 0x1E0004},
+	{"Feedback_Reward", 0x1E0005},
+ 
 
 	// Forum (0x1E)
 	{"Forum_CreateThread", 0x1E0001},

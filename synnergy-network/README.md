@@ -109,6 +109,7 @@ all modules from the core library. Highlights include:
 - `workflow` – automate multi-step tasks with triggers and webhooks
 - `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
+- `feedback` – submit and query user feedback
 - `system_health` – monitor runtime metrics and write logs
 - `idwallet` – register ID-token wallets and verify status
 - `offwallet` – offline wallet utilities
