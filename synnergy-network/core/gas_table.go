@@ -75,6 +75,12 @@ var gasTable map[Opcode]uint64
    GetAuthority:        1_000,
    ListAuthorities:     2_000,
    DeregisterAuthority: 6_000,
+   NewAuthorityApplier: 20_000,
+   SubmitApplication:   4_000,
+   VoteApplication:     3_000,
+   FinalizeApplication: 5_000,
+   GetApplication:      1_000,
+   ListApplications:    2_000,
 
    // ----------------------------------------------------------------------
    // Charity Pool
@@ -651,6 +657,12 @@ var gasNames = map[string]uint64{
 	"GetAuthority":        1_000,
 	"ListAuthorities":     2_000,
 	"DeregisterAuthority": 6_000,
+	"NewAuthorityApplier": 20_000,
+	"SubmitApplication":   4_000,
+	"VoteApplication":     3_000,
+	"FinalizeApplication": 5_000,
+	"GetApplication":      1_000,
+	"ListApplications":    2_000,
 
 	// ----------------------------------------------------------------------
 	// Charity Pool

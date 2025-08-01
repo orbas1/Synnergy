@@ -53,6 +53,7 @@ all modules from the core library. Highlights include:
 - `ai` – publish models and run inference jobs
 - `amm` – swap tokens and manage liquidity pools
 - `authority_node` – validator registration and voting
+- `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
