@@ -844,6 +844,7 @@ var catalogue = []struct {
 	{"GetQuota", 0x1E0002},
 	{"ChargeResources", 0x1E0003},
 	{"ReleaseResources", 0x1E0004},
+
 	// Distribution (0x1E)
 	{"NewDistributor", 0x1E0001},
 	{"BatchTransfer", 0x1E0002},

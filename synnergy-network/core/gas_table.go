@@ -1822,6 +1822,7 @@ var gasNames = map[string]uint64{
 	"GetQuota":         500,
 	"ChargeResources":  2_000,
 	"ReleaseResources": 1_000,
+
 	// Distribution
 	// ---------------------------------------------------------------------
 	"NewDistributor": 1_000,

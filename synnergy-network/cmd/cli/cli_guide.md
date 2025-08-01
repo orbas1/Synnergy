@@ -485,6 +485,7 @@ needed in custom tooling.
 | `set <addr> <cpu> <mem> <store>` | Set resource quota for an address. |
 | `show <addr>` | Display quota and current usage. |
 | `charge <addr> <cpu> <mem> <store>` | Charge and record consumed resources. |
+
 ### carbon_credit_system
 
 | Sub-command | Description |
