@@ -30,6 +30,7 @@ The following command groups expose the same functionality available in the core
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
+- **real_estate** – Manage tokenised real estate assets.
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
@@ -340,6 +341,15 @@ needed in custom tooling.
 | `deal:close` | Close a storage deal and release funds. |
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
+### real_estate
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register` | Register a new property. |
+| `transfer` | Transfer a property to another owner. |
+| `get` | Get property details. |
+| `list` | List properties, optionally by owner. |
+
 
 ### tokens
 
