@@ -88,6 +88,8 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
  - **sidechain** – Launch, manage and interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **loanpool** – Submit loan proposals and manage disbursements.
+- **grant** – Create and release grants from the loan pool.
 - **plasma** – Manage plasma deposits and submit block roots.
 - **state_channel_mgmt** – Pause, resume and force-close channels.
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
@@ -683,6 +685,14 @@ needed in custom tooling.
 | `disburse <id>` | Disburse an approved application. |
 | `get <id>` | Display a single application. |
 | `list` | List loan applications. |
+
+### grant
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <recipient> <amount>` | Create a new grant funded from the loan pool. |
+| `release <id>` | Release funds for a grant. |
+| `get <id>` | Display a single grant record. |
 
 ### network
 

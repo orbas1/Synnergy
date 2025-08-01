@@ -134,6 +134,8 @@ all modules from the core library. Highlights include:
 - `sharding` – shard management
 - `sidechain` – launch, manage and interact with sidechains
 - `state_channel` – open and settle payment channels
+- `loanpool` – submit loan proposals and disburse funds
+- `grant` – create and release loan pool grants
 - `plasma` – manage plasma deposits and block commitments
 - `state_channel_mgmt` – pause, resume and force-close channels
 - `zero_trust_data_channels` – encrypted data channels with ledger-backed escrows

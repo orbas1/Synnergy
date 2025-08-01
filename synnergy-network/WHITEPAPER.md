@@ -136,6 +136,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `liquidity_pools` – Create pools and provide liquidity.
 - `loanpool` – Submit, vote on, cancel or extend loan proposals before funds are disbursed.
 - `loanpool` – Submit loan requests and disburse funds.
+- `grant_disbursement` – Create and release grants from the loan pool.
 - `loanmgr` – Pause or resume the loan pool and query stats.
 - `loanpool_apply` – Apply for loans with on-chain voting.
 - `network` – Connect peers and view network metrics.
