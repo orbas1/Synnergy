@@ -187,7 +187,7 @@ The current code base is a functional prototype.  The following additions would 
 - **Faucet Contract** – simple token dispenser with rate limiting
 - **DAO Governance Contract** – on‑chain voting and proposal execution
 - **Marketplace Contract** – buy and sell digital goods using SYNN tokens
-- **Storage Marketplace Contract** – pay for decentralized storage
+ - **Storage Marketplace Contract** – pay for decentralized storage ✅
 - **LoanPool Application Contract** – terms negotiation and repayment logic
 - **Authority Node Application Contract** – stake tokens to join the validator set
 
@@ -202,7 +202,7 @@ The current code base is a functional prototype.  The following additions would 
 - `internal/` packages for shared utilities and cross‑package helpers
 - `GUI/` – web interfaces for wallet management, explorers and marketplaces
 -   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
-    `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
+    `storage-marketplace/` ✅, `dao-explorer/`, `token-creation-tool/`,
     `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
@@ -214,10 +214,21 @@ contains a basic HTML page, a JavaScript stub and a README to bootstrap
 interfaces such as the wallet, explorer and various marketplaces. These
 projects are designed for web hosting and will evolve alongside the core
 modules.
+- Explorer GUI expanded with forms to query balances and transactions.
+  Backend server `cmd/explorer` now exposes JSON APIs and uses
+  `LedgerService`. Smart contracts demonstrate opcode usage via
+  `explorer_utils.sol` and `ledger_inspector.sol`.
+
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
+
+**DAO Explorer** – Tailwind frontend served from Express with controllers,
+services and smart contract bindings. Solidity contract now covers multiple
+governance opcodes and backend can interact with it via ethers.js.
+
 
 ---
 
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
 \n### Recent Updates\n- Wallet GUI server extended with opcode catalogue and address/transaction utilities.
+

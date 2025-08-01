@@ -87,3 +87,4 @@ func (wc *WalletController) Sign(w http.ResponseWriter, r *http.Request) {
 func (wc *WalletController) Opcodes(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(wc.svc.Opcodes())
 }
+

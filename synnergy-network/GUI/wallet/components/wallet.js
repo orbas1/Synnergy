@@ -47,3 +47,4 @@ document.getElementById('opcodesBtn').addEventListener('click', async () => {
     const data = await res.json();
     document.getElementById('opcodesOutput').textContent = JSON.stringify(data, null, 2);
 });
+

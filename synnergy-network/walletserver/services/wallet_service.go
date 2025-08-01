@@ -3,6 +3,7 @@ package services
 import (
 	core "synnergy-network/core"
 	"synnergy-network/walletserver/smartcontracts"
+
 )
 
 // WalletService wraps core wallet operations used by the HTTP API.
@@ -30,3 +31,4 @@ func (ws *WalletService) SignTransaction(w *core.HDWallet, tx *core.Transaction,
 func (ws *WalletService) Opcodes() map[string]string {
 	return smartcontracts.Bytecodes()
 }
+

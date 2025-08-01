@@ -1,0 +1,11 @@
+/* Additional styling for NFT Marketplace */
+body {
+    font-family: Arial, sans-serif;
+}
+
+#listingContainer li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}

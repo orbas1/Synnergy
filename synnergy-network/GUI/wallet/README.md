@@ -24,3 +24,4 @@ from `localhost:8081` by default (configurable via `.env`).
 - `POST /api/wallet/address` – derive an address from posted wallet data
 - `POST /api/wallet/sign` – sign a transaction structure
 - `GET /api/wallet/opcodes` – list wallet opcodes and their hex values
+
