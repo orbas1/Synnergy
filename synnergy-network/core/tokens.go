@@ -347,6 +347,10 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+
+	// special handling for SYN223 which requires the custom struct
+	if meta.Standard == StdSYN223 {
+		tok := NewSYN223Token(meta, init)
 	// SYN131 tokens require the specialised structure with valuation tracking.
 	if meta.Standard == StdSYN131 {
 		tok := NewSYN131Token(meta, init)
