@@ -340,8 +340,12 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
-	RegisterToken(bt)
-	return bt, nil
+	var tok Token = bt
+	if meta.Standard == StdSYN2100 {
+		tok = &SupplyFinanceToken{BaseToken: bt, documents: make(map[string]*FinancialDocument), liquidity: make(map[Address]uint64)}
+	}
+	RegisterToken(tok)
+	return tok, nil
 }
 
 func NewBalanceTable() *BalanceTable {
