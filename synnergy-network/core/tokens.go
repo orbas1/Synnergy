@@ -13,7 +13,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"sync"
-	Tokens "synnergy-network/core/Tokens"
 	"time"
 )
 
@@ -520,6 +519,3 @@ func (s *Stack) Push(v any) {
 func (s *Stack) Len() int {
 	return len(s.data)
 }
-
-// Reference to TokenInterfaces for package usage
-var _ Tokens.TokenInterfaces
