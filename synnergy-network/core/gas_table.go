@@ -684,6 +684,10 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   DataToken_UpdateMeta: 500,
+   DataToken_SetPrice: 400,
+   DataToken_GrantAccess: 400,
+   DataToken_RevokeAccess: 300,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1642,6 +1646,10 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"DataToken_UpdateMeta":   0,
+	"DataToken_SetPrice":     0,
+	"DataToken_GrantAccess":  0,
+	"DataToken_RevokeAccess": 0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
