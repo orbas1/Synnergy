@@ -162,6 +162,12 @@ var catalogue = []struct {
 	{"GetAuthority", 0x030006},
 	{"ListAuthorities", 0x030007},
 	{"DeregisterAuthority", 0x030008},
+	{"NewAuthorityApplier", 0x030009},
+	{"SubmitApplication", 0x03000A},
+	{"VoteApplication", 0x03000B},
+	{"FinalizeApplication", 0x03000C},
+	{"GetApplication", 0x03000D},
+	{"ListApplications", 0x03000E},
 
 	// Charity (0x04)
 	{"NewCharityPool", 0x040001},

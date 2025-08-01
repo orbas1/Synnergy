@@ -11,6 +11,7 @@ The following command groups expose the same functionality available in the core
 - **ai** – Tools for publishing ML models and running anomaly detection jobs via gRPC to the AI service. Useful for training pipelines and on‑chain inference.
 - **amm** – Swap tokens and manage liquidity pools. Includes helpers to quote routes and add/remove liquidity.
 - **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
+- **authority_apply** – Submit and vote on authority node applications.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
@@ -108,6 +109,17 @@ needed in custom tooling.
 | `info <addr>` | Display details for an authority node. |
 | `list` | List authority nodes. |
 | `deregister <addr>` | Remove an authority node and its votes. |
+
+### authority_apply
+
+| Sub-command | Description |
+|-------------|-------------|
+| `submit <candidate> <role> <desc>` | Submit an authority node application. |
+| `vote <voter> <id>` | Vote on an application. Use `--approve=false` to reject. |
+| `finalize <id>` | Finalize and register the node if the vote passed. |
+| `tick` | Check all pending applications for expiry. |
+| `get <id>` | Display an application by ID. |
+| `list` | List all applications. |
 
 ### charity_pool
 
