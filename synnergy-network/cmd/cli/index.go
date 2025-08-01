@@ -8,8 +8,11 @@ func RegisterRoutes(root *cobra.Command) {
 	// modules with exported command variables
 	root.AddCommand(
 		NetworkCmd,
+		WarfareCmd,
+		MobileMinerCmd,
 		BootstrapCmd,
 		BankNodeCmd,
+		CentralBankCmd,
 		NatCmd,
 		PeerCmd,
 		ConsensusCmd,
