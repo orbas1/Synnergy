@@ -197,6 +197,11 @@ var gasTable map[Opcode]uint64
    ListCDNNodes:   3_000,
    ListOracles:    3_000,
    PushFeedSigned: 4_000,
+   UpdateOracleSource: 4_000,
+   RemoveOracle:      4_000,
+   GetOracleMetrics:  2_000,
+   RequestOracleData: 3_000,
+   SyncOracle:        5_000,
    CreateDataFeed: 6_000,
    QueryDataFeed:  3_000,
    ManageDataFeed: 5_000,
@@ -950,6 +955,22 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Data / Oracle / IPFS Integration
 	// ----------------------------------------------------------------------
+	"RegisterNode":       10_000,
+	"UploadAsset":        30_000,
+	"Pin":                5_000, // shared with Storage
+	"Retrieve":           4_000, // shared with Storage
+	"RetrieveAsset":      4_000,
+	"RegisterOracle":     10_000,
+	"PushFeed":           3_000,
+	"QueryOracle":        3_000,
+	"ListCDNNodes":       3_000,
+	"ListOracles":        3_000,
+	"PushFeedSigned":     4_000,
+	"UpdateOracleSource": 4_000,
+	"RemoveOracle":       4_000,
+	"GetOracleMetrics":   2_000,
+	"RequestOracleData":  3_000,
+	"SyncOracle":         5_000,
 	"RegisterNode":    10_000,
 	"UploadAsset":     30_000,
 	"Pin":             5_000, // shared with Storage

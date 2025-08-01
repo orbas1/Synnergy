@@ -52,6 +52,7 @@ func RegisterRoutes(root *cobra.Command) {
 		CrossChainCmd,
 		ImmutabilityCmd,
 		DataCmd,
+		OracleMgmtCmd,
 		DataOpsCmd,
 		HACmd,
 		CompressionCmd,
