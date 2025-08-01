@@ -88,6 +88,7 @@ The following command groups expose the same functionality available in the core
 - **finalization_management** – Finalize blocks, batches and channels.
 - **quorum** – Manage quorum trackers for proposals or validation.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
+- **sandbox** – Manage VM sandbox environments.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
 - **execution** – Manage block execution and transaction pipelines.
@@ -902,6 +903,15 @@ needed in custom tooling.
 | `stop` | Stop the VM daemon. |
 | `status` | Show daemon status. |
 
+### sandbox
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start` | Create a sandbox for a contract. |
+| `stop` | Stop a running sandbox. |
+| `reset` | Reset sandbox timers. |
+| `status` | Display sandbox info. |
+| `list` | List all sandboxes. |
 ### swarm
 
 | Sub-command | Description |

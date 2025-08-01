@@ -810,6 +810,11 @@ var catalogue = []struct {
 	{"ExecuteSuperLight", 0x1C002D},
 	{"ExecuteLight", 0x1C002E},
 	{"ExecuteHeavy", 0x1C002F},
+	{"VM_SandboxStart", 0x1C0030},
+	{"VM_SandboxStop", 0x1C0031},
+	{"VM_SandboxReset", 0x1C0032},
+	{"VM_SandboxStatus", 0x1C0033},
+	{"VM_SandboxList", 0x1C0034},
 
 	// Wallet (0x1D)
 	{"NewRandomWallet", 0x1D0001},

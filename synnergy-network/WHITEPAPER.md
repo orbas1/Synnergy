@@ -29,6 +29,7 @@ The Synnergy ecosystem brings together several services:
 - **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
 - **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Sandbox Management** – Allows contracts to execute in isolated environments with configurable resource limits.
 - **Feedback System** – Users can submit and browse feedback directly on chain, enabling transparent improvement cycles.
 - **Biometric Authentication** – module for on-chain identity verification.
 - **Faucet Service** – Dispense test coins and tokens to developers with rate limits.

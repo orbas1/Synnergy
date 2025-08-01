@@ -139,6 +139,7 @@ all modules from the core library. Highlights include:
 - `finalization_management` – finalize blocks, rollup batches and channels
 - `quorum` – simple quorum tracker management
 - `virtual_machine` – run the on‑chain VM service
+- `sandbox` – manage VM sandboxes
 - `workflow` – automate multi-step tasks with triggers and webhooks
 - `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
