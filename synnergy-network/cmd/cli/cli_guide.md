@@ -55,6 +55,7 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **account** – manage accounts and balances
 - **network** – Manage peer connections and print networking statistics.
+- **peer** – Discover peers, connect to them and advertise this node.
  - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
  - **high_availability** – Manage standby nodes and promote backups.
  - **rollups** – Create rollup batches or inspect existing ones.
@@ -578,6 +579,14 @@ needed in custom tooling.
 | `peers` | List connected peers. |
 | `broadcast <topic> <data>` | Publish data on the network. |
 | `subscribe <topic>` | Subscribe to a topic. |
+
+### peer
+
+| Sub-command | Description |
+|-------------|-------------|
+| `discover` | List peers discovered via mDNS. |
+| `connect <addr>` | Connect to a peer by multi-address. |
+| `advertise [topic]` | Broadcast this node ID on a topic. |
 
 ### replication
 

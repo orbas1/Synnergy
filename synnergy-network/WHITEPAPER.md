@@ -113,6 +113,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `loanpool` – Submit loan requests and disburse funds.
 - `loanpool_apply` – Apply for loans with on-chain voting.
 - `network` – Connect peers and view network metrics.
+- `peer` – Discover, connect and advertise peers on the network.
  - `replication` – Replicate and synchronize ledger data across nodes.
  - `high_availability` – Manage standby nodes and automated failover.
  - `rollups` – Manage rollup batches and fraud proofs.
