@@ -245,6 +245,14 @@ needed in custom tooling.
 | `get <id>` | Display a single proposal. |
 | `list` | List proposals in the pool. |
 
+### loanmgr
+
+| Sub-command | Description |
+|-------------|-------------|
+| `pause` | Pause new proposals. |
+| `resume` | Resume proposal submissions. |
+| `stats` | Display treasury and proposal stats. |
+
 ### network
 
 | Sub-command | Description |

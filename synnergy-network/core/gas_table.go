@@ -255,6 +255,11 @@ var gasTable map[Opcode]uint64
    GetProposal:   1_000,
    ListProposals: 1_500,
    Redistribute:  5_000,
+   NewLoanPoolManager: 10_000,
+   Loanpool_Pause: 1_000,
+   Loanpool_Resume: 1_000,
+   Loanpool_IsPaused: 500,
+   Loanpool_Stats: 2_000,
    // Vote  & Tick already priced
    // RandomElectorate / IsAuthority already priced
 
@@ -831,6 +836,11 @@ var gasNames = map[string]uint64{
 	"Loanpool_GetProposal":   1_000,
 	"Loanpool_ListProposals": 1_500,
 	"Redistribute":           5_000,
+	"NewLoanPoolManager":     10_000,
+	"Loanpool_Pause":         1000,
+	"Loanpool_Resume":        1000,
+	"Loanpool_IsPaused":      500,
+	"Loanpool_Stats":         2000,
 	// Vote  & Tick already priced
 	// RandomElectorate / IsAuthority already priced
 
