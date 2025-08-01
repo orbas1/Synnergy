@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
+//	                                 0x1E Warehouse
 //	                                 0x1E Gaming
 //
 // Each binary code is shown as a 24-bit big-endian string.
@@ -582,6 +583,13 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+	// Warehouse (0x1E)
+	{"Warehouse_New", 0x1E0001},
+	{"Warehouse_AddItem", 0x1E0002},
+	{"Warehouse_RemoveItem", 0x1E0003},
+	{"Warehouse_MoveItem", 0x1E0004},
+	{"Warehouse_ListItems", 0x1E0005},
+	{"Warehouse_GetItem", 0x1E0006},
 
 	// Gaming (0x1E)
 	{"CreateGame", 0x1E0001},
