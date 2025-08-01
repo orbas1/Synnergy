@@ -200,8 +200,20 @@ The current code base is a functional prototype.  The following additions would 
 - `cmd/loanpool_apply/` – loan application utilities
 - `cmd/authority_apply/` – validator application workflow
 - `internal/` packages for shared utilities and cross‑package helpers
+- `GUI/` – web interfaces for wallet management, explorers and marketplaces
+-   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
+    `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
+    `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
+
+### GUI Tasks
+
+Frontend development lives under `synnergy-network/GUI`. Each subdirectory
+contains a basic HTML page, a JavaScript stub and a README to bootstrap
+interfaces such as the wallet, explorer and various marketplaces. These
+projects are designed for web hosting and will evolve alongside the core
+modules.
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
