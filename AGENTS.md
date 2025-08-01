@@ -214,6 +214,8 @@ contains a basic HTML page, a JavaScript stub and a README to bootstrap
 interfaces such as the wallet, explorer and various marketplaces. These
 projects are designed for web hosting and will evolve alongside the core
 modules.
+- Explorer GUI implemented with backend server `cmd/explorer` and sample
+  smart contract `explorer_utils.sol`.
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
