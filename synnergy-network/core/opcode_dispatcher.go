@@ -210,6 +210,16 @@ var catalogue = []struct {
 	{"ListCDNNodes", 0x0A0009},
 	{"ListOracles", 0x0A000A},
 	{"PushFeedSigned", 0x0A000B},
+	{"CreateDataFeed", 0x0A000C},
+	{"QueryDataFeed", 0x0A000D},
+	{"ManageDataFeed", 0x0A000E},
+	{"ImputeMissing", 0x0A000F},
+	{"NormalizeFeed", 0x0A0010},
+	{"AddProvenance", 0x0A0011},
+	{"SampleFeed", 0x0A0012},
+	{"ScaleFeed", 0x0A0013},
+	{"TransformFeed", 0x0A0014},
+	{"VerifyFeedTrust", 0x0A0015},
 
 	// Fault-Tolerance (0x0B)
 	{"NewHealthChecker", 0x0B0001},

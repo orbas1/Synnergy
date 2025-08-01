@@ -27,6 +27,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ComplianceCmd,
 		CrossChainCmd,
 		DataCmd,
+		DataOpsCmd,
 		ChannelRoute,
 		StorageRoute,
 		UtilityRoute,

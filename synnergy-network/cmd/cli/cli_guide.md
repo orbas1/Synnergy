@@ -18,6 +18,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **data_ops** – Manage and transform on-chain data feeds.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
@@ -176,6 +177,15 @@ needed in custom tooling.
 | `oracle push <oracleID> <value>` | Push a value to an oracle feed. |
 | `oracle query <oracleID>` | Query the latest oracle value. |
 | `oracle list` | List registered oracles. |
+
+### data_ops
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <desc> <v1,v2,..>` | Create a new data feed. |
+| `query <id>` | Query a feed and print JSON. |
+| `normalize <id>` | Normalize feed values. |
+| `impute <id>` | Impute missing values using the mean. |
 
 ### fault_tolerance
 
