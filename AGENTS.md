@@ -187,7 +187,7 @@ The current code base is a functional prototype.  The following additions would 
 - **Faucet Contract** – simple token dispenser with rate limiting
 - **DAO Governance Contract** – on‑chain voting and proposal execution
 - **Marketplace Contract** – buy and sell digital goods using SYNN tokens
-- **Storage Marketplace Contract** – pay for decentralized storage
+ - **Storage Marketplace Contract** – pay for decentralized storage ✅
 - **LoanPool Application Contract** – terms negotiation and repayment logic
 - **Authority Node Application Contract** – stake tokens to join the validator set
 
@@ -214,10 +214,16 @@ contains a basic HTML page, a JavaScript stub and a README to bootstrap
 interfaces such as the wallet, explorer and various marketplaces. These
 projects are designed for web hosting and will evolve alongside the core
 modules.
+- Explorer GUI implemented with backend server `cmd/explorer` and sample
+  smart contract `explorer_utils.sol`.
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
+
+- Added `cmd/dexserver` and expanded `GUI/dex-screener` with Tailwind interface and pool API integration.
 
 ---
 
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
 \n### Recent Updates\n- Wallet GUI now includes a Go HTTP backend under `walletserver/` with REST routes and Bootstrap front-end.
+
+\n## Progress\n- Added full NFT Marketplace GUI with backend service and Solidity contract.\n
