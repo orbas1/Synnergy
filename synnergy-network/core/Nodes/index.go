@@ -9,3 +9,18 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// ValidatorNodeInterface extends NodeInterface with validator specific actions.
+// It provides hooks for toggling individual consensus mechanisms and for
+// participating in block production.
+type ValidatorNodeInterface interface {
+	NodeInterface
+	EnablePoH(bool)
+	EnablePoS(bool)
+	EnablePoW(bool)
+	Start()
+	Stop() error
+	ValidateTx([]byte) error
+	ProposeBlock() error
+	VoteBlock([]byte, []byte) error
+}
