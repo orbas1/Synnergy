@@ -14,6 +14,7 @@ The Synnergy ecosystem brings together several services:
 - **Zero Trust Data Channels** – Encrypted peer-to-peer channels secured by the ledger and consensus.
 - **Data & Resource Management** – Tracks stored blobs and dynamically allocates gas limits.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
+- **AI Model Training** – On-chain jobs allow publishing datasets and training models collaboratively with escrowed payments.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Employment Contracts** – Manage job agreements and salary payments on-chain.
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.

@@ -9,6 +9,7 @@ Most commands require environment variables or a configuration file to be presen
 The following command groups expose the same functionality available in the core modules. Each can be mounted on a root [`cobra.Command`](https://github.com/spf13/cobra).
 
 - **ai** – Tools for publishing ML models and running anomaly detection jobs via gRPC to the AI service. Useful for training pipelines and on‑chain inference.
+- **ai-train** – Manage on-chain AI model training jobs.
 - **ai_mgmt** – Manage marketplace listings for AI models.
 - **ai_infer** – Advanced inference and batch analysis utilities.
 - **amm** – Swap tokens and manage liquidity pools. Includes helpers to quote routes and add/remove liquidity.
@@ -95,6 +96,14 @@ needed in custom tooling.
 | `rent <listing-id> <renter-addr> <hours>` | Rent a model for a period of time. |
 | `release <escrow-id>` | Release funds from escrow to the seller. |
 
+### ai-train
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start <datasetCID> <modelCID>` | Begin a new training job. |
+| `status <jobID>` | Display status for a training job. |
+| `list` | List all active training jobs. |
+| `cancel <jobID>` | Cancel a running job. |
 ### ai_mgmt
 
 | Sub-command | Description |
