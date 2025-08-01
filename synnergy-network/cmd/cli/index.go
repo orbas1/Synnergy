@@ -155,6 +155,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewGreenCommand(),
 		NewLedgerCommand(),
 		NewReplicationCommand(),
+		NewOrphanCommand(),
 		NewRollupCommand(), // includes rollup management
 		NewSyncCommand(),
 		NewSecurityCommand(),
