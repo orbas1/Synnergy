@@ -769,6 +769,11 @@ var gasNames = map[string]uint64{
 	"ExecuteProposal": 15_000,
 	"GetProposal":     1_000,
 	"ListProposals":   2_000,
+	"CreateDAO":       10_000,
+	"JoinDAO":         3_000,
+	"LeaveDAO":        2_000,
+	"DAOInfo":         1_000,
+	"ListDAOs":        2_000,
 
 	// ----------------------------------------------------------------------
 	// Green Technology
