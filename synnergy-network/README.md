@@ -74,6 +74,7 @@ all modules from the core library. Highlights include:
 - `storage` – interact with on‑chain storage providers
 - `tokens` – ERC‑20 style token commands
 - `transactions` – build and sign transactions
+- `transaction_distribution` – split transaction fees between miner and treasury
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service
 - `wallet` – mnemonic generation and signing

@@ -119,6 +119,8 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+Synnergy includes a dedicated **Transaction Distribution** module that automatically splits each transaction fee once a block is committed. Half of the fee rewards the block producer while the remainder is allocated between the LoanPool and community CharityPool. This mechanism keeps incentives aligned and channels a portion of every transaction toward ecosystem development and philanthropic efforts.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 
