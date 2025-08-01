@@ -15,6 +15,7 @@ The Synnergy ecosystem brings together several services:
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Faucet Service** – Dispense test coins and tokens to developers with rate limits.
 All services are optional and run as independent modules that plug into the core.
 
 ## Synnergy Network Architecture

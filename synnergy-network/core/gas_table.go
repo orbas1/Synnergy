@@ -1183,6 +1183,15 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ---------------------------------------------------------------------
+	// Faucet
+	// ---------------------------------------------------------------------
+	"NewFaucet":          5_000,
+	"Faucet_Request":     1_000,
+	"Faucet_Balance":     200,
+	"Faucet_SetAmount":   500,
+	"Faucet_SetCooldown": 500,
 }
 
 func init() {
