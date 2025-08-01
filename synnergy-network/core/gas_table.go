@@ -1036,6 +1036,9 @@ var gasNames = map[string]uint64{
 	"AddTx":          6_000,
 	"PickTxs":        1_500,
 	"TxPoolSnapshot": 800,
+	"Exec_Begin":     1_000,
+	"Exec_RunTx":     2_000,
+	"Exec_Finalize":  5_000,
 	// Sign already priced
 
 	// ----------------------------------------------------------------------

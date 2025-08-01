@@ -18,6 +18,7 @@ func RegisterRoutes(root *cobra.Command) {
 		VMCmd,
 		TransactionsCmd,
 		WalletCmd,
+		ExecutionCmd,
 		AICmd,
 		AMMCmd,
 		PoolsCmd,
