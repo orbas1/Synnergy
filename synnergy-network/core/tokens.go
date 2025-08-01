@@ -335,13 +335,22 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
-	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+
+	var tok Token
+	switch meta.Standard {
+	case StdSYN1800:
+		tok = NewCarbonFootprintToken(meta)
+	default:
+		tok = &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+	}
+
+	bt := tok.(*BaseToken)
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
-	RegisterToken(bt)
-	return bt, nil
+	RegisterToken(tok)
+	return tok, nil
 }
 
 func NewBalanceTable() *BalanceTable {
@@ -442,7 +451,10 @@ func init() {
 
 func registerTokenOpcodes() {
 	Register(0xB0, wrap("Tokens_Transfer"))
-	// Additional token opcodes omitted for brevity.
+	Register(0xB1, wrap("Tokens_RecordEmission"))
+	Register(0xB2, wrap("Tokens_RecordOffset"))
+	Register(0xB3, wrap("Tokens_NetBalance"))
+	Register(0xB4, wrap("Tokens_ListRecords"))
 }
 
 func (ctx *Context) RefundGas(amount uint64) {
