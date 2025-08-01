@@ -1911,6 +1911,14 @@ var gasNames = map[string]uint64{
 	"RetireCredits":    300,
 	"ProjectInfo":      100,
 	"ListProjects":     100,
+	// Government Grant Tokens
+	// ---------------------------------------------------------------------
+	"InitGrantEngine":     800,
+	"GrantEngine":         200,
+	"GrantToken_Create":   500,
+	"GrantToken_Disburse": 500,
+	"GrantToken_Info":     100,
+	"GrantToken_List":     100,
 	// ----------------------------------------------------------------------
 	// Finalization Management
 	// ----------------------------------------------------------------------
