@@ -185,6 +185,13 @@ type IssuerRecord struct {
 	Info string
 }
 
+// CharityTokenInterface exposes SYN4200 charity token helpers.
+type CharityTokenInterface interface {
+	TokenInterfaces
+	Donate([20]byte, uint64, string) error
+	Release([20]byte, uint64) error
+	Progress() float64
+}
 // RecipientRecord stores recipient metadata.
 type RecipientRecord struct {
 	ID   string

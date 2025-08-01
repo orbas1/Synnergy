@@ -44,6 +44,7 @@ func RegisterRoutes(root *cobra.Command) {
 		SYN600Cmd,
 		Syn1200Cmd,
 		TokenMgmtCmd,
+		CharityTokenCmd,
 		Syn500Cmd,
 		IDTokenCmd,
 		IPTokenCmd,
