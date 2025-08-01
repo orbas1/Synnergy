@@ -137,6 +137,7 @@ func RegisterRoutes(root *cobra.Command) {
 		FaucetCmd,
 		SupplyCmd,
 		TangibleCmd,
+		Syn800Cmd,
 		WarehouseCmd,
 		MusicRoyaltyCmd,
 		GamingCmd,
