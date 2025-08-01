@@ -13,6 +13,7 @@ The Synnergy ecosystem brings together several services:
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
+- **Employment Contracts** – Manage job agreements and salary payments on-chain.
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
 - **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
@@ -109,6 +110,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+0x1E  Employment           
                                  0x1E  SupplyChain
                                  0x1E  Healthcare
                                  0x1E  Immutability

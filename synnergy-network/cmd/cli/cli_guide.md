@@ -20,6 +20,7 @@ The following command groups expose the same functionality available in the core
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **immutability** – Verify the chain against the genesis block.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
@@ -187,6 +188,7 @@ needed in custom tooling.
 | `oracle list` | List registered oracles. |
 
 ### fault_tolerance
+- **employment** – Manage on-chain employment contracts and salaries.
 
 | Sub-command | Description |
 |-------------|-------------|

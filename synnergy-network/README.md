@@ -62,6 +62,7 @@ all modules from the core library. Highlights include:
 - `data` – inspect and manage raw data storage
 - `immutability` – verify the canonical chain state
 - `fault_tolerance` – simulate faults and backups
+- `employment` – manage on-chain employment contracts and salaries
 - `governance` – DAO style governance commands
 - `dao` – create and manage DAOs
 - `green_technology` – sustainability features

@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
+//	                                 0x1E Employment
 //	                                 0x1E Escrow
 //	                                 0x1E Marketplace
 //	                                 0x1D Wallet
@@ -122,6 +123,7 @@ func wrap(name string) OpcodeFunc {
 //	                                 0x1E Warehouse
 //	                                 0x1E Gaming
 //	0x1E Assets
+
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -600,6 +602,13 @@ var catalogue = []struct {
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
 
+	// Employment (0x1E)
+	{"InitEmployment", 0x1E0001},
+	{"CreateJob", 0x1E0002},
+	{"SignJob", 0x1E0003},
+	{"RecordWork", 0x1E0004},
+	{"PaySalary", 0x1E0005},
+	{"GetJob", 0x1E0006},
 	// Escrow (0x1E)
 	{"Escrow_Create", 0x1E0001},
 	{"Escrow_Deposit", 0x1E0002},

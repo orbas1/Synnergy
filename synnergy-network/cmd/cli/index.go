@@ -35,6 +35,7 @@ func RegisterRoutes(root *cobra.Command) {
 		MarketplaceCmd,
 		HealthcareCmd,
 		UtilityRoute,
+		EmploymentCmd,
 		DevnetCmd,
 		TestnetCmd,
 		FaucetCmd,
