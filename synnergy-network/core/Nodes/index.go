@@ -9,3 +9,7 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// MolecularNodeFactory returns a MolecularNodeInterface. Actual constructor lives
+// in the core package.
+type MolecularNodeFactory func(cfg interface{}) (MolecularNodeInterface, error)
