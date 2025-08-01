@@ -113,6 +113,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `state_channel` – Open and settle payment channels.
 - `swarm` – Coordinate multiple nodes as a cluster.
 - `storage` – Manage off-chain storage deals.
+- `resource` – Rent compute resources via marketplace.
 - `dao_access` – Control DAO membership roles.
 - `sensor` – Integrate external sensors and trigger webhooks.
 - `real_estate` – Tokenise and trade real-world property.

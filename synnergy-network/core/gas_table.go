@@ -477,6 +477,17 @@ var gasTable map[Opcode]uint64
    // Pin & Retrieve already priced
 
    // ----------------------------------------------------------------------
+   // Resource Marketplace
+   // ----------------------------------------------------------------------
+   ListResource:        8_000,
+   OpenResourceDeal:    5_000,
+   CloseResourceDeal:   5_000,
+   GetResourceListing:  1_000,
+   ListResourceListings: 1_000,
+   GetResourceDeal:     1_000,
+   ListResourceDeals:   1_000,
+
+   // ----------------------------------------------------------------------
    // Token Standards (constants – zero-cost markers)
    // ----------------------------------------------------------------------
    StdSYN10:   0,
@@ -1366,6 +1377,17 @@ var gasNames = map[string]uint64{
 	"Assets_Get":      1_000,
 	"Assets_List":     1_000,
 	// Pin & Retrieve already priced
+
+	// ----------------------------------------------------------------------
+	// Resource Marketplace
+	// ----------------------------------------------------------------------
+	"ListResource":         8_000,
+	"OpenResourceDeal":     5_000,
+	"CloseResourceDeal":    5_000,
+	"GetResourceListing":   1_000,
+	"ListResourceListings": 1_000,
+	"GetResourceDeal":      1_000,
+	"ListResourceDeals":    1_000,
 
 	// ----------------------------------------------------------------------
 	// Token Standards (constants – zero-cost markers)

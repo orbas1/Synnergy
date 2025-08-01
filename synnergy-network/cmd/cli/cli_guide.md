@@ -61,6 +61,7 @@ The following command groups expose the same functionality available in the core
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
 - **swarm** – Manage groups of nodes running together.
 - **storage** – Configure the backing key/value store and inspect content.
+- **resource** – Manage compute resource rentals.
 - **staking** – Stake and unstake tokens for DAO governance.
 - **dao_access** – Manage DAO membership roles.
 - **sensor** – Manage external sensor inputs and webhooks.
@@ -690,6 +691,18 @@ needed in custom tooling.
 | `unstake <addr> <amt>` | Unstake previously locked tokens. |
 | `balance <addr>` | Show staked balance of an address. |
 | `total` | Display the total amount staked. |
+
+### resource
+
+| Sub-command | Description |
+|-------------|-------------|
+| `listing:create` | Create a resource listing. |
+| `listing:get` | Get a resource listing by ID. |
+| `listing:list` | List resource listings. |
+| `deal:open` | Open a resource deal. |
+| `deal:close` | Close a resource deal. |
+| `deal:get` | Get resource deal details. |
+| `deal:list` | List resource deals. |
 
 ### tokens
 
