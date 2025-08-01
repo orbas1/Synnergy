@@ -29,6 +29,7 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **plasma** – Manage plasma deposits and submit block roots.
 - **storage** – Configure the backing key/value store and inspect content.
 - **tokens** – Register new token types and move balances between accounts.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
@@ -326,6 +327,14 @@ needed in custom tooling.
 | `finalize` | Finalize and settle an expired channel. |
 | `status` | Show the current channel state. |
 | `list` | List all open channels. |
+
+### plasma
+
+| Sub-command | Description |
+|-------------|-------------|
+| `deposit` | Deposit tokens into the plasma chain. |
+| `withdraw` | Withdraw a previously deposited amount. |
+| `submit` | Submit a plasma block root. |
 
 ### storage
 

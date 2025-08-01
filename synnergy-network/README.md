@@ -71,6 +71,7 @@ all modules from the core library. Highlights include:
 - `sharding` – shard management
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
+- `plasma` – manage plasma deposits and block commitments
 - `storage` – interact with on‑chain storage providers
 - `tokens` – ERC‑20 style token commands
 - `transactions` – build and sign transactions
