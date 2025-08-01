@@ -281,6 +281,11 @@ var gasTable map[Opcode]uint64
    RequestMissing: 4_000,
    Synchronize:    25_000,
    Stop:           3_000,
+   NewSyncManager: 12_000,
+   Sync_Start:     5_000,
+   Sync_Stop:      3_000,
+   Sync_Status:    1_000,
+   SyncOnce:       8_000,
    // Hash & Start already priced
 
    // ----------------------------------------------------------------------
@@ -857,6 +862,11 @@ var gasNames = map[string]uint64{
 	"RequestMissing": 4_000,
 	"Synchronize":    25_000,
 	"Stop":           3_000,
+	"NewSyncManager": 12_000,
+	"Sync_Start":     5_000,
+	"Sync_Stop":      3_000,
+	"Sync_Status":    1_000,
+	"SyncOnce":       8_000,
 	// Hash & Start already priced
 
 	// ----------------------------------------------------------------------
