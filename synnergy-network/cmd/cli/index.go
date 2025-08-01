@@ -166,6 +166,7 @@ func RegisterRoutes(root *cobra.Command) {
 		WarehouseCmd,
 		MusicRoyaltyCmd,
 		GamingCmd,
+		WatchtowerCmd,
 		ForensicCmd,
 		EnvironmentalNodeCmd,
 		WitnessCmd,

@@ -13,6 +13,12 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// Watchtower exposes the interface implemented by watchtower nodes.
+type Watchtower interface {
+	NodeInterface
+	Start()
+	Stop() error
+	Alerts() <-chan string
 // ForensicNodeInterface extends NodeInterface with forensic analysis helpers.
 // Implementations provide transaction anomaly scoring and compliance checks that
 // feed into the broader ledger and consensus systems.
