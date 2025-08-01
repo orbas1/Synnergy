@@ -184,6 +184,7 @@ func RegisterRoutes(root *cobra.Command) {
 		WorkflowCmd,
 		EcommerceCmd,
 		EmploymentCmd,
+		EmpTokenCmd,
 		DevnetCmd,
 		TestnetCmd,
 		FaucetCmd,
@@ -218,7 +219,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSyncCommand(),
 		NewSecurityCommand(),
 		NewShardingCommand(),
-		NewSidechainCommand(),
+		NewSidechainCommand(), // includes sidechain management helpers
 		NewHealthCommand(),
 	) // includes sidechain management helpers
 }

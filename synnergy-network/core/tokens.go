@@ -348,6 +348,18 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		meta.Created = time.Now().UTC()
 	}
 
+	// Specialised token types based on the standard code
+	if meta.Standard == StdSYN3100 {
+		et := &EmploymentToken{
+			BaseToken: BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()},
+			contracts: make(map[string]EmploymentContractMeta),
+		}
+		for a, v := range init {
+			et.balances.Set(et.id, a, v)
+			et.meta.TotalSupply += v
+		}
+		RegisterToken(et)
+		return et, nil
 	var tok Token
 	switch meta.Standard {
 	case StdSYN3000:
