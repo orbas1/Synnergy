@@ -126,6 +126,8 @@ func wrap(name string) OpcodeFunc {
 //		0x0C Governance             0x1A Transactions
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
+//	                                 0x1D Wallet
+//		0x1E Workflows
 //		                            0x1D Wallet
 //	                                 0x1E Sensors
 //	     0x0E Ledger                 0x1C VirtualMachine
@@ -631,6 +633,14 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+  // Workflows (0x1E)
+	{"NewWorkflow", 0x1E0001},
+	{"AddWorkflowAction", 0x1E0002},
+	{"SetWorkflowTrigger", 0x1E0003},
+	{"SetWebhook", 0x1E0004},
+	{"ExecuteWorkflow", 0x1E0005},
+	{"ListWorkflows", 0x1E0006},
    {"CreateWallet", 0x1D0007},
 	{"ImportWallet", 0x1D0008},
 	{"WalletBalance", 0x1D0009},

@@ -91,6 +91,7 @@ all modules from the core library. Highlights include:
 - `faucet` – dispense test tokens or coins with rate limits
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service
+- `workflow` – automate multi-step tasks with triggers and webhooks
 - `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
 - `wallet_mgmt` – manage wallets and send SYNN directly via the ledger

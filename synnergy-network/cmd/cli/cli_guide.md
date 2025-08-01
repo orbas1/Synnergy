@@ -46,6 +46,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **workflow** – Build on-chain workflows using triggers and webhooks.
 - **wallet_mgmt** – Manage wallets and submit ledger transfers.
 - **devnet** – Launch a local multi-node developer network.
 - **testnet** – Start an ephemeral test network from a YAML config.
@@ -503,6 +504,16 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### workflow
+
+| Sub-command | Description |
+|-------------|-------------|
+| `new` | Create a new workflow by ID. |
+| `add` | Append an opcode name to the workflow. |
+| `trigger` | Set a cron expression for execution. |
+| `webhook` | Register a webhook called after completion. |
+| `run` | Execute the workflow immediately. |
 
 ### wallet_mgmt
 
