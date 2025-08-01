@@ -35,6 +35,7 @@ The following command groups expose the same functionality available in the core
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **system_health** – Monitor node metrics and emit log entries.
 
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
@@ -388,3 +389,11 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### system_health
+
+| Sub-command | Description |
+|-------------|-------------|
+| `snapshot` | Display current system metrics. |
+| `log <level> <msg>` | Append a message to the system log. |
+

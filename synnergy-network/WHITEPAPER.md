@@ -73,6 +73,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `utility_functions` – Miscellaneous support utilities.
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `wallet` – Create wallets and sign transfers.
+- `system_health` – Monitor runtime metrics and emit logs.
 Each command group supports a help flag to display the individual sub-commands and options.
 
 ## Full Opcode and Operand Code Guide
@@ -95,6 +96,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  SystemHealth
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 
