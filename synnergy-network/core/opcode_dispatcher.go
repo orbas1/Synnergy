@@ -173,6 +173,7 @@ func wrap(name string) OpcodeFunc {
 //	                                 0x1E Immutability
 //	                                 0x1E Warehouse
 //	                                 0x1E Gaming
+//                                       0x1F Historical
 //	0x1E Assets//				0x1E Event
 
 // Each binary code is shown as a 24-bit big-endian string.
@@ -1195,6 +1196,11 @@ var catalogue = []struct {
 	{"FinishGame", 0x1E0003},
 	{"GetGame", 0x1E0004},
 	{"ListGames", 0x1E0005},
+	{"NewHistoricalNode", 0x1F0001},
+	{"ArchiveBlock", 0x1F0002},
+	{"BlockByHeight", 0x1F0003},
+	{"RangeBlocks", 0x1F0004},
+	{"SyncFromLedger", 0x1F0005},
 }
 
 // init wires the catalogue into the live dispatcher.
