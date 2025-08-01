@@ -34,6 +34,7 @@ The following command groups expose the same functionality available in the core
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
+- **sandbox** – Manage VM sandbox environments.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
 
 
@@ -379,6 +380,16 @@ needed in custom tooling.
 | `start` | Start the VM HTTP daemon. |
 | `stop` | Stop the VM daemon. |
 | `status` | Show daemon status. |
+
+### sandbox
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start` | Create a sandbox for a contract. |
+| `stop` | Stop a running sandbox. |
+| `reset` | Reset sandbox timers. |
+| `status` | Display sandbox info. |
+| `list` | List all sandboxes. |
 
 ### wallet
 

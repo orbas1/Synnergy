@@ -1174,6 +1174,13 @@ var gasNames = map[string]uint64{
 	"ExecuteLight":      1_500,
 	"ExecuteHeavy":      2_000,
 
+	// Sandbox management
+	"VM_SandboxStart":  500,
+	"VM_SandboxStop":   300,
+	"VM_SandboxReset":  400,
+	"VM_SandboxStatus": 200,
+	"VM_SandboxList":   200,
+
 	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
