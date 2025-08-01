@@ -271,6 +271,11 @@ var gasTable map[Opcode]uint64
    Dial:            2_000,
    SetBroadcaster:  500,
    GlobalBroadcast: 1_000,
+   NewConnPool:     8_000,
+   AcquireConn:     500,
+   ReleaseConn:     200,
+   ClosePool:       400,
+   PoolStats:       100,
    // Broadcast & Subscribe already priced
 
    // ----------------------------------------------------------------------
@@ -847,6 +852,11 @@ var gasNames = map[string]uint64{
 	"Dial":            2_000,
 	"SetBroadcaster":  500,
 	"GlobalBroadcast": 1_000,
+	"NewConnPool":     8_000,
+	"AcquireConn":     500,
+	"ReleaseConn":     200,
+	"ClosePool":       400,
+	"PoolStats":       100,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------

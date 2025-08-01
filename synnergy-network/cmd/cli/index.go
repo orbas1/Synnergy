@@ -21,6 +21,7 @@ func RegisterRoutes(root *cobra.Command) {
 		AICmd,
 		AMMCmd,
 		PoolsCmd,
+		ConnPoolCmd,
 		AuthCmd,
 		CharityCmd,
 		LoanCmd,

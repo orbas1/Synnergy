@@ -65,6 +65,7 @@ all modules from the core library. Highlights include:
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
 - `network` – libp2p networking helpers
+- `connpool` – manage reusable outbound connections
 - `replication` – snapshot and replicate data
 - `rollups` – manage rollup batches
 - `security` – cryptographic utilities
