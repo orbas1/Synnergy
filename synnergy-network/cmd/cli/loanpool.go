@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
+	"os"
 	"strconv"
 	"time"
 
@@ -44,13 +46,23 @@ func ensureLoanPool(cmd *cobra.Command, _ []string) error {
 type LoanPoolController struct{}
 
 func (c *LoanPoolController) Submit(creator, recip string, t core.ProposalType, amt uint64, desc string) (core.Hash, error) {
-	ca := core.Address(creator)
-	ra := core.Address(recip)
+	ca, err := core.StringToAddress(creator)
+	if err != nil {
+		return core.Hash{}, err
+	}
+	ra, err := core.StringToAddress(recip)
+	if err != nil {
+		return core.Hash{}, err
+	}
 	return loanPool.Submit(ca, ra, t, amt, desc)
 }
 
 func (c *LoanPoolController) Vote(voter string, id core.Hash, approve bool) error {
-	return loanPool.Vote(core.Address(voter), id, approve)
+	v, err := core.StringToAddress(voter)
+	if err != nil {
+		return err
+	}
+	return loanPool.Vote(v, id, approve)
 }
 
 func (c *LoanPoolController) Disburse(id core.Hash) error { return loanPool.Disburse(id) }
