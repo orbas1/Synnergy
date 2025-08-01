@@ -17,6 +17,7 @@ The following command groups expose the same functionality available in the core
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
+- **ccsn** – Manage cross-consensus scaling networks.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
@@ -151,6 +152,14 @@ needed in custom tooling.
 | `get <bridge_id>` | Retrieve a bridge configuration. |
 | `authorize <relayer_addr>` | Whitelist a relayer address. |
 | `revoke <relayer_addr>` | Remove a relayer from the whitelist. |
+
+### ccsn
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <source_consensus> <target_consensus>` | Register a cross-consensus network. |
+| `list` | List configured networks. |
+| `get <network_id>` | Retrieve a network configuration. |
 
 ### data
 

@@ -581,6 +581,13 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// CrossConsensus (0x1E)
+	{"RegisterCCSNetwork", 0x1E0001},
+	{"ListCCSNetworks", 0x1E0002},
+	{"GetCCSNetwork", 0x1E0003},
+	{"CCSLockAndTransfer", 0x1E0004},
+	{"CCSBurnAndRelease", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.

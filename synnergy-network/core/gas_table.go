@@ -724,6 +724,15 @@ var gasNames = map[string]uint64{
 	"GetBridge":      1_000,
 
 	// ----------------------------------------------------------------------
+	// Cross-Consensus Scaling Networks
+	// ----------------------------------------------------------------------
+	"RegisterCCSNetwork": 20_000,
+	"ListCCSNetworks":    5_000,
+	"GetCCSNetwork":      1_000,
+	"CCSLockAndTransfer": 30_000,
+	"CCSBurnAndRelease":  30_000,
+
+	// ----------------------------------------------------------------------
 	// Data / Oracle / IPFS Integration
 	// ----------------------------------------------------------------------
 	"RegisterNode":   10_000,
