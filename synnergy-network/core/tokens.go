@@ -335,6 +335,16 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+
+	// Use specialised token structs per standard when required.
+	var tok Token
+	switch meta.Standard {
+	case StdSYN300:
+		g := NewSYN300(meta)
+		tok = g
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		tok = bt
 	// specialised token instantiation based on standard
 	if meta.Standard == StdSYN700 {
 		tok := NewSYN700Token(meta)
@@ -367,7 +377,7 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
-
+	RegisterToken(bt)
 	// specialised token types based on standard
 	switch meta.Standard {
 	case StdSYN1300:

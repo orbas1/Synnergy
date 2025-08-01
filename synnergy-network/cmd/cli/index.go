@@ -148,6 +148,7 @@ func RegisterRoutes(root *cobra.Command) {
 		NewFailoverCommand(),
 		NewGovernanceCommand(),
 		NewTokenVoteCommand(),
+		NewSYN300Command(),
 		NewGovernanceManagementCommand(),
 		NewRepGovCommand(),
 		NewGreenCommand(),
