@@ -28,6 +28,10 @@ import "time"
 // TokenInterfaces consolidates token standard interfaces without core deps.
 type TokenInterfaces interface {
 	Meta() any
+	Issue(to any, amount uint64) error
+	Redeem(from any, amount uint64) error
+	UpdateCoupon(rate float64)
+	PayCoupon() map[any]uint64
 }
 
 // NewSYN70 exposes construction of a SYN70 token registry. The implementation
