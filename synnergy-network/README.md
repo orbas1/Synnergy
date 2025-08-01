@@ -68,6 +68,7 @@ all modules from the core library. Highlights include:
 - `audit` – manage on-chain audit logs
 - `compliance_management` – suspend or whitelist addresses
 - `consensus` – control the consensus engine
+- `consensus_hop` – dynamically switch consensus mode
 - `adaptive` – dynamically adjust consensus weights
 - `stake` – adjust validator stake and record penalties
 - `contracts` – deploy and invoke smart contracts

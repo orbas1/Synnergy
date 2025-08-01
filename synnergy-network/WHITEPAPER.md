@@ -247,6 +247,10 @@ Adaptive management logic monitors block demand and stake concentration to tune 
 
 Stake levels for validators are tracked on-chain using the **StakePenaltyManager**. This subsystem allows dynamic adjustments to bonded stake and records penalty points for misbehaviour. Consensus rules may slash or temporarily disable validators when their penalty level exceeds safe limits. Administrators can query and update stakes through CLI commands or smart contracts, ensuring transparent enforcement of network rules.
 
+### Dynamic Consensus Hopping
+
+To support diverse deployment scenarios the network introduces **Dynamic Consensus Hopping**. This mechanism evaluates current demand and stake concentration to compute a threshold that selects between PoW, PoS and PoH. The active mode is recorded on-chain so all validators follow the same rules. Operators can query or trigger the switch using the `consensus_hop` CLI commands.
+
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 New nodes rely on an initialization service that bootstraps the ledger via the replication subsystem. The service synchronizes historical blocks before starting consensus so that smart contracts, tokens and coin balances are available immediately on launch.

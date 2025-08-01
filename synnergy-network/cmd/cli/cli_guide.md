@@ -27,6 +27,7 @@ The following command groups expose the same functionality available in the core
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
 - **audit** – Manage on-chain audit logs.
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
+- **consensus_hop** – Switch between consensus modes based on network metrics.
 - **adaptive** – Manage adaptive consensus weights.
 - **stake** – Adjust validator stakes and record penalties.
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
@@ -299,6 +300,12 @@ needed in custom tooling.
 | `set-weight-config <alpha> <beta> <gamma> <dmax> <smax>` | Update weight coefficients. |
 | `get-weight-config` | Display current weight configuration. |
 
+### consensus_hop
+
+| Sub-command | Description |
+|-------------|-------------|
+| `eval <demand> <stake>` | Evaluate metrics and possibly switch consensus mode. |
+| `mode` | Show the current consensus mode. |
 ### adaptive
 
 | Sub-command | Description |

@@ -297,6 +297,8 @@ var catalogue = []struct {
 	{"DistributeRewards", 0x070010},
 	{"CalculateWeights", 0x070011},
 	{"ComputeThreshold", 0x070012},
+	{"HopConsensus", 0x070013},
+	{"CurrentConsensus", 0x070014},
 	{"Status", 0x070013},
 	{"SetDifficulty", 0x070014},
 	{"NewConsensusAdaptiveManager", 0x070013},
