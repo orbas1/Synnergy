@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //		0x0D GreenTech              0x1B Utilities
 //		0x0E Ledger                 0x1C VirtualMachine
 //		                            0x1D Wallet
+//	                                 0x1E Biometrics
 //	                                 0x1E SystemHealth
 //	0x01 AI                     0x0F Liquidity
 //	0x02 AMM                    0x10 Loanpool
@@ -686,7 +687,7 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
-{"RegisterIDWallet", 0x1D0007},
+  {"RegisterIDWallet", 0x1D0007},
 	{"IsIDWalletRegistered", 0x1D0008},
 	{"NewOffChainWallet", 0x1D0007},
 	{"OffChainWalletFromMnemonic", 0x1D0008},
@@ -696,6 +697,12 @@ var catalogue = []struct {
 	{"BroadcastSignedTx", 0x1D000C},
 	{"RegisterRecovery", 0x1D0007},
 	{"RecoverAccount", 0x1D0008},
+
+	// Biometrics (0x1E)
+	{"Bio_Enroll", 0x1E0001},
+	{"Bio_Verify", 0x1E0002},
+	{"Bio_Delete", 0x1E0003},
+
   
 	// SystemHealth (0x1E)
 	{"NewHealthLogger", 0x1E0001},

@@ -23,6 +23,7 @@ The Synnergy ecosystem brings together several services:
 - **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
 - **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
+- **Biometric Authentication** – module for on-chain identity verification.
 - **Faucet Service** – Dispense test coins and tokens to developers with rate limits.
 All services are optional and run as independent modules that plug into the core.
 
@@ -133,6 +134,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Biometrics
                                  0x1E  SystemHealth
 0x1E  Employment           
                                  0x1E  SupplyChain
