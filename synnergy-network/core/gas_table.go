@@ -252,6 +252,7 @@ var gasTable map[Opcode]uint64
    DAO_Unstake:     5_000,
    DAO_Staked:      500,
    DAO_TotalStaked: 500,
+
    // Quadratic Voting
    SubmitQuadraticVote: 3_500,
    QuadraticResults:    2_000,

@@ -670,6 +670,15 @@ needed in custom tooling.
 | `balance <addr>` | Show staked balance of an address. |
 | `total` | Display the total amount staked. |
 
+### staking
+
+| Sub-command | Description |
+|-------------|-------------|
+| `stake <addr> <amt>` | Stake tokens to participate in governance. |
+| `unstake <addr> <amt>` | Unstake previously locked tokens. |
+| `balance <addr>` | Show staked balance of an address. |
+| `total` | Display the total amount staked. |
+
 ### tokens
 
 | Sub-command | Description |
