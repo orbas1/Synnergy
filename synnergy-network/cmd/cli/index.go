@@ -120,6 +120,7 @@ func RegisterRoutes(root *cobra.Command) {
 		SYN200Cmd,
 		FootprintCmd,
 		EnergyCmd,
+		EnergyNodeCmd,
 		InitRepCmd,
 		ReputationCmd,
 		FinalizationCmd,

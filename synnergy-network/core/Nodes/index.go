@@ -9,3 +9,11 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// EnergyNodeInterface extends NodeInterface with energy tracking methods.
+type EnergyNodeInterface interface {
+	NodeInterface
+	RecordUsage(txs uint64, kwh float64) error
+	Efficiency() (float64, error)
+	NetworkAverage() (float64, error)
+}
