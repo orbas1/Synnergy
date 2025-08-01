@@ -30,7 +30,13 @@ func main() {
 		addr = ":8081"
 	}
 
-	srv := NewServer(addr)
+	svc, err := NewLedgerService()
+	if err != nil {
+		log.Fatalf("init service: %v", err)
+	}
+
+	srv := NewServer(addr, svc)
+
 	log.Printf("Explorer listening on %s", addr)
 	if err := srv.Start(); err != nil {
 		log.Fatalf("server: %v", err)
