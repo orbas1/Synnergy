@@ -119,6 +119,13 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+### Finalization Management
+The `FinalizationManager` component coordinates finalization of rollup batches,
+state channels and ledger blocks. It acts as a glue layer between consensus and
+the ledger, ensuring results become canonical once challenge periods expire. CLI
+commands expose these helpers so operators can finalize a batch or channel with
+a single call.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 

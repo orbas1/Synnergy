@@ -607,6 +607,14 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+
+   // ----------------------------------------------------------------------
+   // Finalization Management
+   // ----------------------------------------------------------------------
+   NewFinalizationManager: 8_000,
+   FinalizeBlock:         4_000,
+   FinalizeBatchManaged:  3_500,
+   FinalizeChannelManaged: 3_500,
 */
 
 // gasNames holds the gas cost associated with each opcode name. During init()
@@ -1183,6 +1191,14 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ----------------------------------------------------------------------
+	// Finalization Management
+	// ----------------------------------------------------------------------
+	"NewFinalizationManager": 8_000,
+	"FinalizeBlock":          4_000,
+	"FinalizeBatchManaged":   3_500,
+	"FinalizeChannelManaged": 3_500,
 }
 
 func init() {
