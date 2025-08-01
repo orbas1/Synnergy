@@ -111,6 +111,7 @@ func wrap(name string) OpcodeFunc {
 //	0x0D GreenTech              0x1B Utilities
 //	0x0E Ledger                 0x1C VirtualMachine
 //	                            0x1D Wallet
+//				0x1E Swarm
 //
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
@@ -581,6 +582,15 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Swarm (0x1E)
+	{"NewSwarm", 0x1E0001},
+	{"Swarm_AddNode", 0x1E0002},
+	{"Swarm_RemoveNode", 0x1E0003},
+	{"Swarm_BroadcastTx", 0x1E0004},
+	{"Swarm_Start", 0x1E0005},
+	{"Swarm_Stop", 0x1E0006},
+	{"Swarm_Peers", 0x1E0007},
 }
 
 // init wires the catalogue into the live dispatcher.

@@ -1183,6 +1183,17 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ------------------------------------------------------------------
+	// Swarm
+	// ------------------------------------------------------------------
+	"NewSwarm":          10_000,
+	"Swarm_AddNode":     3_000,
+	"Swarm_RemoveNode":  2_000,
+	"Swarm_BroadcastTx": 5_000,
+	"Swarm_Start":       8_000,
+	"Swarm_Stop":        5_000,
+	"Swarm_Peers":       300,
 }
 
 func init() {
