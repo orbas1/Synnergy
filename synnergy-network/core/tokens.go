@@ -347,6 +347,11 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+
+	var tok Token
+	switch meta.Standard {
+	case StdSYN2900:
+		tok = NewInsuranceToken(meta)
 	if meta.Standard == StdSYN1967 {
 		ct := NewSYN1967Token(meta, "", "", 0)
 	// Special case for SYN1155 which uses a dedicated struct
@@ -443,6 +448,8 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
+	RegisterToken(tok)
+	return tok, nil
 
 	RegisterToken(bt)
 	// specialised token types based on standard

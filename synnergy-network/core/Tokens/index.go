@@ -189,6 +189,11 @@ type PriceRecord struct {
 	Price uint64
 }
 
+// Reference types to ensure package consumers compile without manual imports.
+var (
+	_ InsuranceToken
+	_ InsurancePolicy
+)
 // SYN1967TokenInterface exposes additional commodity functions.
 type SYN1967TokenInterface interface {
 	TokenInterfaces
