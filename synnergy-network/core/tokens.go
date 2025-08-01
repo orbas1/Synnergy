@@ -335,6 +335,15 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+	if meta.Standard == StdSYN1967 {
+		ct := NewSYN1967Token(meta, "", "", 0)
+		for a, v := range init {
+			ct.balances.Set(ct.id, a, v)
+			ct.meta.TotalSupply += v
+		}
+		RegisterToken(ct)
+		return ct, nil
+	}
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
