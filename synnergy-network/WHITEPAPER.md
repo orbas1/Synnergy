@@ -20,6 +20,7 @@ The Synnergy ecosystem brings together several services:
 - **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
 - **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Regulatory Management** – Maintain regulator lists and enforce jurisdictional rules.
 - **Polls** – Lightweight polls let the community signal preferences off-chain.
 - **Reputation Voting** – Optional weighted voting using SYN-REP reputation tokens.
 - **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
@@ -148,6 +149,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Regulatory
                                  0x1E  Polls
                                  0x1E  Biometrics
                                  0x1E  SystemHealth
