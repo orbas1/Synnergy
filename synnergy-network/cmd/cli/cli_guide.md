@@ -56,6 +56,7 @@ The following command groups expose the same functionality available in the core
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **account** – manage accounts and balances
 - **network** – Manage peer connections and print networking statistics.
+- **connpool** – Manage reusable outbound connections.
 - **nat** – Manage router port mappings for inbound connectivity.
 - **peer** – Discover peers, connect to them and advertise this node.
  - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
@@ -591,6 +592,13 @@ needed in custom tooling.
 | `broadcast <topic> <data>` | Publish data on the network. |
 | `subscribe <topic>` | Subscribe to a topic. |
 
+### connpool
+
+| Sub-command | Description |
+|-------------|-------------|
+| `stats` | Show pool statistics. |
+| `dial <addr>` | Dial an address using the pool. |
+| `close` | Close the pool. |
 ### nat
 
 | Sub-command | Description |

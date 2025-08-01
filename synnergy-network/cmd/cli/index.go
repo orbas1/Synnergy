@@ -42,6 +42,7 @@ func RegisterRoutes(root *cobra.Command) {
 		AIInferenceCmd,
 		AMMCmd,
 		PoolsCmd,
+		ConnPoolCmd,
 		PollsCmd,
 		BioCmd,
 		AuthCmd,

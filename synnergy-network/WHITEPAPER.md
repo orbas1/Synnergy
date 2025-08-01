@@ -41,13 +41,14 @@ All services are optional and run as independent modules that plug into the core
 ## Synnergy Network Architecture
 At a high level the network consists of:
 1. **Peer-to-Peer Network** – Validators communicate using libp2p with gossip-based transaction propagation.
+2. **Connection Pools** – Reusable outbound connections reduce handshake overhead and speed up cross-module communication.
 2. **NAT Traversal** – Nodes automatically open ports via UPnP or NAT-PMP so peers can reach them behind firewalls.
 3. **Consensus Engine** – A hybrid approach combines Proof of History (PoH) and Proof of Stake (PoS) with pluggable modules for alternative algorithms.
 4. **Ledger** – Blocks contain sub-blocks that optimize for data availability. Smart contracts and token transfers are recorded here.
 5. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 6. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 7. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
-2. **Consensus Engine** – A hybrid approach combines Proof of History (PoH) and Proof of Stake (PoS) with pluggable modules for alternative algorithms.
+2. **Consensus Engine** – A hybrid approach combines Proof of History (PoH), POW and Proof of Stake (PoS) with pluggable modules for alternative algorithms.
 3. **Ledger** – Blocks contain sub-blocks that optimize for data availability. Smart contracts and token transfers are recorded here.
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
