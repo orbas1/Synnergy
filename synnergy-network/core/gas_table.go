@@ -595,6 +595,7 @@ var gasTable map[Opcode]uint64
    // Token Standards (constants – zero-cost markers)
    // ----------------------------------------------------------------------
    StdSYN10:   0,
+   StdSYN11:   0,
    StdSYN20:   0,
    StdSYN70:   0,
    StdSYN130:  0,
@@ -677,6 +678,10 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   SYN11_Issue:        2_100,
+   SYN11_Redeem:       2_100,
+   SYN11_UpdateCoupon: 800,
+   SYN11_PayCoupon:    1_000,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1546,6 +1551,7 @@ var gasNames = map[string]uint64{
 	// Token Standards (constants – zero-cost markers)
 	// ----------------------------------------------------------------------
 	"StdSYN10":   1,
+	"StdSYN11":   11,
 	"StdSYN20":   2,
 	"StdSYN70":   7,
 	"StdSYN130":  13,
@@ -1628,6 +1634,10 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"SYN11_Issue":            0,
+	"SYN11_Redeem":           0,
+	"SYN11_UpdateCoupon":     0,
+	"SYN11_PayCoupon":        0,
 
 	// ----------------------------------------------------------------------
 	// Transactions

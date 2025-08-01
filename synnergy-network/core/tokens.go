@@ -87,6 +87,7 @@ const (
 	StdSYN4900 byte = 0x87
 	StdSYN5000 byte = 0x88
 	StdSYN10   byte = 0x0A
+	StdSYN11   byte = 0x0B
 )
 
 //---------------------------------------------------------------------
