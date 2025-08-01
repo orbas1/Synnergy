@@ -491,6 +491,12 @@ var gasTable map[Opcode]uint64
    AdvertiseSelf:  800,
    StartDevNet:    50_000,
    StartTestNet:   60_000,
+   NewMasterNode:  30_000,
+   Master_Start:   5_000,
+   Master_Stop:    3_000,
+   Master_ProcessTx: 2_000,
+   Master_HandlePrivateTx: 3_000,
+   Master_VoteProposal:   1_000,
    NewStakingNode:   25_000,
    Staking_Start:    8_000,
    Staking_Stop:     4_000,
@@ -1662,6 +1668,7 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Networking
 	// ----------------------------------------------------------------------
+
 	"NewNode":                   1800,
 	"HandlePeerFound":           150,
 	"DialSeed":                  200,
@@ -1863,6 +1870,12 @@ var gasNames = map[string]uint64{
 	"AdvertiseSelf":          80,
 	"StartDevNet":            5000,
 	"StartTestNet":           6000,
+	"NewMasterNode":          3000,
+	"Master_Start":           500,
+	"Master_Stop":            300,
+	"Master_ProcessTx":       200,
+	"Master_HandlePrivateTx": 300,
+	"Master_VoteProposal":    100,
 	"NewNode":            1800,
 	"HandlePeerFound":    150,
 	"DialSeed":           200,
