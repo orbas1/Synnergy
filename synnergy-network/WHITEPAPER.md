@@ -12,6 +12,7 @@ The Synnergy ecosystem brings together several services:
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain. A dedicated IPFS module broadcasts pinned CIDs through consensus and lets clients unpin data when no longer needed.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
+- **Partitioning & Compression** – Blocks can be split into compressed segments for efficient archival.
 - **Data Operations** – Built-in tooling for normalization, sampling and provenance tracking of on-chain feeds.
 - **Zero Trust Data Channels** – Encrypted peer-to-peer channels secured by the ledger and consensus.
 - **Data & Resource Management** – Tracks stored blobs and dynamically allocates gas limits.

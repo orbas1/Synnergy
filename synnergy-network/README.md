@@ -71,6 +71,7 @@ all modules from the core library. Highlights include:
 - `contractops` – administrative tasks such as pausing and upgrading contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `partition` – partition data and apply compression
 - `distribution` – publish datasets and handle paid access
 - `oracle_management` – monitor oracle performance and sync feeds
 - `data_ops` – advanced data feed operations

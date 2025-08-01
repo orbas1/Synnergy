@@ -30,6 +30,7 @@ The following command groups expose the same functionality available in the core
 - **contractops** – Administrative operations like pausing and transferring ownership.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **partition** – Partition and compress data sets.
 - **data_ops** – Manage and transform on-chain data feeds.
 - **anomaly_detection** – Run anomaly analysis on transactions and list flagged hashes.
 - **resource** – Manage stored data and VM gas allocations.
@@ -804,6 +805,14 @@ needed in custom tooling.
 | `revoke <contract> <party>` | Revoke a signature. |
 | `info <addr>` | Show contract and signers. |
 | `list` | List all registered legal contracts. |
+
+### partition
+
+| Sub-command | Description |
+|-------------|-------------|
+| `split <file>` | Split a file into equally sized chunks. |
+| `compress <file>` | Compress a file and print base64 output. |
+| `decompress <b64>` | Decompress base64 input and print bytes. |
 
 ### tokens
 
