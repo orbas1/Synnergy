@@ -68,6 +68,7 @@ all modules from the core library. Highlights include:
 - `dao` – create and manage DAOs
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
+- `account` – manage basic accounts and balances
 - `loanpool` – submit loan proposals and disburse funds
 - `loanpool_apply` – manage loan applications with on-chain voting
 - `network` – libp2p networking helpers

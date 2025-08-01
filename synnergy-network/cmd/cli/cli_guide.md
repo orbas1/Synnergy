@@ -26,6 +26,7 @@ The following command groups expose the same functionality available in the core
 - **dao** – Manage DAO creation and membership.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
+- **account** – manage accounts and balances
 - **network** – Manage peer connections and print networking statistics.
 - **plasma** – Deposit into and withdraw from the Plasma chain.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
@@ -266,6 +267,15 @@ needed in custom tooling.
 | `pool` | List mem-pool transactions. |
 | `mint <addr>` | Mint tokens to an address. |
 | `transfer <from> <to>` | Transfer tokens between addresses. |
+
+### account
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <addr>` | Create a new account. |
+| `delete <addr>` | Delete an account. |
+| `balance <addr>` | Show account balance. |
+| `transfer` | Transfer between accounts. |
 
 ### liquidity_pools
 
