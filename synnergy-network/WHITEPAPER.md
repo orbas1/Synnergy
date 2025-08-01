@@ -48,6 +48,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `amm` – Swap tokens and manage liquidity pools.
 - `authority_node` – Register validators and manage the authority set.
 - `charity_pool` – Contribute to or distribute from community charity funds.
+- `charity_mgmt` – Manage donations and internal fund payouts.
 - `coin` – Mint, transfer, and burn the base asset.
 - `compliance` – Perform KYC/AML verification and auditing.
 - `consensus` – Start or inspect the consensus node.

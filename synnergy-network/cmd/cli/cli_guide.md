@@ -12,6 +12,7 @@ The following command groups expose the same functionality available in the core
 - **amm** – Swap tokens and manage liquidity pools. Includes helpers to quote routes and add/remove liquidity.
 - **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
+- **charity_mgmt** – Donate to and withdraw from the charity pool.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
@@ -97,6 +98,14 @@ needed in custom tooling.
 | `tick [timestamp]` | Manually trigger pool cron tasks. |
 | `registration <addr> [cycle]` | Show registration info for a charity. |
 | `winners [cycle]` | List winning charities for a cycle. |
+
+### charity_mgmt
+
+| Sub-command | Description |
+|-------------|-------------|
+| `donate <from> <amt>` | Donate tokens to the charity pool. |
+| `withdraw <to> <amt>` | Withdraw internal charity funds. |
+| `balances` | Show pool and internal balances. |
 
 ### coin
 

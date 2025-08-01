@@ -655,13 +655,16 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Charity Pool
 	// ----------------------------------------------------------------------
-	"NewCharityPool":   10_000,
-	"Deposit":          2_100,
-	"Charity_Register": 2_500,
-	"Vote":             3_000,
-	"Tick":             1_000,
-	"GetRegistration":  800,
-	"Winners":          800,
+	"NewCharityPool":           10_000,
+	"Deposit":                  2_100,
+	"Charity_Register":         2_500,
+	"Vote":                     3_000,
+	"Tick":                     1_000,
+	"GetRegistration":          800,
+	"Winners":                  800,
+	"Charity_Donate":           2_100,
+	"Charity_WithdrawInternal": 2_100,
+	"Charity_Balances":         400,
 
 	// ----------------------------------------------------------------------
 	// Coin

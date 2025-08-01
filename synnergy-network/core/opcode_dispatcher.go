@@ -145,6 +145,9 @@ var catalogue = []struct {
 	{"Charity_Tick", 0x040005},
 	{"Charity_GetRegistration", 0x040006},
 	{"Charity_Winners", 0x040007},
+	{"Charity_Donate", 0x040008},
+	{"Charity_WithdrawInternal", 0x040009},
+	{"Charity_Balances", 0x04000A},
 
 	// Coin (0x05)
 	{"NewCoin", 0x050001},
