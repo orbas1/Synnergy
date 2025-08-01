@@ -361,6 +361,17 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		bt.balances.Set(bt.id, a, v)
 		bt.meta.TotalSupply += v
 	}
+
+	// specialised token types based on standard
+	switch meta.Standard {
+	case StdSYN1300:
+		sct := NewSupplyChainToken(bt)
+		RegisterToken(sct)
+		return sct, nil
+	default:
+		RegisterToken(bt)
+		return bt, nil
+	}
 	case StdSYN2500:
 		dt := NewSYN2500Token(meta)
 		for a, v := range init {
