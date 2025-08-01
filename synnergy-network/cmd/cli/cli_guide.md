@@ -18,6 +18,7 @@ The following command groups expose the same functionality available in the core
 - **contracts** – Deploy, upgrade and invoke smart contracts stored on chain.
 - **cross_chain** – Bridge assets to or from other chains using lock and release commands.
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
+- **messages** – Queue, process and broadcast network messages.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
@@ -176,6 +177,14 @@ needed in custom tooling.
 | `oracle push <oracleID> <value>` | Push a value to an oracle feed. |
 | `oracle query <oracleID>` | Query the latest oracle value. |
 | `oracle list` | List registered oracles. |
+
+### messages
+
+| Sub-command | Description |
+|-------------|-------------|
+| `enqueue <src> <dst> <topic> <type> <payload>` | Queue a message for processing. |
+| `process` | Process the next queued message using the ledger. |
+| `broadcast` | Broadcast the next message to peers. |
 
 ### fault_tolerance
 

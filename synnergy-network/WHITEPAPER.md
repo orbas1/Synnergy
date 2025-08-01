@@ -11,6 +11,7 @@ The Synnergy ecosystem brings together several services:
 - **Core Ledger and Consensus** – The canonical ledger stores blocks and coordinates the validator set.
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
+- **Messaging and Queue Management** – Internal queues coordinate messages across modules.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
@@ -24,7 +25,8 @@ At a high level the network consists of:
 3. **Ledger** – Blocks contain sub-blocks that optimize for data availability. Smart contracts and token transfers are recorded here.
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
-6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+6. **Messaging Queues** – Pending messages are ordered in queues before being processed by consensus and the VM.
+7. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
 Each layer is intentionally separated so enterprises can replace components as needed (e.g., swap the consensus engine or choose a different storage back end).
 
 ## Synthron Coin
