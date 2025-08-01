@@ -336,6 +336,13 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+	// specialised token instantiation based on standard
+	if meta.Standard == StdSYN700 {
+		tok := NewSYN700Token(meta)
+		tok.BaseToken.id = deriveID(meta.Standard)
+		for a, v := range init {
+			tok.BaseToken.balances.Set(tok.ID(), a, v)
+			tok.BaseToken.meta.TotalSupply += v
 
 	// Specialised standards may require custom token structures.
 	if meta.Standard == StdSYN1600 {
