@@ -56,6 +56,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `data` – Low-level debugging of key/value storage and oracles.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
+- `qvote` – Cast weighted quadratic votes on proposals.
 - `green_technology` – Manage energy tracking and carbon offsets.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
@@ -74,6 +75,10 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `wallet` – Create wallets and sign transfers.
 Each command group supports a help flag to display the individual sub-commands and options.
+
+Quadratic voting complements standard governance by weighting each vote by the
+square root of the tokens committed. This prevents large holders from
+completely dominating proposals while still rewarding significant stake.
 
 ## Full Opcode and Operand Code Guide
 All high-level functions in the protocol are mapped to unique 24-bit opcodes of the form `0xCCNNNN` where `CC` denotes the module category and `NNNN` is a numeric sequence. The catalogue is automatically generated and enforced at compile time. Operands are defined per opcode and typically reference stack values or state variables within the VM.

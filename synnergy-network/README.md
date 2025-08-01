@@ -62,6 +62,7 @@ all modules from the core library. Highlights include:
 - `data` – inspect and manage raw data storage
 - `fault_tolerance` – simulate faults and backups
 - `governance` – DAO style governance commands
+- `qvote` – quadratic voting on governance proposals
 - `green_technology` – sustainability features
 - `ledger` – low level ledger inspection
 - `network` – libp2p networking helpers
@@ -77,6 +78,10 @@ all modules from the core library. Highlights include:
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service
 - `wallet` – mnemonic generation and signing
+
+Quadratic voting allows token holders to weight their governance votes by the
+square root of the staked amount. The `qvote` command submits these weighted
+votes and queries results alongside standard governance commands.
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.
 

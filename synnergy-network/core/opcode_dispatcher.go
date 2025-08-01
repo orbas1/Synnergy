@@ -238,6 +238,9 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"SubmitQuadraticVote", 0x0C000B},
+	{"QuadraticResults", 0x0C000C},
+	{"QuadraticWeight", 0x0C000D},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},
