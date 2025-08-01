@@ -1,5 +1,7 @@
 package core
 
+import "time"
+
 
 
 // CarbonFootprintRecord represents a carbon footprint event recorded on-chain.
@@ -160,6 +162,20 @@ type SupplyChainToken interface {
 	Events(id string) []SupplyChainEvent
 }
 
+// IndexComponent is a lightweight representation of an index element.
+type IndexComponent struct {
+	AssetID  uint32
+	Weight   float64
+	Quantity uint64
+}
+
+// SYN3700Interface exposes functionality for index tokens without depending on core.
+type SYN3700Interface interface {
+	TokenInterfaces
+	Components() []IndexComponent
+	MarketValue() uint64
+	LastRebalance() time.Time
+}
 // SYN1600 defines the behaviour expected from music royalty tokens.
 type SYN1600 interface {
 	TokenInterfaces
