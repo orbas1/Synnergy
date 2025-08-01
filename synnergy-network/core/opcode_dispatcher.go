@@ -238,6 +238,10 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"DAO_Stake", 0x0C000B},
+	{"DAO_Unstake", 0x0C000C},
+	{"DAO_Staked", 0x0C000D},
+	{"DAO_TotalStaked", 0x0C000E},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},

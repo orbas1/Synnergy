@@ -193,6 +193,10 @@ var gasTable map[Opcode]uint64
    ExecuteProposal: 15_000,
    GetProposal:     1_000,
    ListProposals:   2_000,
+   DAO_Stake:       5_000,
+   DAO_Unstake:     5_000,
+   DAO_Staked:      500,
+   DAO_TotalStaked: 500,
 
    // ----------------------------------------------------------------------
    // Green Technology
@@ -769,6 +773,10 @@ var gasNames = map[string]uint64{
 	"ExecuteProposal": 15_000,
 	"GetProposal":     1_000,
 	"ListProposals":   2_000,
+	"DAO_Stake":       5_000,
+	"DAO_Unstake":     5_000,
+	"DAO_Staked":      500,
+	"DAO_TotalStaked": 500,
 
 	// ----------------------------------------------------------------------
 	// Green Technology

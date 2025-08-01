@@ -32,6 +32,7 @@ The native asset powering the network is `SYNTHRON` (ticker: THRON). It has thre
 - **Payment and Transaction Fees** – Every on-chain action consumes gas priced in THRON.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
+- **DAO Staking** – Users may stake THRON to earn voting power in the on-chain DAO.
 
 ### Token Distribution
 Initial supply is minted at genesis with a gradual release schedule:
