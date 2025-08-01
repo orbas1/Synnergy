@@ -607,6 +607,13 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+
+   // ----------------------------------------------------------------------
+   // Immutability Enforcement
+   // ----------------------------------------------------------------------
+   InitImmutability: 8_000,
+   VerifyChain:     4_000,
+   RestoreChain:    6_000,
 */
 
 // gasNames holds the gas cost associated with each opcode name. During init()
@@ -944,6 +951,11 @@ var gasNames = map[string]uint64{
 	"ListListings":  1_000,
 	"GetDeal":       1_000,
 	"ListDeals":     1_000,
+	// Tangible assets
+	"Assets_Register": 5_000,
+	"Assets_Transfer": 4_000,
+	"Assets_Get":      1_000,
+	"Assets_List":     1_000,
 	// Pin & Retrieve already priced
 
 	// ----------------------------------------------------------------------
@@ -1175,6 +1187,15 @@ var gasNames = map[string]uint64{
 	"ExecuteHeavy":      2_000,
 
 	// ----------------------------------------------------------------------
+	// Gaming
+	// ----------------------------------------------------------------------
+	"CreateGame": 8_000,
+	"JoinGame":   4_000,
+	"FinishGame": 6_000,
+	"GetGame":    1_000,
+	"ListGames":  2_000,
+
+	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
 	"NewRandomWallet":     10_000,
@@ -1183,6 +1204,50 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ---------------------------------------------------------------------
+	// Faucet
+	// ---------------------------------------------------------------------
+	"NewFaucet":          5_000,
+	"Faucet_Request":     1_000,
+	"Faucet_Balance":     200,
+	"Faucet_SetAmount":   500,
+	"Faucet_SetCooldown": 500,
+  // ----------------------------------------------------------------------
+	// Supply Chain
+	// ----------------------------------------------------------------------
+	"GetItem":             1_000,
+	"RegisterItem":        10_000,
+	"UpdateLocation":      5_000,
+	"MarkStatus":          5_000,
+
+	// ----------------------------------------------------------------------
+	// Healthcare Records
+	// ----------------------------------------------------------------------
+	"InitHealthcare":    8_000,
+	"RegisterPatient":   3_000,
+	"AddHealthRecord":   4_000,
+	"GrantAccess":       1_500,
+	"RevokeAccess":      1_000,
+	"ListHealthRecords": 2_000,
+
+	// ----------------------------------------------------------------------
+	// Warehouse Records
+	// ----------------------------------------------------------------------
+
+	"Warehouse_New":        10_000,
+	"Warehouse_AddItem":    2_000,
+	"Warehouse_RemoveItem": 2_000,
+	"Warehouse_MoveItem":   2_000,
+	"Warehouse_ListItems":  1_000,
+	"Warehouse_GetItem":    1_000,
+
+	// ---------------------------------------------------------------------
+	// Immutability Enforcement
+	// ---------------------------------------------------------------------
+	"InitImmutability": 8_000,
+	"VerifyChain":      4_000,
+	"RestoreChain":     6_000,
 }
 
 func init() {

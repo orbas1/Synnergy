@@ -201,14 +201,9 @@ The current code base is a functional prototype.  The following additions would 
 - `cmd/authority_apply/` – validator application workflow
 - `internal/` packages for shared utilities and cross‑package helpers
 - `GUI/` – web interfaces for wallet management, explorers and marketplaces
-  -   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
-     `storage-marketplace/`, `dao-explorer/`, `token-creation-tool/`,
-     `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
-        - `cross-chain-management/` now offers a Bootstrap 5 dashboard with
-          forms for bridge registration, relayer administration and opcode
-          testing. The backend service (`cmd/xchainserver`) exposes REST routes
-          with logging middleware and loads relayer config from `.env` or
-          `cmd/config/crosschain.yaml`.
+-   - `wallet/`, `explorer/`, `smart-contract-marketplace/`, `ai-marketplace/`,
+    `storage-marketplace/` ✅, `dao-explorer/`, `token-creation-tool/`,
+    `dex-screener/`, `authority-node-index/`, `cross-chain-management/`
 - `scripts/devnet_start.sh` for spinning up a multi‑node local network
 - `scripts/benchmark.sh` for load and performance testing
 
@@ -219,10 +214,11 @@ contains a basic HTML page, a JavaScript stub and a README to bootstrap
 interfaces such as the wallet, explorer and various marketplaces. These
 projects are designed for web hosting and will evolve alongside the core
 modules.
-Recent work added an Express-based backend and modular Bootstrap frontend for the token-creation-tool GUI.
-Further expanded the token-creation-tool with a TokenFactory contract, new API routes and a token list component.
-- Explorer GUI implemented with backend server `cmd/explorer` and sample
-  smart contract `explorer_utils.sol`.
+- Explorer GUI expanded with forms to query balances and transactions.
+  Backend server `cmd/explorer` now exposes JSON APIs and uses
+  `LedgerService`. Smart contracts demonstrate opcode usage via
+  `explorer_utils.sol` and `ledger_inspector.sol`.
+
 
 These upgrades will require corresponding tests and documentation.  Contributors are encouraged to propose additional improvements as they work through the stages.
 
@@ -234,6 +230,7 @@ governance opcodes and backend can interact with it via ethers.js.
 ---
 
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
+\n### Recent Updates\n- Wallet GUI server extended with opcode catalogue and address/transaction utilities.
 
 ## Progress Log
 
@@ -244,3 +241,4 @@ This playbook should be kept up to date as the project evolves.  Check off files
 \n### Recent Updates\n- Wallet GUI now includes a Go HTTP backend under `walletserver/` with REST routes and Bootstrap front-end.
 
 \n## Progress\n- Added full NFT Marketplace GUI with backend service and Solidity contract.\n
+
