@@ -187,7 +187,7 @@ The current code base is a functional prototype.  The following additions would 
 - **Faucet Contract** – simple token dispenser with rate limiting
 - **DAO Governance Contract** – on‑chain voting and proposal execution
 - **Marketplace Contract** – buy and sell digital goods using SYNN tokens
-- **Storage Marketplace Contract** – pay for decentralized storage
+ - **Storage Marketplace Contract** – pay for decentralized storage ✅
 - **LoanPool Application Contract** – terms negotiation and repayment logic
 - **Authority Node Application Contract** – stake tokens to join the validator set
 
