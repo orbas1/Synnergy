@@ -31,6 +31,8 @@ type AIStubClient interface {
 	Anomaly(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	FeeOpt(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	Volume(ctx context.Context, req *TFRequest) (*TFResponse, error)
+	Inference(ctx context.Context, req *TFRequest) (*TFResponse, error)
+	Analyse(ctx context.Context, req *TFRequest) (*TFResponse, error)
 }
 
 //---------------------------------------------------------------------
@@ -55,6 +57,7 @@ func InitAI(led StateRW, grpcEndpoint string, client AIStubClient) error {
 			conn:   conn,
 			client: client,
 			models: make(map[[32]byte]ModelMeta),
+			jobs:   make(map[string]TrainingJob),
 		}
 	})
 	return err
