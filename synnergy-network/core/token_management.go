@@ -3,6 +3,8 @@ package core
 import (
 	"fmt"
 	"sync"
+
+	Tokens "synnergy-network/core/Tokens"
 )
 
 // TokenManager provides high level helpers for creating and manipulating tokens
@@ -101,6 +103,25 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	return tok.BalanceOf(addr), nil
 }
 
+// CreateEducationToken creates a SYN1900-compliant token.
+func (tm *TokenManager) CreateEducationToken(meta Metadata, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	tok := NewEducationToken(meta, tm.ledger, tm.gas)
+	for a, v := range init {
+		tok.balances.Set(tok.id, a, v)
+		tok.meta.TotalSupply += v
+	}
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[tok.id] = tok
+	RegisterToken(tok)
+	return tok.id, nil
+}
+
+// IssueEducationCredit adds a credit record to an education token.
+func (tm *TokenManager) IssueEducationCredit(id TokenID, credit Tokens.EducationCreditMetadata) error {
 // --- SYN2100 helpers ---
 func (tm *TokenManager) RegisterDocument(id TokenID, doc FinancialDocument) error {
 	tok, ok := GetToken(id)
@@ -119,6 +140,28 @@ func (tm *TokenManager) FinanceDocument(id TokenID, docID string, financier Addr
 	if !ok {
 		return ErrInvalidAsset
 	}
+	et, ok := tok.(*EducationToken)
+	if !ok {
+		return fmt.Errorf("not education token")
+	}
+	return et.IssueCredit(credit)
+}
+
+// VerifyEducationCredit checks if a credit is valid.
+func (tm *TokenManager) VerifyEducationCredit(id TokenID, creditID string) (bool, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return false, ErrInvalidAsset
+	}
+	et, ok := tok.(*EducationToken)
+	if !ok {
+		return false, fmt.Errorf("not education token")
+	}
+	return et.VerifyCredit(creditID), nil
+}
+
+// RevokeEducationCredit removes a credit from the token.
+func (tm *TokenManager) RevokeEducationCredit(id TokenID, creditID string) error {
 	sf, ok := tok.(*SupplyFinanceToken)
 	if !ok {
 		return ErrInvalidAsset
@@ -171,6 +214,37 @@ func (tm *TokenManager) RemoveLiquidity(id TokenID, to Address, amt uint64) erro
 	if !ok {
 		return ErrInvalidAsset
 	}
+	et, ok := tok.(*EducationToken)
+	if !ok {
+		return fmt.Errorf("not education token")
+	}
+	return et.RevokeCredit(creditID)
+}
+
+// GetEducationCredit retrieves a specific credit record.
+func (tm *TokenManager) GetEducationCredit(id TokenID, creditID string) (Tokens.EducationCreditMetadata, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return Tokens.EducationCreditMetadata{}, ErrInvalidAsset
+	}
+	et, ok := tok.(*EducationToken)
+	if !ok {
+		return Tokens.EducationCreditMetadata{}, fmt.Errorf("not education token")
+	}
+	return et.GetCredit(creditID)
+}
+
+// ListEducationCredits lists all credits issued to a recipient.
+func (tm *TokenManager) ListEducationCredits(id TokenID, recipient string) ([]Tokens.EducationCreditMetadata, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	et, ok := tok.(*EducationToken)
+	if !ok {
+		return nil, fmt.Errorf("not education token")
+	}
+	return et.ListCredits(recipient), nil
 	sf, ok := tok.(*SupplyFinanceToken)
 	if !ok {
 		return ErrInvalidAsset
