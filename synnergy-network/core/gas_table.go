@@ -1183,6 +1183,15 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+
+	// ---------------------------------------------------------------------
+	// Regulatory Management
+	// ---------------------------------------------------------------------
+	"InitRegulatory":    4_000,
+	"RegisterRegulator": 6_000,
+	"GetRegulator":      2_000,
+	"ListRegulators":    2_000,
+	"EvaluateRuleSet":   5_000,
 }
 
 func init() {

@@ -77,6 +77,7 @@ all modules from the core library. Highlights include:
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service
 - `wallet` – mnemonic generation and signing
+- `regulator` – manage approved regulators and enforce rules
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.
 

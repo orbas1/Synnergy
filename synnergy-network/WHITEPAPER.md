@@ -14,6 +14,7 @@ The Synnergy ecosystem brings together several services:
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Regulatory Management** – Maintain regulator lists and enforce jurisdictional rules.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
 All services are optional and run as independent modules that plug into the core.
 
@@ -95,6 +96,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Regulatory
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 
