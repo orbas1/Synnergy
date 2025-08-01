@@ -339,7 +339,7 @@ needed in custom tooling.
 | Sub-command | Description |
 |-------------|-------------|
 | `cast <proposal-id> <voter> <token-id> <amount> [approve]` | Cast a token weighted vote on a proposal. |
-=======
+
 ### qvote
 
 | Sub-command | Description |
