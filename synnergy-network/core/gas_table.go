@@ -112,6 +112,8 @@ var gasTable map[Opcode]uint64
    Compliance_AuditTrail: 3_000,
    Compliance_MonitorTx:  5_000,
    Compliance_VerifyZKP:  12_000,
+   AnalyzeAnomaly:       6_000,
+   FlagAnomalyTx:        2_500,
 
    // ----------------------------------------------------------------------
    // Consensus Core
@@ -741,6 +743,8 @@ var gasNames = map[string]uint64{
 	"Compliance_AuditTrail": 3_000,
 	"Compliance_MonitorTx":  5_000,
 	"Compliance_VerifyZKP":  12_000,
+	"AnalyzeAnomaly":        6_000,
+	"FlagAnomalyTx":         2_500,
 
 	// ----------------------------------------------------------------------
 	// Consensus Core

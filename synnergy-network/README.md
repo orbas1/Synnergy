@@ -61,6 +61,7 @@ all modules from the core library. Highlights include:
 - `contracts` – deploy and invoke smart contracts
 - `cross_chain` – configure asset bridges
 - `data` – inspect and manage raw data storage
+- `anomaly_detection` – analyse transactions for suspicious activity
 - `resource` – manage stored data and VM gas allocations
 - `immutability` – verify the canonical chain state
 - `fault_tolerance` – simulate faults and backups
