@@ -38,6 +38,7 @@ type RewardTokenInterface interface {
 	EngagementOf(addr any) uint64
 	DistributeStakingRewards(rate uint64) error
 }
+
 // AssetMeta mirrors the metadata used by SYN800 asset-backed tokens.
 type AssetMeta struct {
 	Description string
