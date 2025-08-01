@@ -232,3 +232,13 @@ governance opcodes and backend can interact with it via ethers.js.
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
 \n### Recent Updates\n- Wallet GUI server extended with opcode catalogue and address/transaction utilities.
 
+## Progress Log
+
+- Added basic Express server and UI for the AI Marketplace under `GUI/ai-marketplace`.
+- Implemented `AIServiceMarketplace` Solidity contract demonstrating use of opcode `VM_Transfer`.
+- Added `Faucet` smart contract implementing a rate limited token dispenser.
+
+\n### Recent Updates\n- Wallet GUI now includes a Go HTTP backend under `walletserver/` with REST routes and Bootstrap front-end.
+
+\n## Progress\n- Added full NFT Marketplace GUI with backend service and Solidity contract.\n
+
