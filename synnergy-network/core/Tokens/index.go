@@ -96,6 +96,11 @@ type EmploymentToken interface {
 	GetContract(string) (EmploymentContractMeta, bool)
 }
 
+type ForexToken interface {
+	TokenInterfaces
+	Rate() float64
+	Pair() string
+}
 // EmploymentContractMeta mirrors the on-chain metadata for employment tokens.
 type EmploymentContractMeta struct {
 	ContractID string

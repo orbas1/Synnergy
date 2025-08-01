@@ -856,6 +856,11 @@ var gasTable map[Opcode]uint64
   SYN500_Usage:         400,
   SYN500_AccessInfo:    400,
    TokenManager_BalanceOf: 400,
+   Forex_UpdateRate:    500,
+   Forex_OpenPosition:  1_500,
+   Forex_ClosePosition: 1_500,
+
+   // ----------------------------------------------------------------------
    ETF_UpdatePrice:      400,
    ETF_FractionalMint:   2_100,
    ETF_FractionalBurn:   2_100,
@@ -1017,7 +1022,9 @@ var gasTable map[Opcode]uint64
    SYN1155_SetApprovalForAll:  500,
    SYN1155_IsApprovedForAll:  300,
    SYN1155_RegisterHook:  300,
-   // Transactions
+
+
+// Transactions
    // ----------------------------------------------------------------------
    VerifySig:      3_500,
    ValidateTx:     5_000,
@@ -2555,6 +2562,9 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"Forex_UpdateRate":       0,
+	"Forex_OpenPosition":     0,
+	"Forex_ClosePosition":    0,
 	"ETF_UpdatePrice":        0,
 	"ETF_FractionalMint":     0,
 	"ETF_FractionalBurn":     0,

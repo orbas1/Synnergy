@@ -643,6 +643,9 @@ func init() {
 
 func registerTokenOpcodes() {
 	Register(0xB0, wrap("Tokens_Transfer"))
+	Register(0xB4, wrap("Forex_UpdateRate"))
+	Register(0xB5, wrap("Forex_OpenPosition"))
+	Register(0xB6, wrap("Forex_ClosePosition"))
 	Register(0xB1, wrap("Syn3200_CreateBill"))
 	Register(0xB2, wrap("Syn3200_PayFraction"))
 	Register(0xB3, wrap("Syn3200_AdjustAmount"))
