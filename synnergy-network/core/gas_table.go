@@ -491,6 +491,14 @@ var gasTable map[Opcode]uint64
    AdvertiseSelf:  800,
    StartDevNet:    50_000,
    StartTestNet:   60_000,
+   // ----------------------------------------------------------------------
+   // Mining Node
+   // ----------------------------------------------------------------------
+   NewMiningNode:  20_000,
+   StartMining:    10_000,
+   StopMining:     5_000,
+   AddTransaction: 2_000,
+   SolvePuzzle:    50_000,
    NewMasterNode:  30_000,
    Master_Start:   5_000,
    Master_Stop:    3_000,
@@ -1911,6 +1919,12 @@ var gasNames = map[string]uint64{
 	"AdvertiseSelf":      80,
 	"StartDevNet":        5000,
 	"StartTestNet":       6000,
+	// Mining Node
+	"NewMiningNode":  2000,
+	"StartMining":    1000,
+	"StopMining":     500,
+	"AddTransaction": 200,
+	"SolvePuzzle":    5000,
 	"NewAPINode":         2500,
 	"APINode_Start":      500,
 	"APINode_Stop":       200,

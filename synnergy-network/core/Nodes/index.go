@@ -13,6 +13,12 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// MiningNodeInterface extends NodeInterface with mining specific controls.
+type MiningNodeInterface interface {
+	NodeInterface
+	StartMining()
+	StopMining() error
+	AddTransaction(tx []byte) error
 // MasterNodeInterface extends NodeInterface with specialised services used by
 // Synthron master nodes. The concrete implementation lives in the core package
 // to avoid an import cycle.
