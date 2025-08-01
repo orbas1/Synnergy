@@ -58,6 +58,7 @@ all modules from the core library. Highlights include:
 - `ai_infer` – advanced inference and transaction analysis
 - `amm` – swap tokens and manage liquidity pools
 - `authority_node` – validator registration and voting
+- `access` – manage role based access permissions
 - `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
 - `identity` – manage verified addresses

@@ -92,6 +92,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `ai_infer` – Advanced inference and batch analysis utilities.
 - `amm` – Swap tokens and manage liquidity pools.
 - `authority_node` – Register validators and manage the authority set.
+- `access` – Manage role based access permissions.
 - `authority_apply` – Submit and vote on authority node applications.
 - `charity_pool` – Contribute to or distribute from community charity funds.
 - `coin` – Mint, transfer, and burn the base asset.

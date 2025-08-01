@@ -15,6 +15,7 @@ The following command groups expose the same functionality available in the core
 - **ai_infer** – Advanced inference and batch analysis utilities.
 - **amm** – Swap tokens and manage liquidity pools. Includes helpers to quote routes and add/remove liquidity.
 - **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
+- **access** – Manage role based access permissions.
 - **authority_apply** – Submit and vote on authority node applications.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
 - **identity** – Register and verify user identities.
@@ -197,6 +198,14 @@ needed in custom tooling.
 | `list` | List authority nodes. |
 | `deregister <addr>` | Remove an authority node and its votes. |
 
+### access
+
+| Sub-command | Description |
+|-------------|-------------|
+| `grant <role> <addr>` | Grant a role to an address. |
+| `revoke <role> <addr>` | Revoke a role from an address. |
+| `check <role> <addr>` | Check whether an address has a role. |
+| `list <addr>` | List all roles assigned to an address. |
 ### authority_apply
 
 | Sub-command | Description |
