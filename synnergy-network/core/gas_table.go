@@ -677,6 +677,12 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   Edu_RegisterCourse: 5_000,
+   Edu_IssueCredit:    2_100,
+   Edu_VerifyCredit:   800,
+   Edu_RevokeCredit:   800,
+   Edu_GetCredit:      400,
+   Edu_ListCredits:    400,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1628,6 +1634,12 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"Edu_RegisterCourse":     0,
+	"Edu_IssueCredit":        0,
+	"Edu_VerifyCredit":       0,
+	"Edu_RevokeCredit":       0,
+	"Edu_GetCredit":          0,
+	"Edu_ListCredits":        0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
