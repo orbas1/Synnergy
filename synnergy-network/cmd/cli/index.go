@@ -126,6 +126,7 @@ func RegisterRoutes(root *cobra.Command) {
 		SupplyCmd,
 		TangibleCmd,
 		WarehouseCmd,
+		MusicRoyaltyCmd,
 		GamingCmd,
 	)
 
@@ -146,7 +147,6 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),
-	) // includes sidechain management helpers
 		NewHealthCommand(),
 	)
 }

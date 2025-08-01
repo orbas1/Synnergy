@@ -335,6 +335,17 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+
+	// Specialised standards may require custom token structures.
+	if meta.Standard == StdSYN1600 {
+		tok, err := NewSYN1600Token(meta, init, MusicInfo{}, nil)
+		if err != nil {
+			return nil, err
+		}
+		RegisterToken(tok)
+		return tok, nil
+	}
+
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
