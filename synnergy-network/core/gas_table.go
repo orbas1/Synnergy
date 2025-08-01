@@ -404,6 +404,9 @@ var gasTable map[Opcode]uint64
    DilithiumVerify:   5_000,
    PredictRisk:       2_000,
    AnomalyScore:      2_000,
+   BuildMerkleTree:   1_500,
+   MerkleProof:       1_200,
+   VerifyMerklePath:  1_200,
 
    // ----------------------------------------------------------------------
    // Sharding
@@ -1279,6 +1282,9 @@ var gasNames = map[string]uint64{
 	"DilithiumVerify":   5_000,
 	"PredictRisk":       2_000,
 	"AnomalyScore":      2_000,
+	"BuildMerkleTree":   1_500,
+	"MerkleProof":       1_200,
+	"VerifyMerklePath":  1_200,
 
 	// ----------------------------------------------------------------------
 	// Sharding

@@ -535,6 +535,9 @@ var catalogue = []struct {
 	{"DilithiumVerify", 0x14000C},
 	{"PredictRisk", 0x14000D},
 	{"AnomalyScore", 0x14000E},
+	{"BuildMerkleTree", 0x14000F},
+	{"MerkleProof", 0x140010},
+	{"VerifyMerklePath", 0x140011},
 
 	// Sharding (0x15)
 	{"NewShardCoordinator", 0x150001},
