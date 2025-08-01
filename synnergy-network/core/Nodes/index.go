@@ -9,3 +9,12 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// MobileMiner extends NodeInterface with light mining controls.
+type MobileMiner interface {
+	NodeInterface
+	StartMining()
+	StopMining()
+	SetIntensity(int)
+	Stats() any
+}
