@@ -669,6 +669,11 @@ var gasTable map[Opcode]uint64
    ResumeChannel:        1_500,
    CancelClose:          3_000,
    ForceClose:           6_000,
+   // Lightning Node
+   Lightning_OpenChannel: 8_000,
+   Lightning_RoutePayment: 500,
+   Lightning_CloseChannel: 4_000,
+   Lightning_ListChannels: 800,
 
    // ----------------------------------------------------------------------
    // Storage / Marketplace
@@ -2084,19 +2089,23 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// State-Channels
 	// ----------------------------------------------------------------------
-	"InitStateChannels":    800,
-	"Channels":             60,
-	"OpenChannel":          1000,
-	"VerifyECDSASignature": 200,
-	"InitiateClose":        300,
-	"Challenge":            400,
-	"Finalize":             500,
-	"GetChannel":           80,
-	"ListChannels":         120,
-	"PauseChannel":         150,
-	"ResumeChannel":        150,
-	"CancelClose":          300,
-	"ForceClose":           600,
+	"InitStateChannels":      800,
+	"Channels":               60,
+	"OpenChannel":            1000,
+	"VerifyECDSASignature":   200,
+	"InitiateClose":          300,
+	"Challenge":              400,
+	"Finalize":               500,
+	"GetChannel":             80,
+	"ListChannels":           120,
+	"PauseChannel":           150,
+	"ResumeChannel":          150,
+	"CancelClose":            300,
+	"ForceClose":             600,
+	"Lightning_OpenChannel":  800,
+	"Lightning_RoutePayment": 50,
+	"Lightning_CloseChannel": 400,
+	"Lightning_ListChannels": 80,
 
 	// ----------------------------------------------------------------------
 	// Storage / Marketplace

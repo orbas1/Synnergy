@@ -125,6 +125,7 @@ func RegisterRoutes(root *cobra.Command) {
 		ChannelRoute,
 		ChannelMgmtRoute,
 		ZTChannelCmd,
+		LightningCmd,
 		StorageRoute,
 		FirewallCmd,
 		IPFSRoute,
