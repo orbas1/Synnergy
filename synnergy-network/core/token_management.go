@@ -154,6 +154,11 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	return tok.BalanceOf(addr), nil
 }
 
+// CreateSYN1967 creates a new commodity token following the SYN1967 standard.
+func (tm *TokenManager) CreateSYN1967(meta Metadata, commodity, unit string, price uint64, init map[Address]uint64) (TokenID, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	tok := NewSYN1967Token(meta, commodity, unit, price)
 // BatchTransfer1155 executes a batch transfer for SYN1155 tokens.
 func (tm *TokenManager) BatchTransfer1155(id TokenID, from Address, items []Batch1155Transfer) error {
 	tok, ok := GetToken(id)
@@ -216,6 +221,9 @@ func (tm *TokenManager) CreateEducationToken(meta Metadata, init map[Address]uin
 		tok.balances.Set(tok.id, a, v)
 		tok.meta.TotalSupply += v
 	}
+	tok.ledger = tm.ledger
+	tok.gas = tm.gas
+
 	if tm.ledger.tokens == nil {
 		tm.ledger.tokens = make(map[TokenID]Token)
 	}

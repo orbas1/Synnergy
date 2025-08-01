@@ -856,6 +856,14 @@ var gasTable map[Opcode]uint64
   SYN500_Usage:         400,
   SYN500_AccessInfo:    400,
    TokenManager_BalanceOf: 400,
+   SYN1967_UpdatePrice: 500,
+   SYN1967_CurrentPrice: 200,
+   SYN1967_PriceHistory: 200,
+   SYN1967_AddCertification: 100,
+   SYN1967_AddTrace: 100,
+   TokenManager_CreateSYN1967: 8_000,
+
+   // ----------------------------------------------------------------------
    // SYN721 specific operations
    Mint721:            5_000,
    Transfer721:        2_100,
@@ -2539,6 +2547,12 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":          0,
 	"TokenManager_Approve":       0,
 	"TokenManager_BalanceOf":     0,
+	"SYN1967_UpdatePrice":        0,
+	"SYN1967_CurrentPrice":       0,
+	"SYN1967_PriceHistory":       0,
+	"SYN1967_AddCertification":   0,
+	"SYN1967_AddTrace":           0,
+	"TokenManager_CreateSYN1967": 0,
 	"LegalToken_New":             0,
 	"LegalToken_AddSignature":    0,
 	"LegalToken_RevokeSignature": 0,

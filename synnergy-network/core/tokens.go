@@ -347,6 +347,8 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+	if meta.Standard == StdSYN1967 {
+		ct := NewSYN1967Token(meta, "", "", 0)
 	// Special case for SYN1155 which uses a dedicated struct
 	if meta.Standard == StdSYN1155 {
 		mt := NewSYN1155Token(meta, nil, nil)
@@ -394,6 +396,7 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 		}
 		RegisterToken(ct)
 		return ct, nil
+	}
 
 	if meta.Standard == StdSYN4900 {
 		return NewSyn4900Token(meta, init)
