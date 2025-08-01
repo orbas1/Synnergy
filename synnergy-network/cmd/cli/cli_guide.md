@@ -40,6 +40,7 @@ The following command groups expose the same functionality available in the core
 - **event_management** – Emit and query custom events stored on chain.
 - **gaming** – Manage simple on-chain games.
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
+- **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.

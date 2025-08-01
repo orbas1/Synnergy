@@ -11,6 +11,9 @@ var (
 	globalLedger *Ledger
 	authSetOnce  sync.Once
 	globalAuth   *AuthoritySet
+
+	distOnce   sync.Once
+	globalDist *TxDistributor
 )
 
 // InitLedger initialises the global ledger using OpenLedger at the given path.
@@ -32,6 +35,14 @@ func InitAuthoritySet(set *AuthoritySet) {
 
 // CurrentAuthoritySet returns the global authority set if initialised.
 func CurrentAuthoritySet() *AuthoritySet { return globalAuth }
+
+// InitTxDistributor initialises the global fee distributor.
+func InitTxDistributor(l *Ledger) {
+	distOnce.Do(func() { globalDist = NewTxDistributor(l) })
+}
+
+// CurrentTxDistributor returns the fee distributor if initialised.
+func CurrentTxDistributor() *TxDistributor { return globalDist }
 
 // ------------------------------------------------------------------
 // TF gRPC stub client for AI module wiring
