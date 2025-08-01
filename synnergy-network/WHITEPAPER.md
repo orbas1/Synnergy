@@ -44,6 +44,7 @@ At a high level the network consists of:
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Plasma Layer** – Optional plasma child chains handle high throughput transfers with periodic block roots posted to the ledger.
 7. **Binary Trees** – Ledger-backed search trees provide efficient on-chain indexing for smart contracts and services.
 7. **Blockchain Compression** – Snapshots can be gzipped and restored on demand to reduce storage costs.
 7. **Zero Trust Data Channels** – End-to-end encrypted channels leverage the token ledger for escrowed access control.

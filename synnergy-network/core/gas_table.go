@@ -773,6 +773,13 @@ var gasTable map[Opcode]uint64
    SignTx:              3_000,
 
    // ----------------------------------------------------------------------
+   // Plasma Management
+   // ----------------------------------------------------------------------
+   InitPlasma:        8_000,
+   Plasma_Deposit:    5_000,
+   Plasma_Withdraw:   5_000,
+   Plasma_SubmitBlock: 10_000,
+   Plasma_GetBlock:    1_000,
    // Resource Management
    // ----------------------------------------------------------------------
    SetQuota:         1_000,
@@ -1836,6 +1843,13 @@ var gasNames = map[string]uint64{
 	"SignTx":              3_000,
 
 	// ---------------------------------------------------------------------
+	// Plasma Management
+	// ---------------------------------------------------------------------
+	"InitPlasma":         8_000,
+	"Plasma_Deposit":     5_000,
+	"Plasma_Withdraw":    5_000,
+	"Plasma_SubmitBlock": 10_000,
+	"Plasma_GetBlock":    1_000,
 	// Resource Management
 	// ---------------------------------------------------------------------
 	"SetQuota":         1_000,

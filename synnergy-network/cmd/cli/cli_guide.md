@@ -69,6 +69,7 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
  - **sidechain** – Launch, manage and interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **plasma** – Manage plasma deposits and submit block roots.
 - **state_channel_mgmt** – Pause, resume and force-close channels.
 - **zero_trust_data_channels** – Manage encrypted data channels with escrow.
 - **swarm** – Manage groups of nodes running together.
@@ -703,6 +704,13 @@ needed in custom tooling.
 | `status` | Show the current channel state. |
 | `list` | List all open channels. |
 
+### plasma
+
+| Sub-command | Description |
+|-------------|-------------|
+| `deposit` | Deposit tokens into the plasma chain. |
+| `withdraw` | Withdraw a previously deposited amount. |
+| `submit` | Submit a plasma block root. |
 ### state_channel_mgmt
 
 | Sub-command | Description |
