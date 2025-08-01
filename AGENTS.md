@@ -220,3 +220,4 @@ These upgrades will require corresponding tests and documentation.  Contributors
 ---
 
 This playbook should be kept up to date as the project evolves.  Check off files as they are completed and add new tasks or modules to the roadmap so that future developers have a clear picture of the current status.
+\n## Progress\n- Added full NFT Marketplace GUI with backend service and Solidity contract.\n
