@@ -2498,6 +2498,14 @@ var gasNames = map[string]uint64{
 	"VerifyChain":      400,
 	"RestoreChain":     600,
 
+	// ---------------------------------------------------------------------
+	// Archival Witness Node
+	// ---------------------------------------------------------------------
+	"NewArchivalWitnessNode": 1000,
+	"Witness_NotarizeTx":     300,
+	"Witness_NotarizeBlock":  500,
+	"Witness_GetTx":          50,
+	"Witness_GetBlock":       50,
 	// ----------------------------------------------------------------------
 	// Warfare / Military Nodes
 	// ----------------------------------------------------------------------

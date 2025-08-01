@@ -1225,6 +1225,12 @@ var catalogue = []struct {
 	{"FinishGame", 0x1E0003},
 	{"GetGame", 0x1E0004},
 	{"ListGames", 0x1E0005},
+	// Archival Witness Node (0x1F)
+	{"NewArchivalWitnessNode", 0x1F0001},
+	{"Witness_NotarizeTx", 0x1F0002},
+	{"Witness_NotarizeBlock", 0x1F0003},
+	{"Witness_GetTx", 0x1F0004},
+	{"Witness_GetBlock", 0x1F0005},
 }
 
 // init wires the catalogue into the live dispatcher.
