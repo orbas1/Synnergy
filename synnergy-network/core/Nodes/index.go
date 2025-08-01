@@ -9,3 +9,13 @@ type NodeInterface interface {
 	Close() error
 	Peers() []string
 }
+
+// QuantumNodeInterface extends NodeInterface with quantum-safe operations.
+type QuantumNodeInterface interface {
+	NodeInterface
+	SecureBroadcast(topic string, data []byte) error
+	SecureSubscribe(topic string) (<-chan []byte, error)
+	Sign(msg []byte) ([]byte, error)
+	Verify(msg, sig []byte) (bool, error)
+	RotateKeys() error
+}
