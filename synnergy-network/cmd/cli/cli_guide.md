@@ -358,6 +358,16 @@ needed in custom tooling.
 | `deal:get` | Get details for a storage deal. |
 | `deal:list` | List storage deals. |
 
+### escrow
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a new multi-party escrow |
+| `deposit` | Deposit additional funds |
+| `release` | Release funds to participants |
+| `cancel` | Cancel an escrow and refund |
+| `info` | Show escrow details |
+| `list` | List all escrows |
 ### marketplace
 
 | Sub-command | Description |
