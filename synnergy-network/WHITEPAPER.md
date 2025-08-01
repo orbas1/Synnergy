@@ -11,11 +11,21 @@ The Synnergy ecosystem brings together several services:
 - **Core Ledger and Consensus** – The canonical ledger stores blocks and coordinates the validator set.
 - **Virtual Machine** – A modular VM executes smart contracts compiled to WASM or EVM-compatible bytecode.
 - **Data Layer** – Integrated IPFS-style storage allows assets and off-chain data to be referenced on-chain.
+- **Zero Trust Data Channels** – Encrypted peer-to-peer channels secured by the ledger and consensus.
+- **Data & Resource Management** – Tracks stored blobs and dynamically allocates gas limits.
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
+- **AI Model Training** – On-chain jobs allow publishing datasets and training models collaboratively with escrowed payments.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
+- **Employment Contracts** – Manage job agreements and salary payments on-chain.
+- **Immutability Enforcement** – Ensures the genesis block and historical chain remain tamper proof.
+- **Warehouse Management** – On-chain inventory tracking for supply chains.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Workflow Automation** – Workflows allow automated tasks to run on-chain with cron triggers and webhooks.
+- **Healthcare Data** – Patients control medical records stored via on-chain permissions.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
 - **Feedback System** – Users can submit and browse feedback directly on chain, enabling transparent improvement cycles.
+- **Biometric Authentication** – module for on-chain identity verification.
+- **Faucet Service** – Dispense test coins and tokens to developers with rate limits.
 All services are optional and run as independent modules that plug into the core.
 
 ## Synnergy Network Architecture
@@ -26,13 +36,17 @@ At a high level the network consists of:
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Blockchain Compression** – Snapshots can be gzipped and restored on demand to reduce storage costs.
+7. **Zero Trust Data Channels** – End-to-end encrypted channels leverage the token ledger for escrowed access control.
+7. **Swarm Manager** – Coordinates multiple nodes as a high-availability cluster.
 Each layer is intentionally separated so enterprises can replace components as needed (e.g., swap the consensus engine or choose a different storage back end).
 
 ## Synthron Coin
-The native asset powering the network is `SYNTHRON` (ticker: THRON). It has three main functions:
-- **Payment and Transaction Fees** – Every on-chain action consumes gas priced in THRON.
+The native asset powering the network is `SYNTHRON` (ticker: SYNN). It has three main functions:
+- **Payment and Transaction Fees** – Every on-chain action consumes gas priced in SYNN.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
+- **DAO Module** – Users can create independent DAOs and manage membership directly on-chain.
 
 ### Token Distribution
 Initial supply is minted at genesis with a gradual release schedule:
@@ -46,8 +60,11 @@ The supply inflates annually by 2% to maintain incentives and fund new initiativ
 ## Full CLI Guide and Index
 Synnergy comes with a powerful CLI built using the Cobra framework. Commands are grouped into modules mirroring the codebase. Below is a concise index; see `cmd/cli/cli_guide.md` for the detailed usage of each command group:
 - `ai` – Publish machine learning models and run inference jobs.
+- `ai_mgmt` – Manage listings in the AI model marketplace.
+- `ai_infer` – Advanced inference and batch analysis utilities.
 - `amm` – Swap tokens and manage liquidity pools.
 - `authority_node` – Register validators and manage the authority set.
+- `authority_apply` – Submit and vote on authority node applications.
 - `charity_pool` – Contribute to or distribute from community charity funds.
 - `coin` – Mint, transfer, and burn the base asset.
 - `compliance` – Perform KYC/AML verification and auditing.
@@ -55,25 +72,48 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `contracts` – Deploy and invoke smart contracts.
 - `cross_chain` – Bridge assets to and from external chains.
 - `data` – Low-level debugging of key/value storage and oracles.
+- `anomaly_detection` – Detect suspicious transactions using the built-in AI.
 - `fault_tolerance` – Simulate network failures and snapshot recovery.
 - `governance` – Create proposals and cast votes.
+- `dao` – Create DAOs and manage their members.
 - `green_technology` – Manage energy tracking and carbon offsets.
 - `ledger` – Inspect blocks, accounts, and token metrics.
 - `liquidity_pools` – Create pools and provide liquidity.
 - `loanpool` – Submit loan requests and disburse funds.
+- `loanpool_apply` – Apply for loans with on-chain voting.
 - `network` – Connect peers and view network metrics.
+- `plasma` – Manage Plasma deposits and exits.
 - `replication` – Replicate and synchronize ledger data across nodes.
 - `rollups` – Manage rollup batches and fraud proofs.
 - `security` – Generate keys and sign payloads.
 - `sharding` – Split the ledger into shards and coordinate cross-shard messages.
 - `sidechain` – Launch or interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.
+- `swarm` – Coordinate multiple nodes as a cluster.
 - `storage` – Manage off-chain storage deals.
+- `sensor` – Integrate external sensors and trigger webhooks.
+- `real_estate` – Tokenise and trade real-world property.
+- `escrow` – Multi-party escrow management.
+- `marketplace` – General on-chain marketplace for digital goods.
+- `healthcare` – Manage healthcare records and permissions.
+- `tangible` – Track tangible asset ownership on-chain.
 - `tokens` – Issue and manage token contracts.
+- `token_management` – Advanced token lifecycle management.
+- `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
+- `transactionreversal` – Reverse erroneous payments with authority approval.
+- `devnet` – Spawn an in-memory developer network for rapid testing.
+- `testnet` – Launch a configurable test network from a YAML file.
+- `supply` – Track supply chain assets and logistics.
 - `utility_functions` – Miscellaneous support utilities.
 - `virtual_machine` – Execute VM-level operations for debugging.
+- `account` – basic account management and balance queries.
 - `wallet` – Create wallets and sign transfers.
+- `system_health` – Monitor runtime metrics and emit logs.
+- `idwallet` – Register ID-token wallets and verify status.
+- `offwallet` – Manage offline wallets and signed transactions.
+- `recovery` – Multi-factor account recovery leveraging SYN900 tokens.
+- `wallet_mgmt` – High level wallet manager for ledger payments.
 Each command group supports a help flag to display the individual sub-commands and options.
 
 ## Full Opcode and Operand Code Guide
@@ -96,6 +136,14 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  Biometrics
+                                 0x1E  SystemHealth
+0x1E  Employment           
+                                 0x1E  SupplyChain
+                                 0x1E  Healthcare
+                                 0x1E  Immutability
+                                 0x1E  Warehouse
+                                 0x1E  Gaming
 ```
 The complete list of opcodes along with their handlers can be inspected in `core/opcode_dispatcher.go`. Tools like `synnergy opcodes` dump the catalogue in `<FunctionName>=<Hex>` format to aid audits.
 
@@ -120,11 +168,16 @@ Synnergy employs a hybrid consensus combining Proof of History for ordering and 
 ## Transaction Distribution Guide
 Transactions are propagated through a gossip network. Nodes maintain a mempool and relay validated transactions to peers. When a validator proposes a sub-block, it selects transactions from its pool based on fee priority and time of arrival. After consensus, the finalized block is broadcast to all peers and applied to local state. Replication modules ensure ledger data remains consistent even under network partitions or DDoS attempts.
 
+Reversals of fraudulent payments are handled via special `TxReversal` records. At least three authority nodes must co-sign the reversal. The recipient sends back the original amount minus a 2.5% fee and the VM refunds any unused gas.
+Synnergy includes a dedicated **Transaction Distribution** module that automatically splits each transaction fee once a block is committed. Half of the fee rewards the block producer while the remainder is allocated between the LoanPool and community CharityPool. This mechanism keeps incentives aligned and channels a portion of every transaction toward ecosystem development and philanthropic efforts.
+## Event Management
+Modules emit structured events whenever notable actions occur such as token transfers or contract executions. The Event Manager records these entries in the ledger state and broadcasts them so external services can react in real time. Events are addressed by deterministic hashes and can be queried via the CLI or from smart contracts. This design keeps observers in sync without polling full blocks.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 
 ### Network Growth Model
-- **Year 1**: Target 50 validator nodes and 100,000 daily transactions. Estimated 10 million THRON in circulation with modest staking rewards.
+- **Year 1**: Target 50 validator nodes and 100,000 daily transactions. Estimated 10 million SYNTHRON in circulation with modest staking rewards.
 - **Year 2**: Expand to 200 validators and introduce sharding. Daily volume expected to exceed 500,000 transactions. Circulating supply projected at 12 million THRON.
 - **Year 3**: Full ecosystem of sidechains and rollups. Goal of 1 million transactions per day and 15 million THRON in circulation. Increased staking and governance participation anticipated.
 
