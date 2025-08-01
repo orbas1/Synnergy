@@ -37,6 +37,24 @@ func (tm *TokenManager) Create(meta Metadata, init map[Address]uint64) (TokenID,
 	return bt.id, nil
 }
 
+// CreateSYN500 creates a SYN500 utility token and registers it.
+func (tm *TokenManager) CreateSYN500(meta Metadata, init map[Address]uint64) (*SYN500Token, error) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+	tok, err := NewSYN500Token(meta, init)
+	if err != nil {
+		return nil, err
+	}
+	bt := tok.BaseToken
+	bt.ledger = tm.ledger
+	bt.gas = tm.gas
+	if tm.ledger.tokens == nil {
+		tm.ledger.tokens = make(map[TokenID]Token)
+	}
+	tm.ledger.tokens[bt.id] = tok
+	return tok, nil
+}
+
 // Transfer moves balances between addresses for the given token.
 func (tm *TokenManager) Transfer(id TokenID, from, to Address, amount uint64) error {
 	tok, ok := GetToken(id)

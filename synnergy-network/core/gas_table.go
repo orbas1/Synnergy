@@ -676,7 +676,15 @@ var gasTable map[Opcode]uint64
    TokenManager_Mint: 2_100,
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
-   TokenManager_BalanceOf: 400,
+  TokenManager_BalanceOf: 400,
+  SYN500_GrantAccess:   1_000,
+  SYN500_UpdateAccess:  1_000,
+  SYN500_RevokeAccess:  800,
+  SYN500_RecordUsage:   500,
+  SYN500_RedeemReward:  500,
+  SYN500_RewardBalance: 400,
+  SYN500_Usage:         400,
+  SYN500_AccessInfo:    400,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1628,6 +1636,14 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"SYN500_GrantAccess":     0,
+	"SYN500_UpdateAccess":    0,
+	"SYN500_RevokeAccess":    0,
+	"SYN500_RecordUsage":     0,
+	"SYN500_RedeemReward":    0,
+	"SYN500_RewardBalance":   0,
+	"SYN500_Usage":           0,
+	"SYN500_AccessInfo":      0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
