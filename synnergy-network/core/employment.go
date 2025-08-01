@@ -44,6 +44,18 @@ func InitEmployment(led *Ledger) {
 // Employment returns the current registry instance.
 func Employment() *EmploymentRegistry { return empReg }
 
+// employmentToken attempts to locate the canonical SYN3100 token.
+func employmentToken() *EmploymentToken {
+	for _, t := range GetRegistryTokens() {
+		if t.Meta().Standard == StdSYN3100 {
+			if et, ok := any(t).(*EmploymentToken); ok {
+				return et
+			}
+		}
+	}
+	return nil
+}
+
 // CreateJob creates a new employment contract.
 func (r *EmploymentRegistry) CreateJob(employer, employee Address, salary uint64, start, end time.Time) (string, error) {
 	r.mu.Lock()
@@ -147,6 +159,9 @@ func (r *EmploymentRegistry) PaySalary(id string) error {
 	total := uint64(c.HoursWorked) * c.SalaryPerHour
 	if err := r.led.Transfer(c.Employer, c.Employee, total); err != nil {
 		return err
+	}
+	if et := employmentToken(); et != nil {
+		_ = et.PaySalary(id)
 	}
 	c.Paid = true
 	b, _ := json.Marshal(c)

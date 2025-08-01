@@ -3,6 +3,7 @@ package core
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -178,6 +179,34 @@ func (n *Node) Broadcast(topic string, data []byte) error {
 	// Optional replication hook
 	HandleNetworkMessage(NetworkMessage{Topic: topic, Content: data})
 	return nil
+}
+
+// BroadcastOrphanBlock sends a serialised orphan block across the network.
+func (n *Node) BroadcastOrphanBlock(b *Block) error {
+	data, err := json.Marshal(b)
+	if err != nil {
+		return err
+	}
+	return n.Broadcast("orphan-block", data)
+}
+
+// SubscribeOrphanBlocks subscribes to the orphan-block topic and decodes blocks.
+func (n *Node) SubscribeOrphanBlocks() (<-chan *Block, error) {
+	ch, err := n.Subscribe("orphan-block")
+	if err != nil {
+		return nil, err
+	}
+	out := make(chan *Block)
+	go func() {
+		for msg := range ch {
+			var b Block
+			if err := json.Unmarshal(msg.Data, &b); err == nil {
+				out <- &b
+			}
+		}
+		close(out)
+	}()
+	return out, nil
 }
 
 // Subscribe listens for messages on a topic.
