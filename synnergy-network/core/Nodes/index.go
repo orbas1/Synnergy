@@ -10,6 +10,13 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// BiometricSecurityNode extends NodeInterface with biometric operations.
+type BiometricSecurityNode interface {
+	NodeInterface
+	Enroll(addr string, data []byte) error
+	Verify(addr string, data []byte) bool
+	Delete(addr string)
+	ValidateTransaction(tx any, data []byte) bool
 // BankInstitutionalNode defines behaviour for specialised
 // bank/institution authority nodes.
 type BankInstitutionalNode interface {
