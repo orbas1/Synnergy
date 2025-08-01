@@ -197,6 +197,11 @@ var catalogue = []struct {
 	{"LockAndMint", 0x090004},
 	{"BurnAndRelease", 0x090005},
 	{"GetBridge", 0x090006},
+	{"RegisterProtocol", 0x090007},
+	{"ListProtocols", 0x090008},
+	{"GetProtocol", 0x090009},
+	{"ProtocolDeposit", 0x09000A},
+	{"ProtocolWithdraw", 0x09000B},
 
 	// Data (0x0A)
 	{"RegisterNode", 0x0A0001},
