@@ -13,6 +13,14 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// QuantumNodeInterface extends NodeInterface with quantum-safe operations.
+type QuantumNodeInterface interface {
+	NodeInterface
+	SecureBroadcast(topic string, data []byte) error
+	SecureSubscribe(topic string) (<-chan []byte, error)
+	Sign(msg []byte) ([]byte, error)
+	Verify(msg, sig []byte) (bool, error)
+	RotateKeys() error
 // AIEnhancedNodeInterface extends NodeInterface with AI powered helpers.
 // Parameters are kept generic (byte slices) to avoid direct core dependencies
 // while still allowing advanced functionality when implemented in the core
