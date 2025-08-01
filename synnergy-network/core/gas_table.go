@@ -431,6 +431,15 @@ var gasTable map[Opcode]uint64
    Bootstrap_Stop: 4_000,
    Bootstrap_Peers: 500,
    Bootstrap_DialSeed: 2_000,
+   NewCentralBankingNode: 25_000,
+   CentralBank_Start: 10_000,
+   CentralBank_Stop: 5_000,
+   SetInterestRate: 2_000,
+   InterestRate: 500,
+   SetReserveRequirement: 2_000,
+   ReserveRequirement: 500,
+   IssueDigitalCurrency: 10_000,
+   RecordSettlement: 5_000,
    NewConnPool:     8_000,
    AcquireConn:     500,
    ReleaseConn:     200,
@@ -442,6 +451,10 @@ var gasTable map[Opcode]uint64
    AdvertiseSelf:  800,
    StartDevNet:    50_000,
    StartTestNet:   60_000,
+   MobileMiner_Start: 30_000,
+   MobileMiner_Stop: 5_000,
+   MobileMiner_Status: 1_000,
+   MobileMiner_SetIntensity: 500,
    // Broadcast & Subscribe already priced
 
    // ----------------------------------------------------------------------
@@ -1506,36 +1519,40 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Networking
 	// ----------------------------------------------------------------------
-	"NewNode":            1800,
-	"HandlePeerFound":    150,
-	"DialSeed":           200,
-	"ListenAndServe":     800,
-	"Close":              50,
-	"Peers":              40,
-	"NewDialer":          200,
-	"Dial":               200,
-	"SetBroadcaster":     50,
-	"GlobalBroadcast":    100,
-	"NewBootstrapNode":   2000,
-	"Bootstrap_Start":    0,
-	"Bootstrap_Stop":     0,
-	"Bootstrap_Peers":    0,
-	"Bootstrap_DialSeed": 0,
-	"NewConnPool":        800,
-	"AcquireConn":        50,
-	"ReleaseConn":        20,
-	"ClosePool":          40,
-	"PoolStats":          10,
-	"NewNATManager":      500,
-	"NAT_Map":            0,
-	"NAT_Unmap":          0,
-	"NAT_ExternalIP":     0,
-	"DiscoverPeers":      100,
-	"Connect":            150,
-	"Disconnect":         100,
-	"AdvertiseSelf":      80,
-	"StartDevNet":        5000,
-	"StartTestNet":       6000,
+	"NewNode":                  1800,
+	"HandlePeerFound":          150,
+	"DialSeed":                 200,
+	"ListenAndServe":           800,
+	"Close":                    50,
+	"Peers":                    40,
+	"NewDialer":                200,
+	"Dial":                     200,
+	"SetBroadcaster":           50,
+	"GlobalBroadcast":          100,
+	"NewBootstrapNode":         2000,
+	"Bootstrap_Start":          0,
+	"Bootstrap_Stop":           0,
+	"Bootstrap_Peers":          0,
+	"Bootstrap_DialSeed":       0,
+	"NewConnPool":              800,
+	"AcquireConn":              50,
+	"ReleaseConn":              20,
+	"ClosePool":                40,
+	"PoolStats":                10,
+	"NewNATManager":            500,
+	"NAT_Map":                  0,
+	"NAT_Unmap":                0,
+	"NAT_ExternalIP":           0,
+	"DiscoverPeers":            100,
+	"Connect":                  150,
+	"Disconnect":               100,
+	"AdvertiseSelf":            80,
+	"StartDevNet":              5000,
+	"StartTestNet":             6000,
+	"MobileMiner_Start":        3000,
+	"MobileMiner_Stop":         500,
+	"MobileMiner_Status":       100,
+	"MobileMiner_SetIntensity": 50,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------
@@ -2304,11 +2321,17 @@ var gasNames = map[string]uint64{
 	// ---------------------------------------------------------------------
 	// Regulatory Management
 	// ---------------------------------------------------------------------
-	"InitRegulatory":    400,
-	"RegisterRegulator": 600,
-	"GetRegulator":      200,
-	"ListRegulators":    200,
-	"EvaluateRuleSet":   500,
+	"InitRegulatory":           400,
+	"RegisterRegulator":        600,
+	"GetRegulator":             200,
+	"ListRegulators":           200,
+	"EvaluateRuleSet":          500,
+	"NewGovAuthorityNode":      1000,
+	"Gov_CheckCompliance":      500,
+	"Gov_EnforceRegulation":    700,
+	"Gov_InterfaceRegulator":   400,
+	"Gov_UpdateLegalFramework": 800,
+	"Gov_AuditTrail":           300,
 
 	// ----------------------------------------------------------------------
 	// Polls Management
@@ -2456,6 +2479,18 @@ var gasNames = map[string]uint64{
 	"Warehouse_ListItems":  0,
 	"Warehouse_GetItem":    0,
 
+	// ----------------------------------------------------------------------
+	// Bank Institutional Node
+	// ----------------------------------------------------------------------
+	"NewBankInstitutionalNode":  1500,
+	"BankNode_Start":            300,
+	"BankNode_Stop":             200,
+	"BankNode_MonitorTx":        250,
+	"BankNode_ComplianceReport": 400,
+	"BankNode_ConnectFinNet":    300,
+	"BankNode_UpdateRules":      250,
+	"BankNode_SubmitTx":         300,
+
 	// ---------------------------------------------------------------------
 	// Immutability Enforcement
 	// ---------------------------------------------------------------------
@@ -2471,6 +2506,13 @@ var gasNames = map[string]uint64{
 	"Witness_NotarizeBlock":  500,
 	"Witness_GetTx":          50,
 	"Witness_GetBlock":       50,
+	// ----------------------------------------------------------------------
+	// Warfare / Military Nodes
+	// ----------------------------------------------------------------------
+	"NewWarfareNode":         2000,
+	"Warfare_SecureCommand":  300,
+	"Warfare_TrackLogistics": 300,
+	"Warfare_ShareTactical":  200,
 }
 
 func init() {
