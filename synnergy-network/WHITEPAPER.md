@@ -76,6 +76,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `tokens` – Issue and manage token contracts.
 - `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
+- `supply` – Track supply chain assets and logistics.
 - `utility_functions` – Miscellaneous support utilities.
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `wallet` – Create wallets and sign transfers.
@@ -101,6 +102,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  SupplyChain
                                  0x1E  Healthcare
                                  0x1E  Immutability
                                  0x1E  Warehouse

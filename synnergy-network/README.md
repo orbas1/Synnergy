@@ -81,6 +81,7 @@ all modules from the core library. Highlights include:
 - `transactions` – build and sign transactions
 - `utility_functions` – assorted helpers
 - `virtual_machine` – run the on‑chain VM service
+- `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.

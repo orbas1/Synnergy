@@ -38,6 +38,7 @@ The following command groups expose the same functionality available in the core
 - **transactions** – Build raw transactions, sign them and broadcast to the network.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
+- **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
 
 
@@ -411,6 +412,15 @@ needed in custom tooling.
 | `hash` | Compute a cryptographic hash. |
 | `short-hash` | Shorten a 32-byte hash to first4..last4 format. |
 | `bytes2addr` | Convert big-endian bytes to an address. |
+
+### supply
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <id> <desc> <owner> <location>` | Register a new item on chain. |
+| `update-location <id> <location>` | Update item location. |
+| `status <id> <status>` | Update item status. |
+| `get <id>` | Fetch item metadata. |
 
 ### virtual_machine
 
