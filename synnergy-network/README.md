@@ -54,6 +54,7 @@ all modules from the core library. Highlights include:
 - `amm` – swap tokens and manage liquidity pools
 - `authority_node` – validator registration and voting
 - `charity_pool` – query and disburse community funds
+- `identity` – manage verified addresses
 - `coin` – mint and transfer the native SYNN coin
 - `compliance` – perform KYC/AML checks
 - `consensus` – control the consensus engine

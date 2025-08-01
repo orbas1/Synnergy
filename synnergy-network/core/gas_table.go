@@ -369,6 +369,14 @@ var gasTable map[Opcode]uint64
    GetDeal:       1_000,
    ListDeals:     1_000,
    // Pin & Retrieve already priced
+   // ----------------------------------------------------------------------
+   // Identity Verification
+   // ----------------------------------------------------------------------
+   RegisterIdentity: 5_000,
+   VerifyIdentity:   1_000,
+   RemoveIdentity:   2_000,
+   ListIdentities:   2_000,
+
 
    // ----------------------------------------------------------------------
    // Token Standards (constants – zero-cost markers)
@@ -945,6 +953,13 @@ var gasNames = map[string]uint64{
 	"GetDeal":       1_000,
 	"ListDeals":     1_000,
 	// Pin & Retrieve already priced
+	// ----------------------------------------------------------------------
+	// Identity Verification
+	// ----------------------------------------------------------------------
+	"RegisterIdentity": 5_000,
+	"VerifyIdentity":   1_000,
+	"RemoveIdentity":   2_000,
+	"ListIdentities":   2_000,
 
 	// ----------------------------------------------------------------------
 	// Token Standards (constants – zero-cost markers)

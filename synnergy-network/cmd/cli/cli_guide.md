@@ -12,6 +12,7 @@ The following command groups expose the same functionality available in the core
 - **amm** – Swap tokens and manage liquidity pools. Includes helpers to quote routes and add/remove liquidity.
 - **authority_node** – Register new validators, vote on authority proposals and list the active electorate.
 - **charity_pool** – Query the community charity fund and trigger payouts for the current cycle.
+- **identity** – Register and verify user identities.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
