@@ -89,6 +89,7 @@ all modules from the core library. Highlights include:
 - `virtual_machine` – run the on‑chain VM service
 - `supply` – manage supply chain assets on chain
 - `wallet` – mnemonic generation and signing
+- `wallet_mgmt` – manage wallets and send SYNN directly via the ledger
 
 More details for each command can be found in `cmd/cli/cli_guide.md`.
 

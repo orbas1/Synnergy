@@ -42,6 +42,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **wallet_mgmt** – Manage wallets and submit ledger transfers.
 - **devnet** – Launch a local multi-node developer network.
 - **testnet** – Start an ephemeral test network from a YAML config.
 - **faucet** – Dispense test funds with rate limiting.
@@ -483,6 +484,13 @@ needed in custom tooling.
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
 
+### wallet_mgmt
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create` | Create a wallet and print the mnemonic. |
+| `balance` | Show the SYNN balance for an address. |
+| `transfer` | Send SYNN from a mnemonic to a target address. |
 ### devnet
 
 | Sub-command | Description |

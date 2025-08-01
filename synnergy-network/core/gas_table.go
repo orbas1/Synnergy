@@ -624,6 +624,10 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+   CreateWallet:        10_000,
+   ImportWallet:        5_000,
+   WalletBalance:       400,
+   WalletTransfer:      2_100,
 
    // ----------------------------------------------------------------------
    // Immutability Enforcement
@@ -1245,6 +1249,10 @@ var gasNames = map[string]uint64{
 	"PrivateKey":          400,
 	"NewAddress":          500,
 	"SignTx":              3_000,
+	"CreateWallet":        10_000,
+	"ImportWallet":        5_000,
+	"WalletBalance":       400,
+	"WalletTransfer":      2_100,
 
 	// ----------------------------------------------------------------------
 	// Employment Contracts
