@@ -14,6 +14,7 @@ The Synnergy ecosystem brings together several services:
 - **AI Compliance** – A built-in AI service scans transactions for fraud patterns, KYC signals, and anomalies.
 - **DEX and AMM** – Native modules manage liquidity pools and cross-chain swaps.
 - **Governance** – Token holders can create proposals and vote on protocol upgrades.
+- **Reputation Voting** – Optional weighted voting using SYN-REP reputation tokens.
 - **Developer Tooling** – CLI modules, RPC services, and SDKs make integration straightforward.
 All services are optional and run as independent modules that plug into the core.
 
@@ -32,6 +33,7 @@ The native asset powering the network is `SYNTHRON` (ticker: THRON). It has thre
 - **Payment and Transaction Fees** – Every on-chain action consumes gas priced in THRON.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
+- **Reputation Voting** – SYN-REP tokens weight votes for advanced governance scenarios.
 
 ### Token Distribution
 Initial supply is minted at genesis with a gradual release schedule:

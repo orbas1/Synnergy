@@ -20,6 +20,7 @@ The following command groups expose the same functionality available in the core
 - **data** – Inspect raw key/value pairs in the underlying data store for debugging.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
 - **governance** – Create proposals, cast votes and check DAO parameters.
+- **reputation_voting** – Reputation weighted governance commands.
 - **green_technology** – View energy metrics and toggle any experimental sustainability features.
 - **ledger** – Inspect blocks, query balances and perform administrative token operations via the ledger daemon.
 - **network** – Manage peer connections and print networking statistics.
@@ -199,6 +200,17 @@ needed in custom tooling.
 | `execute <proposal-id>` | Execute a proposal after the deadline. |
 | `get <proposal-id>` | Display a single proposal. |
 | `list` | List all proposals. |
+
+### reputation_voting
+
+| Sub-command | Description |
+|-------------|-------------|
+| `propose` | Submit a new reputation proposal. |
+| `vote <proposal-id>` | Cast a weighted vote using SYN-REP. |
+| `execute <proposal-id>` | Execute a reputation proposal. |
+| `get <proposal-id>` | Display a reputation proposal. |
+| `list` | List all reputation proposals. |
+| `balance <addr>` | Show reputation balance. |
 
 ### green_technology
 

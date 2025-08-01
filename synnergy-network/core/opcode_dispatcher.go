@@ -238,6 +238,14 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"AddReputation", 0x0C000B},
+	{"SubtractReputation", 0x0C000C},
+	{"ReputationOf", 0x0C000D},
+	{"SubmitRepGovProposal", 0x0C000E},
+	{"CastRepGovVote", 0x0C000F},
+	{"ExecuteRepGovProposal", 0x0C0010},
+	{"GetRepGovProposal", 0x0C0011},
+	{"ListRepGovProposals", 0x0C0012},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},
