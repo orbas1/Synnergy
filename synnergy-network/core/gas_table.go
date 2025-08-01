@@ -867,6 +867,12 @@ var gasTable map[Opcode]uint64
    ETF_Info:             100,
 
    // ----------------------------------------------------------------------
+   SYN3500_UpdateRate: 100,
+   SYN3500_Mint:       200,
+   SYN3500_Redeem:     200,
+   SYN3500_Info:       50,
+
+   // ----------------------------------------------------------------------
    Syn3200_CreateBill:    5_000,
    Syn3200_PayFraction:   2_100,
    Syn3200_AdjustAmount:  1_000,
@@ -1021,6 +1027,9 @@ var gasTable map[Opcode]uint64
    DataToken_SetPrice: 400,
    DataToken_GrantAccess: 400,
    DataToken_RevokeAccess: 300,
+   SYN5000_PlaceBet: 2100,
+   SYN5000_ResolveBet: 1500,
+   SYN5000_BetInfo: 200,
 
    // ----------------------------------------------------------------------
    SYN1155_BatchTransfer: 2_100,
@@ -2575,6 +2584,10 @@ var gasNames = map[string]uint64{
 	"ETF_FractionalMint":          0,
 	"ETF_FractionalBurn":          0,
 	"ETF_Info":                    0,
+	"SYN3500_UpdateRate":          0,
+	"SYN3500_Mint":                0,
+	"SYN3500_Redeem":              0,
+	"SYN3500_Info":                0,
 	"Syn3200_CreateBill":          0,
 	"Syn3200_PayFraction":         0,
 	"Syn3200_AdjustAmount":        0,
@@ -2843,6 +2856,9 @@ var gasNames = map[string]uint64{
 	"DataToken_SetPrice":          0,
 	"DataToken_GrantAccess":       0,
 	"DataToken_RevokeAccess":      0,
+	"SYN5000_PlaceBet":            0,
+	"SYN5000_ResolveBet":          0,
+	"SYN5000_BetInfo":             0,
 
 	// ----------------------------------------------------------------------
 	// Transactions
@@ -3157,6 +3173,10 @@ var gasNames = map[string]uint64{
 	"SYN10_Info":          50,
 	"SYN10_Mint":          200,
 	"SYN10_Burn":          200,
+	"SYN3500_UpdateRate":  100,
+	"SYN3500_Info":        50,
+	"SYN3500_Mint":        200,
+	"SYN3500_Redeem":      200,
 	"InitCarbonEngine":    800,
 	"Carbon":              200,
 	"RegisterProject":     500,
