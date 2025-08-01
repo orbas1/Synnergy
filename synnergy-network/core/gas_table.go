@@ -1177,12 +1177,18 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
-	"NewRandomWallet":     10_000,
-	"WalletFromMnemonic":  5_000,
-	"NewHDWalletFromSeed": 6_000,
-	"PrivateKey":          400,
-	"NewAddress":          500,
-	"SignTx":              3_000,
+	"NewRandomWallet":      10_000,
+	"WalletFromMnemonic":   5_000,
+	"NewHDWalletFromSeed":  6_000,
+	"PrivateKey":           400,
+	"NewAddress":           500,
+	"SignTx":               3_000,
+	"Warehouse_New":        10_000,
+	"Warehouse_AddItem":    2_000,
+	"Warehouse_RemoveItem": 2_000,
+	"Warehouse_MoveItem":   2_000,
+	"Warehouse_ListItems":  1_000,
+	"Warehouse_GetItem":    1_000,
 }
 
 func init() {
