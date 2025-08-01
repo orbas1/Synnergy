@@ -207,6 +207,46 @@ func txsRPC(ctx context.Context, batchID uint64) ([][]byte, error) {
 	return resp.Txs, nil
 }
 
+func pauseRPC(ctx context.Context) error {
+	cli, err := newRollClient(ctx)
+	if err != nil {
+		return err
+	}
+	defer cli.Close()
+	return cli.writeJSON(map[string]any{"action": "pause"})
+}
+
+func resumeRPC(ctx context.Context) error {
+	cli, err := newRollClient(ctx)
+	if err != nil {
+		return err
+	}
+	defer cli.Close()
+	return cli.writeJSON(map[string]any{"action": "resume"})
+}
+
+func rollupStatusRPC(ctx context.Context) (string, error) {
+	cli, err := newRollClient(ctx)
+	if err != nil {
+		return "", err
+	}
+	defer cli.Close()
+	if err := cli.writeJSON(map[string]any{"action": "status"}); err != nil {
+		return "", err
+	}
+	var resp struct {
+		Status string `json:"status"`
+		Error  string `json:"error,omitempty"`
+	}
+	if err := cli.readJSON(&resp); err != nil {
+		return "", err
+	}
+	if resp.Error != "" {
+		return "", errors.New(resp.Error)
+	}
+	return resp.Status, nil
+}
+
 // -----------------------------------------------------------------------------
 // Top‑level Cobra commands
 // -----------------------------------------------------------------------------
@@ -398,6 +438,44 @@ var txsCmd = &cobra.Command{
 	},
 }
 
+// pause -----------------------------------------------------------------------
+var rollupsPauseCmd = &cobra.Command{
+	Use:   "pause",
+	Short: "Pause the rollup aggregator",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := context.WithTimeout(cmd.Context(), 2*time.Second)
+		defer cancel()
+		return pauseRPC(ctx)
+	},
+}
+
+// resume ----------------------------------------------------------------------
+var rollupsResumeCmd = &cobra.Command{
+	Use:   "resume",
+	Short: "Resume the rollup aggregator",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := context.WithTimeout(cmd.Context(), 2*time.Second)
+		defer cancel()
+		return resumeRPC(ctx)
+	},
+}
+
+// status ----------------------------------------------------------------------
+var rollupsStatusCmd = &cobra.Command{
+	Use:   "status",
+	Short: "Show aggregator status",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := context.WithTimeout(cmd.Context(), 2*time.Second)
+		defer cancel()
+		st, err := rollupStatusRPC(ctx)
+		if err != nil {
+			return err
+		}
+		fmt.Println(st)
+		return nil
+	},
+}
+
 // -----------------------------------------------------------------------------
 // init – config & route wiring
 // -----------------------------------------------------------------------------
@@ -436,6 +514,9 @@ func init() {
 	rollCmd.AddCommand(rollupsInfoCmd)
 	rollCmd.AddCommand(rollupsListCmd)
 	rollCmd.AddCommand(txsCmd)
+	rollCmd.AddCommand(rollupsPauseCmd)
+	rollCmd.AddCommand(rollupsResumeCmd)
+	rollCmd.AddCommand(rollupsStatusCmd)
 }
 
 // NewRollupCommand exposes the consolidated command tree.

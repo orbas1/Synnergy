@@ -12,4 +12,6 @@ func Register(r *mux.Router, wc *controllers.WalletController) {
 	r.HandleFunc("/api/wallet/import", wc.Import).Methods("POST")
 	r.HandleFunc("/api/wallet/address", wc.Address).Methods("POST")
 	r.HandleFunc("/api/wallet/sign", wc.Sign).Methods("POST")
+	r.HandleFunc("/api/wallet/opcodes", wc.Opcodes).Methods("GET")
+
 }
