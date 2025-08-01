@@ -759,16 +759,20 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Governance
 	// ----------------------------------------------------------------------
-	"UpdateParam":     5_000,
-	"ProposeChange":   10_000,
-	"VoteChange":      3_000,
-	"EnactChange":     8_000,
-	"SubmitProposal":  10_000,
-	"BalanceOfAsset":  600,
-	"CastVote":        3_000,
-	"ExecuteProposal": 15_000,
-	"GetProposal":     1_000,
-	"ListProposals":   2_000,
+	"UpdateParam":      5_000,
+	"ProposeChange":    10_000,
+	"VoteChange":       3_000,
+	"EnactChange":      8_000,
+	"SubmitProposal":   10_000,
+	"BalanceOfAsset":   600,
+	"CastVote":         3_000,
+	"ExecuteProposal":  15_000,
+	"GetProposal":      1_000,
+	"ListProposals":    2_000,
+	"NewQuorumTracker": 1_000,
+	"Quorum_AddVote":   500,
+	"Quorum_HasQuorum": 300,
+	"Quorum_Reset":     200,
 
 	// ----------------------------------------------------------------------
 	// Green Technology

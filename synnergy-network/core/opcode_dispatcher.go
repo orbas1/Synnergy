@@ -238,6 +238,10 @@ var catalogue = []struct {
 	{"ExecuteProposal", 0x0C0008},
 	{"GetProposal", 0x0C0009},
 	{"ListProposals", 0x0C000A},
+	{"NewQuorumTracker", 0x0C000B},
+	{"Quorum_AddVote", 0x0C000C},
+	{"Quorum_HasQuorum", 0x0C000D},
+	{"Quorum_Reset", 0x0C000E},
 
 	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},

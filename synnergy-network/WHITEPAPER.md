@@ -71,6 +71,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `tokens` – Issue and manage token contracts.
 - `transactions` – Build and broadcast transactions manually.
 - `utility_functions` – Miscellaneous support utilities.
+- `quorum` – Track proposal votes and check thresholds.
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `wallet` – Create wallets and sign transfers.
 Each command group supports a help flag to display the individual sub-commands and options.
