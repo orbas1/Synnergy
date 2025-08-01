@@ -1221,6 +1221,10 @@ var gasNames = map[string]uint64{
 	"GetValidator":                100,
 	"ListValidators":              200,
 	"IsValidator":                 80,
+        "ConsensusNode_Start":         500,
+        "ConsensusNode_Stop":          500,
+        "ConsensusNode_SubmitBlock":   800,
+        "ConsensusNode_ProcessTx":     400,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)
