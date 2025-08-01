@@ -932,6 +932,8 @@ var catalogue = []struct {
 	{"ProjectInfo", 0x1E0006},
 	{"ListProjects", 0x1E0007},
 	{"InitEnergyEfficiency", 0x1E0001},
+	{"AddVerification", 0x1E0008},
+	{"ListVerifications", 0x1E0009},
 	{"EnergyEff", 0x1E0002},
 	{"RecordStats", 0x1E0003},
 	{"EfficiencyOf", 0x1E0004},
