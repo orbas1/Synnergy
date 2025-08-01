@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -33,7 +34,8 @@ func ensureLoanPool(cmd *cobra.Command, _ []string) error {
 	if led == nil {
 		return errors.New("ledger not initialised")
 	}
-	loanPool = core.NewLoanPool(logrus.StandardLogger(), led, lpElector{}, &core.LoanPool{})
+	std := log.New(logrus.StandardLogger().Out, "", log.LstdFlags)
+	loanPool = core.NewLoanPool(std, led, lpElector{}, &core.LoanPool{})
 	return nil
 }
 
@@ -58,6 +60,12 @@ func (c *LoanPoolController) Get(id core.Hash) (core.Proposal, bool, error) {
 }
 func (c *LoanPoolController) List(status core.ProposalStatus) ([]core.Proposal, error) {
 	return loanPool.ListProposals(status)
+}
+func (c *LoanPoolController) Cancel(creator string, id core.Hash) error {
+	return loanPool.CancelProposal(id, core.Address(creator))
+}
+func (c *LoanPoolController) Extend(creator string, id core.Hash, hrs int) error {
+	return loanPool.ExtendProposal(id, time.Duration(hrs)*time.Hour, core.Address(creator))
 }
 
 // CLI commands
@@ -148,9 +156,44 @@ var lpListCmd = &cobra.Command{Use: "list", Args: cobra.NoArgs, RunE: func(cmd *
 	return enc.Encode(props)
 }}
 
+var lpCancelCmd = &cobra.Command{Use: "cancel <creator> <id>", Args: cobra.ExactArgs(2), RunE: func(cmd *cobra.Command, args []string) error {
+	ctrl := &LoanPoolController{}
+	b, err := hex.DecodeString(args[1])
+	if err != nil {
+		return err
+	}
+	var h core.Hash
+	copy(h[:], b)
+	return ctrl.Cancel(args[0], h)
+}}
+
+var lpExtendCmd = &cobra.Command{Use: "extend <creator> <id> <hrs>", Args: cobra.ExactArgs(3), RunE: func(cmd *cobra.Command, args []string) error {
+	ctrl := &LoanPoolController{}
+	b, err := hex.DecodeString(args[1])
+	if err != nil {
+		return err
+	}
+	var h core.Hash
+	copy(h[:], b)
+	hrs, err := strconv.Atoi(args[2])
+	if err != nil {
+		return err
+	}
+	return ctrl.Extend(args[0], h, hrs)
+}}
+
 func init() {
 	lpVoteCmd.Flags().Bool("approve", true, "approve or reject")
-	loanCmd.AddCommand(lpSubmitCmd, lpVoteCmd, lpDisburseCmd, lpTickCmd, lpGetCmd, lpListCmd)
+	loanCmd.AddCommand(
+		lpSubmitCmd,
+		lpVoteCmd,
+		lpDisburseCmd,
+		lpTickCmd,
+		lpGetCmd,
+		lpListCmd,
+		lpCancelCmd,
+		lpExtendCmd,
+	)
 }
 
 var LoanCmd = loanCmd

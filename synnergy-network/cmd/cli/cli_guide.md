@@ -244,6 +244,8 @@ needed in custom tooling.
 | `tick` | Process proposals and update cycles. |
 | `get <id>` | Display a single proposal. |
 | `list` | List proposals in the pool. |
+| `cancel <creator> <id>` | Cancel an active proposal. |
+| `extend <creator> <id> <hrs>` | Extend the voting deadline. |
 
 ### network
 

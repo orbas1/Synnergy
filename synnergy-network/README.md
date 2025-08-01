@@ -72,6 +72,7 @@ all modules from the core library. Highlights include:
 - `sidechain` – launch and interact with sidechains
 - `state_channel` – open and settle payment channels
 - `storage` – interact with on‑chain storage providers
+- `loanpool` – submit, vote on and manage loan proposals
 - `tokens` – ERC‑20 style token commands
 - `transactions` – build and sign transactions
 - `utility_functions` – assorted helpers
