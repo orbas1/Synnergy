@@ -128,6 +128,10 @@ var gasTable map[Opcode]uint64
    DistributeRewards:     10_000,
    CalculateWeights:      8_000,
    ComputeThreshold:      6_000,
+   NewConsensusAdaptiveManager: 10_000,
+   ComputeDemand:               2_000,
+   ComputeStakeConcentration:   2_000,
+   AdjustConsensus:             5_000,
 
    // ----------------------------------------------------------------------
    // Contracts (WASM / EVM‐compat)
@@ -686,24 +690,28 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// Consensus Core
 	// ----------------------------------------------------------------------
-	"Pick":                  2_000,
-	"Broadcast":             5_000,
-	"Subscribe":             1_500,
-	"Sign":                  3_000, // shared with Security & Tx
-	"Verify":                3_500, // shared with Security & Tx
-	"ValidatorPubKey":       800,
-	"StakeOf":               1_000,
-	"LoanPoolAddress":       800,
-	"Hash":                  600, // shared with Replication
-	"SerializeWithoutNonce": 1_200,
-	"NewConsensus":          25_000,
-	"Start":                 5_000,
-	"ProposeSubBlock":       15_000,
-	"ValidatePoH":           20_000,
-	"SealMainBlockPOW":      60_000,
-	"DistributeRewards":     10_000,
-	"CalculateWeights":      8_000,
-	"ComputeThreshold":      6_000,
+	"Pick":                        2_000,
+	"Broadcast":                   5_000,
+	"Subscribe":                   1_500,
+	"Sign":                        3_000, // shared with Security & Tx
+	"Verify":                      3_500, // shared with Security & Tx
+	"ValidatorPubKey":             800,
+	"StakeOf":                     1_000,
+	"LoanPoolAddress":             800,
+	"Hash":                        600, // shared with Replication
+	"SerializeWithoutNonce":       1_200,
+	"NewConsensus":                25_000,
+	"Start":                       5_000,
+	"ProposeSubBlock":             15_000,
+	"ValidatePoH":                 20_000,
+	"SealMainBlockPOW":            60_000,
+	"DistributeRewards":           10_000,
+	"CalculateWeights":            8_000,
+	"ComputeThreshold":            6_000,
+	"NewConsensusAdaptiveManager": 10_000,
+	"ComputeDemand":               2_000,
+	"ComputeStakeConcentration":   2_000,
+	"AdjustConsensus":             5_000,
 
 	// ----------------------------------------------------------------------
 	// Contracts (WASM / EVM‐compat)

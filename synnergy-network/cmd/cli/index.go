@@ -12,6 +12,7 @@ func RegisterRoutes(root *cobra.Command) {
 	root.AddCommand(
 		NetworkCmd,
 		ConsensusCmd,
+		AdaptiveCmd,
 		TokensCmd,
 		CoinCmd,
 		ContractsCmd,

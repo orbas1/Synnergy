@@ -183,6 +183,10 @@ var catalogue = []struct {
 	{"DistributeRewards", 0x070010},
 	{"CalculateWeights", 0x070011},
 	{"ComputeThreshold", 0x070012},
+	{"NewConsensusAdaptiveManager", 0x070013},
+	{"ComputeDemand", 0x070014},
+	{"ComputeStakeConcentration", 0x070015},
+	{"AdjustConsensus", 0x070016},
 
 	// Contracts (0x08)
 	{"InitContracts", 0x080001},
