@@ -175,18 +175,16 @@ func wrap(name string) OpcodeFunc {
 //	                                 0x1E Gaming
 //	0x1E Assets//				0x1E Event
 
-
-//
 // Each binary code is shown as a 24-bit big-endian string.
 var catalogue = []struct {
 	name string
 	op   Opcode
 }{
-       // AI (0x01)
-       {"DeployAIContract", 0x010001},
-       {"InvokeAIContract", 0x010002},
-       {"UpdateAIModel", 0x010003},
-       {"GetAIModel", 0x010004},
+	// AI (0x01)
+	{"DeployAIContract", 0x010001},
+	{"InvokeAIContract", 0x010002},
+	{"UpdateAIModel", 0x010003},
+	{"GetAIModel", 0x010004},
 	{"StartTraining", 0x010001},
 	{"TrainingStatus", 0x010002},
 	{"ListTrainingJobs", 0x010003},
@@ -210,15 +208,12 @@ var catalogue = []struct {
 	{"InferModel", 0x010001},
 	{"AnalyseTransactions", 0x010002},
 
-	// AMM (0x02)
 	{"SwapExactIn", 0x020001},
 	{"AMM_AddLiquidity", 0x020002},
 	{"AMM_RemoveLiquidity", 0x020003},
 	{"Quote", 0x020004},
 	{"AllPairs", 0x020005},
 	{"InitPoolsFromFile", 0x020006},
-
-	// Authority (0x03)
 	{"NewAuthoritySet", 0x030001},
 	{"RecordVote", 0x030002},
 	{"RegisterCandidate", 0x030003},
@@ -233,8 +228,6 @@ var catalogue = []struct {
 	{"FinalizeApplication", 0x03000C},
 	{"GetApplication", 0x03000D},
 	{"ListApplications", 0x03000E},
-
-	// Charity (0x04)
 	{"NewCharityPool", 0x040001},
 	{"Charity_Deposit", 0x040002},
 	{"Charity_Register", 0x040003},
@@ -245,16 +238,12 @@ var catalogue = []struct {
 	{"Charity_Donate", 0x040008},
 	{"Charity_WithdrawInternal", 0x040009},
 	{"Charity_Balances", 0x04000A},
-
-	// Coin (0x05)
 	{"NewCoin", 0x050001},
 	{"Coin_Mint", 0x050002},
 	{"Coin_TotalSupply", 0x050003},
 	{"Coin_BalanceOf", 0x050004},
 	{"Coin_Transfer", 0x050005},
 	{"Coin_Burn", 0x050006},
-
-	// Compliance (0x06)
 	{"InitCompliance", 0x060001},
 	{"Compliance_ValidateKYC", 0x060002},
 	{"EraseData", 0x060003},
@@ -277,8 +266,6 @@ var catalogue = []struct {
 	{"Compliance_ReviewTx", 0x060010},
 	{"AnalyzeAnomaly", 0x060009},
 	{"FlagAnomalyTx", 0x06000A},
-
-	// Consensus (0x07)
 	{"Pick", 0x070001},
 	{"Consensus_Broadcast", 0x070002},
 	{"Consensus_Subscribe", 0x070003},
@@ -315,8 +302,6 @@ var catalogue = []struct {
 	{"GetValidator", 0x070018},
 	{"ListValidators", 0x070019},
 	{"IsValidator", 0x07001A},
-
-	// Contracts (0x08)
 	{"InitContracts", 0x080001},
 	{"CompileWASM", 0x080002},
 	{"Invoke", 0x080003},
@@ -326,8 +311,6 @@ var catalogue = []struct {
 	{"ResumeContract", 0x080007},
 	{"UpgradeContract", 0x080008},
 	{"ContractInfo", 0x080009},
-
-	// Cross-Chain (0x09)
 	{"RegisterBridge", 0x090001},
 	{"AssertRelayer", 0x090002},
 	{"Iterator", 0x090003},
@@ -354,8 +337,6 @@ var catalogue = []struct {
 	{"CompleteBridgeTransfer", 0x090008},
 	{"GetBridgeTransfer", 0x090009},
 	{"ListBridgeTransfers", 0x09000A},
-
-	// Data (0x0A)
 	{"RegisterNode", 0x0A0001},
 	{"UploadAsset", 0x0A0002},
 	{"Data_Pin", 0x0A0003},
@@ -393,8 +374,6 @@ var catalogue = []struct {
 	{"StoreManagedData", 0x0A000C},
 	{"LoadManagedData", 0x0A000D},
 	{"DeleteManagedData", 0x0A000E},
-
-	// Fault-Tolerance (0x0B)
 	{"NewHealthChecker", 0x0B0001},
 	{"AddPeer", 0x0B0002},
 	{"RemovePeer", 0x0B0003},
@@ -420,8 +399,6 @@ var catalogue = []struct {
 	{"HA_List", 0x0B0011},
 	{"HA_Sync", 0x0B0012},
 	{"HA_Promote", 0x0B0013},
-
-	// Governance (0x0C)
 	{"UpdateParam", 0x0C0001},
 	{"ProposeChange", 0x0C0002},
 	{"VoteChange", 0x0C0003},
@@ -473,8 +450,6 @@ var catalogue = []struct {
 	{"LeaveDAO", 0x0C000D},
 	{"DAOInfo", 0x0C000E},
 	{"ListDAOs", 0x0C000F},
-
-	// GreenTech (0x0D)
 	{"InitGreenTech", 0x0D0001},
 	{"Green", 0x0D0002},
 	{"RecordUsage", 0x0D0003},
@@ -483,8 +458,6 @@ var catalogue = []struct {
 	{"CertificateOf", 0x0D0006},
 	{"ShouldThrottle", 0x0D0007},
 	{"ListCertificates", 0x0D0008},
-
-	// Ledger (0x0E)
 	{"NewLedger", 0x0E0001},
 	{"GetPendingSubBlocks", 0x0E0002},
 	{"LastBlockHash", 0x0E0003},
@@ -520,8 +493,6 @@ var catalogue = []struct {
 	{"Account_Delete", 0x0E001D},
 	{"Account_Balance", 0x0E001E},
 	{"Account_Transfer", 0x0E001F},
-
-	// Liquidity (0x0F)
 	{"InitAMM", 0x0F0001},
 	{"Manager", 0x0F0002},
 	{"CreatePool", 0x0F0003},
@@ -530,8 +501,6 @@ var catalogue = []struct {
 	{"Liquidity_RemoveLiquidity", 0x0F0006},
 	{"Liquidity_Pool", 0x0F0007},
 	{"Liquidity_Pools", 0x0F0008},
-
-	// Loanpool (0x10)
 	{"Loanpool_RandomElectorate", 0x100001},
 	{"Loanpool_IsAuthority", 0x100002},
 	{"Loanpool_init", 0x100003},
@@ -563,8 +532,6 @@ var catalogue = []struct {
 	{"LoanApply_Disburse", 0x100010},
 	{"LoanApply_Get", 0x100011},
 	{"LoanApply_List", 0x100012},
-
-	// Network (0x11)
 	{"NewNode", 0x110001},
 	{"HandlePeerFound", 0x110002},
 	{"DialSeed", 0x110003},
@@ -592,8 +559,6 @@ var catalogue = []struct {
 	{"AdvertiseSelf", 0x110010},
 	{"StartDevNet", 0x11000D},
 	{"StartTestNet", 0x11000E},
-
-	// Replication (0x12)
 	{"NewReplicator", 0x120001},
 	{"ReplicateBlock", 0x120002},
 	{"Replication_Hash", 0x120003},
@@ -609,8 +574,6 @@ var catalogue = []struct {
 	{"Sync_Stop", 0x12000A},
 	{"Sync_Status", 0x12000B},
 	{"SyncOnce", 0x12000C},
-
-	// Rollups (0x13)
 	{"NewAggregator", 0x130001},
 	{"SubmitBatch", 0x130002},
 	{"SubmitFraudProof", 0x130003},
@@ -622,8 +585,6 @@ var catalogue = []struct {
 	{"PauseAggregator", 0x130009},
 	{"ResumeAggregator", 0x13000A},
 	{"AggregatorStatus", 0x13000B},
-
-	// Security (0x14)
 	{"Security_Sign", 0x140001},
 	{"Security_Verify", 0x140002},
 	{"AggregateBLSSigs", 0x140003},
@@ -641,8 +602,6 @@ var catalogue = []struct {
 	{"BuildMerkleTree", 0x14000F},
 	{"MerkleProof", 0x140010},
 	{"VerifyMerklePath", 0x140011},
-
-	// Sharding (0x15)
 	{"NewShardCoordinator", 0x150001},
 	{"SetLeader", 0x150002},
 	{"Leader", 0x150003},
@@ -657,8 +616,6 @@ var catalogue = []struct {
 	{"HorizontalPartition", 0x15000C},
 	{"CompressData", 0x15000D},
 	{"DecompressData", 0x15000E},
-
-	// Sidechains (0x16)
 	{"InitSidechains", 0x160001},
 	{"Sidechains", 0x160002},
 	{"Sidechains_Register", 0x160003},
@@ -674,8 +631,6 @@ var catalogue = []struct {
 	{"ResumeSidechain", 0x16000D},
 	{"UpdateSidechainValidators", 0x16000E},
 	{"RemoveSidechain", 0x16000F},
-
-	// StateChannel (0x17)
 	{"InitStateChannels", 0x170001},
 	{"Channels", 0x170002},
 	{"OpenChannel", 0x170003},
@@ -689,8 +644,6 @@ var catalogue = []struct {
 	{"ResumeChannel", 0x17000B},
 	{"CancelClose", 0x17000C},
 	{"ForceClose", 0x17000D},
-
-	// Storage (0x18)
 	{"NewStorage", 0x180001},
 	{"Storage_Pin", 0x180002},
 	{"Storage_Retrieve", 0x180003},
@@ -707,8 +660,6 @@ var catalogue = []struct {
 	{"IPFS_Add", 0x18000E},
 	{"IPFS_Get", 0x18000F},
 	{"IPFS_Unpin", 0x180010},
-
-	// Tokens (0x19)
 	{"ID", 0x190001},
 	{"Meta", 0x190002},
 	{"Tokens_BalanceOf", 0x190003},
@@ -742,8 +693,6 @@ var catalogue = []struct {
 	{"TokenManager_Burn", 0x19001F},
 	{"TokenManager_Approve", 0x190020},
 	{"TokenManager_BalanceOf", 0x190021},
-
-	// Transactions (0x1A)
 	{"Tx_Sign", 0x1A0001},
 	{"VerifySig", 0x1A0002},
 	{"ValidateTx", 0x1A0003},
@@ -761,8 +710,6 @@ var catalogue = []struct {
 	{"ReverseTransaction", 0x1A0008},
 	{"NewTxDistributor", 0x1A0008},
 	{"DistributeFees", 0x1A0009},
-
-	// Utilities (0x1B) – EVM-compatible arithmetic & crypto
 	{"Short", 0x1B0001},
 	{"BytesToAddress", 0x1B0002},
 	{"Pop", 0x1B0003},
@@ -846,8 +793,6 @@ var catalogue = []struct {
 	{"Utilities_Transfer", 0x1B0051},
 	{"Utilities_Mint", 0x1B0052},
 	{"Utilities_Burn", 0x1B0053},
-
-	// Virtual Machine (0x1C)
 	{"VM_Burn", 0x1C0001},
 	{"BurnLP", 0x1C0002},
 	{"MintLP", 0x1C0003},
@@ -900,51 +845,39 @@ var catalogue = []struct {
 	{"VM_SandboxReset", 0x1C0032},
 	{"VM_SandboxStatus", 0x1C0033},
 	{"VM_SandboxList", 0x1C0034},
-
-	// Wallet (0x1D)
 	{"NewRandomWallet", 0x1D0001},
 	{"WalletFromMnemonic", 0x1D0002},
 	{"NewHDWalletFromSeed", 0x1D0003},
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
-
-	// CrossConsensus (0x1E)
 	{"RegisterCCSNetwork", 0x1E0001},
 	{"ListCCSNetworks", 0x1E0002},
 	{"GetCCSNetwork", 0x1E0003},
 	{"CCSLockAndTransfer", 0x1E0004},
 	{"CCSBurnAndRelease", 0x1E0005},
-	// AccessControl (0x1E)
 	{"GrantRole", 0x1E0001},
 	{"RevokeRole", 0x1E0002},
 	{"HasRole", 0x1E0003},
 	{"ListRoles", 0x1E0004},
-	// Identity (0x1E)
 	{"RegisterIdentity", 0x1E0001},
 	{"VerifyIdentity", 0x1E0002},
 	{"RemoveIdentity", 0x1E0003},
 	{"ListIdentities", 0x1E0004},
-
-	// Geolocation (0x1E)
 	{"RegisterLocation", 0x1E0001},
 	{"GetLocation", 0x1E0002},
 	{"ListLocations", 0x1E0003},
 	{"NodesInRadius", 0x1E0004},
-	// ConnPool (0x1E)
 	{"NewConnPool", 0x1E0001},
 	{"AcquireConn", 0x1E0002},
 	{"ReleaseConn", 0x1E0003},
 	{"ClosePool", 0x1E0004},
 	{"PoolStats", 0x1E0005},
-	// Coordination (0x1E)
 	{"NewCoordinator", 0x1E0001},
 	{"StartCoordinator", 0x1E0002},
 	{"StopCoordinator", 0x1E0003},
 	{"BroadcastLedgerHeight", 0x1E0004},
 	{"DistributeToken", 0x1E0005},
-
-	// Firewall (0x1E)
 	{"NewFirewall", 0x1E0001},
 	{"Firewall_BlockAddress", 0x1E0002},
 	{"Firewall_UnblockAddress", 0x1E0003},
@@ -957,7 +890,6 @@ var catalogue = []struct {
 	{"Firewall_IsIPBlocked", 0x1E000A},
 	{"Firewall_ListRules", 0x1E000B},
 	{"Firewall_CheckTx", 0x1E000C},
-	// Messaging (0x1E)
 	{"NewMessageQueue", 0x1E0001},
 	{"EnqueueMessage", 0x1E0002},
 	{"DequeueMessage", 0x1E0003},
@@ -965,45 +897,33 @@ var catalogue = []struct {
 	{"ProcessNextMessage", 0x1E0005},
 	{"QueueLength", 0x1E0006},
 	{"ClearQueue", 0x1E0007},
-	// RPC (0x1E)
 	{"NewRPCWebRTC", 0x1E0001},
 	{"RPC_Serve", 0x1E0002},
 	{"RPC_Close", 0x1E0003},
 	{"RPC_ConnectPeer", 0x1E0004},
 	{"RPC_Broadcast", 0x1E0005},
-	// Plasma (0x1E)
 	{"InitPlasma", 0x1E0001},
 	{"Plasma_Deposit", 0x1E0002},
 	{"Plasma_StartExit", 0x1E0003},
 	{"Plasma_FinalizeExit", 0x1E0004},
 	{"Plasma_GetExit", 0x1E0005},
 	{"Plasma_ListExits", 0x1E0006},
-	{"InitPlasma", 0x1E0001},
-	{"Plasma_Deposit", 0x1E0002},
 	{"Plasma_Withdraw", 0x1E0003},
 	{"Plasma_SubmitBlock", 0x1E0004},
 	{"Plasma_GetBlock", 0x1E0005},
-
-	// Resource Management (0x1E)
 	{"SetQuota", 0x1E0001},
 	{"GetQuota", 0x1E0002},
 	{"ChargeResources", 0x1E0003},
 	{"ReleaseResources", 0x1E0004},
-
-	// Distribution (0x1E)
 	{"NewDistributor", 0x1E0001},
 	{"BatchTransfer", 0x1E0002},
 	{"Airdrop", 0x1E0003},
 	{"DistributeEven", 0x1E0004},
-  
-  // Smart-legal contract (0x1D)
 	{"Legal_Register", 0x1E0001},
 	{"Legal_Sign", 0x1E0002},
 	{"Legal_Revoke", 0x1E0003},
 	{"Legal_Info", 0x1E0004},
 	{"Legal_List", 0x1E0005},
-
-	// CarbonCredit (0x1E)
 	{"InitCarbonEngine", 0x1E0001},
 	{"Carbon", 0x1E0002},
 	{"RegisterProject", 0x1E0003},
@@ -1011,14 +931,12 @@ var catalogue = []struct {
 	{"RetireCredits", 0x1E0005},
 	{"ProjectInfo", 0x1E0006},
 	{"ListProjects", 0x1E0007},
-	// EnergyEfficiency (0x1E)
 	{"InitEnergyEfficiency", 0x1E0001},
 	{"EnergyEff", 0x1E0002},
 	{"RecordStats", 0x1E0003},
 	{"EfficiencyOf", 0x1E0004},
 	{"NetworkAverage", 0x1E0005},
 	{"ListEfficiency", 0x1E0006},
-	// ResourceMarket (0x1E)
 	{"ListResource", 0x1E0001},
 	{"OpenResourceDeal", 0x1E0002},
 	{"CloseResourceDeal", 0x1E0003},
@@ -1026,12 +944,10 @@ var catalogue = []struct {
 	{"ListResourceListings", 0x1E0005},
 	{"GetResourceDeal", 0x1E0006},
 	{"ListResourceDeals", 0x1E0007},
-	// Finalization (0x1E)
 	{"NewFinalizationManager", 0x1E0001},
 	{"FinalizeBlock", 0x1E0002},
 	{"FinalizeBatchManaged", 0x1E0003},
 	{"FinalizeChannelManaged", 0x1E0004},
-	// DeFi (0x1E)
 	{"DeFi_CreateInsurance", 0x1E0001},
 	{"DeFi_ClaimInsurance", 0x1E0002},
 	{"DeFi_PlaceBet", 0x1E0003},
@@ -1050,7 +966,7 @@ var catalogue = []struct {
 	{"DeFi_CreateSynthetic", 0x1E0010},
 	{"DeFi_MintSynthetic", 0x1E0011},
 	{"DeFi_BurnSynthetic", 0x1E0012},
-   {"RegisterIDWallet", 0x1D0007},
+	{"RegisterIDWallet", 0x1D0007},
 	{"IsIDWalletRegistered", 0x1D0008},
 	{"NewOffChainWallet", 0x1D0007},
 	{"OffChainWalletFromMnemonic", 0x1D0008},
@@ -1060,68 +976,42 @@ var catalogue = []struct {
 	{"BroadcastSignedTx", 0x1D000C},
 	{"RegisterRecovery", 0x1D0007},
 	{"RecoverAccount", 0x1D0008},
-
-	// BinaryTree (0x1E)
 	{"BinaryTreeNew", 0x1E0001},
 	{"BinaryTreeInsert", 0x1E0002},
 	{"BinaryTreeSearch", 0x1E0003},
 	{"BinaryTreeDelete", 0x1E0004},
 	{"BinaryTreeInOrder", 0x1E0005},
-  
-	// Regulatory (0x1E)
 	{"InitRegulatory", 0x1E0001},
 	{"RegisterRegulator", 0x1E0002},
 	{"GetRegulator", 0x1E0003},
 	{"ListRegulators", 0x1E0004},
 	{"EvaluateRuleSet", 0x1E0005},
-
-
-
-	// Polls Management (0x1E)
 	{"CreatePoll", 0x1E0001},
 	{"VotePoll", 0x1E0002},
 	{"ClosePoll", 0x1E0003},
 	{"GetPoll", 0x1E0004},
 	{"ListPolls", 0x1E0005},
-
-   
-
-	// Feedback (0x1E)
 	{"InitFeedback", 0x1E0001},
 	{"Feedback_Submit", 0x1E0002},
 	{"Feedback_Get", 0x1E0003},
 	{"Feedback_List", 0x1E0004},
 	{"Feedback_Reward", 0x1E0005},
- 
-
-	// Forum (0x1E)
 	{"Forum_CreateThread", 0x1E0001},
 	{"Forum_GetThread", 0x1E0002},
 	{"Forum_ListThreads", 0x1E0003},
 	{"Forum_AddComment", 0x1E0004},
 	{"Forum_ListComments", 0x1E0005},
- 
-	// Compression (0x1E)
 	{"CompressLedger", 0x1E0001},
 	{"DecompressLedger", 0x1E0002},
 	{"SaveCompressedSnapshot", 0x1E0003},
 	{"LoadCompressedSnapshot", 0x1E0004},
-
-
-	// Biometrics (0x1E)
 	{"Bio_Enroll", 0x1E0001},
 	{"Bio_Verify", 0x1E0002},
 	{"Bio_Delete", 0x1E0003},
-
-  
-	// SystemHealth (0x1E)
 	{"NewHealthLogger", 0x1E0001},
 	{"MetricsSnapshot", 0x1E0002},
 	{"LogEvent", 0x1E0003},
 	{"RotateLogs", 0x1E0004},
-	
-
-	// Swarm (0x1E)
 	{"NewSwarm", 0x1E0001},
 	{"Swarm_AddNode", 0x1E0002},
 	{"Swarm_RemoveNode", 0x1E0003},
@@ -1129,62 +1019,42 @@ var catalogue = []struct {
 	{"Swarm_Start", 0x1E0005},
 	{"Swarm_Stop", 0x1E0006},
 	{"Swarm_Peers", 0x1E0007},
-	// Plasma (0x1E)
-	{"InitPlasma", 0x1E0001},
-	{"Plasma_Deposit", 0x1E0002},
-	{"Plasma_Withdraw", 0x1E0003},
-  // Workflows (0x1E)
 	{"NewWorkflow", 0x1E0001},
 	{"AddWorkflowAction", 0x1E0002},
 	{"SetWorkflowTrigger", 0x1E0003},
 	{"SetWebhook", 0x1E0004},
 	{"ExecuteWorkflow", 0x1E0005},
 	{"ListWorkflows", 0x1E0006},
-   {"CreateWallet", 0x1D0007},
+	{"CreateWallet", 0x1D0007},
 	{"ImportWallet", 0x1D0008},
 	{"WalletBalance", 0x1D0009},
 	{"WalletTransfer", 0x1D000A},
-  
-	// Sensors (0x1E)
 	{"RegisterSensor", 0x1E0001},
 	{"GetSensor", 0x1E0002},
 	{"ListSensors", 0x1E0003},
 	{"UpdateSensorValue", 0x1E0004},
 	{"PollSensor", 0x1E0005},
 	{"TriggerWebhook", 0x1E0006},
-
-  
-	// Real Estate (0x1D)
 	{"RegisterProperty", 0x1E0001},
 	{"TransferProperty", 0x1E0002},
 	{"GetProperty", 0x1E0003},
 	{"ListProperties", 0x1E0004},
-
- 
-
-	// Event (0x1E)
 	{"InitEvents", 0x1E0001},
 	{"EmitEvent", 0x1E0002},
 	{"GetEvent", 0x1E0003},
 	{"ListEvents", 0x1E0004},
-
-  
-
-	// Employment (0x1E)
 	{"InitEmployment", 0x1E0001},
 	{"CreateJob", 0x1E0002},
 	{"SignJob", 0x1E0003},
 	{"RecordWork", 0x1E0004},
 	{"PaySalary", 0x1E0005},
 	{"GetJob", 0x1E0006},
-	// Escrow (0x1E)
 	{"Escrow_Create", 0x1E0001},
 	{"Escrow_Deposit", 0x1E0002},
 	{"Escrow_Release", 0x1E0003},
 	{"Escrow_Cancel", 0x1E0004},
 	{"Escrow_Get", 0x1E0005},
 	{"Escrow_List", 0x1E0006},
-	// Marketplace (0x1E)
 	{"CreateMarketListing", 0x1E0001},
 	{"PurchaseItem", 0x1E0002},
 	{"CancelListing", 0x1E0003},
@@ -1193,45 +1063,34 @@ var catalogue = []struct {
 	{"ListMarketListings", 0x1E0006},
 	{"GetMarketDeal", 0x1E0007},
 	{"ListMarketDeals", 0x1E0008},
-	// Faucet (0x1E)
 	{"NewFaucet", 0x1E0001},
 	{"Faucet_Request", 0x1E0002},
 	{"Faucet_Balance", 0x1E0003},
 	{"Faucet_SetAmount", 0x1E0004},
 	{"Faucet_SetCooldown", 0x1E0005},
-  // Supply Chain (0x1E)
-  {"RegisterItem", 0x1E0001},
+	{"RegisterItem", 0x1E0001},
 	{"UpdateLocation", 0x1E0002},
 	{"MarkStatus", 0x1E0003},
 	{"GetItem", 0x1E0004},
-
-	// Healthcare (0x1E)
 	{"InitHealthcare", 0x1E0001},
 	{"RegisterPatient", 0x1E0002},
 	{"AddHealthRecord", 0x1E0003},
 	{"GrantAccess", 0x1E0004},
 	{"RevokeAccess", 0x1E0005},
 	{"ListHealthRecords", 0x1E0006},
-
-  // Tangible (0x1E)
 	{"Assets_Register", 0x1E0001},
 	{"Assets_Transfer", 0x1E0002},
 	{"Assets_Get", 0x1E0003},
 	{"Assets_List", 0x1E0004},
-
-	// Immutability (0x1E)
 	{"InitImmutability", 0x1E0001},
 	{"VerifyChain", 0x1E0002},
 	{"RestoreChain", 0x1E0003},
-	// Warehouse (0x1E)
 	{"Warehouse_New", 0x1E0001},
 	{"Warehouse_AddItem", 0x1E0002},
 	{"Warehouse_RemoveItem", 0x1E0003},
 	{"Warehouse_MoveItem", 0x1E0004},
 	{"Warehouse_ListItems", 0x1E0005},
 	{"Warehouse_GetItem", 0x1E0006},
-
-	// Gaming (0x1E)
 	{"CreateGame", 0x1E0001},
 	{"JoinGame", 0x1E0002},
 	{"FinishGame", 0x1E0003},
