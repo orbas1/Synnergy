@@ -31,6 +31,7 @@ At a high level the network consists of:
 4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
 5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
 6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
+7. **Swarm Manager** – Coordinates multiple nodes as a high-availability cluster.
 Each layer is intentionally separated so enterprises can replace components as needed (e.g., swap the consensus engine or choose a different storage back end).
 
 ## Synthron Coin
@@ -76,6 +77,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `sharding` – Split the ledger into shards and coordinate cross-shard messages.
 - `sidechain` – Launch or interact with auxiliary chains.
 - `state_channel` – Open and settle payment channels.
+- `swarm` – Coordinate multiple nodes as a cluster.
 - `storage` – Manage off-chain storage deals.
 - `sensor` – Integrate external sensors and trigger webhooks.
 - `real_estate` – Tokenise and trade real-world property.

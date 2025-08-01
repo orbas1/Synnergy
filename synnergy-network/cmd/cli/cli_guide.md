@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **sharding** – Migrate data between shards and check shard status.
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
+- **swarm** – Manage groups of nodes running together.
 - **storage** – Configure the backing key/value store and inspect content.
 - **sensor** – Manage external sensor inputs and webhooks.
 - **real_estate** – Manage tokenised real estate assets.
@@ -503,6 +504,17 @@ needed in custom tooling.
 | `start` | Start the VM HTTP daemon. |
 | `stop` | Stop the VM daemon. |
 | `status` | Show daemon status. |
+
+### swarm
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <id> <addr>` | Add a node to the swarm. |
+| `remove <id>` | Remove a node from the swarm. |
+| `broadcast <tx.json>` | Broadcast a transaction to all nodes. |
+| `peers` | List nodes currently in the swarm. |
+| `start` | Start consensus for the swarm. |
+| `stop` | Stop all nodes and consensus. |
 
 ### wallet
 
