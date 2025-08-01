@@ -827,7 +827,7 @@ func (ctx *Context) Gas(amount uint64) error {
 type Registry struct {
 	mu      sync.RWMutex
 	Entries map[string][]byte
-	tokens  map[TokenID]*BaseToken
+	tokens  map[TokenID]Token
 }
 
 type BalanceTable struct {
