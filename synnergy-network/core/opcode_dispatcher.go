@@ -96,21 +96,24 @@ func wrap(name string) OpcodeFunc {
 //
 // Category map:
 //
-//	0x01 AI                     0x0F Liquidity
-//	0x02 AMM                    0x10 Loanpool
-//	0x03 Authority              0x11 Network
-//	0x04 Charity                0x12 Replication
-//	0x05 Coin                   0x13 Rollups
-//	0x06 Compliance             0x14 Security
-//	0x07 Consensus              0x15 Sharding
-//	0x08 Contracts              0x16 Sidechains
-//	0x09 CrossChain             0x17 StateChannel
-//	0x0A Data                   0x18 Storage
-//	0x0B FaultTolerance         0x19 Tokens
-//	0x0C Governance             0x1A Transactions
-//	0x0D GreenTech              0x1B Utilities
-//	0x0E Ledger                 0x1C VirtualMachine
-//	                            0x1D Wallet
+//		0x01 AI                     0x0F Liquidity
+//		0x02 AMM                    0x10 Loanpool
+//		0x03 Authority              0x11 Network
+//		0x04 Charity                0x12 Replication
+//		0x05 Coin                   0x13 Rollups
+//		0x06 Compliance             0x14 Security
+//		0x07 Consensus              0x15 Sharding
+//		0x08 Contracts              0x16 Sidechains
+//		0x09 CrossChain             0x17 StateChannel
+//		0x0A Data                   0x18 Storage
+//		0x0B FaultTolerance         0x19 Tokens
+//		0x0C Governance             0x1A Transactions
+//		0x0D GreenTech              0x1B Utilities
+//		0x0E Ledger                 0x1C VirtualMachine
+//		                            0x1D Wallet
+//	                                 0x1E Immutability
+//	                                 0x1E Warehouse
+//	                                 0x1E Gaming
 //	0x1E Assets
 //
 // Each binary code is shown as a 24-bit big-endian string.
@@ -582,10 +585,31 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+  // Tangible (0x1E)
 	{"Assets_Register", 0x1E0001},
 	{"Assets_Transfer", 0x1E0002},
 	{"Assets_Get", 0x1E0003},
 	{"Assets_List", 0x1E0004},
+
+	// Immutability (0x1E)
+	{"InitImmutability", 0x1E0001},
+	{"VerifyChain", 0x1E0002},
+	{"RestoreChain", 0x1E0003},
+	// Warehouse (0x1E)
+	{"Warehouse_New", 0x1E0001},
+	{"Warehouse_AddItem", 0x1E0002},
+	{"Warehouse_RemoveItem", 0x1E0003},
+	{"Warehouse_MoveItem", 0x1E0004},
+	{"Warehouse_ListItems", 0x1E0005},
+	{"Warehouse_GetItem", 0x1E0006},
+
+	// Gaming (0x1E)
+	{"CreateGame", 0x1E0001},
+	{"JoinGame", 0x1E0002},
+	{"FinishGame", 0x1E0003},
+	{"GetGame", 0x1E0004},
+	{"ListGames", 0x1E0005},
 }
 
 // init wires the catalogue into the live dispatcher.

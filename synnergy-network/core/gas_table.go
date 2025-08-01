@@ -607,6 +607,13 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+
+   // ----------------------------------------------------------------------
+   // Immutability Enforcement
+   // ----------------------------------------------------------------------
+   InitImmutability: 8_000,
+   VerifyChain:     4_000,
+   RestoreChain:    6_000,
 */
 
 // gasNames holds the gas cost associated with each opcode name. During init()
@@ -1180,14 +1187,38 @@ var gasNames = map[string]uint64{
 	"ExecuteHeavy":      2_000,
 
 	// ----------------------------------------------------------------------
+	// Gaming
+	// ----------------------------------------------------------------------
+	"CreateGame": 8_000,
+	"JoinGame":   4_000,
+	"FinishGame": 6_000,
+	"GetGame":    1_000,
+	"ListGames":  2_000,
+
+	// ----------------------------------------------------------------------
 	// Wallet / Key-Management
 	// ----------------------------------------------------------------------
-	"NewRandomWallet":     10_000,
-	"WalletFromMnemonic":  5_000,
-	"NewHDWalletFromSeed": 6_000,
-	"PrivateKey":          400,
-	"NewAddress":          500,
-	"SignTx":              3_000,
+
+
+"NewRandomWallet":      10_000,
+	"WalletFromMnemonic":   5_000,
+	"NewHDWalletFromSeed":  6_000,
+	"PrivateKey":           400,
+	"NewAddress":           500,
+	"SignTx":               3_000,
+	"Warehouse_New":        10_000,
+	"Warehouse_AddItem":    2_000,
+	"Warehouse_RemoveItem": 2_000,
+	"Warehouse_MoveItem":   2_000,
+	"Warehouse_ListItems":  1_000,
+	"Warehouse_GetItem":    1_000,
+
+	// ---------------------------------------------------------------------
+	// Immutability Enforcement
+	// ---------------------------------------------------------------------
+	"InitImmutability": 8_000,
+	"VerifyChain":      4_000,
+	"RestoreChain":     6_000,
 }
 
 func init() {
