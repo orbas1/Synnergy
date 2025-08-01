@@ -18,7 +18,12 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+	Tokens "synnergy-network/core/Tokens"
 )
+
+// Static check to ensure token interfaces are available
+// Reference to TokenInterfaces for package usage
+var _ Tokens.TokenInterfaces
 
 // -----------------------------------------------------------------------------
 // Address helper (our 20-byte address type ↔ go-ethereum common.Address)
@@ -112,6 +117,11 @@ func (tx *Transaction) VerifySig() error {
 func (tp *TxPool) ValidateTx(tx *Transaction) error {
 	if err := tx.VerifySig(); err != nil {
 		return err
+	}
+	if fw := CurrentFirewall(); fw != nil {
+		if err := fw.CheckTx(tx); err != nil {
+			return err
+		}
 	}
 	// … other checks omitted …
 
@@ -242,7 +252,6 @@ func (tp *TxPool) AddTx(tx *Transaction) error {
 
 	tp.lookup[tx.Hash] = tx
 	tp.queue = append(tp.queue, tx)
-
 
 	if len(tp.net.peers) > 0 {
 		if data, err := json.Marshal(tx); err == nil {
