@@ -1,45 +1,172 @@
 # Synnergy Script Guide
 
-The `start_synnergy_network.sh` script builds the `synnergy` CLI and boots the
-core daemons using the commands provided by the CLI packages.  It also runs a
-sample security command.
+This guide documents the utility scripts located in `cmd/scripts`. Each script wraps common `synnergy` CLI commands to showcase typical workflows and to help automate repetitive tasks during development. A working Go toolchain and the compiled `synnergy` binary are required.
+
+## Prerequisites
+
+1. Run `./setup_synn.sh` to install Go and fetch project dependencies.
+2. Optionally execute `./Synnergy.env.sh` to configure additional environment variables and tools.
+3. Build the CLI with `./build_cli.sh` or by invoking `go build -o synnergy ./cmd/synnergy` from the `synnergy-network` directory.
+
+## Running the Demo Network
+
+The `start_synnergy_network.sh` script launches a small local network and demonstrates basic commands:
 
 ```bash
 ./start_synnergy_network.sh
 ```
 
-This will:
+This script performs the following steps:
 
-1. Compile the CLI from `cmd/synnergy/main.go`.
-2. Start the networking, consensus, replication and VM services.
-3. Run a demo `~sec merkle` command.
-4. Wait until the services exit (Ctrl+C to terminate).
+1. Compiles the CLI from `cmd/synnergy/main.go`.
+2. Starts the networking, consensus, replication and VM services in the background.
+3. Executes a sample `~sec merkle` command against demo data to show the security module.
+4. Waits until you press `Ctrl+C`, then terminates all services.
 
-Ensure that the Go toolchain is available in your `PATH` before running the
-script.
+Ensure the `synnergy` binary is present in the working directory and that `go` is on your `PATH` before running the demo.
 
-## Additional Example Scripts
+## Script Reference
 
-The following bash scripts demonstrate how to invoke various CLI modules. Each assumes the `synnergy` binary has been built in this directory using `build_cli.sh`.
+The files below illustrate how to invoke individual command groups. Arguments in square brackets are optional and default values are taken from each script.
 
-- `build_cli.sh` – compile the CLI binary.
-- `network_start.sh` – start the networking daemon.
-- `network_peers.sh` – list connected peers.
-- `consensus_start.sh` – launch the consensus service.
-- `replication_status.sh` – query the replication daemon status.
-- `vm_start.sh` – run the WASM virtual machine daemon.
-- `coin_mint.sh` – mint SYNN coins.
-- `token_transfer.sh` – transfer a token between two addresses.
-- `contracts_deploy.sh` – deploy a smart contract from a WASM file.
-- `wallet_create.sh` – create a new HD wallet file.
-- `transactions_submit.sh` – submit a signed transaction JSON blob.
-- `security_merkle.sh` – compute a Merkle root for auditing.
-- `governance_propose.sh` – create a governance proposal.
-- `cross_chain_register.sh` – register a cross‑chain bridge relayer.
-- `rollup_submit_batch.sh` – submit an optimistic roll‑up batch.
-- `sharding_leader.sh` – query the current shard leader.
-- `sidechain_sync.sh` – list registered side‑chains.
-- `fault_check.sh` – capture a fault‑tolerance snapshot.
-- `state_channel_open.sh` – open a payment channel.
-- `storage_pin.sh` – pin a file in the storage subsystem.
+### build_cli.sh
+Compile the `synnergy` CLI with trimmed debug paths.
 
+```bash
+./build_cli.sh
+```
+
+### network_start.sh
+Start the networking daemon.
+
+```bash
+./network_start.sh
+```
+
+### network_peers.sh
+List currently connected peers.
+
+```bash
+./network_peers.sh
+```
+
+### consensus_start.sh
+Launch the consensus service.
+
+```bash
+./consensus_start.sh
+```
+
+### replication_status.sh
+Query replication daemon status.
+
+```bash
+./replication_status.sh
+```
+
+### vm_start.sh
+Run the WebAssembly virtual machine daemon.
+
+```bash
+./vm_start.sh
+```
+
+### coin_mint.sh
+Mint SYNN coins to a target address. Usage:
+
+```bash
+./coin_mint.sh <address> [amount]
+```
+
+### token_transfer.sh
+Transfer tokens between two addresses. Usage:
+
+```bash
+./token_transfer.sh <token> <from> <to> [amount]
+```
+
+### contracts_deploy.sh
+Deploy a smart contract from a WASM file.
+
+```bash
+./contracts_deploy.sh <file.wasm>
+```
+
+### wallet_create.sh
+Create a new HD wallet file. Usage:
+
+```bash
+./wallet_create.sh [output.json] [password]
+```
+
+### transactions_submit.sh
+Submit a signed transaction JSON blob.
+
+```bash
+./transactions_submit.sh <tx.json>
+```
+
+### security_merkle.sh
+Compute a Merkle root for auditing. Example:
+
+```bash
+./security_merkle.sh "deadbeef,baadf00d"
+```
+
+### governance_propose.sh
+Create a governance proposal.
+
+```bash
+./governance_propose.sh [title] [body.md]
+```
+
+### cross_chain_register.sh
+Register a cross-chain bridge relayer.
+
+```bash
+./cross_chain_register.sh <srcChain> <dstChain> <relayerAddress>
+```
+
+### rollup_submit_batch.sh
+Submit an optimistic roll-up batch.
+
+```bash
+./rollup_submit_batch.sh <batch.json>
+```
+
+### sharding_leader.sh
+Query the current shard leader.
+
+```bash
+./sharding_leader.sh
+```
+
+### sidechain_sync.sh
+List registered side-chains.
+
+```bash
+./sidechain_sync.sh
+```
+
+### fault_check.sh
+Capture a fault-tolerance snapshot.
+
+```bash
+./fault_check.sh
+```
+
+### state_channel_open.sh
+Open a payment channel. Usage:
+
+```bash
+./state_channel_open.sh <from> <to> [amount]
+```
+
+### storage_pin.sh
+Pin a file in the storage subsystem.
+
+```bash
+./storage_pin.sh <file>
+```
+
+These scripts are intentionally minimal to keep the focus on demonstrating CLI usage. Feel free to modify them or combine commands to suit your workflow.
