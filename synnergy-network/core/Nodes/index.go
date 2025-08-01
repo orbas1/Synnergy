@@ -10,6 +10,14 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// ZKPNodeInterface extends NodeInterface with zero-knowledge proof functions.
+type ZKPNodeInterface interface {
+	NodeInterface
+	GenerateProof(data []byte) ([]byte, error)
+	VerifyProof(data, proof []byte) bool
+	StoreProof(txID string, proof []byte)
+	Proof(txID string) ([]byte, bool)
+	SubmitTransaction(tx any, proof []byte) error
 // Address mirrors the core.Address type without importing the core package.
 type Address [20]byte
 
