@@ -323,6 +323,7 @@ func InitTokens(ledger *Ledger, vm VM, gas GasCalculator) {
 		tok.gas = gas
 		ledger.tokens[id] = tok
 	}
+	InitDAO2500(ledger)
 }
 
 //---------------------------------------------------------------------
@@ -335,15 +336,29 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
-	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
-	for a, v := range init {
-		bt.balances.Set(bt.id, a, v)
-		bt.meta.TotalSupply += v
+
+	var tok Token
+	switch meta.Standard {
+	case StdSYN2500:
+		dt := NewSYN2500Token(meta)
+		for a, v := range init {
+			dt.balances.Set(dt.id, a, v)
+			dt.meta.TotalSupply += v
+		}
+		tok = dt
+	default:
+		bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+		for a, v := range init {
+			bt.balances.Set(bt.id, a, v)
+			bt.meta.TotalSupply += v
+		}
+		tok = bt
 	}
 	var tok Token = bt
 	if meta.Standard == StdSYN2100 {
 		tok = &SupplyFinanceToken{BaseToken: bt, documents: make(map[string]*FinancialDocument), liquidity: make(map[Address]uint64)}
 	}
+
 	RegisterToken(tok)
 	return tok, nil
 }
@@ -527,3 +542,21 @@ func (s *Stack) Len() int {
 
 // Reference to TokenInterfaces for package usage
 var _ Tokens.TokenInterfaces
+
+// Tokens_CreateSYN2200 is a VM-accessible helper to mint a SYN2200 token.
+func Tokens_CreateSYN2200(meta Metadata, init map[Address]uint64) (TokenID, error) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.CreateSYN2200(meta, init)
+}
+
+// Tokens_SendPayment performs an instant payment via a SYN2200 token.
+func Tokens_SendPayment(id TokenID, from, to Address, amount uint64, currency string) (uint64, error) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.SendRealTimePayment(id, from, to, amount, currency)
+}
+
+// Tokens_GetPayment retrieves a payment record from a SYN2200 token.
+func Tokens_GetPayment(id TokenID, pid uint64) (Tokens.PaymentRecord, bool) {
+	tm := NewTokenManager(CurrentLedger(), NewFlatGasCalculator())
+	return tm.GetPaymentRecord(id, pid)
+}
