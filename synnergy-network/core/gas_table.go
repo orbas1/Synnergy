@@ -856,6 +856,12 @@ var gasTable map[Opcode]uint64
   SYN500_Usage:         400,
   SYN500_AccessInfo:    400,
    TokenManager_BalanceOf: 400,
+   ETF_UpdatePrice:      400,
+   ETF_FractionalMint:   2_100,
+   ETF_FractionalBurn:   2_100,
+   ETF_Info:             100,
+
+   // ----------------------------------------------------------------------
    Syn3200_CreateBill:    5_000,
    Syn3200_PayFraction:   2_100,
    Syn3200_AdjustAmount:  1_000,
@@ -2549,6 +2555,10 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"ETF_UpdatePrice":        0,
+	"ETF_FractionalMint":     0,
+	"ETF_FractionalBurn":     0,
+	"ETF_Info":               0,
 	"Syn3200_CreateBill":     0,
 	"Syn3200_PayFraction":    0,
 	"Syn3200_AdjustAmount":   0,

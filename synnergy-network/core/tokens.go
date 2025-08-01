@@ -617,6 +617,9 @@ func init() {
 	}
 
 	for _, m := range canon {
+		if m.Standard == StdSYN3300 {
+			_, err := NewSYN3300(m, ETFRecord{ETFID: m.Symbol, Name: m.Name}, map[Address]uint64{AddressZero: 0})
+			if err != nil {
 		if m.Standard == StdSYN3600 {
 			if _, err := f.CreateFutures(m, FuturesContract{}, map[Address]uint64{AddressZero: 0}); err != nil {
 		if m.Standard == StdSYN1200 {

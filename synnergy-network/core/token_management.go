@@ -154,6 +154,41 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	return tok.BalanceOf(addr), nil
 }
 
+// UpdateETFPrice updates the market price for a SYN3300 token.
+func (tm *TokenManager) UpdateETFPrice(id TokenID, price uint64) error {
+	tok, ok := GetSYN3300(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	tok.UpdatePrice(price)
+	return nil
+}
+
+// FractionalMint mints fractional ETF shares.
+func (tm *TokenManager) FractionalMint(id TokenID, to Address, shares uint64) error {
+	tok, ok := GetSYN3300(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return tok.FractionalMint(to, shares)
+}
+
+// FractionalBurn burns fractional ETF shares.
+func (tm *TokenManager) FractionalBurn(id TokenID, from Address, shares uint64) error {
+	tok, ok := GetSYN3300(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	return tok.FractionalBurn(from, shares)
+}
+
+// ETFInfo returns the ETF metadata for a SYN3300 token.
+func (tm *TokenManager) ETFInfo(id TokenID) (ETFRecord, error) {
+	tok, ok := GetSYN3300(id)
+	if !ok {
+		return ETFRecord{}, ErrInvalidAsset
+	}
+	return tok.GetETFInfo(), nil
 // CreateSYN1967 creates a new commodity token following the SYN1967 standard.
 func (tm *TokenManager) CreateSYN1967(meta Metadata, commodity, unit string, price uint64, init map[Address]uint64) (TokenID, error) {
 	tm.mu.Lock()
