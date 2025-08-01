@@ -52,6 +52,10 @@ var gasTable map[Opcode]uint64
    RentModel:      20_000,
    ReleaseEscrow:  12_000,
    PredictVolume:  15_000,
+   DeployAIContract: 50_000,
+   InvokeAIContract: 7_500,
+   UpdateAIModel:    20_000,
+   GetAIModel:       2_000,
    InferModel:     30_000,
    AnalyseTransactions: 35_000,
 
@@ -796,6 +800,22 @@ var gasNames = map[string]uint64{
 	// ----------------------------------------------------------------------
 	// AI
 	// ----------------------------------------------------------------------
+	"InitAI":         50_000,
+	"AI":             40_000,
+	"PredictAnomaly": 35_000,
+	"OptimizeFees":   25_000,
+	"PublishModel":   45_000,
+	"FetchModel":     15_000,
+	"ListModel":      8_000,
+	"ValidateKYC":    1_000,
+	"BuyModel":       30_000,
+	"RentModel":      20_000,
+	"ReleaseEscrow":  12_000,
+        "PredictVolume":  15_000,
+       "DeployAIContract": 50_000,
+       "InvokeAIContract": 7_500,
+       "UpdateAIModel":    20_000,
+       "GetAIModel":       2_000,
 	"InitAI":           50_000,
 	"AI":               40_000,
 	"PredictAnomaly":   35_000,

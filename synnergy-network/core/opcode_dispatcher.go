@@ -172,7 +172,11 @@ var catalogue = []struct {
 	name string
 	op   Opcode
 }{
-	// AI (0x01)
+       // AI (0x01)
+       {"DeployAIContract", 0x010001},
+       {"InvokeAIContract", 0x010002},
+       {"UpdateAIModel", 0x010003},
+       {"GetAIModel", 0x010004},
 	{"StartTraining", 0x010001},
 	{"TrainingStatus", 0x010002},
 	{"ListTrainingJobs", 0x010003},

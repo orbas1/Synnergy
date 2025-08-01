@@ -52,6 +52,7 @@ Each file in `cmd/cli` registers its own group of commands with the root
 all modules from the core library. Highlights include:
 
 - `ai` – publish models and run inference jobs
+- `ai_contract` – manage AI enhanced contracts with risk checks
 - `ai-train` – manage on-chain AI model training
 - `ai_mgmt` – manage AI model marketplace listings
 - `ai_infer` – advanced inference and transaction analysis

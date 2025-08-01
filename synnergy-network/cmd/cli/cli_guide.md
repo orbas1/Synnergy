@@ -9,6 +9,7 @@ Most commands require environment variables or a configuration file to be presen
 The following command groups expose the same functionality available in the core modules. Each can be mounted on a root [`cobra.Command`](https://github.com/spf13/cobra).
 
 - **ai** – Tools for publishing ML models and running anomaly detection jobs via gRPC to the AI service. Useful for training pipelines and on‑chain inference.
+- **ai_contract** – Deploy and interact with AI-enhanced smart contracts.
 - **ai-train** – Manage on-chain AI model training jobs.
 - **ai_mgmt** – Manage marketplace listings for AI models.
 - **ai_infer** – Advanced inference and batch analysis utilities.
