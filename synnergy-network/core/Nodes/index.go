@@ -13,6 +13,16 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+// CustodialNodeInterface exposes asset custody operations.
+type CustodialNodeInterface interface {
+	NodeInterface
+	Register(addr string) error
+	Deposit(addr, token string, amount uint64) error
+	Withdraw(addr, token string, amount uint64) error
+	Transfer(from, to, token string, amount uint64) error
+	BalanceOf(addr, token string) (uint64, error)
+	Audit() ([]byte, error)
+
 // QuantumNodeInterface extends NodeInterface with quantum-safe operations.
 type QuantumNodeInterface interface {
 	NodeInterface
@@ -71,6 +81,7 @@ type DisasterRecovery interface {
 	BackupNow(ctx context.Context, incremental bool) error
 	Restore(path string) error
 	Verify(path string) error
+
 // ContentMeta describes stored content pinned by a content node.
 type ContentMeta struct {
 	CID      string
