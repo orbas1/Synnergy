@@ -75,5 +75,6 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),
+		NewHealthCommand(),
 	)
 }

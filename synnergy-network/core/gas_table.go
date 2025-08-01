@@ -644,6 +644,14 @@ var gasTable map[Opcode]uint64
    PrivateKey:          400,
    NewAddress:          500,
    SignTx:              3_000,
+
+   // ----------------------------------------------------------------------
+   // System Health & Logging
+   // ----------------------------------------------------------------------
+   NewHealthLogger: 8_000,
+   MetricsSnapshot: 1_000,
+   LogEvent:        500,
+   RotateLogs:      4_000,
    RegisterIDWallet:    8_000,
    IsIDWalletRegistered: 500,
 
@@ -1352,9 +1360,18 @@ var gasNames = map[string]uint64{
 	"NewHDWalletFromSeed": 6_000,
 	"PrivateKey":          400,
 	"NewAddress":          500,
-  "SignTx":              3_000,
+	"SignTx":              3_000,
+ "SignTx":              3_000,
 	"RegisterRecovery":    5_000,
 	"RecoverAccount":      8_000,
+	// ---------------------------------------------------------------------
+	// System Health & Logging
+	// ---------------------------------------------------------------------
+	"NewHealthLogger": 8_000,
+	"MetricsSnapshot": 1_000,
+	"LogEvent":        500,
+	"RotateLogs":      4_000,
+ 
   
   
   // ----------------------------------------------------------------------

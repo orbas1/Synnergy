@@ -53,6 +53,7 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **system_health** – Monitor node metrics and emit log entries.
 - **idwallet** – Register ID-token wallets and verify status.
 - **offwallet** – Offline wallet utilities.
 - **recovery** – Manage account recovery registration and execution.
@@ -586,6 +587,13 @@ needed in custom tooling.
 | `import` | Import an existing mnemonic. |
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
+
+### system_health
+
+| Sub-command | Description |
+|-------------|-------------|
+| `snapshot` | Display current system metrics. |
+| `log <level> <msg>` | Append a message to the system log. |
 
 ### idwallet
 

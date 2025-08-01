@@ -102,6 +102,7 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `virtual_machine` – Execute VM-level operations for debugging.
 - `account` – basic account management and balance queries.
 - `wallet` – Create wallets and sign transfers.
+- `system_health` – Monitor runtime metrics and emit logs.
 - `idwallet` – Register ID-token wallets and verify status.
 - `offwallet` – Manage offline wallets and signed transactions.
 - `recovery` – Multi-factor account recovery leveraging SYN900 tokens.
@@ -128,6 +129,7 @@ All high-level functions in the protocol are mapped to unique 24-bit opcodes of 
 0x0D  GreenTech              0x1B  Utilities
 0x0E  Ledger                 0x1C  VirtualMachine
                                  0x1D  Wallet
+                                 0x1E  SystemHealth
 0x1E  Employment           
                                  0x1E  SupplyChain
                                  0x1E  Healthcare
