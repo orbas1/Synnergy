@@ -75,6 +75,7 @@ all modules from the core library. Highlights include:
 - `resource` – manage stored data and VM gas allocations
 - `immutability` – verify the canonical chain state
 - `fault_tolerance` – simulate faults and backups
+- `failover` – manage ledger snapshots and trigger recovery
 - `employment` – manage on-chain employment contracts and salaries
 - `governance` – DAO style governance commands
 - `token_vote` – cast token weighted governance votes

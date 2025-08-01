@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **resource** – Manage stored data and VM gas allocations.
 - **immutability** – Verify the chain against the genesis block.
 - **fault_tolerance** – Inject faults, simulate network partitions and test recovery procedures.
+- **failover** – Manage ledger snapshots and coordinate recovery.
 - **employment** – Manage on-chain employment contracts and salaries.
 - **governance** – Create proposals, cast votes and check DAO parameters.
 - **token_vote** – Cast token weighted governance votes.
@@ -347,6 +348,15 @@ needed in custom tooling.
 | `restore <file>` | Restore ledger state from a snapshot. |
 | `failover <addr>` | Force failover of a node. |
 | `predict <addr>` | Predict failure probability for a node. |
+
+### failover
+
+| Sub-command | Description |
+|-------------|-------------|
+| `backup <path>` | Create a ledger snapshot. |
+| `restore <file>` | Restore ledger state from a snapshot file. |
+| `verify <file>` | Verify a snapshot against the current ledger. |
+| `node [reason]` | Trigger a view change. |
 
 ### governance
 

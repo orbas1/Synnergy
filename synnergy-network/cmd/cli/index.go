@@ -94,6 +94,7 @@ func RegisterRoutes(root *cobra.Command) {
 	// modules that expose constructors
 	root.AddCommand(
 		NewFaultToleranceCommand(),
+		NewFailoverCommand(),
 		NewGovernanceCommand(),
 		NewTokenVoteCommand(),
 		NewGovernanceManagementCommand(),
