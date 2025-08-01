@@ -46,6 +46,7 @@ func RegisterRoutes(root *cobra.Command) {
 		LoanApplyCmd,
 		EventsCmd,
 		ComplianceCmd,
+		AuditCmd,
 		ComplianceMgmtCmd,
 		CrossChainCmd,
 		ImmutabilityCmd,

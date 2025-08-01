@@ -21,6 +21,7 @@ The following command groups expose the same functionality available in the core
  - **compliance_management** – Manage suspensions and whitelists for addresses.
  - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
+- **audit** – Manage on-chain audit logs.
 - **consensus** – Start, stop or inspect the node's consensus service. Provides status metrics for debugging.
 - **adaptive** – Manage adaptive consensus weights.
 - **stake** – Adjust validator stakes and record penalties.
@@ -201,6 +202,12 @@ needed in custom tooling.
 | `monitor <tx.json> <threshold>` | Run anomaly detection on a transaction. |
 | `verifyzkp <blob.bin> <commitmentHex> <proofHex>` | Verify a zero‑knowledge proof. |
 
+### audit
+
+| Sub-command | Description |
+|-------------|-------------|
+| `log <addr> <event> [meta.json]` | Record an audit event. |
+| `list <addr>` | List audit events for an address. |
 ### compliance_management
 
 | Sub-command | Description |
