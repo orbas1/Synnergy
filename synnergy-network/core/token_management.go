@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -80,4 +81,53 @@ func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 		return 0, ErrInvalidAsset
 	}
 	return tok.BalanceOf(addr), nil
+}
+
+// SYN5000 specialised helpers
+func (tm *TokenManager) PlaceBet(id TokenID, player Address, gameType string, amount uint64) (Bet, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return Bet{}, ErrInvalidAsset
+	}
+	gtok, ok := tok.(*SYN5000Token)
+	if !ok {
+		return Bet{}, fmt.Errorf("not SYN5000 token")
+	}
+	return gtok.PlaceBet(player, gameType, amount)
+}
+
+func (tm *TokenManager) ResolveBet(id TokenID, betID, outcome string, winner Address) error {
+	tok, ok := GetToken(id)
+	if !ok {
+		return ErrInvalidAsset
+	}
+	gtok, ok := tok.(*SYN5000Token)
+	if !ok {
+		return fmt.Errorf("not SYN5000 token")
+	}
+	return gtok.ResolveBet(betID, outcome, winner)
+}
+
+func (tm *TokenManager) GetBet(id TokenID, betID string) (Bet, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return Bet{}, ErrInvalidAsset
+	}
+	gtok, ok := tok.(*SYN5000Token)
+	if !ok {
+		return Bet{}, fmt.Errorf("not SYN5000 token")
+	}
+	return gtok.GetBet(betID)
+}
+
+func (tm *TokenManager) ListBets(id TokenID) ([]Bet, error) {
+	tok, ok := GetToken(id)
+	if !ok {
+		return nil, ErrInvalidAsset
+	}
+	gtok, ok := tok.(*SYN5000Token)
+	if !ok {
+		return nil, fmt.Errorf("not SYN5000 token")
+	}
+	return gtok.ListBets()
 }

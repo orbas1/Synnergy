@@ -13,7 +13,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"sync"
-	Tokens "synnergy-network/core/Tokens"
 	"time"
 )
 
@@ -425,6 +424,7 @@ func init() {
 		{"Synnergy Rental", "SYN-RENT", 0, StdSYN3000, time.Time{}, false, 0},
 		{"Synnergy Employment", "SYN-EMP", 0, StdSYN3100, time.Time{}, false, 0},
 		{"Synnergy Bill", "SYN-BILL", 0, StdSYN3200, time.Time{}, false, 0},
+		{"Synnergy Gambling", "SYN-GMBL", 0, StdSYN5000, time.Time{}, false, 0},
 	}
 
 	for _, m := range canon {
@@ -520,6 +520,3 @@ func (s *Stack) Push(v any) {
 func (s *Stack) Len() int {
 	return len(s.data)
 }
-
-// Reference to TokenInterfaces for package usage
-var _ Tokens.TokenInterfaces

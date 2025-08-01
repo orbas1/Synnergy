@@ -127,6 +127,7 @@ func RegisterRoutes(root *cobra.Command) {
 		TangibleCmd,
 		WarehouseCmd,
 		GamingCmd,
+		Syn5000Cmd,
 	)
 
 	// modules that expose constructors
@@ -146,7 +147,6 @@ func RegisterRoutes(root *cobra.Command) {
 		NewSecurityCommand(),
 		NewShardingCommand(),
 		NewSidechainCommand(),
-	) // includes sidechain management helpers
 		NewHealthCommand(),
-	)
+	) // includes sidechain management helpers
 }
