@@ -33,6 +33,7 @@ The following command groups expose the same functionality available in the core
 - **sidechain** – Launch side chains or interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **storage** – Configure the backing key/value store and inspect content.
+- **sensor** – Manage external sensor inputs and webhooks.
 - **real_estate** – Manage tokenised real estate assets.
 - **healthcare** – Manage healthcare records and permissions.
 - **warehouse** – Manage on-chain inventory records.
