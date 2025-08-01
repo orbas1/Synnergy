@@ -13,6 +13,7 @@ type NodeInterface interface {
 	Peers() []string
 }
 
+
 // QuantumNodeInterface extends NodeInterface with quantum-safe operations.
 type QuantumNodeInterface interface {
 	NodeInterface
@@ -71,6 +72,7 @@ type DisasterRecovery interface {
 	BackupNow(ctx context.Context, incremental bool) error
 	Restore(path string) error
 	Verify(path string) error
+
 // ContentMeta describes stored content pinned by a content node.
 type ContentMeta struct {
 	CID      string
