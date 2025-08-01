@@ -442,7 +442,9 @@ func init() {
 
 func registerTokenOpcodes() {
 	Register(0xB0, wrap("Tokens_Transfer"))
-	// Additional token opcodes omitted for brevity.
+	Register(0xB4, wrap("Forex_UpdateRate"))
+	Register(0xB5, wrap("Forex_OpenPosition"))
+	Register(0xB6, wrap("Forex_ClosePosition"))
 }
 
 func (ctx *Context) RefundGas(amount uint64) {
