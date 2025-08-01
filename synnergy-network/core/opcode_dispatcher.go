@@ -330,6 +330,8 @@ var catalogue = []struct {
 	{"Dial", 0x11000A},
 	{"SetBroadcaster", 0x11000B},
 	{"GlobalBroadcast", 0x11000C},
+	{"StartDevNet", 0x11000D},
+	{"StartTestNet", 0x11000E},
 
 	// Replication (0x12)
 	{"NewReplicator", 0x120001},

@@ -122,6 +122,12 @@ Additional helper scripts live under `cmd/scripts`.  Running
 `start_synnergy_network.sh` will build the CLI, launch networking, consensus and
 other daemons, then run a demo security command.
 
+Two top level scripts provide larger network setups:
+`scripts/devnet_start.sh` spins up a local multi-node developer network, while
+`scripts/testnet_start.sh` starts an ephemeral testnet defined by a YAML
+configuration. Both build the CLI automatically and clean up all processes on
+`Ctrl+C`.
+
 
 ## Docker
 

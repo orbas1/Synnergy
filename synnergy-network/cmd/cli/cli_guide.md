@@ -41,6 +41,8 @@ The following command groups expose the same functionality available in the core
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
 - **supply** – Manage supply chain records.
 - **wallet** – Generate mnemonics, derive addresses and sign transactions.
+- **devnet** – Launch a local multi-node developer network.
+- **testnet** – Start an ephemeral test network from a YAML config.
 - **faucet** – Dispense test funds with rate limiting.
 
 
@@ -472,6 +474,17 @@ needed in custom tooling.
 | `address` | Derive an address from a wallet. |
 | `sign` | Sign a transaction JSON using the wallet. |
 
+### devnet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start [nodes]` | Start a local developer network with the given number of nodes. |
+
+### testnet
+
+| Sub-command | Description |
+|-------------|-------------|
+| `start <config.yaml>` | Launch a testnet using the node definitions in the YAML file. |
 ### faucet
 
 | Sub-command | Description |

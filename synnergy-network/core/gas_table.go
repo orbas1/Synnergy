@@ -271,6 +271,8 @@ var gasTable map[Opcode]uint64
    Dial:            2_000,
    SetBroadcaster:  500,
    GlobalBroadcast: 1_000,
+   StartDevNet:    50_000,
+   StartTestNet:   60_000,
    // Broadcast & Subscribe already priced
 
    // ----------------------------------------------------------------------
@@ -868,6 +870,8 @@ var gasNames = map[string]uint64{
 	"Dial":            2_000,
 	"SetBroadcaster":  500,
 	"GlobalBroadcast": 1_000,
+	"StartDevNet":     50_000,
+	"StartTestNet":    60_000,
 	// Broadcast & Subscribe already priced
 
 	// ----------------------------------------------------------------------

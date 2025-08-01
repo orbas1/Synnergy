@@ -81,6 +81,8 @@ Synnergy comes with a powerful CLI built using the Cobra framework. Commands are
 - `tokens` – Issue and manage token contracts.
 - `gaming` – Lightweight on-chain gaming sessions.
 - `transactions` – Build and broadcast transactions manually.
+- `devnet` – Spawn an in-memory developer network for rapid testing.
+- `testnet` – Launch a configurable test network from a YAML file.
 - `supply` – Track supply chain assets and logistics.
 - `utility_functions` – Miscellaneous support utilities.
 - `virtual_machine` – Execute VM-level operations for debugging.
