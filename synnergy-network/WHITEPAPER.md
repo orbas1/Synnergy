@@ -230,6 +230,13 @@ Synnergy includes a dedicated **Transaction Distribution** module that automatic
 ## Event Management
 Modules emit structured events whenever notable actions occur such as token transfers or contract executions. The Event Manager records these entries in the ledger state and broadcasts them so external services can react in real time. Events are addressed by deterministic hashes and can be queried via the CLI or from smart contracts. This design keeps observers in sync without polling full blocks.
 
+## Distribution Module
+The distribution service handles large scale token payouts such as staking
+rewards or promotional airdrops. It integrates with the ledger and coin modules
+to guarantee mint limits are respected. Batch transfers are executed atomically
+and can be triggered via smart contracts through dedicated opcodes. This module
+simplifies rewarding validators and distributing governance tokens to new users.
+
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
 

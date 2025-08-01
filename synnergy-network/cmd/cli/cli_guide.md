@@ -86,6 +86,7 @@ The following command groups expose the same functionality available in the core
 - **transactionreversal** – Reverse confirmed transactions with authority approval.
 - **transaction_distribution** – Distribute transaction fees between stakeholders.
 - **utility_functions** – Miscellaneous helpers shared by other command groups.
+- **distribution** – Bulk token distribution and airdrop helpers.
 - **finalization_management** – Finalize blocks, batches and channels.
 - **quorum** – Manage quorum trackers for proposals or validation.
 - **virtual_machine** – Execute scripts in the built‑in VM for testing.
@@ -865,6 +866,12 @@ needed in custom tooling.
 | `submit` | Submit a signed transaction to the network. |
 | `pool` | List pending pool transaction hashes. |
 
+### distribution
+
+| Sub-command | Description |
+|-------------|-------------|
+| `airdrop` | Mint tokens to a list of recipients. |
+| `batch` | Transfer tokens from one account to many. |
 ### private_tx
 
 | Sub-command | Description |

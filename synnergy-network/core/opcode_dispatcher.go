@@ -832,6 +832,12 @@ var catalogue = []struct {
 	{"PrivateKey", 0x1D0004},
 	{"NewAddress", 0x1D0005},
 	{"SignTx", 0x1D0006},
+
+	// Distribution (0x1E)
+	{"NewDistributor", 0x1E0001},
+	{"BatchTransfer", 0x1E0002},
+	{"Airdrop", 0x1E0003},
+	{"DistributeEven", 0x1E0004},
   
   // Smart-legal contract (0x1D)
 	{"Legal_Register", 0x1E0001},
