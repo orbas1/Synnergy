@@ -677,6 +677,10 @@ var gasTable map[Opcode]uint64
    TokenManager_Burn: 2_100,
    TokenManager_Approve: 800,
    TokenManager_BalanceOf: 400,
+   Benefit_Issue:       5_000,
+   Benefit_Claim:       3_000,
+   Benefit_Record:      400,
+   Benefit_List:        800,
 
    // ----------------------------------------------------------------------
    // Transactions
@@ -1628,6 +1632,10 @@ var gasNames = map[string]uint64{
 	"TokenManager_Burn":      0,
 	"TokenManager_Approve":   0,
 	"TokenManager_BalanceOf": 0,
+	"Benefit_Issue":          0,
+	"Benefit_Claim":          0,
+	"Benefit_Record":         0,
+	"Benefit_List":           0,
 
 	// ----------------------------------------------------------------------
 	// Transactions

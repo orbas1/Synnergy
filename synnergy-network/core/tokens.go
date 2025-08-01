@@ -285,7 +285,16 @@ func RegisterToken(t Token) {
 	if r.Registry.tokens == nil {
 		r.Registry.tokens = make(map[TokenID]*BaseToken)
 	}
-	r.Registry.tokens[t.ID()] = t.(*BaseToken)
+	switch v := t.(type) {
+	case *BaseToken:
+		r.Registry.tokens[t.ID()] = v
+	case interface{ Base() *BaseToken }:
+		r.Registry.tokens[t.ID()] = v.Base()
+	default:
+		r.mu.Unlock()
+		log.WithField("symbol", t.Meta().Symbol).Warn("token registration failed: incompatible type")
+		return
+	}
 	r.mu.Unlock()
 	log.WithField("symbol", t.Meta().Symbol).Info("token registered")
 }
@@ -335,6 +344,18 @@ func (Factory) Create(meta Metadata, init map[Address]uint64) (Token, error) {
 	if meta.Created.IsZero() {
 		meta.Created = time.Now().UTC()
 	}
+
+	// specialised handling for SYN3900 benefit tokens
+	if meta.Standard == StdSYN3900 {
+		bt := NewBenefitToken(meta)
+		for a, v := range init {
+			bt.balances.Set(bt.id, a, v)
+			bt.meta.TotalSupply += v
+		}
+		RegisterToken(bt)
+		return bt, nil
+	}
+
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
 	for a, v := range init {
 		bt.balances.Set(bt.id, a, v)
