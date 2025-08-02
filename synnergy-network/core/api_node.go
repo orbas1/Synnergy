@@ -80,6 +80,10 @@ func (a *APINode) handleTx(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
+	if a.ledger == nil {
+		http.Error(w, "ledger not initialised", http.StatusInternalServerError)
+		return
+	}
 	if ct := req.Header.Get("Content-Type"); !strings.HasPrefix(ct, "application/json") {
 		http.Error(w, "content type must be application/json", http.StatusUnsupportedMediaType)
 		return
@@ -90,6 +94,7 @@ func (a *APINode) handleTx(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	a.ledger.AddToPool(&tx)
+	w.WriteHeader(http.StatusAccepted)
 	writeJSON(w, map[string]string{"status": "accepted"})
 }
 
@@ -118,5 +123,7 @@ func (a *APINode) handleBlock(w http.ResponseWriter, req *http.Request) {
 
 func writeJSON(w http.ResponseWriter, v interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(v)
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
