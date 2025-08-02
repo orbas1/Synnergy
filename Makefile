@@ -1,13 +1,16 @@
 .RECIPEPREFIX := >
 GO_MODULE_DIR := synnergy-network
 
-.PHONY: go-build go-test node-install node-test all
+.PHONY: go-build go-test go-cycle node-install node-test all
 
 go-build:
 >cd $(GO_MODULE_DIR) && go build ./...
 
 go-test:
 >cd $(GO_MODULE_DIR) && go test ./...
+
+go-cycle:
+>./scripts/check_circular_imports.sh
 
 node-install:
 >cd synnergy-network/GUI/token-creation-tool/server && npm ci
@@ -23,4 +26,4 @@ node-test:
 >cd synnergy-network/GUI/storage-marketplace/backend && npm run test --if-present
 >cd synnergy-network/GUI/nft_marketplace/backend && npm run test --if-present
 
-all: go-build node-install
+all: go-build go-cycle node-install
