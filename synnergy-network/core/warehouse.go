@@ -133,17 +133,17 @@ func ensureWarehouse() *Warehouse {
 	return defaultWarehouse
 }
 
-func Warehouse_New(_ *Context) error { defaultWarehouse = NewWarehouse(CurrentLedger()); return nil }
-func Warehouse_AddItem(ctx *Context, id, name string, qty uint64) error {
+func WarehouseNew(_ *Context) error { defaultWarehouse = NewWarehouse(CurrentLedger()); return nil }
+func WarehouseAddItem(ctx *Context, id, name string, qty uint64) error {
 	return ensureWarehouse().AddItem(ctx, id, name, qty)
 }
-func Warehouse_RemoveItem(ctx *Context, id string) error {
+func WarehouseRemoveItem(ctx *Context, id string) error {
 	return ensureWarehouse().RemoveItem(ctx, id)
 }
-func Warehouse_MoveItem(ctx *Context, id string, newOwner Address) error {
+func WarehouseMoveItem(ctx *Context, id string, newOwner Address) error {
 	return ensureWarehouse().MoveItem(ctx, id, newOwner)
 }
-func Warehouse_ListItems(_ *Context) ([]WarehouseItem, error) { return ensureWarehouse().ListItems() }
-func Warehouse_GetItem(_ *Context, id string) (WarehouseItem, error) {
+func WarehouseListItems(_ *Context) ([]WarehouseItem, error) { return ensureWarehouse().ListItems() }
+func WarehouseGetItem(_ *Context, id string) (WarehouseItem, error) {
 	return ensureWarehouse().GetItem(id)
 }

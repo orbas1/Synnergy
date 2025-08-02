@@ -84,12 +84,12 @@ func (t *SYN131Token) TransferShare(from, to Address, share uint64) {
 }
 
 // --- VM opcode wrappers ---
-func SYN131_UpdateValuation(t *SYN131Token, value uint64) { t.UpdateValuation(value) }
-func SYN131_RecordSale(t *SYN131Token, price uint64, buyer, seller Address) {
+func SYN131UpdateValuation(t *SYN131Token, value uint64) { t.UpdateValuation(value) }
+func SYN131RecordSale(t *SYN131Token, price uint64, buyer, seller Address) {
 	t.RecordSale(price, buyer, seller)
 }
-func SYN131_AddRental(t *SYN131Token, r SYN131RentalAgreement) { t.AddRental(r) }
-func SYN131_IssueLicense(t *SYN131Token, l LicenseRecord)      { t.IssueLicense(l) }
-func SYN131_TransferShare(t *SYN131Token, from, to Address, share uint64) {
+func SYN131AddRental(t *SYN131Token, r SYN131RentalAgreement) { t.AddRental(r) }
+func SYN131IssueLicense(t *SYN131Token, l LicenseRecord)      { t.IssueLicense(l) }
+func SYN131TransferShare(t *SYN131Token, from, to Address, share uint64) {
 	t.TransferShare(from, to, share)
 }
