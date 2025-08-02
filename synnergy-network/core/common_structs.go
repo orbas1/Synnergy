@@ -46,6 +46,8 @@ type AIEngine struct {
 	mu     sync.RWMutex
 	models map[[32]byte]ModelMeta
 	jobs   map[string]TrainingJob
+	encKey []byte        // symmetric key for encrypted storage
+	drift  *DriftMonitor // tracks model performance drift
 }
 
 type ModelMeta struct {
