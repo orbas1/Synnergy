@@ -2,7 +2,9 @@ package core
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -16,11 +18,19 @@ type SupplyItem struct {
 	Updated     time.Time `json:"updated"`
 }
 
+var supplyMu sync.RWMutex
+
 // RegisterItem stores a new SupplyItem on the ledger and broadcasts the event.
 func RegisterItem(item SupplyItem) error {
-	item.Updated = time.Now().UTC()
+	supplyMu.Lock()
+	defer supplyMu.Unlock()
 	key := fmt.Sprintf("supply:item:%s", item.ID)
-
+	if _, err := CurrentStore().Get([]byte(key)); err == nil {
+		return fmt.Errorf("item %s already exists", item.ID)
+	} else if !errors.Is(err, ErrNotFound) {
+		return err
+	}
+	item.Updated = time.Now().UTC()
 	raw, err := json.Marshal(item)
 	if err != nil {
 		return err
@@ -33,7 +43,9 @@ func RegisterItem(item SupplyItem) error {
 
 // UpdateLocation changes the location of an existing item.
 func UpdateLocation(id, location string) error {
-	item, err := GetItem(id)
+	supplyMu.Lock()
+	defer supplyMu.Unlock()
+	item, err := fetchItem(id)
 	if err != nil {
 		return err
 	}
@@ -44,7 +56,9 @@ func UpdateLocation(id, location string) error {
 
 // MarkStatus updates the status of an item (e.g. shipped, delivered).
 func MarkStatus(id, status string) error {
-	item, err := GetItem(id)
+	supplyMu.Lock()
+	defer supplyMu.Unlock()
+	item, err := fetchItem(id)
 	if err != nil {
 		return err
 	}
@@ -55,15 +69,9 @@ func MarkStatus(id, status string) error {
 
 // GetItem retrieves a SupplyItem by ID.
 func GetItem(id string) (*SupplyItem, error) {
-	raw, err := CurrentStore().Get([]byte(fmt.Sprintf("supply:item:%s", id)))
-	if err != nil {
-		return nil, err
-	}
-	var item SupplyItem
-	if err := json.Unmarshal(raw, &item); err != nil {
-		return nil, err
-	}
-	return &item, nil
+	supplyMu.RLock()
+	defer supplyMu.RUnlock()
+	return fetchItem(id)
 }
 
 func saveItem(it SupplyItem) error {
@@ -76,4 +84,16 @@ func saveItem(it SupplyItem) error {
 		return err
 	}
 	return Broadcast("supply_update", raw)
+}
+
+func fetchItem(id string) (*SupplyItem, error) {
+	raw, err := CurrentStore().Get([]byte(fmt.Sprintf("supply:item:%s", id)))
+	if err != nil {
+		return nil, err
+	}
+	var item SupplyItem
+	if err := json.Unmarshal(raw, &item); err != nil {
+		return nil, err
+	}
+	return &item, nil
 }
