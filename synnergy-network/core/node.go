@@ -42,4 +42,3 @@ var _ Nodes.NodeInterface = (*NodeAdapter)(nil)
 func (n *Node) AsLightNode() *Nodes.LightNode {
 	return Nodes.NewLightNode(&NodeAdapter{n})
 }
-var _ Nodes.Watchtower = (*WatchtowerNode)(nil)

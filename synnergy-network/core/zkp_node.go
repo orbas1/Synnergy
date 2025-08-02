@@ -5,8 +5,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"sync"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // ZKPNodeConfig aggregates network and ledger configuration for a zero-knowledge proof node.
@@ -115,6 +113,3 @@ func (z *ZKPNode) SubmitTransaction(tx *Transaction, proof []byte) error {
 
 // Ledger exposes the underlying ledger.
 func (z *ZKPNode) Ledger() *Ledger { return z.ledger }
-
-// compile-time interface check
-var _ Nodes.ZKPNodeInterface = (*ZKPNode)(nil)

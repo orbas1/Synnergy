@@ -86,13 +86,21 @@ func (e *ChannelEngine) ForceClose(state SignedState) error {
 	tok, _ := GetToken(state.Channel.Token)
 	escrow := escrowAddr(state.Channel.ID)
 	if state.Channel.BalanceA > 0 {
-		_ = tok.Transfer(escrow, state.Channel.PartyA, state.Channel.BalanceA)
+		if err := tok.Transfer(escrow, state.Channel.PartyA, state.Channel.BalanceA); err != nil {
+			return err
+		}
 	}
 	if state.Channel.BalanceB > 0 {
-		_ = tok.Transfer(escrow, state.Channel.PartyB, state.Channel.BalanceB)
+		if err := tok.Transfer(escrow, state.Channel.PartyB, state.Channel.BalanceB); err != nil {
+			return err
+		}
 	}
 
-	e.led.DeleteState(chKey(state.Channel.ID))
-	e.led.DeleteState(pendingKey(state.Channel.ID))
+	if err := e.led.DeleteState(chKey(state.Channel.ID)); err != nil {
+		return err
+	}
+	if err := e.led.DeleteState(pendingKey(state.Channel.ID)); err != nil {
+		return err
+	}
 	return nil
 }

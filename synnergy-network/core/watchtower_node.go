@@ -11,7 +11,7 @@ import (
 
 // WatchtowerNode observes transactions and channel updates enforcing contract rules.
 type WatchtowerNode struct {
-	net    *Node
+	*BaseNode
 	ledger *Ledger
 	logger *logrus.Logger
 	alerts chan string
@@ -39,13 +39,14 @@ func NewWatchtowerNode(cfg *WatchtowerConfig) (*WatchtowerNode, error) {
 		_ = n.Close()
 		return nil, err
 	}
+	base := NewBaseNode(&NodeAdapter{n})
 	wt := &WatchtowerNode{
-		net:    n,
-		ledger: led,
-		logger: logrus.New(),
-		alerts: make(chan string, 100),
-		ctx:    ctx,
-		cancel: cancel,
+		BaseNode: base,
+		ledger:   led,
+		logger:   logrus.New(),
+		alerts:   make(chan string, 100),
+		ctx:      ctx,
+		cancel:   cancel,
 	}
 	return wt, nil
 }
@@ -54,7 +55,7 @@ func NewWatchtowerNode(cfg *WatchtowerConfig) (*WatchtowerNode, error) {
 func (w *WatchtowerNode) Start() {
 	w.mu.Lock()
 	defer w.mu.Unlock()
-	go w.net.ListenAndServe()
+	go w.ListenAndServe()
 }
 
 // Stop shuts down the node and ledger.
@@ -63,39 +64,10 @@ func (w *WatchtowerNode) Stop() error {
 	defer w.mu.Unlock()
 	w.cancel()
 	close(w.alerts)
-	if err := w.net.Close(); err != nil {
+	if err := w.Close(); err != nil {
 		return err
 	}
 	return nil
-}
-
-// DialSeed proxies to the underlying node.
-func (w *WatchtowerNode) DialSeed(seeds []string) error { return w.net.DialSeed(seeds) }
-
-// Broadcast proxies to the underlying node.
-func (w *WatchtowerNode) Broadcast(topic string, data []byte) error {
-	return w.net.Broadcast(topic, data)
-}
-
-// Subscribe proxies to the underlying node.
-func (w *WatchtowerNode) Subscribe(topic string) (<-chan []byte, error) {
-	return w.net.Subscribe(topic)
-}
-
-// ListenAndServe runs the internal network service.
-func (w *WatchtowerNode) ListenAndServe() { w.net.ListenAndServe() }
-
-// Close stops all services.
-func (w *WatchtowerNode) Close() error { return w.Stop() }
-
-// Peers returns the peer list.
-func (w *WatchtowerNode) Peers() []string {
-	peers := w.net.Peers()
-	out := make([]string, len(peers))
-	for i, p := range peers {
-		out[i] = string(p.ID)
-	}
-	return out
 }
 
 // Alerts returns the alert channel.

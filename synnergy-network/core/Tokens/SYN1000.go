@@ -1,3 +1,6 @@
+//go:build tokens
+// +build tokens
+
 package Tokens
 
 import (

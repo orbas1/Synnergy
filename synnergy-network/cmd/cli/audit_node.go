@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"strconv"
 	"sync"
 	"syscall"
 
@@ -17,28 +16,13 @@ import (
 	"github.com/spf13/viper"
 
 	core "synnergy-network/core"
+	"synnergy-network/pkg/utils"
 )
 
 var (
 	audNode *core.AuditNode
 	audMu   sync.RWMutex
 )
-
-func auditEnvOr(key, def string) string {
-	if v := os.Getenv(key); v != "" {
-		return v
-	}
-	return def
-}
-
-func auditEnvOrInt(k string, def int) int {
-	if v := os.Getenv(k); v != "" {
-		if n, err := strconv.Atoi(v); err == nil {
-			return n
-		}
-	}
-	return def
-}
 
 func auditInit(cmd *cobra.Command, _ []string) error {
 	if audNode != nil {
@@ -56,9 +40,9 @@ func auditInit(cmd *cobra.Command, _ []string) error {
 		BootstrapPeers: viper.GetStringSlice("network.bootstrap_peers"),
 		DiscoveryTag:   viper.GetString("network.discovery_tag"),
 	}
-	wal := auditEnvOr("LEDGER_WAL", "./ledger.wal")
-	snap := auditEnvOr("LEDGER_SNAPSHOT", "./ledger.snap")
-	interval := auditEnvOrInt("LEDGER_SNAPSHOT_INTERVAL", 100)
+	wal := utils.EnvOrDefault("LEDGER_WAL", "./ledger.wal")
+	snap := utils.EnvOrDefault("LEDGER_SNAPSHOT", "./ledger.snap")
+	interval := utils.EnvOrDefaultInt("LEDGER_SNAPSHOT_INTERVAL", 100)
 	ledCfg := core.LedgerConfig{WALPath: wal, SnapshotPath: snap, SnapshotInterval: interval}
 	boot := core.BootstrapConfig{Network: netCfg, Ledger: ledCfg, Replication: nil}
 	cfg := core.AuditNodeConfig{Bootstrap: boot, TrailPath: os.Getenv("AUDIT_FILE")}
@@ -164,13 +148,34 @@ func auditEvents(cmd *cobra.Command, args []string) error {
 	return enc.Encode(evs)
 }
 
+func auditArchive(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("usage: archive <dest>")
+	}
+	audMu.RLock()
+	n := audNode
+	audMu.RUnlock()
+	if n == nil {
+		return errors.New("not running")
+	}
+	path, sum, err := n.ArchiveTrail(args[0])
+	if err != nil {
+		return err
+	}
+	fmt.Fprintf(cmd.OutOrStdout(), "archive written to %s (sha256 %s)\n", path, sum)
+	return nil
+}
+
 var auditNodeCmd = &cobra.Command{Use: "auditnode", Short: "Run audit node", PersistentPreRunE: auditInit}
 var auditNodeStart = &cobra.Command{Use: "start", Short: "Start node", RunE: auditStart}
 var auditNodeStop = &cobra.Command{Use: "stop", Short: "Stop node", RunE: auditStop}
 var auditNodeLog = &cobra.Command{Use: "log", Short: "Record event", RunE: auditLog}
 var auditNodeEvents = &cobra.Command{Use: "events", Short: "List events", RunE: auditEvents}
+var auditNodeArchive = &cobra.Command{Use: "archive", Short: "Archive audit trail", RunE: auditArchive}
 
-func init() { auditNodeCmd.AddCommand(auditNodeStart, auditNodeStop, auditNodeLog, auditNodeEvents) }
+func init() {
+	auditNodeCmd.AddCommand(auditNodeStart, auditNodeStop, auditNodeLog, auditNodeEvents, auditNodeArchive)
+}
 
 // AuditNodeCmd exported for index registration
 var AuditNodeCmd = auditNodeCmd

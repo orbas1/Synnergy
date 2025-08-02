@@ -28,6 +28,14 @@ ID with `deriveID`, populate initial balances via `NewBalanceTable` and
 register themselves using `RegisterToken` so that other packages can
 discover them by `TokenID`.
 
+
+#### Allowances
+
+`BaseToken` mirrors ERC‑20 style spending approvals.  The `Approve`
+method sets allowances for third‑party spenders while `TransferFrom`
+consumes those allowances and moves funds on behalf of the owner.
+Allowances are decremented after each successful transfer.
+
 ### Standards
 
 The `TokenStandard` enumeration lists all SYN standards.  Each concrete
@@ -49,4 +57,13 @@ Each specialised token should keep its implementation self‑contained and
 only rely on the shared types and interfaces defined within this
 package.  This consolidation simplifies maintenance and ensures that new
 tokens automatically integrate with existing network tooling.
+
+## CLI Integra<<<<<<< codex/focus-on-stage-8-in-agents.mdtion
+
+The `tokens` command in the CLI provides a uniform interface to inspect
+and administer any registered token.  It supports listing tokens,
+querying balances, transferring funds, minting, burning and managing
+allowances.  Addresses are supplied as hex strings and decoded into the
+common 20‑byte `Address` format.
+
 

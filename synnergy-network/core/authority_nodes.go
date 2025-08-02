@@ -156,6 +156,11 @@ var roleWeights = map[AuthorityRole]int{
 	LargeCommerceNode:     2,
 }
 
+const (
+	authorityPenaltyThreshold uint32  = 100
+	authoritySlashFraction    float64 = 0.25
+)
+
 func (as *AuthoritySet) RandomElectorate(size int) ([]Address, error) {
 	as.mu.RLock()
 	defer as.mu.RUnlock()
@@ -224,6 +229,47 @@ func (as *AuthoritySet) ListAuthorities(activeOnly bool) ([]AuthorityNode, error
 		out = append(out, n)
 	}
 	return out, nil
+}
+
+// ApplyPenalty records penalty points for an authority node and enforces slashing
+// and deactivation if the accumulated penalties exceed the threshold.
+func (as *AuthoritySet) ApplyPenalty(addr Address, points uint32, reason string, spm *StakePenaltyManager) error {
+	if spm == nil {
+		return errors.New("penalty manager required")
+	}
+
+	as.mu.Lock()
+	defer as.mu.Unlock()
+
+	if err := spm.Penalize(addr, points, reason); err != nil {
+		return err
+	}
+	if spm.PenaltyOf(addr) < authorityPenaltyThreshold {
+		return nil
+	}
+	if _, err := spm.SlashStake(addr, authoritySlashFraction); err != nil {
+		return err
+	}
+	if err := spm.ResetPenalty(addr); err != nil {
+		return err
+	}
+
+	raw, _ := as.led.GetState(nodeKey(addr))
+	if len(raw) == 0 {
+		return errors.New("authority not found")
+	}
+	var n AuthorityNode
+	if err := json.Unmarshal(raw, &n); err != nil {
+		return err
+	}
+	n.Active = false
+	if err := as.led.SetState(nodeKey(addr), mustJSON(n)); err != nil {
+		return err
+	}
+	if as.logger != nil {
+		as.logger.Printf("authority node %s slashed and deactivated", addr.Short())
+	}
+	return nil
 }
 
 // Deregister removes an authority node and all associated votes.

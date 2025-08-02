@@ -34,7 +34,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -127,7 +126,7 @@ func handleCompile(cmd *cobra.Command, _ []string) error {
 	}
 
 	outPath := filepath.Join(outDir, fmt.Sprintf("%x.wasm", hash[:8]))
-	if err := ioutil.WriteFile(outPath, wasm, 0o644); err != nil {
+	if err := os.WriteFile(outPath, wasm, 0o644); err != nil {
 		return err
 	}
 	fmt.Fprintf(cmd.OutOrStdout(), "compiled → %s\nhash: %x\n", outPath, hash[:])
@@ -143,13 +142,13 @@ type deployFlags struct {
 func handleDeploy(cmd *cobra.Command, _ []string) error {
 	df := cmd.Context().Value("dflags").(deployFlags)
 
-	code, err := ioutil.ReadFile(df.wasm)
+	code, err := os.ReadFile(df.wasm)
 	if err != nil {
 		return err
 	}
 	var ricData []byte
 	if df.ric != "" {
-		ricData, err = ioutil.ReadFile(df.ric)
+		ricData, err = os.ReadFile(df.ric)
 		if err != nil {
 			return err
 		}
@@ -167,6 +166,12 @@ func handleDeploy(cmd *cobra.Command, _ []string) error {
 }
 
 type invokeFlags struct {
+	method string
+	args   string
+	gas    uint64
+}
+
+type debugFlags struct {
 	method string
 	args   string
 	gas    uint64
@@ -192,6 +197,30 @@ func handleInvoke(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	fmt.Fprintf(cmd.OutOrStdout(), "%x\n", out)
+	return nil
+}
+
+func handleDebug(cmd *cobra.Command, args []string) error {
+	addrStr := args[0]
+	df := cmd.Context().Value("dbgflags").(debugFlags)
+
+	addr, err := mustParseAddr(addrStr)
+	if err != nil {
+		return err
+	}
+
+	argBytes, err := hex.DecodeString(strings.TrimPrefix(df.args, "0x"))
+	if err != nil && df.args != "" {
+		return fmt.Errorf("args must be hex bytes")
+	}
+
+	caller := core.Address{}
+	rec, err := core.GetContractRegistry().InvokeWithReceipt(caller, addr, df.method, argBytes, df.gas)
+	if err != nil {
+		return err
+	}
+	b, _ := json.MarshalIndent(rec, "", "  ")
+	fmt.Fprintln(cmd.OutOrStdout(), string(b))
 	return nil
 }
 
@@ -290,6 +319,24 @@ var invokeCmd = &cobra.Command{
 	},
 }
 
+var debugCmd = &cobra.Command{
+	Use:   "debug <address>",
+	Short: "Invoke contract and print full receipt",
+	Args:  cobra.ExactArgs(1),
+	RunE:  handleDebug,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		df := debugFlags{}
+		df.method, _ = cmd.Flags().GetString("method")
+		df.args, _ = cmd.Flags().GetString("args")
+		df.gas, _ = cmd.Flags().GetUint64("gas")
+		if df.method == "" {
+			return fmt.Errorf("--method required")
+		}
+		cmd.SetContext(context.WithValue(cmd.Context(), "dbgflags", df))
+		return nil
+	},
+}
+
 var contractsListCmd = &cobra.Command{Use: "list", Short: "List deployed contracts", Args: cobra.NoArgs, RunE: handleList}
 var contractsInfoCmd = &cobra.Command{Use: "info <address>", Short: "Show ricardian manifest", Args: cobra.ExactArgs(1), RunE: handleInfo}
 
@@ -302,7 +349,11 @@ func init() {
 	invokeCmd.Flags().String("args", "", "hex‑encoded arg bytes")
 	invokeCmd.Flags().Uint64("gas", 200_000, "gas limit")
 
-	contractsCmd.AddCommand(compileCmd, deployCmd, invokeCmd, contractsListCmd, contractsInfoCmd)
+	debugCmd.Flags().String("method", "", "method name")
+	debugCmd.Flags().String("args", "", "hex‑encoded arg bytes")
+	debugCmd.Flags().Uint64("gas", 200_000, "gas limit")
+
+	contractsCmd.AddCommand(compileCmd, deployCmd, invokeCmd, debugCmd, contractsListCmd, contractsInfoCmd)
 }
 
 // ──────────────────────────────────────────────────────────────────────────────

@@ -13,6 +13,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"os"
 	"sync"
 	"time"
 )
@@ -27,12 +28,40 @@ type TFResponse struct {
 	Result []byte
 }
 
+// ModelUploadRequest uploads a trained model to the remote AI service.
+type ModelUploadRequest struct {
+	Model []byte
+	CID   string
+}
+
+// ModelUploadResponse contains an identifier for the uploaded model.
+type ModelUploadResponse struct{ ID string }
+
+// TrainingRequest starts a remote training job.
+type TrainingRequest struct {
+	DatasetCID string
+	ModelCID   string
+	Params     map[string]string
+}
+
+// TrainingResponse returns the remote job identifier.
+type TrainingResponse struct{ JobID string }
+
+// TrainingStatusRequest queries the status of a remote training job.
+type TrainingStatusRequest struct{ JobID string }
+
+// TrainingStatusResponse reports the status of a remote training job.
+type TrainingStatusResponse struct{ Status string }
+
 type AIStubClient interface {
 	Anomaly(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	FeeOpt(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	Volume(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	Inference(ctx context.Context, req *TFRequest) (*TFResponse, error)
 	Analyse(ctx context.Context, req *TFRequest) (*TFResponse, error)
+	UploadModel(ctx context.Context, req *ModelUploadRequest) (*ModelUploadResponse, error)
+	StartTraining(ctx context.Context, req *TrainingRequest) (*TrainingResponse, error)
+	TrainingStatus(ctx context.Context, req *TrainingStatusRequest) (*TrainingStatusResponse, error)
 }
 
 //---------------------------------------------------------------------
@@ -47,6 +76,11 @@ var (
 func InitAI(led StateRW, grpcEndpoint string, client AIStubClient) error {
 	var err error
 	aiOnce.Do(func() {
+		key := os.Getenv("AI_STORAGE_KEY")
+		if len(key) != 32 {
+			err = fmt.Errorf("AI_STORAGE_KEY must be 32 bytes")
+			return
+		}
 		conn, e := grpc.Dial(grpcEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if e != nil {
 			err = e
@@ -58,6 +92,8 @@ func InitAI(led StateRW, grpcEndpoint string, client AIStubClient) error {
 			client: client,
 			models: make(map[[32]byte]ModelMeta),
 			jobs:   make(map[string]TrainingJob),
+			encKey: []byte(key),
+			drift:  NewDriftMonitor(50),
 		}
 	})
 	return err

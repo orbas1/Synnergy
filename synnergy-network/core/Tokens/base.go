@@ -27,6 +27,7 @@ type Token interface {
 	ID() TokenID
 	BalanceOf(Address) uint64
 	Transfer(from, to Address, amount uint64) error
+	TransferFrom(owner, spender, to Address, amount uint64) error
 	Allowance(owner, spender Address) uint64
 	Approve(owner, spender Address, amount uint64) error
 	Mint(to Address, amount uint64) error
@@ -120,6 +121,26 @@ func (b *BaseToken) Transfer(from, to Address, amount uint64) error {
 	return nil
 }
 
+// TransferFrom moves funds on behalf of the owner using an approved allowance.
+func (b *BaseToken) TransferFrom(owner, spender, to Address, amount uint64) error {
+	b.mu.Lock()
+	if b.allowance == nil || b.allowance[owner] == nil || b.allowance[owner][spender] < amount {
+		b.mu.Unlock()
+		return fmt.Errorf("allowance exceeded")
+	}
+	b.allowance[owner][spender] -= amount
+	b.mu.Unlock()
+	if err := b.Transfer(owner, to, amount); err != nil {
+		// roll back allowance on failure
+		b.mu.Lock()
+		b.allowance[owner][spender] += amount
+		b.mu.Unlock()
+		return err
+	}
+	return nil
+}
+
+
 // Allowance returns the approved spend for a spender.
 func (b *BaseToken) Allowance(owner, spender Address) uint64 {
 	b.mu.RLock()
@@ -149,6 +170,9 @@ func (b *BaseToken) Approve(owner, spender Address, amount uint64) error {
 
 // Mint adds new supply to the given address.
 func (b *BaseToken) Mint(to Address, amount uint64) error {
+	if b.meta.FixedSupply {
+		return fmt.Errorf("fixed supply token")
+	}
 	if b.balances == nil {
 		b.balances = NewBalanceTable()
 	}

@@ -1,3 +1,6 @@
+//go:build tokens
+// +build tokens
+
 package core
 
 import Tokens "synnergy-network/core/Tokens"

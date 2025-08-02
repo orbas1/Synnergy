@@ -46,6 +46,8 @@ type AIEngine struct {
 	mu     sync.RWMutex
 	models map[[32]byte]ModelMeta
 	jobs   map[string]TrainingJob
+	encKey []byte        // symmetric key for encrypted storage
+	drift  *DriftMonitor // tracks model performance drift
 }
 
 type ModelMeta struct {
@@ -304,6 +306,8 @@ type LedgerConfig struct {
 	WALPath          string
 	SnapshotPath     string
 	SnapshotInterval int
+	ArchivePath      string // optional gzip file to archive pruned blocks
+	PruneInterval    int    // number of recent blocks to retain in memory/WAL
 }
 
 // UTXO represents a spendable output identified by (TxID, Index).
@@ -362,6 +366,8 @@ type Ledger struct {
 	walFile          *os.File
 	snapshotPath     string
 	snapshotInterval int
+	archivePath      string // destination file for archived blocks
+	pruneInterval    int    // retain this many recent blocks
 	tokens           map[TokenID]Token
 	lpBalances       map[Address]map[PoolID]uint64
 	nonces           map[Address]uint64
@@ -551,6 +557,8 @@ type Channel struct {
 	ID       ChannelID `json:"id"`
 	PartyA   Address   `json:"a"`
 	PartyB   Address   `json:"b"`
+	ShardA   ShardID   `json:"shard_a"`
+	ShardB   ShardID   `json:"shard_b"`
 	Token    TokenID   `json:"token"`
 	BalanceA uint64    `json:"bal_a"`
 	BalanceB uint64    `json:"bal_b"`
@@ -561,6 +569,8 @@ type Channel struct {
 
 type SignedState struct {
 	Channel Channel `json:"channel"`
+	PubKeyA []byte  `json:"pub_key_a"`
+	PubKeyB []byte  `json:"pub_key_b"`
 	SigA    []byte  `json:"sig_a"`
 	SigB    []byte  `json:"sig_b"`
 }

@@ -1,13 +1,25 @@
 package config
 
+// Package config provides a reusable loader for Synnergy configuration files
+// and environment variables. It is versioned so that applications can depend
+// on a stable API contract.
+//
+// Version: v0.1.0
+
 import (
+	"fmt"
+
 	"github.com/spf13/viper"
-	"log"
+
+	"synnergy-network/pkg/utils"
 )
 
-// FullConfig represents the unified configuration for a Synnergy node.
-// It mirrors the structure of the YAML files under cmd/config.
-type FullConfig struct {
+// Version is the semantic version of this configuration package.
+const Version = "v0.1.0"
+
+// Config represents the unified configuration for a Synnergy node. It mirrors
+// the structure of the YAML files under cmd/config.
+type Config struct {
 	Network struct {
 		ID             string   `mapstructure:"id"`
 		ChainID        int      `mapstructure:"chain_id"`
@@ -42,27 +54,38 @@ type FullConfig struct {
 	} `mapstructure:"logging"`
 }
 
-// AppConfig holds the loaded configuration after calling LoadConfig.
-var AppConfig FullConfig
+// AppConfig holds the configuration loaded via Load or LoadFromEnv.
+var AppConfig Config
 
-func LoadConfig(env string) {
+// Load reads configuration files and merges any environment specific
+// overrides. The resulting configuration is stored in AppConfig and returned.
+//
+// The function uses the provided environment name to merge additional config
+// files. If env is empty, only the default configuration is loaded.
+func Load(env string) (*Config, error) {
 	viper.SetConfigName("default")
-	viper.AddConfigPath("./config")
+	viper.AddConfigPath("cmd/config")
 	viper.SetConfigType("yaml")
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Failed to load config: %v", err)
+		return nil, utils.Wrap(err, "load config")
 	}
 
 	if env != "" {
 		viper.SetConfigName(env)
 		if err := viper.MergeInConfig(); err != nil {
-			log.Fatalf("Failed to merge %s config: %v", env, err)
+			return nil, utils.Wrap(err, fmt.Sprintf("merge %s config", env))
 		}
 	}
 
 	viper.AutomaticEnv() // picks up from .env
 
 	if err := viper.Unmarshal(&AppConfig); err != nil {
-		log.Fatalf("Failed to unmarshal config: %v", err)
+		return nil, utils.Wrap(err, "unmarshal config")
 	}
+	return &AppConfig, nil
+}
+
+// LoadFromEnv loads configuration using the SYNN_ENV environment variable.
+func LoadFromEnv() (*Config, error) {
+	return Load(utils.EnvOrDefault("SYNN_ENV", ""))
 }
