@@ -25,9 +25,9 @@ func NewContentNode(cfg Config) (*ContentNode, error) {
 	return &ContentNode{Node: n, store: make(map[string][]byte)}, nil
 }
 
+
 // encryptContent applies CFB encryption to the provided data using the key.
 func encryptContent(data, key []byte) ([]byte, error) {
-
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -41,6 +41,7 @@ func encryptContent(data, key []byte) ([]byte, error) {
 	stream.XORKeyStream(b[aes.BlockSize:], data)
 	return b, nil
 }
+
 
 // decryptContent reverses CFB encryption performed by encryptContent.
 func decryptContent(data, key []byte) ([]byte, error) {
