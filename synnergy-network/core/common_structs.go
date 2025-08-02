@@ -434,16 +434,18 @@ type Config struct {
 }
 
 type Node struct {
-	host     host.Host
-	pubsub   *pubsub.PubSub
-	topics   map[string]*pubsub.Topic
-	subs     map[string]*pubsub.Subscription
-	peerLock sync.RWMutex
-	peers    map[NodeID]*Peer
-	nat      *NATManager
-	ctx      context.Context
-	cancel   context.CancelFunc
-	cfg      Config
+	host      host.Host
+	pubsub    *pubsub.PubSub
+	topics    map[string]*pubsub.Topic
+	subs      map[string]*pubsub.Subscription
+	topicLock sync.RWMutex
+	subLock   sync.RWMutex
+	peerLock  sync.RWMutex
+	peers     map[NodeID]*Peer
+	nat       *NATManager
+	ctx       context.Context
+	cancel    context.CancelFunc
+	cfg       Config
 }
 
 //---------------------------------------------------------------------
