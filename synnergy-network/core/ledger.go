@@ -16,16 +16,25 @@ import (
 	"sort"
 )
 
-// NewLedger initializes a ledger, replaying an existing WAL and optionally loading a genesis block.
-func NewLedger(cfg LedgerConfig) (*Ledger, error) {
+// NewLedger initializes a ledger, replaying an existing WAL and optionally
+// loading a genesis block. The WAL file is closed if an error occurs during
+// initialisation.
+func NewLedger(cfg LedgerConfig) (l *Ledger, err error) {
 	// Prepare directories
 	// Open or create WAL
 	wal, err := os.OpenFile(cfg.WALPath, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0o600)
 	if err != nil {
 		return nil, fmt.Errorf("open WAL: %w", err)
 	}
+	// Ensure the WAL is closed on failure. On success it remains open and is
+	// managed by the returned Ledger instance.
+	defer func() {
+		if err != nil {
+			_ = wal.Close()
+		}
+	}()
 
-	l := &Ledger{
+	l = &Ledger{
 		Blocks:           []*Block{},
 		blockIndex:       make(map[Hash]*Block),
 		State:            make(map[string][]byte),
@@ -43,7 +52,7 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 		pruneInterval:    cfg.PruneInterval,
 	}
 	if cfg.GenesisBlock != nil {
-		if err := l.applyBlock(cfg.GenesisBlock, false); err != nil {
+		if err = l.applyBlock(cfg.GenesisBlock, false); err != nil {
 			return nil, err
 		}
 		logrus.Infof("Loaded genesis block height %d", cfg.GenesisBlock.Header.Height)
@@ -52,14 +61,14 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 	scanner := bufio.NewScanner(wal)
 	for scanner.Scan() {
 		var blk Block
-		if err := json.Unmarshal(scanner.Bytes(), &blk); err != nil {
+		if err = json.Unmarshal(scanner.Bytes(), &blk); err != nil {
 			return nil, fmt.Errorf("WAL unmarshal: %w", err)
 		}
-		if err := l.applyBlock(&blk, false); err != nil {
+		if err = l.applyBlock(&blk, false); err != nil {
 			return nil, err
 		}
 	}
-	if err := scanner.Err(); err != nil {
+	if err = scanner.Err(); err != nil {
 		return nil, fmt.Errorf("WAL scan: %w", err)
 	}
 	// initialise global fee distributor for this ledger
@@ -854,4 +863,17 @@ func (l *Ledger) AllNodeLocations() map[NodeID]Location {
 	}
 	l.mu.RUnlock()
 	return out
+}
+
+// Close releases file descriptors associated with the ledger.
+// It is safe to call multiple times.
+func (l *Ledger) Close() error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.walFile != nil {
+		err := l.walFile.Close()
+		l.walFile = nil
+		return err
+	}
+	return nil
 }
