@@ -17,6 +17,15 @@ type Kademlia struct {
 	mu      sync.RWMutex
 }
 
+// hash160 returns the first 160 bits of the SHA-256 hash of the data.
+func hash160(data []byte) [20]byte {
+	sum := sha256.Sum256(data)
+	var h [20]byte
+	copy(h[:], sum[:20])
+	return h
+}
+
+
 // NewKademlia creates a new Kademlia instance bound to the given node ID.
 func NewKademlia(id NodeID) *Kademlia {
 	return &Kademlia{
@@ -110,12 +119,4 @@ func (k *Kademlia) distance(a NodeID, b NodeID) *big.Int {
 		diff[i] = aa[i] ^ bb[i]
 	}
 	return new(big.Int).SetBytes(diff[:])
-}
-
-// hash160 returns the first 160 bits of the SHA‑256 hash of the data.
-func hash160(data []byte) [20]byte {
-	full := sha256.Sum256(data)
-	var out [20]byte
-	copy(out[:], full[:20])
-	return out
 }
