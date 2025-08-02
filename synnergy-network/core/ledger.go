@@ -169,9 +169,9 @@ func (l *Ledger) WithinBlock(fn func() error) error {
 	return fn()
 }
 
-func (l *Ledger) IsIDTokenHolder(addr Address) bool {
-	const IDTokenID TokenID = 1 // Use your actual governance/ID token ID
+const IDTokenID TokenID = 1 // Use your actual governance/ID token ID
 
+func (l *Ledger) IsIDTokenHolder(addr Address) bool {
 	bal := l.TokenBalance(IDTokenID, addr)
 	return bal > 0
 }
