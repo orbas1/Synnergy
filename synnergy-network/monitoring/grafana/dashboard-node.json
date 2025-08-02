@@ -1,0 +1,20 @@
+{
+  "title": "Synnergy Node Overview",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Block Height",
+      "targets": [{ "expr": "synnergy_block_height" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Peer Count",
+      "targets": [{ "expr": "synnergy_peer_count" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Pending Transactions",
+      "targets": [{ "expr": "synnergy_pending_transactions" }]
+    }
+  ]
+}
