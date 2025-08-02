@@ -19,10 +19,13 @@ type ContractMapping struct {
 
 const topicContractRegistry = "xchain:contract"
 
-// RegisterContract stores a mapping from a local contract address to a remote chain.
 // RegisterXContract stores a mapping from a local contract address to a remote chain.
 func RegisterXContract(local Address, remoteChain, remoteAddr string) error {
 	logger := zap.L().Sugar()
+	if !HasActiveConnection("", remoteChain) {
+		logger.Warnf("No active connection to remote chain %s", remoteChain)
+		return fmt.Errorf("no active connection to remote chain %s: %w", remoteChain, ErrNoActiveConnection)
+	}
 	key := fmt.Sprintf("crosschain:contract:%s", hex.EncodeToString(local[:]))
 	m := ContractMapping{Local: local, RemoteChain: remoteChain, Remote: remoteAddr, CreatedAt: time.Now().UTC()}
 	raw, err := json.Marshal(m)
@@ -52,7 +55,6 @@ func GetXContract(local Address) (ContractMapping, error) {
 	return m, nil
 }
 
-// ListContracts returns all registered contract mappings.
 // ListXContracts returns all registered contract mappings.
 func ListXContracts() ([]ContractMapping, error) {
 	it := CurrentStore().Iterator([]byte("crosschain:contract:"), nil)
@@ -68,7 +70,6 @@ func ListXContracts() ([]ContractMapping, error) {
 	return out, it.Error()
 }
 
-// RemoveContract deletes a mapping for the given local address.
 // RemoveXContract deletes a mapping for the given local address.
 func RemoveXContract(local Address) error {
 	return CurrentStore().Delete([]byte(fmt.Sprintf("crosschain:contract:%s", hex.EncodeToString(local[:]))))

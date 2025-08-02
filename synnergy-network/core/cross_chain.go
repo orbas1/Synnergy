@@ -52,6 +52,11 @@ func RegisterBridge(b Bridge) error {
 		return ErrUnauthorized
 	}
 
+	if !HasActiveConnection(b.SourceChain, b.TargetChain) {
+		logger.Warnf("No active connection between %s and %s", b.SourceChain, b.TargetChain)
+		return fmt.Errorf("no active connection between %s and %s: %w", b.SourceChain, b.TargetChain, ErrNoActiveConnection)
+	}
+
 	// assign ID
 	b.ID = uuid.New().String()
 	b.CreatedAt = time.Now().UTC()
@@ -94,7 +99,7 @@ type KVStore interface {
 	Set(key, value []byte) error
 	Get(key []byte) ([]byte, error)
 	Delete(key []byte) error
-	Iterator(start, end []byte) Iterator // ← Add this line
+	Iterator(start, end []byte) Iterator
 }
 
 type Iterator interface {
