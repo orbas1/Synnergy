@@ -2,6 +2,10 @@
   "name": "smart-contract-marketplace",
   "version": "0.1.0",
   "main": "server/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@11.4.2",
   "dependencies": {
     "express": "^4.18.2",
     "morgan": "^1.10.0",
