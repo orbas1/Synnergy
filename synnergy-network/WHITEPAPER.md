@@ -39,6 +39,12 @@ The Synnergy ecosystem brings together several services:
 - **Feedback System** – Users can submit and browse feedback directly on chain, enabling transparent improvement cycles.
 - **Biometric Authentication** – module for on-chain identity verification.
 - **Faucet Service** – Dispense test coins and tokens to developers with rate limits.
+- **Wallet Server** – REST APIs for wallet creation, mnemonic import and transaction signing.
+- **GUI Projects** – Web interfaces for the wallet, explorer, marketplaces, DAO governance and cross-chain tools.
+- **Resource Marketplace** – Auction-based system for renting compute or storage resources.
+- **Integration Registry** – Tracks integration endpoints used by specialized nodes and external services.
+- **Specialized Node Types** – Includes watchtower, quantum-resistant, geospatial and historical nodes for niche deployments.
+- **Extensive Token Library** – Example contracts like SYN70 gaming assets, SYN1000 stablecoins and SYN845 debt instruments.
 All services are optional and run as independent modules that plug into the core.
 
 ## Synnergy Network Architecture
@@ -87,6 +93,9 @@ Initial supply is minted at genesis with a gradual release schedule:
 - 10% sold in public rounds to encourage early community involvement.
 - 5% kept as a liquidity buffer for exchanges and market making.
 The supply inflates annually by 2% to maintain incentives and fund new initiatives.
+
+### Token and Node Catalog
+The repository includes many sample token contracts and node variants beyond the basic coin and validator roles. Token examples cover gaming assets, stablecoins, debt instruments and fractional real estate among others. Node types range from energy-efficient and quantum-resistant nodes to watchtowers, historical archives and holographic nodes used for research. An integration registry keeps track of these specialised roles so operators can discover compatible services.
 
 ## Full CLI Guide and Index
 Synnergy comes with a powerful CLI built using the Cobra framework. Commands are grouped into modules mirroring the codebase. Below is a concise index; see `cmd/cli/cli_guide.md` for the detailed usage of each command group:
@@ -281,6 +290,9 @@ simplifies rewarding validators and distributing governance tokens to new users.
 Each contract address on Synnergy maintains an adjustable gas allowance. The resource allocation manager stores these limits directly in the ledger and exposes opcodes so the VM can consume or transfer allowances during execution. Operators may update limits through CLI commands or automated governance proposals. This ensures predictable resource usage while integrating tightly with consensus and transaction validation.
 
 To improve operational awareness across clusters, a lightweight **Distributed Network Coordination** service periodically broadcasts the current ledger height and can distribute test tokens for bootstrap scenarios. This module hooks into the existing networking layer and ledger without introducing consensus dependencies. Enterprises can run the coordinator alongside replication to monitor progress and trigger synchronisation tasks.
+
+## User Interfaces and Wallet Server
+Several web-based GUI projects under `GUI/` complement the CLI. They provide front ends for wallet management, blockchain exploration, marketplace listings, cross-chain operations and DAO voting. Most use small Node.js or Go backends that demonstrate contract calls. The `walletserver` package exposes REST endpoints so the wallet GUI can generate mnemonics, derive addresses, sign transactions and query opcode metadata. These tools showcase how real applications integrate with the core modules and remain under active development.
 
 ## Financial and Numerical Forecasts
 The following projections outline potential adoption metrics and pricing scenarios. These figures are purely illustrative and not financial advice.
