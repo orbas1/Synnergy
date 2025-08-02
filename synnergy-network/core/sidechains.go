@@ -113,7 +113,7 @@ func (sc *SidechainCoordinator) Deposit(chain SidechainID, from Address, to []by
 		return DepositReceipt{}, errors.New("zero amount")
 	}
 	// escrow: transfer from user to bridge account
-	bridgeAcct := bridgeAccount(chain, token)
+	bridgeAcct := sidechainBridgeAccount(chain, token)
 	tok, ok := GetToken(token)
 	if !ok {
 		return DepositReceipt{}, errors.New("token unknown")
@@ -214,7 +214,7 @@ func (sc *SidechainCoordinator) VerifyWithdraw(p WithdrawProof) error {
 	}
 
 	// release funds from escrow
-	bridgeAcct := bridgeAccount(p.Header.ChainID, payload.Token)
+	bridgeAcct := sidechainBridgeAccount(p.Header.ChainID, payload.Token)
 	tok, _ := GetToken(payload.Token)
 	if err := tok.Transfer(bridgeAcct, p.Recipient, payload.Amount); err != nil {
 		return err
@@ -297,7 +297,11 @@ func depositKey(id SidechainID, n uint64) []byte {
 	return append([]byte("sc:dep:"), b...)
 }
 func withdrawnKey(hash [32]byte) []byte { return append([]byte("sc:wd:"), hash[:]...) }
-func bridgeAccount(id SidechainID, token TokenID) Address {
+
+// sidechainBridgeAccount derives the special bridge account used for transfers
+// between the main chain and a given sidechain. The unique prefix ensures the
+// address space does not collide with other bridge mechanisms.
+func sidechainBridgeAccount(id SidechainID, token TokenID) Address {
 	var a Address
 	copy(a[:4], []byte("BRG1"))
 	binary.BigEndian.PutUint32(a[4:], uint32(id))
