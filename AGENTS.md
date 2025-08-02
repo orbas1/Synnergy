@@ -740,3 +740,69 @@ To prepare for final security auditing and production launch, perform a project-
     - Execute final go/no-go checklist with stakeholder sign-off.
     - Transition ongoing maintenance to operations with clear SLAs.
 
+## Comprehensive 30-Stage Error Type Roadmap
+
+To categorise and resolve all current error types across the 701 files in `synnergy-network` (core, GUI and CLI), follow this 30-stage roadmap. Each stage targets a specific class of issues and associated directories so that every file is covered before launch.
+
+1. **Stage 1 – Module Initialization**
+   - Create/verify `go.mod` for Go packages and lock GUI dependencies.
+2. **Stage 2 – Formatting Sweep**
+   - Run `gofmt -w` on Go files; apply formatters to JS/HTML/CSS.
+3. **Stage 3 – Import & Syntax Cleanup**
+   - Resolve missing imports and syntax errors using `go build`.
+4. **Stage 4 – Type Checking**
+   - Fix type mismatches and interface compliance across `core` and `cmd`.
+5. **Stage 5 – Node Module Build Failures**
+   - Address compile issues in `core/Nodes` and node-related CLI commands.
+6. **Stage 6 – Token Module Errors**
+   - Review `core/Tokens` and token CLI utilities for inconsistencies.
+7. **Stage 7 – Consensus & Networking Packages**
+   - Validate consensus and networking files plus related scripts.
+8. **Stage 8 – Linting Sweep**
+   - Run `go vet`, `golangci-lint`, and ESLint on GUI components.
+9. **Stage 9 – Variable Naming & Scope**
+   - Ensure exported identifiers are `PascalCase` and unexported `camelCase`.
+10. **Stage 10 – Error Handling Patterns**
+    - Confirm all returned errors are checked or wrapped with context.
+11. **Stage 11 – Struct Tags & JSON Alignment**
+    - Validate tags in data and contract structures.
+12. **Stage 12 – Dependency Hygiene**
+    - Run `go mod tidy` and `npm audit fix` to tidy modules.
+13. **Stage 13 – Circular Import Detection**
+    - Break import cycles between packages such as Nodes and Tokens.
+14. **Stage 14 – Concurrency & Goroutines**
+    - Review goroutine usage and channel operations; apply `-race` tools.
+15. **Stage 15 – Resource Leakage**
+    - Ensure files, DB handles, and network connections are properly closed.
+16. **Stage 16 – Logging Consistency**
+    - Standardise logging patterns across `core` and `cmd`.
+17. **Stage 17 – Security & Cryptography Review**
+    - Audit cryptographic primitives and key management.
+18. **Stage 18 – API & RPC Validations**
+    - Verify API contracts in `core/api*` and `cmd/explorer` modules.
+19. **Stage 19 – CLI Flag Validation**
+    - Check argument parsing and user feedback in `cmd/cli` commands.
+20. **Stage 20 – Script Shellchecks**
+    - Use `shellcheck` on `cmd/scripts/*.sh` files.
+21. **Stage 21 – Smart Contract Compilation**
+    - Compile and lint Solidity contracts under `cmd/smart_contracts`.
+22. **Stage 22 – GUI Build Warnings**
+    - Run builds for each GUI app and resolve bundler errors.
+23. **Stage 23 – Configuration Files**
+    - Validate YAML/JSON configs and environment samples.
+24. **Stage 24 – Documentation & Comment Lint**
+    - Fix broken links and ensure sample code compiles.
+25. **Stage 25 – Unit Test Coverage**
+    - Add or update tests for critical paths in `core` and CLI packages.
+26. **Stage 26 – Integration Tests**
+    - Run end‑to‑end network tests for consensus and cross‑chain flows.
+27. **Stage 27 – Performance Profiling**
+    - Use `pprof` and other profilers to tune hotspots.
+28. **Stage 28 – Packaging & Build Matrix**
+    - Build binaries for multiple OS/architectures and validate Docker images.
+29. **Stage 29 – Release Candidate Validation**
+    - Deploy to a staging network and execute transaction scripts.
+30. **Stage 30 – Final Quality Gate**
+    - Confirm all prior stages are complete and sign off for production.
+
+
