@@ -57,12 +57,12 @@ func effStart(cmd *cobra.Command, _ []string) error {
 	if n == nil {
 		return fmt.Errorf("not initialised")
 	}
-	core.EnergyNode_Start(n)
+	core.EnergyNodeStart(n)
 	go func() {
 		sig := make(chan os.Signal, 1)
 		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 		<-sig
-		_ = core.EnergyNode_Stop(n)
+		_ = core.EnergyNodeStop(n)
 		os.Exit(0)
 	}()
 	fmt.Fprintln(cmd.OutOrStdout(), "energy node started")
@@ -77,7 +77,7 @@ func effStop(cmd *cobra.Command, _ []string) error {
 		fmt.Fprintln(cmd.OutOrStdout(), "not running")
 		return nil
 	}
-	_ = core.EnergyNode_Stop(n)
+	_ = core.EnergyNodeStop(n)
 	core.SetBroadcaster(nil)
 	effMu.Lock()
 	effNode = nil

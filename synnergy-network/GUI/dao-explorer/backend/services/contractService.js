@@ -1,6 +1,6 @@
-const { ethers } = require('ethers');
-const config = require('../config/config');
-const abi = require('../../../../cmd/smart_contracts/dao_explorer.json');
+const { ethers } = require("ethers");
+const config = require("../config/config");
+const abi = require("../../../../cmd/smart_contracts/dao_explorer.json");
 
 // Connect to network (assumes local JSON-RPC node)
 const provider = new ethers.JsonRpcProvider(config.rpcUrl);
@@ -45,5 +45,5 @@ module.exports = {
   getProposal,
   listProposals,
   executeProposal,
-  balanceOfAsset
+  balanceOfAsset,
 };

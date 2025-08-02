@@ -1,4 +1,8 @@
-import { createToken, listTokens, deployContract } from '../services/tokenService.js';
+import {
+  createToken,
+  listTokens,
+  deployContract,
+} from "../services/tokenService.js";
 
 export async function create(req, res) {
   try {

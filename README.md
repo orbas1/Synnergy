@@ -42,6 +42,14 @@ go mod tidy
 GOFLAGS="-trimpath" go build -o synnergy ./cmd/synnergy
 ```
 
+To compile binaries for multiple operating systems and architectures and validate the Docker image, run:
+
+```bash
+./scripts/build_matrix.sh
+```
+
+Built binaries are placed under `dist/` and a `synnergy:latest` Docker image is produced.
+
 ## Running a Local Node
 
 Initialise a ledger and start the services:

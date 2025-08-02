@@ -114,6 +114,9 @@ func (b *BaseToken) Transfer(from, to Address, amount uint64) error {
 	if b.balances == nil {
 		return fmt.Errorf("balances not initialised")
 	}
+	if from == (Address{}) || to == (Address{}) {
+		return fmt.Errorf("zero address")
+	}
 	if err := b.balances.Sub(b.id, from, amount); err != nil {
 		return err
 	}
@@ -140,7 +143,6 @@ func (b *BaseToken) TransferFrom(owner, spender, to Address, amount uint64) erro
 	return nil
 }
 
-
 // Allowance returns the approved spend for a spender.
 func (b *BaseToken) Allowance(owner, spender Address) uint64 {
 	b.mu.RLock()
@@ -158,6 +160,9 @@ func (b *BaseToken) Allowance(owner, spender Address) uint64 {
 func (b *BaseToken) Approve(owner, spender Address, amount uint64) error {
 	b.mu.Lock()
 	defer b.mu.Unlock()
+	if owner == (Address{}) || spender == (Address{}) {
+		return fmt.Errorf("zero address")
+	}
 	if b.allowance == nil {
 		b.allowance = make(map[Address]map[Address]uint64)
 	}
@@ -173,6 +178,9 @@ func (b *BaseToken) Mint(to Address, amount uint64) error {
 	if b.meta.FixedSupply {
 		return fmt.Errorf("fixed supply token")
 	}
+	if to == (Address{}) {
+		return fmt.Errorf("zero address")
+	}
 	if b.balances == nil {
 		b.balances = NewBalanceTable()
 	}
@@ -185,6 +193,9 @@ func (b *BaseToken) Mint(to Address, amount uint64) error {
 func (b *BaseToken) Burn(from Address, amount uint64) error {
 	if b.balances == nil {
 		return fmt.Errorf("balances not initialised")
+	}
+	if from == (Address{}) {
+		return fmt.Errorf("zero address")
 	}
 	if err := b.balances.Sub(b.id, from, amount); err != nil {
 		return err

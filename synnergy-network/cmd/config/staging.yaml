@@ -1,0 +1,27 @@
+network:
+  id: synnergy-staging
+  chain_id: 1216
+  max_peers: 50
+  genesis_file: config/genesis.json
+  rpc_enabled: true
+  p2p_port: 30304
+  listen_addr: "/ip4/0.0.0.0/tcp/4002"
+  discovery_tag: synnergy-staging
+  bootstrap_peers: []
+
+consensus:
+  type: pos
+  block_time_ms: 3000
+  validators_required: 3
+
+vm:
+  max_gas_per_block: 8000000
+  opcode_debug: false
+
+storage:
+  db_path: ./data/staging_db
+  prune: true
+
+logging:
+  level: info
+  file: logs/staging.log
