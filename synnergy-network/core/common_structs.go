@@ -551,6 +551,8 @@ type Channel struct {
 	ID       ChannelID `json:"id"`
 	PartyA   Address   `json:"a"`
 	PartyB   Address   `json:"b"`
+	ShardA   ShardID   `json:"shard_a"`
+	ShardB   ShardID   `json:"shard_b"`
 	Token    TokenID   `json:"token"`
 	BalanceA uint64    `json:"bal_a"`
 	BalanceB uint64    `json:"bal_b"`
@@ -561,6 +563,8 @@ type Channel struct {
 
 type SignedState struct {
 	Channel Channel `json:"channel"`
+	PubKeyA []byte  `json:"pub_key_a"`
+	PubKeyB []byte  `json:"pub_key_b"`
 	SigA    []byte  `json:"sig_a"`
 	SigB    []byte  `json:"sig_b"`
 }

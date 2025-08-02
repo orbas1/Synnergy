@@ -18,14 +18,11 @@ package core
 // -----------------------------------------------------------------------------
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
+	"crypto/ed25519"
 	"crypto/sha256"
-	"encoding/asn1"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
-	"math/big"
 	"sync"
 	"time"
 )
@@ -74,6 +71,9 @@ func (e *ChannelEngine) OpenChannel(a, b Address, token TokenID, amountA, amount
 	var id ChannelID
 	copy(id[:], h[:])
 
+	shA := shardOfAddr(a)
+	shB := shardOfAddr(b)
+
 	// escrow funds into multisig account
 	escrow := escrowAddr(id)
 	if amountA > 0 {
@@ -87,8 +87,10 @@ func (e *ChannelEngine) OpenChannel(a, b Address, token TokenID, amountA, amount
 		}
 	}
 
-	ch := Channel{ID: id, PartyA: a, PartyB: b, Token: token, BalanceA: amountA, BalanceB: amountB, Nonce: 0, Closing: 0, Paused: false}
-	e.led.SetState(chKey(id), mustJSON(ch))
+	ch := Channel{ID: id, PartyA: a, PartyB: b, ShardA: shA, ShardB: shB, Token: token, BalanceA: amountA, BalanceB: amountB, Nonce: 0, Closing: 0, Paused: false}
+	if err := e.led.SetState(chKey(id), mustJSON(ch)); err != nil {
+		return id, err
+	}
 	return id, nil
 }
 
@@ -96,49 +98,47 @@ func (e *ChannelEngine) OpenChannel(a, b Address, token TokenID, amountA, amount
 // UpdateState signature verification helper
 //---------------------------------------------------------------------
 
-type ECDSASignature struct {
-	R, S *big.Int
-}
-
-func VerifyECDSASignature(pubKeyBytes []byte, msgHash []byte, sigBytes []byte) error {
-	if len(pubKeyBytes) != 65 || pubKeyBytes[0] != 0x04 {
-		return errors.New("invalid uncompressed public key format")
-	}
-
-	x := new(big.Int).SetBytes(pubKeyBytes[1:33])
-	y := new(big.Int).SetBytes(pubKeyBytes[33:])
-	pubKey := ecdsa.PublicKey{
-		Curve: elliptic.P256(),
-		X:     x,
-		Y:     y,
-	}
-
-	var sig ECDSASignature
-	_, err := asn1.Unmarshal(sigBytes, &sig)
-	if err != nil {
-		return errors.New("invalid signature encoding")
-	}
-
-	if !ecdsa.Verify(&pubKey, msgHash, sig.R, sig.S) {
-		return errors.New("signature verification failed")
-	}
-
-	return nil
-}
-
 func verifySigs(ss *SignedState) error {
-	raw, _ := json.Marshal(ss.Channel)
+	raw, err := json.Marshal(ss.Channel)
+	if err != nil {
+		return err
+	}
 	h := sha256.Sum256(raw)
 
-	pubA := ss.Channel.PartyA[:] // convert [N]byte → []byte
-	pubB := ss.Channel.PartyB[:]
-
-	if err := VerifyECDSASignature(pubA, h[:], ss.SigA); err != nil {
-		return errors.New("sigA invalid: " + err.Error())
+	if len(ss.PubKeyA) != ed25519.PublicKeySize {
+		return errors.New("invalid pubKeyA length")
+	}
+	if len(ss.PubKeyB) != ed25519.PublicKeySize {
+		return errors.New("invalid pubKeyB length")
+	}
+	if len(ss.SigA) != ed25519.SignatureSize {
+		return errors.New("invalid sigA length")
+	}
+	if len(ss.SigB) != ed25519.SignatureSize {
+		return errors.New("invalid sigB length")
 	}
 
-	if err := VerifyECDSASignature(pubB, h[:], ss.SigB); err != nil {
-		return errors.New("sigB invalid: " + err.Error())
+	pubA := ed25519.PublicKey(ss.PubKeyA)
+	pubB := ed25519.PublicKey(ss.PubKeyB)
+
+	if !ed25519.Verify(pubA, h[:], ss.SigA) {
+		return errors.New("sigA invalid")
+	}
+	if !ed25519.Verify(pubB, h[:], ss.SigB) {
+		return errors.New("sigB invalid")
+	}
+
+	if addr := pubKeyToAddress(pubA); addr != ss.Channel.PartyA {
+		return errors.New("pubkeyA does not match PartyA address")
+	}
+	if addr := pubKeyToAddress(pubB); addr != ss.Channel.PartyB {
+		return errors.New("pubkeyB does not match PartyB address")
+	}
+	if shardOfAddr(ss.Channel.PartyA) != ss.Channel.ShardA {
+		return errors.New("shardA mismatch with PartyA")
+	}
+	if shardOfAddr(ss.Channel.PartyB) != ss.Channel.ShardB {
+		return errors.New("shardB mismatch with PartyB")
 	}
 
 	return nil
@@ -168,8 +168,12 @@ func (e *ChannelEngine) InitiateClose(state SignedState) error {
 
 	// store latest state + start timer
 	state.Channel.Closing = time.Now().Unix()
-	e.led.SetState(chKey(state.Channel.ID), mustJSON(state.Channel))
-	e.led.SetState(pendingKey(state.Channel.ID), mustJSON(state))
+	if err := e.led.SetState(chKey(state.Channel.ID), mustJSON(state.Channel)); err != nil {
+		return err
+	}
+	if err := e.led.SetState(pendingKey(state.Channel.ID), mustJSON(state)); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -198,8 +202,12 @@ func (e *ChannelEngine) Challenge(state SignedState) error {
 	}
 	// replace pending state
 	state.Channel.Closing = cur.Closing
-	e.led.SetState(chKey(state.Channel.ID), mustJSON(state.Channel))
-	e.led.SetState(pendingKey(state.Channel.ID), mustJSON(state))
+	if err := e.led.SetState(chKey(state.Channel.ID), mustJSON(state.Channel)); err != nil {
+		return err
+	}
+	if err := e.led.SetState(pendingKey(state.Channel.ID), mustJSON(state)); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -224,14 +232,22 @@ func (e *ChannelEngine) Finalize(id ChannelID) error {
 	tok, _ := GetToken(ch.Token)
 	escrow := escrowAddr(id)
 	if ch.BalanceA > 0 {
-		_ = tok.Transfer(escrow, ch.PartyA, ch.BalanceA)
+		if err := tok.Transfer(escrow, ch.PartyA, ch.BalanceA); err != nil {
+			return err
+		}
 	}
 	if ch.BalanceB > 0 {
-		_ = tok.Transfer(escrow, ch.PartyB, ch.BalanceB)
+		if err := tok.Transfer(escrow, ch.PartyB, ch.BalanceB); err != nil {
+			return err
+		}
 	}
 
-	e.led.DeleteState(chKey(id))
-	e.led.DeleteState(pendingKey(id))
+	if err := e.led.DeleteState(chKey(id)); err != nil {
+		return err
+	}
+	if err := e.led.DeleteState(pendingKey(id)); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -268,12 +284,17 @@ func (e *ChannelEngine) ListChannels() ([]Channel, error) {
 //---------------------------------------------------------------------
 
 func (e *ChannelEngine) getChannel(id ChannelID) (Channel, error) {
-	raw, _ := e.led.GetState(chKey(id))
+	raw, err := e.led.GetState(chKey(id))
+	if err != nil {
+		return Channel{}, err
+	}
 	if len(raw) == 0 {
 		return Channel{}, errors.New("ch not found")
 	}
 	var c Channel
-	_ = json.Unmarshal(raw, &c)
+	if err := json.Unmarshal(raw, &c); err != nil {
+		return Channel{}, err
+	}
 	return c, nil
 }
 
@@ -286,7 +307,13 @@ func escrowAddr(id ChannelID) Address {
 	return a
 }
 func uint64ToBytes(x uint64) []byte { b := make([]byte, 8); binary.BigEndian.PutUint64(b, x); return b }
-func mustJSON(v interface{}) []byte { b, _ := json.Marshal(v); return b }
+func mustJSON(v interface{}) []byte {
+	b, err := json.Marshal(v)
+	if err != nil {
+		panic(err)
+	}
+	return b
+}
 
 //---------------------------------------------------------------------
 // END state_channel.go
