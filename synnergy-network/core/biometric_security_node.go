@@ -62,6 +62,5 @@ func (b *BiometricSecurityNode) BroadcastTxWithBio(tx *Transaction, bio []byte) 
 func (b *BiometricSecurityNode) Close() error {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	_ = b.ledger.Close()
 	return b.Node.Close()
 }
