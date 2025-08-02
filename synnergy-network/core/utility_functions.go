@@ -413,8 +413,8 @@ func toSigned(x *big.Int) *big.Int {
 	return new(big.Int).Set(x)
 }
 
-// ErrInvalidSignature is returned by opECRECOVER when the signature cannot be recovered.
-var ErrInvalidSignature = errors.New("vm: invalid ecrecover signature")
+// errInvalidSignature is returned by opECRECOVER when the signature cannot be recovered.
+var errInvalidSignature = errors.New("vm: invalid ecrecover signature")
 
 // opECRECOVER pops 4 values (s, r, v, hash) from the stack (in that order),
 // attempts to recover the public key from the ECDSA signature over secp256k1,
@@ -600,15 +600,15 @@ func opCODECOPY(ctx *VMContext) error {
 	return nil
 }
 
-// ErrInvalidJumpDest is returned when a JUMP or JUMPI target is not a valid JUMPDEST.
-var ErrInvalidJumpDest = errors.New("vm: invalid jump destination")
+// errInvalidJumpDest is returned when a JUMP or JUMPI target is not a valid JUMPDEST.
+var errInvalidJumpDest = errors.New("vm: invalid jump destination")
 
 // opJUMP pops a destination off the stack and unconditionally sets PC to that location,
 // if it is a valid JUMPDEST.
 func opJUMP(ctx *VMContext) error {
 	dest := ctx.Stack.Pop().Uint64()
 	if _, ok := ctx.JumpTable[dest]; !ok {
-		return ErrInvalidJumpDest
+		return errInvalidJumpDest
 	}
 	ctx.PC = dest
 	return nil
@@ -620,7 +620,7 @@ func opJUMPI(ctx *VMContext) error {
 	cond := ctx.Stack.Pop()
 	if cond.Sign() != 0 {
 		if _, ok := ctx.JumpTable[dest]; !ok {
-			return ErrInvalidJumpDest
+			return errInvalidJumpDest
 		}
 		ctx.PC = dest
 	}

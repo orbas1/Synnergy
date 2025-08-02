@@ -59,7 +59,7 @@ func UploadContent(data, key []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	nodes, err := chooseContentNodes(ContentReplicationFactor)
+	nodes, err := chooseContentNodes(contentReplicationFactor)
 	if err != nil {
 		return cid, err
 	}
@@ -102,4 +102,4 @@ func ListContentNodes() ([]ContentNetworkNode, error) {
 	return list, nil
 }
 
-var ContentReplicationFactor = 2
+var contentReplicationFactor = 2

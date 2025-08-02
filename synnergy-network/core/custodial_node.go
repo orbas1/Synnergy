@@ -12,9 +12,9 @@ type CustodialConfig struct {
 	Ledger  LedgerConfig
 }
 
-// ErrInsufficientBalance is returned when a withdrawal or transfer exceeds the
+// errInsufficientBalance is returned when a withdrawal or transfer exceeds the
 // stored amount for an account.
-var ErrInsufficientBalance = errors.New("insufficient balance")
+var errInsufficientBalance = errors.New("insufficient balance")
 
 // CustodialNode provides secure asset custody and management services.
 type CustodialNode struct {
@@ -72,7 +72,7 @@ func (c *CustodialNode) Withdraw(addr Address, token TokenID, amount uint64) err
 	defer c.mu.Unlock()
 	bal := c.store[addr][token]
 	if bal < amount {
-		return ErrInsufficientBalance
+		return errInsufficientBalance
 	}
 	c.store[addr][token] -= amount
 	return c.ledger.Burn(addr, amount)
@@ -83,7 +83,7 @@ func (c *CustodialNode) Transfer(from, to Address, token TokenID, amount uint64)
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if c.store[from][token] < amount {
-		return ErrInsufficientBalance
+		return errInsufficientBalance
 	}
 	if _, ok := c.store[to]; !ok {
 		c.store[to] = make(map[TokenID]uint64)

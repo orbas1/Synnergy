@@ -144,8 +144,8 @@ var standardNames = map[TokenStandard]string{
 	StdSYN5000: "SYN5000",
 }
 
-// ErrInvalidAsset is returned when a token cannot be located in the registry.
-var ErrInvalidAsset = errors.New("invalid token asset")
+// errInvalidAsset is returned when a token cannot be located in the registry.
+var errInvalidAsset = errors.New("invalid token asset")
 
 // Metadata describes a token instance.  Only the most common fields are kept
 // here; specialised tokens may extend this struct in their own packages.

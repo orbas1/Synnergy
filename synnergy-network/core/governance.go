@@ -26,7 +26,7 @@ type GovProposal struct {
 	Executed     bool              `json:"executed"`
 }
 
-var BlockGasLimit = uint64(1000000)
+var blockGasLimit = uint64(1000000)
 
 func UpdateParam(key, value string) error {
 	switch key {
@@ -35,7 +35,7 @@ func UpdateParam(key, value string) error {
 		if err != nil {
 			return fmt.Errorf("invalid uint: %w", err)
 		}
-		BlockGasLimit = v
+		blockGasLimit = v
 		return nil
 	default:
 		return fmt.Errorf("unknown param: %s", key)
@@ -259,7 +259,7 @@ func BalanceOfAsset(asset AssetRef, addr Address) (uint64, error) {
 	case AssetToken:
 		tok, ok := TokenLedger[asset.TokenID]
 		if !ok {
-			return 0, ErrInvalidAsset
+			return 0, errInvalidAsset
 		}
 		return tok.balances.Get(asset.TokenID, addr), nil
 	default:

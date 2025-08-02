@@ -47,7 +47,7 @@ func Lightning() *LightningNode { return ln }
 func (l *LightningNode) OpenChannel(a, b Address, token TokenID, amtA, amtB uint64) (LightningChannelID, error) {
 	tok, ok := GetToken(token)
 	if !ok {
-		return LightningChannelID{}, ErrInvalidAsset
+		return LightningChannelID{}, errInvalidAsset
 	}
 	l.mu.Lock()
 	l.nonce++
@@ -81,22 +81,22 @@ func (l *LightningNode) RoutePayment(id LightningChannelID, from Address, amount
 	defer l.mu.Unlock()
 	ch, ok := l.channels[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if from == ch.PartyA {
 		if ch.BalanceA < amount {
-			return ErrInvalidAsset
+			return errInvalidAsset
 		}
 		ch.BalanceA -= amount
 		ch.BalanceB += amount
 	} else if from == ch.PartyB {
 		if ch.BalanceB < amount {
-			return ErrInvalidAsset
+			return errInvalidAsset
 		}
 		ch.BalanceB -= amount
 		ch.BalanceA += amount
 	} else {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	ch.Nonce++
 	return nil
@@ -108,13 +108,13 @@ func (l *LightningNode) CloseChannel(id LightningChannelID) error {
 	ch, ok := l.channels[id]
 	if !ok {
 		l.mu.Unlock()
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	delete(l.channels, id)
 	l.mu.Unlock()
 	tok, ok := GetToken(ch.Token)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	esc := channelEscrow(id)
 	if ch.BalanceA > 0 {

@@ -49,7 +49,7 @@ func (tm *TokenManager) Create(meta Metadata, init map[Address]uint64) (TokenID,
 func (tm *TokenManager) Transfer(id TokenID, from, to Address, amount uint64) error {
 	tok, ok := GetToken(id)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	return tok.Transfer(from, to, amount)
 }
@@ -58,7 +58,7 @@ func (tm *TokenManager) Transfer(id TokenID, from, to Address, amount uint64) er
 func (tm *TokenManager) Mint(id TokenID, to Address, amount uint64) error {
 	tok, ok := GetToken(id)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	return tok.Mint(to, amount)
 }
@@ -67,7 +67,7 @@ func (tm *TokenManager) Mint(id TokenID, to Address, amount uint64) error {
 func (tm *TokenManager) Burn(id TokenID, from Address, amount uint64) error {
 	tok, ok := GetToken(id)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	return tok.Burn(from, amount)
 }
@@ -76,7 +76,7 @@ func (tm *TokenManager) Burn(id TokenID, from Address, amount uint64) error {
 func (tm *TokenManager) Approve(id TokenID, owner, spender Address, amount uint64) error {
 	tok, ok := GetToken(id)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	return tok.Approve(owner, spender, amount)
 }
@@ -85,7 +85,7 @@ func (tm *TokenManager) Approve(id TokenID, owner, spender Address, amount uint6
 func (tm *TokenManager) BalanceOf(id TokenID, addr Address) (uint64, error) {
 	tok, ok := GetToken(id)
 	if !ok {
-		return 0, ErrInvalidAsset
+		return 0, errInvalidAsset
 	}
 	return tok.BalanceOf(addr), nil
 }

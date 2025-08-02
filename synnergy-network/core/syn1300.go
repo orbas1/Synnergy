@@ -46,7 +46,7 @@ func (s *SupplyChainToken) RegisterAsset(asset SupplyChainAsset) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if _, ok := s.assets[asset.ID]; ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	asset.Timestamp = time.Now().UTC()
 	s.assets[asset.ID] = asset
@@ -69,7 +69,7 @@ func (s *SupplyChainToken) UpdateLocation(id, loc string) error {
 	defer s.mu.Unlock()
 	asset, ok := s.assets[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	asset.Location = loc
 	asset.Timestamp = time.Now().UTC()
@@ -90,7 +90,7 @@ func (s *SupplyChainToken) UpdateStatus(id, status string) error {
 	defer s.mu.Unlock()
 	asset, ok := s.assets[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	asset.Status = status
 	asset.Timestamp = time.Now().UTC()
@@ -111,7 +111,7 @@ func (s *SupplyChainToken) TransferAsset(id string, newOwner Address) error {
 	defer s.mu.Unlock()
 	asset, ok := s.assets[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if err := s.Transfer(asset.Owner, newOwner, 1); err != nil {
 		return err

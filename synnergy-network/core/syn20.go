@@ -68,7 +68,7 @@ func (t *SYN20Token) Transfer(from, to Address, amt uint64) error {
 	frozen := t.freeze[from] || t.freeze[to]
 	t.mu.RUnlock()
 	if paused || frozen {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	return t.BaseToken.Transfer(from, to, amt)
 }
@@ -81,7 +81,7 @@ func (t *SYN20Token) TransferWithMemo(from, to Address, amt uint64, memo string)
 // BulkTransfer sends tokens to multiple recipients.
 func (t *SYN20Token) BulkTransfer(from Address, tos []Address, amts []uint64) error {
 	if len(tos) != len(amts) {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	for i, to := range tos {
 		if err := t.Transfer(from, to, amts[i]); err != nil {
@@ -94,7 +94,7 @@ func (t *SYN20Token) BulkTransfer(from Address, tos []Address, amts []uint64) er
 // BulkApprove grants allowances to multiple spenders.
 func (t *SYN20Token) BulkApprove(owner Address, spenders []Address, amts []uint64) error {
 	if len(spenders) != len(amts) {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	for i, s := range spenders {
 		if err := t.Approve(owner, s, amts[i]); err != nil {
