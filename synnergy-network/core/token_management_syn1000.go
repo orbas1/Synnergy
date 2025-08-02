@@ -22,11 +22,11 @@ func (tm *TokenManager) CreateSYN1000(meta Metadata, init map[Address]uint64) (T
 func (tm *TokenManager) AddStableReserve(id TokenID, asset string, amt uint64) error {
 	tok, ok := GetToken(id)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	sc, ok := tok.(*Tokens.SYN1000Token)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	sc.AddReserve(asset, amt)
 	return nil
@@ -36,11 +36,11 @@ func (tm *TokenManager) AddStableReserve(id TokenID, asset string, amt uint64) e
 func (tm *TokenManager) RemoveStableReserve(id TokenID, asset string, amt uint64) error {
 	tok, ok := GetToken(id)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	sc, ok := tok.(*Tokens.SYN1000Token)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	return sc.RemoveReserve(asset, amt)
 }
@@ -49,11 +49,11 @@ func (tm *TokenManager) RemoveStableReserve(id TokenID, asset string, amt uint64
 func (tm *TokenManager) SetStablePrice(id TokenID, asset string, price float64) error {
 	tok, ok := GetToken(id)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	sc, ok := tok.(*Tokens.SYN1000Token)
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	sc.SetPrice(asset, price)
 	return nil
@@ -63,11 +63,11 @@ func (tm *TokenManager) SetStablePrice(id TokenID, asset string, price float64) 
 func (tm *TokenManager) StableReserveValue(id TokenID) (float64, error) {
 	tok, ok := GetToken(id)
 	if !ok {
-		return 0, ErrInvalidAsset
+		return 0, errInvalidAsset
 	}
 	sc, ok := tok.(*Tokens.SYN1000Token)
 	if !ok {
-		return 0, ErrInvalidAsset
+		return 0, errInvalidAsset
 	}
 	return sc.ReserveValue(), nil
 }

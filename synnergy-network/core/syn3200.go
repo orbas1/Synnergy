@@ -71,10 +71,10 @@ func (t *Syn3200Token) PayFraction(billID uint64, payer Address, amount uint64) 
 	defer t.mu.Unlock()
 	b, ok := t.bills[billID]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if b.Paid || b.Remaining < amount {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if err := t.Transfer(payer, b.Issuer, amount); err != nil {
 		return err
@@ -98,7 +98,7 @@ func (t *Syn3200Token) AdjustAmount(billID uint64, newAmount uint64) error {
 	defer t.mu.Unlock()
 	b, ok := t.bills[billID]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	b.Remaining = newAmount
 	b.Adjustments = append(b.Adjustments, Adjustment{NewAmount: newAmount, Date: time.Now().UTC()})

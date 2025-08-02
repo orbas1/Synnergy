@@ -41,12 +41,12 @@ func (t *SYN70Token) Meta() any { return "SYN70" }
 // within the token. If the asset already exists an error is returned.
 func (t *SYN70Token) RegisterAsset(id string, asset *SYN70Asset) error {
 	if id == "" || asset == nil {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if _, ok := t.assets[id]; ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	t.assets[id] = asset
 	return nil
@@ -58,7 +58,7 @@ func (t *SYN70Token) TransferAsset(id string, newOwner Address) error {
 	defer t.mu.Unlock()
 	a, ok := t.assets[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	a.Owner = newOwner
 	return nil
@@ -71,7 +71,7 @@ func (t *SYN70Token) UpdateAttributes(id string, attrs map[string]string) error 
 	defer t.mu.Unlock()
 	a, ok := t.assets[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if a.Attributes == nil {
 		a.Attributes = make(map[string]string)
@@ -88,7 +88,7 @@ func (t *SYN70Token) RecordAchievement(id, achievement string) error {
 	defer t.mu.Unlock()
 	a, ok := t.assets[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	a.Achievements = append(a.Achievements, achievement)
 	return nil
@@ -119,7 +119,7 @@ func (t *SYN70Token) ListAssets() []SYN70Asset {
 	return out
 }
 
-// ErrInvalidAsset is used by SYN70 operations for generic input errors. The
-// core package defines the real error but we replicate it here to keep the
+// errInvalidAsset is used by SYN70 operations for generic input errors. The
+// core package defines a similar error but we replicate it here to keep the
 // dependency graph flat.
-var ErrInvalidAsset = errors.New("invalid asset")
+var errInvalidAsset = errors.New("invalid asset")

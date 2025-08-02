@@ -59,7 +59,7 @@ func (t *SYN721Token) Approve(owner, spender Address, nftID uint64) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if t.owners[nftID] != owner {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	t.approvals[nftID] = spender
 	if t.BaseToken.ledger != nil {
@@ -73,7 +73,7 @@ func (t *SYN721Token) Transfer(from, to Address, nftID uint64) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if owner := t.owners[nftID]; owner != from && t.approvals[nftID] != from {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	t.owners[nftID] = to
 	delete(t.approvals, nftID)
@@ -115,7 +115,7 @@ func (t *SYN721Token) Burn(from Address, nftID uint64) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if t.owners[nftID] != from {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	delete(t.owners, nftID)
 	delete(t.metaStore, nftID)
@@ -140,7 +140,7 @@ func (t *SYN721Token) UpdateMetadata(id uint64, md SYN721Metadata) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if _, ok := t.metaStore[id]; !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	prev := t.metaStore[id]
 	if prev.Data != "" {

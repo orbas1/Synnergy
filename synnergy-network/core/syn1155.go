@@ -94,7 +94,7 @@ func (t *SYN1155Token) TransferAsset(from, to Address, id uint64, amount uint64)
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if t.balances[id] == nil || t.balances[id][from] < amount {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if t.balances[id] == nil {
 		t.balances[id] = make(map[Address]uint64)
@@ -115,7 +115,7 @@ func (t *SYN1155Token) BatchTransfer(from Address, items []Batch1155Transfer) er
 	// check balances first
 	for _, it := range items {
 		if t.balances[it.ID] == nil || t.balances[it.ID][from] < it.Amount {
-			return ErrInvalidAsset
+			return errInvalidAsset
 		}
 	}
 	for _, it := range items {
@@ -150,7 +150,7 @@ func (t *SYN1155Token) BurnAsset(from Address, id uint64, amount uint64) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if t.balances[id] == nil || t.balances[id][from] < amount {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	t.balances[id][from] -= amount
 	t.meta.TotalSupply -= amount

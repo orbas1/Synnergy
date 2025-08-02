@@ -19,7 +19,7 @@ type CCSNetwork struct {
 	CreatedAt       time.Time `json:"created_at"`
 }
 
-var TopicCCSRegistry = "ccsn:registry"
+var topicCCSRegistry = "ccsn:registry"
 
 // RegisterCCSNetwork stores a new cross-consensus configuration and broadcasts it.
 func RegisterCCSNetwork(n CCSNetwork) error {
@@ -38,7 +38,7 @@ func RegisterCCSNetwork(n CCSNetwork) error {
 		return err
 	}
 
-	Broadcast(TopicCCSRegistry, raw)
+	Broadcast(topicCCSRegistry, raw)
 	logger.Infof("CCSN %s registered", n.ID)
 	return nil
 }
