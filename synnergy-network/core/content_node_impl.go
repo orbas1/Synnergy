@@ -25,6 +25,7 @@ func NewContentNode(cfg Config) (*ContentNode, error) {
 	return &ContentNode{Node: n, store: make(map[string][]byte)}, nil
 }
 
+// encryptCFB performs CFB mode encryption for content payloads.
 func encryptCFB(data, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -40,6 +41,7 @@ func encryptCFB(data, key []byte) ([]byte, error) {
 	return b, nil
 }
 
+// decryptCFB reverses encryptCFB for retrieving original content.
 func decryptCFB(data, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
