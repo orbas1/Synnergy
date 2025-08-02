@@ -277,6 +277,56 @@ func (l *Ledger) AddBlock(block *Block) error {
 	return l.applyBlock(block, true)
 }
 
+// RebuildChain resets the ledger and replays the supplied blocks as the new
+// canonical chain. WAL data is rewritten to reflect the new history. This is
+// used during fork recovery to switch to a longer branch.
+func (l *Ledger) RebuildChain(blocks []*Block) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	// Reset core structures
+	l.Blocks = make([]*Block, 0, len(blocks))
+	l.blockIndex = make(map[Hash]*Block)
+	l.State = make(map[string][]byte)
+	l.UTXO = make(map[string]UTXO)
+	l.TxPool = make(map[string]*Transaction)
+	l.Contracts = make(map[string]Contract)
+	l.TokenBalances = make(map[string]uint64)
+	l.logs = nil
+	l.lpBalances = make(map[Address]map[PoolID]uint64)
+	l.nonces = make(map[Address]uint64)
+	l.NodeLocations = make(map[NodeID]Location)
+	l.pendingSubBlocks = nil
+	l.holoData = make(map[Hash][]byte)
+	l.tokens = make(map[TokenID]Token)
+
+	for i, blk := range blocks {
+		if err := l.applyBlock(blk, false); err != nil {
+			return fmt.Errorf("reapply block %d: %w", i, err)
+		}
+	}
+
+	// Rewrite WAL to match new canonical chain
+	if l.walFile != nil {
+		if err := l.walFile.Truncate(0); err != nil {
+			return err
+		}
+		if _, err := l.walFile.Seek(0, 0); err != nil {
+			return err
+		}
+		enc := json.NewEncoder(l.walFile)
+		for _, blk := range l.Blocks {
+			if err := enc.Encode(blk); err != nil {
+				return err
+			}
+		}
+		_ = l.walFile.Sync()
+	}
+
+	InitTxDistributor(l)
+	return nil
+}
+
 // snapshot writes full ledger state to JSON and truncates WAL.
 func (l *Ledger) snapshot() error {
 	// Write snapshot
