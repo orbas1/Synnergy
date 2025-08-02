@@ -772,6 +772,9 @@ To categorise and resolve all current error types across the 701 files in `synne
     - Break import cycles between packages such as Nodes and Tokens.
 14. **Stage 14 – Concurrency & Goroutines**
     - Review goroutine usage and channel operations; apply `-race` tools.
+    - Progress: `cmd/cli/historical_node.go` blocks on `ListenAndServe` and
+      closes gracefully on OS signals. Verified with `go vet`, `go build` and
+      `go test -race` for the `cmd/cli` package.
 15. **Stage 15 – Resource Leakage**
     - Ensure files, DB handles, and network connections are properly closed.
 16. **Stage 16 – Logging Consistency**

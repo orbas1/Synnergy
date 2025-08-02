@@ -8,7 +8,6 @@ import (
 	"syscall"
 
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -59,16 +58,15 @@ func histStart(cmd *cobra.Command, _ []string) error {
 	if n == nil {
 		return fmt.Errorf("not initialised")
 	}
-	go n.ListenAndServe()
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
-		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 		<-sig
 		_ = n.Close()
-		os.Exit(0)
+		signal.Stop(sig)
 	}()
 	fmt.Fprintln(cmd.OutOrStdout(), "historical node started")
-	return nil
+	return n.ListenAndServe()
 }
 
 func histSync(cmd *cobra.Command, _ []string) error {
