@@ -1,2 +1,15 @@
+# Build artifacts
+synnergy-network/synnergy
+synnergy-network/bin
+*.exe
+*.out
+
+# Node modules
+node_modules/
+*/node_modules/
+**/node_modules/
+
+# Logs
+*.log
 coverage.out
 synnergy-network/internal/testutil/testdata/
