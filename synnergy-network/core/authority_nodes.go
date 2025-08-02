@@ -12,11 +12,12 @@ package core
 // Compile‑time dependencies: common, ledger, security (sig verify).
 
 import (
+	crand "crypto/rand"
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"github.com/sirupsen/logrus"
-	"math/rand"
+	"math/big"
 	"time"
 )
 
@@ -186,13 +187,28 @@ func (as *AuthoritySet) RandomElectorate(size int) ([]Address, error) {
 		return nil, errors.New("no active authority nodes")
 	}
 
-	// Sample without replacement
-	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	// Sample without replacement using cryptographic randomness
+	if err := shuffleAddresses(pool); err != nil {
+		return nil, err
+	}
 	sel := unique(pool)
 	if len(sel) < size {
 		size = len(sel)
 	}
 	return sel[:size], nil
+}
+
+// shuffleAddresses performs an in-place Fisher-Yates shuffle using crypto/rand.
+func shuffleAddresses(pool []Address) error {
+	for i := len(pool) - 1; i > 0; i-- {
+		n, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(n.Int64())
+		pool[i], pool[j] = pool[j], pool[i]
+	}
+	return nil
 }
 
 // GetAuthority returns the AuthorityNode information for the given address.

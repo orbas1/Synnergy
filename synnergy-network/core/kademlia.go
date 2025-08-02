@@ -1,7 +1,7 @@
 package core
 
 import (
-	"crypto/sha1"
+	"crypto/sha256"
 	"math/big"
 	"sort"
 	"sync"
@@ -42,10 +42,10 @@ func (k *Kademlia) AddPeer(id NodeID) {
 	k.buckets[idx] = append(list, id)
 }
 
-// Store saves a value under the given key. The key is hashed with SHA1 to
-// produce the internal 160 bit key used by the DHT.
+// Store saves a value under the given key. The key is hashed with SHA‑256 and
+// truncated to 160 bits to produce the internal key used by the DHT.
 func (k *Kademlia) Store(key string, value []byte) {
-	var hash [20]byte = sha1.Sum([]byte(key))
+	hash := hash160([]byte(key))
 	k.mu.Lock()
 	k.store[hash] = append([]byte(nil), value...)
 	k.mu.Unlock()
@@ -53,7 +53,7 @@ func (k *Kademlia) Store(key string, value []byte) {
 
 // Lookup retrieves a value by key. It returns the value and true if present.
 func (k *Kademlia) Lookup(key string) ([]byte, bool) {
-	var hash [20]byte = sha1.Sum([]byte(key))
+	hash := hash160([]byte(key))
 	k.mu.RLock()
 	val, ok := k.store[hash]
 	k.mu.RUnlock()
@@ -88,8 +88,8 @@ func (k *Kademlia) Nearest(target NodeID, count int) []NodeID {
 }
 
 func (k *Kademlia) bucketIndex(id NodeID) int {
-	a := sha1.Sum([]byte(k.id))
-	b := sha1.Sum([]byte(id))
+	a := hash160([]byte(k.id))
+	b := hash160([]byte(id))
 	var diff [20]byte
 	for i := 0; i < len(diff); i++ {
 		diff[i] = a[i] ^ b[i]
@@ -102,11 +102,19 @@ func (k *Kademlia) bucketIndex(id NodeID) int {
 }
 
 func (k *Kademlia) distance(a NodeID, b NodeID) *big.Int {
-	aa := sha1.Sum([]byte(a))
-	bb := sha1.Sum([]byte(b))
+	aa := hash160([]byte(a))
+	bb := hash160([]byte(b))
 	var diff [20]byte
 	for i := 0; i < len(diff); i++ {
 		diff[i] = aa[i] ^ bb[i]
 	}
 	return new(big.Int).SetBytes(diff[:])
+}
+
+// hash160 returns the first 160 bits of the SHA‑256 hash of the data.
+func hash160(data []byte) [20]byte {
+	full := sha256.Sum256(data)
+	var out [20]byte
+	copy(out[:], full[:20])
+	return out
 }

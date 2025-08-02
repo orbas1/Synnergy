@@ -2,8 +2,9 @@ package core
 
 import (
 	"context"
+	crand "crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"sync"
 	"time"
 
@@ -89,7 +90,14 @@ func (pm *PeerManagement) Sample(n int) []string {
 	if n > len(peers) {
 		n = len(peers)
 	}
-	rand.Shuffle(len(peers), func(i, j int) { peers[i], peers[j] = peers[j], peers[i] })
+	for i := len(peers) - 1; i > 0; i-- {
+		r, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			break
+		}
+		j := int(r.Int64())
+		peers[i], peers[j] = peers[j], peers[i]
+	}
 	ids := make([]string, 0, n)
 	for i := 0; i < n; i++ {
 		ids = append(ids, string(pm.node.peers[NodeID(peers[i].Address.String())].ID))
