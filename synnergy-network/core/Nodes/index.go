@@ -1,12 +1,15 @@
 package Nodes
 
+import (
+	"context"
+	"time"
+)
+
 // Address mirrors the core address type without creating a dependency.
 type Address [20]byte
 
 // Hash mirrors the core hash type.
 type Hash [32]byte
-import "context"
- "time"
 
 // NodeInterface defines minimal node behaviour independent from core types.
 type NodeInterface interface {
@@ -19,8 +22,6 @@ type NodeInterface interface {
 }
 
 // ValidatorNodeInterface extends NodeInterface with validator specific actions.
-// It provides hooks for toggling individual consensus mechanisms and for
-// participating in block production.
 type ValidatorNodeInterface interface {
 	NodeInterface
 	EnablePoH(bool)
@@ -31,17 +32,20 @@ type ValidatorNodeInterface interface {
 	ValidateTx([]byte) error
 	ProposeBlock() error
 	VoteBlock([]byte, []byte) error
-// FullNodeAPI exposes the extended functionality provided by a Synnergy
-// FullNode. It embeds NodeInterface and adds lifecycle helpers and
-// accessors required by higher-level modules.
+}
+
+// FullNodeAPI exposes the extended functionality provided by a Synnergy full
+// node.
 type FullNodeAPI interface {
 	NodeInterface
 	Start()
 	Stop() error
 	Ledger() any
 	Mode() uint8
-// ElectedAuthorityNodeInterface extends NodeInterface with privileged actions
-// provided by elected authority nodes.
+}
+
+// ElectedAuthorityNodeInterface defines privileged actions for elected
+// authority nodes.
 type ElectedAuthorityNodeInterface interface {
 	NodeInterface
 	RecordVote(addr Address)
@@ -51,34 +55,27 @@ type ElectedAuthorityNodeInterface interface {
 	ReverseTransaction(hash Hash, sigs [][]byte) error
 	ViewPrivateTransaction(hash Hash) ([]byte, error)
 	ApproveLoanProposal(id string) error
+}
+
 // MiningNodeInterface extends NodeInterface with mining specific controls.
 type MiningNodeInterface interface {
 	NodeInterface
 	StartMining()
 	StopMining() error
 	AddTransaction(tx []byte) error
-// MasterNodeInterface extends NodeInterface with specialised services used by
-// Synthron master nodes. The concrete implementation lives in the core package
-// to avoid an import cycle.
+}
+
+// MasterNodeInterface defines additional services used by master nodes.
 type MasterNodeInterface interface {
 	NodeInterface
-
-	// ProcessTx submits a standard transaction for expedited processing.
 	ProcessTx(tx any) error
-
-	// HandlePrivateTx encrypts and submits a privacy preserving transaction.
 	HandlePrivateTx(tx any, key []byte) error
-
-	// VoteProposal allows the master node to participate in on-chain
-	// governance via the SYN300 token module.
 	VoteProposal(id uint64, approve bool) error
-
-	// Start activates the underlying services (network, consensus, etc.).
 	Start()
-
-	// Stop gracefully shuts down all services.
 	Stop() error
-// StakingNodeInterface extends NodeInterface with staking-related actions.
+}
+
+// StakingNodeInterface exposes staking-related actions.
 type StakingNodeInterface interface {
 	NodeInterface
 	Stake(addr string, amount uint64) error
@@ -86,49 +83,57 @@ type StakingNodeInterface interface {
 	ProposeBlock(data []byte) error
 	ValidateBlock(data []byte) error
 	Status() string
-// LightNodeInterface extends NodeInterface with header specific accessors.
-// Light nodes only maintain block headers and request full blocks on demand.
+}
+
+// LightNodeInterface defines the minimal behaviour for light clients.
 type LightNodeInterface interface {
 	NodeInterface
 	StoreHeader(h BlockHeader)
 	Headers() []BlockHeader
-// IndexingNodeInterface describes the additional capabilities provided by
-// indexing nodes in the network.
+}
+
+// IndexingNodeInterface describes capabilities of indexing nodes.
 type IndexingNodeInterface interface {
 	NodeInterface
 	AddBlock(b any)
-	QueryTxHistory(addr any) []any
-	QueryState(addr any, key string) (any, bool)
+	QueryTxHistory(addr Address) []any
+	QueryState(addr Address, key string) (any, bool)
+}
+
 // GatewayInterface extends NodeInterface with cross-chain and data functions.
 type GatewayInterface interface {
 	NodeInterface
-	ConnectChain(local, remote string) (interface{}, error)
+	ConnectChain(local, remote string) (any, error)
 	DisconnectChain(id string) error
-	ListConnections() interface{}
+	ListConnections() any
 	RegisterExternalSource(name, url string)
 	RemoveExternalSource(name string)
 	ExternalSources() map[string]string
 	PushExternalData(name string, data []byte) error
 	QueryExternalData(name string) ([]byte, error)
-// APINodeInterface extends NodeInterface with HTTP API controls.
+}
+
+// APINodeInterface exposes HTTP API lifecycle controls.
 type APINodeInterface interface {
 	NodeInterface
 	APINode_Start(addr string) error
 	APINode_Stop() error
-// Watchtower exposes the interface implemented by watchtower nodes.
+}
+
+// Watchtower defines the interface implemented by watchtower nodes.
 type Watchtower interface {
 	NodeInterface
-	Start()
-	Stop() error
 	Alerts() <-chan string
-// ForensicNodeInterface extends NodeInterface with forensic analysis helpers.
-// Implementations provide transaction anomaly scoring and compliance checks that
-// feed into the broader ledger and consensus systems.
+}
+
+// ForensicNodeInterface exposes forensic analysis helpers.
 type ForensicNodeInterface interface {
 	NodeInterface
 	AnalyseTransaction(tx []byte) (float32, error)
 	ComplianceCheck(tx []byte, threshold float32) (float32, error)
 	StartMonitoring(ctx context.Context, txCh <-chan []byte, threshold float32)
+}
+
 // CustodialNodeInterface exposes asset custody operations.
 type CustodialNodeInterface interface {
 	NodeInterface
@@ -138,8 +143,9 @@ type CustodialNodeInterface interface {
 	Transfer(from, to, token string, amount uint64) error
 	BalanceOf(addr, token string) (uint64, error)
 	Audit() ([]byte, error)
+}
 
-// QuantumNodeInterface extends NodeInterface with quantum-safe operations.
+// QuantumNodeInterface exposes quantum-safe operations.
 type QuantumNodeInterface interface {
 	NodeInterface
 	SecureBroadcast(topic string, data []byte) error
@@ -147,29 +153,24 @@ type QuantumNodeInterface interface {
 	Sign(msg []byte) ([]byte, error)
 	Verify(msg, sig []byte) (bool, error)
 	RotateKeys() error
-// AIEnhancedNodeInterface extends NodeInterface with AI powered helpers.
-// Parameters are kept generic (byte slices) to avoid direct core dependencies
-// while still allowing advanced functionality when implemented in the core
-// package.
+}
+
+// AIEnhancedNodeInterface defines AI-powered helpers.
 type AIEnhancedNodeInterface interface {
 	NodeInterface
-
-	// PredictLoad returns the predicted transaction volume for the provided
-	// metrics blob. The caller defines the encoding of the blob.
 	PredictLoad([]byte) (uint64, error)
-
-	// AnalyseTx performs batch anomaly detection over the provided
-	// transaction list. Keys in the returned map are hex-encoded hashes.
 	AnalyseTx([]byte) (map[string]float32, error)
-// EnergyNodeInterface extends NodeInterface with energy tracking methods.
+}
+
+// EnergyNodeInterface exposes energy tracking methods.
 type EnergyNodeInterface interface {
 	NodeInterface
 	RecordUsage(txs uint64, kwh float64) error
 	Efficiency() (float64, error)
 	NetworkAverage() (float64, error)
-// IntegrationNodeInterface extends NodeInterface with integration specific
-// management helpers. It deliberately avoids referencing core types to keep the
-// package dependency hierarchy simple.
+}
+
+// IntegrationNodeInterface exposes integration management helpers.
 type IntegrationNodeInterface interface {
 	NodeInterface
 	RegisterAPI(name, endpoint string) error
@@ -178,7 +179,9 @@ type IntegrationNodeInterface interface {
 	ConnectChain(id, endpoint string) error
 	DisconnectChain(id string) error
 	ListChains() []string
-// RegulatoryNodeInterface extends NodeInterface with compliance helpers.
+}
+
+// RegulatoryNodeInterface exposes compliance helpers.
 type RegulatoryNodeInterface interface {
 	NodeInterface
 	VerifyTransaction([]byte) error
@@ -186,10 +189,9 @@ type RegulatoryNodeInterface interface {
 	EraseKYC(string) error
 	RiskScore(string) int
 	GenerateReport() ([]byte, error)
-// DisasterRecovery interface extends NodeInterface with backup and restore
-// helpers used by specialised disaster recovery nodes. Implementations may
-// persist snapshots to multiple locations and verify integrity before applying
-// them to the ledger.
+}
+
+// DisasterRecovery exposes backup and restore helpers.
 type DisasterRecovery interface {
 	NodeInterface
 	Start()
@@ -197,6 +199,7 @@ type DisasterRecovery interface {
 	BackupNow(ctx context.Context, incremental bool) error
 	Restore(path string) error
 	Verify(path string) error
+}
 
 // ContentMeta describes stored content pinned by a content node.
 type ContentMeta struct {
@@ -205,14 +208,15 @@ type ContentMeta struct {
 	Uploaded time.Time
 }
 
-// ContentNodeInterface extends NodeInterface with large content operations.
+// ContentNodeInterface exposes large content operations.
 type ContentNodeInterface interface {
 	NodeInterface
 	StoreContent(data, key []byte) (string, error)
 	RetrieveContent(cid string, key []byte) ([]byte, error)
 	ListContent() ([]ContentMeta, error)
+}
 
-// ZKPNodeInterface extends NodeInterface with zero-knowledge proof functions.
+// ZKPNodeInterface exposes zero-knowledge proof functions.
 type ZKPNodeInterface interface {
 	NodeInterface
 	GenerateProof(data []byte) ([]byte, error)
@@ -220,8 +224,7 @@ type ZKPNodeInterface interface {
 	StoreProof(txID string, proof []byte)
 	Proof(txID string) ([]byte, bool)
 	SubmitTransaction(tx any, proof []byte) error
-// Address mirrors the core.Address type without importing the core package.
-type Address [20]byte
+}
 
 // LedgerAuditEvent mirrors the core ledger audit event structure.
 type LedgerAuditEvent struct {
@@ -231,32 +234,32 @@ type LedgerAuditEvent struct {
 	Meta      map[string]string
 }
 
-// AuditNodeInterface extends NodeInterface with audit management functions.
+// AuditNodeInterface exposes audit management functions.
 type AuditNodeInterface interface {
 	NodeInterface
 	LogAudit(addr Address, event string, meta map[string]string) error
 	AuditEvents(addr Address) ([]LedgerAuditEvent, error)
+}
 
-
-  // AutonomousAgent defines additional behaviour for autonomous nodes.
+// AutonomousAgent defines additional behaviour for autonomous nodes.
 type AutonomousAgent interface {
 	NodeInterface
-	AddRule(rule interface{})
+	AddRule(rule any)
 	RemoveRule(id string)
 	Start()
 	Stop() error
-// HolographicNodeInterface extends NodeInterface with holographic functions.
-type HolographicNodeInterface interface {
-	NodeInterface
-	EncodeStore(data []byte) (interface{}, error)
-	Retrieve(id interface{}) ([]byte, error)
-	SyncConsensus(c Consensus) error
-	ProcessTx(tx interface{}) error
-	ExecuteContract(ctx interface{}, vm VMExecutor, code []byte) error
 }
 
-// Ensure the implementation satisfies the interface.
-var _ HolographicNodeInterface = (*HolographicNode)(nil)
+// HolographicNodeInterface exposes holographic functions.
+type HolographicNodeInterface interface {
+	NodeInterface
+	EncodeStore(data []byte) (any, error)
+	Retrieve(id any) ([]byte, error)
+	SyncConsensus(c any) error
+	ProcessTx(tx any) error
+	ExecuteContract(ctx any, vm any, code []byte) error
+}
+
 // TimeLockRecord mirrors core.TimeLockRecord without importing the core package.
 type TimeLockRecord struct {
 	ID        string
@@ -274,8 +277,9 @@ type TimeLockedNodeInterface interface {
 	Cancel(id string) error
 	ExecuteDue() []string
 	List() []TimeLockRecord
-// EnvironmentalMonitoringInterface extends NodeInterface with sensor management
-// and conditional triggers.
+}
+
+// EnvironmentalMonitoringInterface exposes sensor management helpers.
 type EnvironmentalMonitoringInterface interface {
 	NodeInterface
 	RegisterSensor(id, endpoint string) error
@@ -284,9 +288,8 @@ type EnvironmentalMonitoringInterface interface {
 	AddTrigger(id string, threshold float64, action string) error
 	Start()
 	Stop() error
-// MolecularNodeFactory returns a MolecularNodeInterface. Actual constructor lives
-// in the core package.
-type MolecularNodeFactory func(cfg interface{}) (MolecularNodeInterface, error)
+}
+
 // BiometricSecurityNode extends NodeInterface with biometric operations.
 type BiometricSecurityNode interface {
 	NodeInterface
@@ -294,25 +297,25 @@ type BiometricSecurityNode interface {
 	Verify(addr string, data []byte) bool
 	Delete(addr string)
 	ValidateTransaction(tx any, data []byte) bool
-// BankInstitutionalNode defines behaviour for specialised
-// bank/institution authority nodes.
+}
+
+// BankInstitutionalNode defines behaviour for specialised bank nodes.
 type BankInstitutionalNode interface {
 	NodeInterface
 	MonitorTransaction(data []byte) error
 	ComplianceReport() ([]byte, error)
 	ConnectFinancialNetwork(endpoint string) error
-	UpdateRuleset(rules map[string]interface{})
-// WarfareNodeInterface is implemented by nodes specialised for military
-// operations. It embeds NodeInterface and exposes additional methods defined
-// in the military_nodes subpackage.
-//
-// Keeping the interface here avoids package import cycles while allowing the
-// core package to rely on the abstract type.
+	UpdateRuleset(rules map[string]any)
+}
+
+// WarfareNodeInterface is implemented by nodes specialised for military operations.
 type WarfareNodeInterface interface {
 	NodeInterface
 	SecureCommand(data []byte) error
 	TrackLogistics(itemID, status string) error
 	ShareTactical(data []byte) error
+}
+
 // MobileMiner extends NodeInterface with light mining controls.
 type MobileMiner interface {
 	NodeInterface
@@ -320,20 +323,15 @@ type MobileMiner interface {
 	StopMining()
 	SetIntensity(int)
 	Stats() any
-// CentralBankingNode defines the extended behaviour required by central bank
-// infrastructure. It mirrors the high level actions without importing core
-// types to avoid circular dependencies.
+}
+
+// CentralBankingNode defines the extended behaviour required by central bank infrastructure.
 type CentralBankingNode interface {
 	NodeInterface
-
-	// Monetary policy controls
 	SetInterestRate(float64) error
 	InterestRate() float64
 	SetReserveRequirement(float64) error
 	ReserveRequirement() float64
-
-	// Digital currency issuance and settlement hooks. Addresses and
-	// transactions are passed as raw bytes to keep this package decoupled.
 	IssueDigitalCurrency(addr [20]byte, amount uint64) error
 	RecordSettlement(tx []byte) error
 }

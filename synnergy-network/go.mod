@@ -143,7 +143,6 @@ require (
 	rsc.io/tmplfunc v0.0.3 // indirect
 )
 
-// Add this replace directive at the bottom:
 replace synnergy-network => .
 
 replace github.com/synnergy-network/core => .

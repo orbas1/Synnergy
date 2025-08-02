@@ -2,9 +2,6 @@ package Nodes
 
 import "time"
 
-// Address mirrors the core address type to avoid a heavy dependency.
-type Address [20]byte
-
 // DebtRecord describes a debt instrument managed by SYN845 nodes.
 type DebtRecord struct {
 	ID              string
