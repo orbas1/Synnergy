@@ -14,10 +14,7 @@ type StablecoinToken interface {
 }
 
 // NewSYN1000 creates and registers a SYN1000 stablecoin.
-func NewSYN1000(meta Metadata, init map[Address]uint64, ledger *Ledger, gas GasCalculator) (*Tokens.SYN1000Token, error) {
-	tok, err := Tokens.NewSYN1000Token(meta, init, ledger, gas)
-	if err != nil {
-		return nil, err
-	}
+func NewSYN1000(meta Metadata, init map[Address]uint64) (*Tokens.SYN1000Token, error) {
+	tok := Tokens.NewSYN1000Token(meta, init)
 	return tok, nil
 }
