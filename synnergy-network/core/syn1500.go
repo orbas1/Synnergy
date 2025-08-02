@@ -31,8 +31,8 @@ type ReputationEngine struct {
 var (
 	repEngine *ReputationEngine
 	repOnce   sync.Once
-	// reputationTokenID derives from the SYN1500 standard constant.
-	reputationTokenID = deriveID(StdSYN1500)
+	// syn1500ReputationTokenID derives from the SYN1500 standard constant.
+	syn1500ReputationTokenID = deriveID(StdSYN1500)
 )
 
 // InitReputationEngine creates the singleton reputation manager.
@@ -65,7 +65,7 @@ func (e *ReputationEngine) AddActivity(addr Address, delta int64, desc string) e
 	rec.Score += delta
 	rec.Events = append(rec.Events, ReputationEvent{Timestamp: time.Now().UTC(), Delta: delta, Description: desc})
 	e.updateLevel(rec)
-	tok, ok := TokenLedger[reputationTokenID]
+	tok, ok := TokenLedger[syn1500ReputationTokenID]
 	if ok {
 		if delta > 0 {
 			_ = tok.Mint(addr, uint64(delta))

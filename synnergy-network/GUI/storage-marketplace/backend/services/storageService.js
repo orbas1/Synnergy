@@ -1,14 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const { dataPath } = require('../config');
-
+const fs = require("fs");
+const path = require("path");
+const { dataPath } = require("../config");
 
 function load() {
   try {
-    return JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    return JSON.parse(fs.readFileSync(dataPath, "utf8"));
   } catch {
     return { listings: [], deals: [], files: [], storages: [] };
-
   }
 }
 
@@ -28,7 +26,7 @@ exports.createListing = async (input) => {
     provider: input.provider,
     pricePerGB: Number(input.pricePerGB),
     capacityGB: Number(input.capacityGB),
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
   db.listings.push(listing);
   save(db);
@@ -47,7 +45,7 @@ exports.openDeal = async (input) => {
     listingId: input.listingId,
     client: input.client,
     duration: input.duration,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
   db.deals.push(deal);
   save(db);
@@ -56,12 +54,12 @@ exports.openDeal = async (input) => {
 
 exports.getListing = async (id) => {
   const db = load();
-  return db.listings.find(l => l.id === id);
+  return db.listings.find((l) => l.id === id);
 };
 
 exports.getDeal = async (id) => {
   const db = load();
-  return db.deals.find(d => d.id === id);
+  return db.deals.find((d) => d.id === id);
 };
 
 exports.pin = async (cid, meta) => {
@@ -79,12 +77,12 @@ exports.listPins = async () => {
 
 exports.retrieve = async (cid) => {
   const db = load();
-  return db.files.find(f => f.cid === cid);
+  return db.files.find((f) => f.cid === cid);
 };
 
 exports.exists = async (cid) => {
   const db = load();
-  return db.files.some(f => f.cid === cid);
+  return db.files.some((f) => f.cid === cid);
 };
 
 exports.createStorage = async (input) => {
@@ -93,7 +91,7 @@ exports.createStorage = async (input) => {
     id: Date.now().toString(),
     owner: input.owner,
     capacityGB: Number(input.capacityGB),
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
   db.storages.push(storage);
   save(db);
@@ -104,5 +102,3 @@ exports.listStorages = async () => {
   const db = load();
   return db.storages;
 };
-
-

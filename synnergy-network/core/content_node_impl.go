@@ -25,7 +25,8 @@ func NewContentNode(cfg Config) (*ContentNode, error) {
 	return &ContentNode{Node: n, store: make(map[string][]byte)}, nil
 }
 
-// encryptContent encrypts the provided data using the supplied key.
+
+// encryptContent applies CFB encryption to the provided data using the key.
 func encryptContent(data, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -41,7 +42,8 @@ func encryptContent(data, key []byte) ([]byte, error) {
 	return b, nil
 }
 
-// decryptContent decrypts the provided data using the supplied key.
+
+// decryptContent reverses CFB encryption performed by encryptContent.
 func decryptContent(data, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -87,6 +89,7 @@ func (c *ContentNode) RetrieveContent(cid string, key []byte) ([]byte, error) {
 		}
 	}
 	return decryptContent(data, key)
+
 }
 
 // ListContent enumerates pinned content metadata.

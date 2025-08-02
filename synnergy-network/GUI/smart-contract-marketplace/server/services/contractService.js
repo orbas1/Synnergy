@@ -1,9 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { exec } = require("child_process");
 
-const DB_PATH = process.env.DB_FILE || path.join(__dirname, '../data/contracts.json');
-const CLI = process.env.CLI_PATH || 'synnergy';
+const DB_PATH =
+  process.env.DB_FILE || path.join(__dirname, "../data/contracts.json");
+const CLI = process.env.CLI_PATH || "synnergy";
 
 if (!fs.existsSync(path.dirname(DB_PATH))) {
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
@@ -26,12 +27,13 @@ exports.deployContract = async (name, wasm) => {
   const contracts = load();
   const id = `c${Date.now()}`;
   const filename = path.join(__dirname, `${id}.wasm`);
-  fs.writeFileSync(filename, Buffer.from(wasm, 'base64'));
+  fs.writeFileSync(filename, Buffer.from(wasm, "base64"));
 
   // Deploy contract via Synnergy CLI
   await new Promise((resolve, reject) => {
     exec(`${CLI} contracts deploy ${filename}`, (err) => {
-      if (err) reject(err); else resolve();
+      if (err) reject(err);
+      else resolve();
     });
   });
 
@@ -43,12 +45,12 @@ exports.deployContract = async (name, wasm) => {
 
 exports.getContract = async (id) => {
   const contracts = load();
-  return contracts.find(c => c.id === id);
+  return contracts.find((c) => c.id === id);
 };
 
 exports.deleteContract = async (id) => {
   let contracts = load();
-  contracts = contracts.filter(c => c.id !== id);
+  contracts = contracts.filter((c) => c.id !== id);
   save(contracts);
 };
 
