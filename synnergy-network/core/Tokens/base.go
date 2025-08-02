@@ -140,6 +140,7 @@ func (b *BaseToken) TransferFrom(owner, spender, to Address, amount uint64) erro
 	return nil
 }
 
+
 // Allowance returns the approved spend for a spender.
 func (b *BaseToken) Allowance(owner, spender Address) uint64 {
 	b.mu.RLock()

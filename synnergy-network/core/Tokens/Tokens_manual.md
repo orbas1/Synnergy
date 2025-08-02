@@ -28,6 +28,7 @@ ID with `deriveID`, populate initial balances via `NewBalanceTable` and
 register themselves using `RegisterToken` so that other packages can
 discover them by `TokenID`.
 
+
 #### Allowances
 
 `BaseToken` mirrors ERC‑20 style spending approvals.  The `Approve`
@@ -57,11 +58,12 @@ only rely on the shared types and interfaces defined within this
 package.  This consolidation simplifies maintenance and ensures that new
 tokens automatically integrate with existing network tooling.
 
-## CLI Integration
+## CLI Integra<<<<<<< codex/focus-on-stage-8-in-agents.mdtion
 
 The `tokens` command in the CLI provides a uniform interface to inspect
 and administer any registered token.  It supports listing tokens,
 querying balances, transferring funds, minting, burning and managing
 allowances.  Addresses are supplied as hex strings and decoded into the
 common 20‑byte `Address` format.
+
 
