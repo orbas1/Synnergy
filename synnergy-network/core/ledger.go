@@ -3,16 +3,17 @@ package core
 import (
 	"bufio"
 	"bytes"
+	"compress/gzip"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/sirupsen/logrus"
-	"log"
 	"math/big"
 	"os"
 	"path/filepath"
+	"sort"
 )
 
 // NewLedger initializes a ledger, replaying an existing WAL and optionally loading a genesis block.
@@ -38,6 +39,8 @@ func NewLedger(cfg LedgerConfig) (*Ledger, error) {
 		walFile:          wal,
 		snapshotPath:     cfg.SnapshotPath,
 		snapshotInterval: cfg.SnapshotInterval,
+		archivePath:      cfg.ArchivePath,
+		pruneInterval:    cfg.PruneInterval,
 	}
 	if cfg.GenesisBlock != nil {
 		if err := l.applyBlock(cfg.GenesisBlock, false); err != nil {
@@ -264,6 +267,9 @@ func (l *Ledger) applyBlock(block *Block, persist bool) error {
 				logrus.Errorf("snapshot error: %v", err)
 			}
 		}
+		if err := l.prune(); err != nil {
+			logrus.Errorf("prune error: %v", err)
+		}
 	}
 
 	logrus.Infof("Block %d applied; total blocks %d", block.Header.Height, len(l.Blocks))
@@ -275,6 +281,56 @@ func (l *Ledger) AddBlock(block *Block) error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	return l.applyBlock(block, true)
+}
+
+// RebuildChain resets the ledger and replays the supplied blocks as the new
+// canonical chain. WAL data is rewritten to reflect the new history. This is
+// used during fork recovery to switch to a longer branch.
+func (l *Ledger) RebuildChain(blocks []*Block) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	// Reset core structures
+	l.Blocks = make([]*Block, 0, len(blocks))
+	l.blockIndex = make(map[Hash]*Block)
+	l.State = make(map[string][]byte)
+	l.UTXO = make(map[string]UTXO)
+	l.TxPool = make(map[string]*Transaction)
+	l.Contracts = make(map[string]Contract)
+	l.TokenBalances = make(map[string]uint64)
+	l.logs = nil
+	l.lpBalances = make(map[Address]map[PoolID]uint64)
+	l.nonces = make(map[Address]uint64)
+	l.NodeLocations = make(map[NodeID]Location)
+	l.pendingSubBlocks = nil
+	l.holoData = make(map[Hash][]byte)
+	l.tokens = make(map[TokenID]Token)
+
+	for i, blk := range blocks {
+		if err := l.applyBlock(blk, false); err != nil {
+			return fmt.Errorf("reapply block %d: %w", i, err)
+		}
+	}
+
+	// Rewrite WAL to match new canonical chain
+	if l.walFile != nil {
+		if err := l.walFile.Truncate(0); err != nil {
+			return err
+		}
+		if _, err := l.walFile.Seek(0, 0); err != nil {
+			return err
+		}
+		enc := json.NewEncoder(l.walFile)
+		for _, blk := range l.Blocks {
+			if err := enc.Encode(blk); err != nil {
+				return err
+			}
+		}
+		_ = l.walFile.Sync()
+	}
+
+	InitTxDistributor(l)
+	return nil
 }
 
 // snapshot writes full ledger state to JSON and truncates WAL.
@@ -289,9 +345,13 @@ func (l *Ledger) snapshot() error {
 		f.Close()
 		return err
 	}
-	f.Close()
+	if err := f.Close(); err != nil {
+		return err
+	}
 	// Truncate WAL (start anew)
-	l.walFile.Close()
+	if err := l.walFile.Close(); err != nil {
+		return err
+	}
 	wal, err := os.Create(l.walFile.Name())
 	if err != nil {
 		return err
@@ -299,6 +359,96 @@ func (l *Ledger) snapshot() error {
 	l.walFile = wal
 	logrus.Infof("Snapshot saved to %s; WAL truncated", l.snapshotPath)
 	return nil
+}
+
+// prune archives old blocks and rewrites WAL to keep the ledger size bounded.
+func (l *Ledger) prune() error {
+	if l.pruneInterval <= 0 || len(l.Blocks) <= l.pruneInterval {
+		return nil
+	}
+
+	toArchive := len(l.Blocks) - l.pruneInterval
+	if l.archivePath != "" {
+		f, err := os.OpenFile(l.archivePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
+		if err != nil {
+			return err
+		}
+		gz := gzip.NewWriter(f)
+		for i := 0; i < toArchive; i++ {
+			data, err := json.Marshal(l.Blocks[i])
+			if err != nil {
+				gz.Close()
+				f.Close()
+				return err
+			}
+			if _, err := gz.Write(data); err != nil {
+				gz.Close()
+				f.Close()
+				return err
+			}
+			if _, err := gz.Write([]byte("\n")); err != nil {
+				gz.Close()
+				f.Close()
+				return err
+			}
+			delete(l.blockIndex, l.Blocks[i].Hash())
+		}
+		if err := gz.Close(); err != nil {
+			f.Close()
+			return err
+		}
+		if err := f.Close(); err != nil {
+			return err
+		}
+	}
+
+	l.Blocks = l.Blocks[toArchive:]
+	return l.rewriteWAL()
+}
+
+// rewriteWAL persists current blocks into WAL from scratch.
+func (l *Ledger) rewriteWAL() error {
+	if err := l.walFile.Close(); err != nil {
+		return err
+	}
+	wal, err := os.Create(l.walFile.Name())
+	if err != nil {
+		return err
+	}
+	l.walFile = wal
+	for _, blk := range l.Blocks {
+		data, err := json.Marshal(blk)
+		if err != nil {
+			return err
+		}
+		if _, err := l.walFile.Write(append(data, '\n')); err != nil {
+			return err
+		}
+	}
+	if err := l.walFile.Sync(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// StateRoot computes a deterministic hash of the ledger's State map.
+func (l *Ledger) StateRoot() Hash {
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+
+	keys := make([]string, 0, len(l.State))
+	for k := range l.State {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	h := sha256.New()
+	for _, k := range keys {
+		h.Write([]byte(k))
+		h.Write(l.State[k])
+	}
+	var out Hash
+	copy(out[:], h.Sum(nil))
+	return out
 }
 
 // GetBlock returns block by height.
@@ -441,7 +591,7 @@ func (l *Ledger) MintToken(addr Address, tokenID string, amount uint64) error {
 	l.TokenBalances[key] += amount
 
 	// Log the minting event (optional if you use structured logging)
-	log.Printf("Minted %d of token %s to address %s", amount, tokenID, addr.String())
+	logrus.Infof("Minted %d of token %s to address %s", amount, tokenID, addr.String())
 
 	return nil
 }

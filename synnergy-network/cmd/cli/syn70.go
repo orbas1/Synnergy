@@ -1,8 +1,11 @@
 package cli
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"strings"
+
 	"github.com/spf13/cobra"
 	Tokens "synnergy-network/core/Tokens"
 )
@@ -29,7 +32,10 @@ var syn70RegisterCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(4),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		id := args[0]
-		owner := args[1]
+		owner, err := parseSYN70Addr(args[1])
+		if err != nil {
+			return err
+		}
 		name := args[2]
 		game := args[3]
 		asset := &Tokens.SYN70Asset{TokenID: 0, Name: name, Owner: owner, GameID: game}
@@ -42,7 +48,11 @@ var syn70TransferCmd = &cobra.Command{
 	Short: "Transfer asset ownership",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return syn70.TransferAsset(args[0], args[1])
+		owner, err := parseSYN70Addr(args[1])
+		if err != nil {
+			return err
+		}
+		return syn70.TransferAsset(args[0], owner)
 	},
 }
 
@@ -97,3 +107,13 @@ func init() {
 var SYN70Cmd = syn70Cmd
 
 func RegisterSYN70(root *cobra.Command) { root.AddCommand(SYN70Cmd) }
+
+func parseSYN70Addr(h string) (Tokens.Address, error) {
+	var a Tokens.Address
+	b, err := hex.DecodeString(strings.TrimPrefix(h, "0x"))
+	if err != nil || len(b) != len(a) {
+		return a, fmt.Errorf("bad address")
+	}
+	copy(a[:], b)
+	return a, nil
+}

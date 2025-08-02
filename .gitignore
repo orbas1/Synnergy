@@ -11,3 +11,5 @@ node_modules/
 
 # Logs
 *.log
+coverage.out
+synnergy-network/internal/testutil/testdata/

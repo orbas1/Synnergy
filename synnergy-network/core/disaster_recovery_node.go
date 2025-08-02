@@ -21,7 +21,7 @@ type DisasterRecoveryConfig struct {
 // recovery manager. It exposes helpers used by the VM and CLI to perform
 // immediate backups and to restore state in the event of catastrophic failure.
 type DisasterRecoveryNode struct {
-	net      *Node
+	*BaseNode
 	ledger   *Ledger
 	backup   *BackupManager
 	recovery *RecoveryManager
@@ -42,7 +42,8 @@ func NewDisasterRecoveryNode(cfg *DisasterRecoveryConfig, hc *HealthChecker, vc 
 	}
 	bm := NewBackupManager(led, cfg.BackupPaths, cfg.Interval)
 	rm := NewRecoveryManager(led, hc, vc)
-	return &DisasterRecoveryNode{net: n, ledger: led, backup: bm, recovery: rm}, nil
+	base := NewBaseNode(&NodeAdapter{n})
+	return &DisasterRecoveryNode{BaseNode: base, ledger: led, backup: bm, recovery: rm}, nil
 }
 
 // Start begins networking and periodic backups.
@@ -50,7 +51,7 @@ func (d *DisasterRecoveryNode) Start() {
 	if d.backup != nil {
 		d.backup.Start()
 	}
-	go d.net.ListenAndServe()
+	go d.ListenAndServe()
 }
 
 // Stop gracefully shuts down the node and backup manager.
@@ -58,30 +59,8 @@ func (d *DisasterRecoveryNode) Stop() error {
 	if d.backup != nil {
 		d.backup.Stop()
 	}
-	return d.net.Close()
+	return d.Close()
 }
-
-// DialSeed proxies to the underlying network implementation.
-func (d *DisasterRecoveryNode) DialSeed(peers []string) error { return d.net.DialSeed(peers) }
-
-// Broadcast proxies to the underlying network implementation.
-func (d *DisasterRecoveryNode) Broadcast(topic string, data []byte) error {
-	return d.net.Broadcast(topic, data)
-}
-
-// Subscribe proxies to the underlying network implementation.
-func (d *DisasterRecoveryNode) Subscribe(topic string) (<-chan []byte, error) {
-	return d.net.Subscribe(topic)
-}
-
-// ListenAndServe exposes the lower level network listener.
-func (d *DisasterRecoveryNode) ListenAndServe() { d.net.ListenAndServe() }
-
-// Close stops the node and returns any error from the network layer.
-func (d *DisasterRecoveryNode) Close() error { return d.Stop() }
-
-// Peers lists connected peers by string identifier.
-func (d *DisasterRecoveryNode) Peers() []string { return d.net.Peers() }
 
 // BackupNow triggers an immediate snapshot. When incremental is true the
 // snapshot is skipped if no state change occurred since the last backup.

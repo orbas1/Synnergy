@@ -21,6 +21,13 @@ type InferenceResult struct {
 	Timestamp int64    `json:"time"`
 }
 
+// DriftRecord captures a drift event for audit purposes.
+type DriftRecord struct {
+	Model [32]byte `json:"model"`
+	Drift float64  `json:"drift"`
+	Time  int64    `json:"time"`
+}
+
 // InferModel runs the input through the referenced model and records the result
 // on the ledger. The model must have been published previously.
 func (ai *AIEngine) InferModel(hash [32]byte, input []byte) (*InferenceResult, error) {
@@ -39,6 +46,13 @@ func (ai *AIEngine) InferModel(hash [32]byte, input []byte) (*InferenceResult, e
 	res := &InferenceResult{Model: hash, Output: resp.Result, Score: resp.Score, Timestamp: time.Now().Unix()}
 	key := append([]byte("ai:inference:"), hash[:]...)
 	ai.led.SetState(key, mustJSON(res))
+	if ai.drift != nil {
+		if diff, alert := ai.drift.Record(hash, resp.Score); alert {
+			dkey := append([]byte("ai:drift:"), hash[:]...)
+			rec := DriftRecord{Model: hash, Drift: diff, Time: time.Now().Unix()}
+			ai.led.SetState(dkey, mustJSON(rec))
+		}
+	}
 	return res, nil
 }
 

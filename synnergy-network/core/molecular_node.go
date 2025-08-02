@@ -3,14 +3,12 @@ package core
 import (
 	"fmt"
 	"sync"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // MolecularNode operates at the molecular level combining networking with ledger
 // integration. This is a speculative prototype for future nano-scale nodes.
 type MolecularNode struct {
-	net    *Node
+	*BaseNode
 	ledger *Ledger
 	mu     sync.RWMutex
 }
@@ -33,48 +31,15 @@ func NewMolecularNode(cfg MolecularNodeConfig) (*MolecularNode, error) {
 		_ = n.Close()
 		return nil, err
 	}
-	return &MolecularNode{net: n, ledger: led}, nil
-}
-
-// DialSeed proxies to the underlying network node.
-func (m *MolecularNode) DialSeed(peers []string) error { return m.net.DialSeed(peers) }
-
-// Broadcast proxies network broadcast.
-func (m *MolecularNode) Broadcast(topic string, data []byte) error {
-	return m.net.Broadcast(topic, data)
-}
-
-// Subscribe proxies network subscription and converts messages.
-func (m *MolecularNode) Subscribe(topic string) (<-chan []byte, error) {
-	ch, err := m.net.Subscribe(topic)
-	if err != nil {
-		return nil, err
-	}
-	out := make(chan []byte)
-	go func() {
-		for msg := range ch {
-			out <- msg.Data
-		}
-	}()
-	return out, nil
-}
-
-// ListenAndServe starts the underlying network node.
-func (m *MolecularNode) ListenAndServe() { m.net.ListenAndServe() }
-
-// Close shuts down network and ledger.
-func (m *MolecularNode) Close() error {
-	err := m.net.Close()
-	return err
+	base := NewBaseNode(&NodeAdapter{n})
+	return &MolecularNode{BaseNode: base, ledger: led}, nil
 }
 
 // Peers lists known peers as strings.
 func (m *MolecularNode) Peers() []string {
-	peers := m.net.Peers()
+	peers := m.BaseNode.Peers()
 	list := make([]string, len(peers))
-	for i, p := range peers {
-		list[i] = fmt.Sprintf("%s", p.ID)
-	}
+	copy(list, peers)
 	return list
 }
 
@@ -100,6 +65,3 @@ func (m *MolecularNode) MonitorNanoSensors() ([]byte, error) { return []byte("ok
 
 // ControlMolecularProcess accepts a command payload. Currently a stub.
 func (m *MolecularNode) ControlMolecularProcess(cmd []byte) error { return nil }
-
-// Ensure MolecularNode implements the interface.
-var _ Nodes.MolecularNodeInterface = (*MolecularNode)(nil)

@@ -6,7 +6,7 @@ import "time"
 // direct dependencies to prevent cycles.
 type InsurancePolicy struct {
 	ID            string
-	Holder        [20]byte
+	Holder        Address
 	Coverage      string
 	Premium       uint64
 	Payout        uint64
@@ -20,7 +20,7 @@ type InsurancePolicy struct {
 // InsuranceToken exposes the SYN2900 insurance-specific methods.
 type InsuranceToken interface {
 	TokenInterfaces
-	IssuePolicy(holder [20]byte, coverage string, premium, payout, deductible, limit uint64, start, end time.Time) (string, error)
+	IssuePolicy(holder Address, coverage string, premium, payout, deductible, limit uint64, start, end time.Time) (string, error)
 	GetPolicy(id string) (InsurancePolicy, bool)
 	UpdatePolicy(pol InsurancePolicy) error
 	CancelPolicy(id string) error

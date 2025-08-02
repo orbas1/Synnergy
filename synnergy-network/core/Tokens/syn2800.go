@@ -5,8 +5,8 @@ import "time"
 // LifePolicy defines the metadata for a SYN2800 life insurance token.
 type LifePolicy struct {
 	PolicyID       string
-	Insured        string
-	Beneficiary    string
+	Insured        Address
+	Beneficiary    Address
 	Premium        uint64
 	CoverageAmount uint64
 	StartDate      time.Time

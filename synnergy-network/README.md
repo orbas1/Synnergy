@@ -336,6 +336,14 @@ Those tests may require additional environment variables or mock
 implementations; consult the comments within each test file for setup
 instructions.
 
+## User Feedback and UX
+
+Community input guides interface design across the project.
+
+- Report usability and accessibility issues through the [UX Feedback issue template](../.github/ISSUE_TEMPLATE/ux_feedback.md), including environment details, user type and impact.
+- Follow the [UX Feedback Guide](UX_FEEDBACK_GUIDE.md) for the feedback lifecycle, accessibility checklist and metrics.
+- Issues are triaged weekly and outcomes are summarised in a monthly community call where priorities are set and metrics reviewed.
+
 ## Contributing
 
 Development tasks are organised in stages described in

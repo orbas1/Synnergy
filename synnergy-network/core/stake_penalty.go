@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/binary"
+	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"sync"
@@ -95,3 +96,48 @@ func (spm *StakePenaltyManager) PenaltyOf(addr Address) uint32 {
 
 func stakeKey(addr Address) []byte   { return []byte("stake:" + addr.Hex()) }
 func penaltyKey(addr Address) []byte { return []byte("penalty:" + addr.Hex()) }
+
+// SlashStake reduces the recorded stake for an address by the given fraction
+// (e.g. 0.25 slashes 25%). The slashed amount is returned. An error is
+// returned if no stake is recorded or the ledger update fails.
+func (spm *StakePenaltyManager) SlashStake(addr Address, fraction float64) (uint64, error) {
+	spm.mu.Lock()
+	defer spm.mu.Unlock()
+
+	if fraction <= 0 || fraction > 1 {
+		return 0, fmt.Errorf("fraction must be within (0,1]")
+	}
+
+	key := stakeKey(addr)
+	raw, _ := spm.led.GetState(key)
+	if len(raw) == 0 {
+		return 0, errors.New("no stake recorded")
+	}
+
+	cur := binary.BigEndian.Uint64(raw)
+	slash := uint64(float64(cur) * fraction)
+	if slash > cur {
+		slash = cur
+	}
+	next := cur - slash
+	buf := make([]byte, 8)
+	binary.BigEndian.PutUint64(buf, next)
+	if err := spm.led.SetState(key, buf); err != nil {
+		return 0, err
+	}
+	spm.logger.WithFields(log.Fields{"addr": addr, "slashed": slash}).Warn("stake slashed")
+	return slash, nil
+}
+
+// ResetPenalty clears accumulated penalty points for the address and records the action.
+func (spm *StakePenaltyManager) ResetPenalty(addr Address) error {
+	spm.mu.Lock()
+	defer spm.mu.Unlock()
+	if err := spm.led.DeleteState(penaltyKey(addr)); err != nil {
+		return err
+	}
+	if spm.logger != nil {
+		spm.logger.WithField("addr", addr).Info("penalties reset")
+	}
+	return nil
+}

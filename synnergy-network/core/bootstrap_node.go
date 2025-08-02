@@ -12,7 +12,7 @@ import (
 // surface compatible with the VM opcode dispatcher.
 
 type BootstrapNode struct {
-	net    *Node
+	*BaseNode
 	rep    *Replicator // optional, may be nil
 	led    *Ledger
 	ctx    context.Context
@@ -48,7 +48,8 @@ func NewBootstrapNode(cfg *BootstrapConfig) (*BootstrapNode, error) {
 	if cfg.Replication != nil {
 		logrus.Warn("replication disabled: Node lacks PeerManager support")
 	}
-	return &BootstrapNode{net: n, rep: rep, led: led, ctx: ctx, cancel: cancel}, nil
+	base := NewBaseNode(&NodeAdapter{n})
+	return &BootstrapNode{BaseNode: base, rep: rep, led: led, ctx: ctx, cancel: cancel}, nil
 }
 
 // Start launches the bootstrap services. It is safe to call multiple times.
@@ -58,7 +59,7 @@ func (b *BootstrapNode) Start() {
 	if b.rep != nil {
 		b.rep.Start()
 	}
-	go b.net.ListenAndServe()
+	go b.ListenAndServe()
 }
 
 // Stop gracefully shuts down the node and replication service.
@@ -69,21 +70,7 @@ func (b *BootstrapNode) Stop() error {
 		b.rep.Stop()
 	}
 	b.cancel()
-	return b.net.Close()
-}
-
-// DialSeed connects to a list of peers. It proxies to the underlying network node.
-func (b *BootstrapNode) DialSeed(peers []string) error {
-	b.mu.RLock()
-	defer b.mu.RUnlock()
-	return b.net.DialSeed(peers)
-}
-
-// Peers returns the current peer list known to the node.
-func (b *BootstrapNode) Peers() []*Peer {
-	b.mu.RLock()
-	defer b.mu.RUnlock()
-	return b.net.Peers()
+	return b.Close()
 }
 
 // Ledger exposes the underlying ledger for integrations.

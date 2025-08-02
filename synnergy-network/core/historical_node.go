@@ -11,7 +11,7 @@ import (
 // HistoricalNode maintains a complete archive of all blocks and exposes
 // retrieval helpers for audits and analytics.
 type HistoricalNode struct {
-	net        *NodeAdapter
+	*BaseNode
 	ledger     *Ledger
 	archiveDir string
 	mu         sync.RWMutex
@@ -27,24 +27,13 @@ func NewHistoricalNode(cfg Config, led *Ledger, archiveDir string) (*HistoricalN
 	if err := os.MkdirAll(archiveDir, 0o755); err != nil {
 		return nil, err
 	}
+	base := NewBaseNode(&NodeAdapter{n})
 	return &HistoricalNode{
-		net:        &NodeAdapter{n},
+		BaseNode:   base,
 		ledger:     led,
 		archiveDir: archiveDir,
 	}, nil
 }
-
-// DialSeed proxies to the underlying network node.
-func (h *HistoricalNode) DialSeed(peers []string) error { return h.net.DialSeed(peers) }
-func (h *HistoricalNode) Broadcast(topic string, data []byte) error {
-	return h.net.Broadcast(topic, data)
-}
-func (h *HistoricalNode) Subscribe(topic string) (<-chan []byte, error) {
-	return h.net.Subscribe(topic)
-}
-func (h *HistoricalNode) ListenAndServe() { h.net.ListenAndServe() }
-func (h *HistoricalNode) Close() error    { return h.net.Close() }
-func (h *HistoricalNode) Peers() []string { return h.net.Peers() }
 
 // SyncFromLedger persists every block currently stored in the ledger.
 func (h *HistoricalNode) SyncFromLedger() error {

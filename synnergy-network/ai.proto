@@ -3,13 +3,39 @@ syntax = "proto3";
 package ai;
 
 service TFService {
-  rpc Predict (PredictRequest) returns (PredictResponse);
+  rpc Predict(PredictRequest) returns (PredictResponse);
+  rpc Anomaly(PredictRequest) returns (PredictResponse);
+  rpc FeeOpt(PredictRequest) returns (PredictResponse);
+  rpc Volume(PredictRequest) returns (PredictResponse);
+  rpc Inference(PredictRequest) returns (PredictResponse);
+  rpc Analyse(PredictRequest) returns (PredictResponse);
+  rpc UploadModel(ModelUploadRequest) returns (ModelUploadResponse);
+  rpc StartTraining(TrainingRequest) returns (TrainingResponse);
+  rpc TrainingStatus(TrainingStatusRequest) returns (TrainingStatusResponse);
 }
 
-message PredictRequest {
-  bytes input = 1;
-}
+message PredictRequest { bytes input = 1; }
 
 message PredictResponse {
   bytes output = 1;
+  float score = 2;
 }
+
+message ModelUploadRequest {
+  bytes model = 1;
+  string cid = 2;
+}
+
+message ModelUploadResponse { string id = 1; }
+
+message TrainingRequest {
+  string dataset_cid = 1;
+  string model_cid = 2;
+  map<string, string> params = 3;
+}
+
+message TrainingResponse { string job_id = 1; }
+
+message TrainingStatusRequest { string job_id = 1; }
+
+message TrainingStatusResponse { string status = 1; }

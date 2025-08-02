@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"io"
 	"time"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // ContentNode provides specialised handling for large encrypted content.
@@ -68,7 +66,7 @@ func (c *ContentNode) StoreContent(data, key []byte) (string, error) {
 		return "", err
 	}
 	c.store[cid] = enc
-	meta := Nodes.ContentMeta{CID: cid, Size: uint64(len(enc)), Uploaded: time.Now().UTC()}
+	meta := ContentMeta{CID: cid, Size: uint64(len(enc)), Uploaded: time.Now().UTC()}
 	raw, _ := json.Marshal(meta)
 	if err := CurrentStore().Set([]byte("content:meta:"+cid), raw); err != nil {
 		return cid, err
@@ -90,12 +88,12 @@ func (c *ContentNode) RetrieveContent(cid string, key []byte) ([]byte, error) {
 }
 
 // ListContent enumerates pinned content metadata.
-func (c *ContentNode) ListContent() ([]Nodes.ContentMeta, error) {
+func (c *ContentNode) ListContent() ([]ContentMeta, error) {
 	it := CurrentStore().Iterator([]byte("content:meta:"), nil)
 	defer it.Close()
-	var list []Nodes.ContentMeta
+	var list []ContentMeta
 	for it.Next() {
-		var m Nodes.ContentMeta
+		var m ContentMeta
 		if err := json.Unmarshal(it.Value(), &m); err == nil {
 			list = append(list, m)
 		}

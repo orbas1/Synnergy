@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"encoding/json"
+
 	Nodes "synnergy-network/core/Nodes"
 )
 
@@ -15,7 +16,7 @@ type RegulatoryConfig struct {
 
 // RegulatoryNode enforces compliance rules and exposes network services.
 type RegulatoryNode struct {
-	net       *Node
+	*BaseNode
 	ledger    *Ledger
 	consensus *SynnergyConsensus
 	ctx       context.Context
@@ -38,50 +39,19 @@ func NewRegulatoryNode(cfg *RegulatoryConfig) (*RegulatoryNode, error) {
 	}
 	InitRegulatory(led)
 	InitCompliance(led, cfg.TrustedIssuers)
-	rn := &RegulatoryNode{net: n, ledger: led, ctx: ctx, cancel: cancel}
+	base := NewBaseNode(&NodeAdapter{n})
+	rn := &RegulatoryNode{BaseNode: base, ledger: led, ctx: ctx, cancel: cancel}
 	return rn, nil
 }
 
 // Start launches the underlying network services.
-func (r *RegulatoryNode) Start() { go r.net.ListenAndServe() }
+func (r *RegulatoryNode) Start() { go r.ListenAndServe() }
 
 // Stop gracefully shuts down the node.
 func (r *RegulatoryNode) Stop() error {
 	r.cancel()
-	return r.net.Close()
+	return r.Close()
 }
-
-// DialSeed proxies to the underlying network node.
-func (r *RegulatoryNode) DialSeed(peers []string) error { return r.net.DialSeed(peers) }
-
-// Broadcast sends data to peers using the underlying network node.
-func (r *RegulatoryNode) Broadcast(topic string, data []byte) error {
-	return r.net.Broadcast(topic, data)
-}
-
-// Subscribe wraps the underlying node subscription and exposes raw byte messages.
-func (r *RegulatoryNode) Subscribe(topic string) (<-chan []byte, error) {
-	ch, err := r.net.Subscribe(topic)
-	if err != nil {
-		return nil, err
-	}
-	out := make(chan []byte)
-	go func() {
-		for msg := range ch {
-			out <- msg.Data
-		}
-	}()
-	return out, nil
-}
-
-// ListenAndServe starts listening for network traffic.
-func (r *RegulatoryNode) ListenAndServe() { r.net.ListenAndServe() }
-
-// Close stops the node.
-func (r *RegulatoryNode) Close() error { return r.Stop() }
-
-// Peers returns the list of connected peer IDs.
-func (r *RegulatoryNode) Peers() []string { return r.net.Peers() }
 
 // Ledger exposes the underlying ledger.
 func (r *RegulatoryNode) Ledger() *Ledger { return r.ledger }

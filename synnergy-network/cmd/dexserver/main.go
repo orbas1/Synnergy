@@ -3,12 +3,12 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"os"
 
 	log "github.com/sirupsen/logrus"
 
-	config "synnergy-network/cmd/config"
 	core "synnergy-network/core"
+	config "synnergy-network/pkg/config"
+	"synnergy-network/pkg/utils"
 )
 
 // poolView is a public representation of a liquidity pool.
@@ -42,17 +42,16 @@ func poolsHandler(w http.ResponseWriter, _ *http.Request) {
 }
 
 func main() {
-	config.LoadConfig(os.Getenv("SYNN_ENV"))
-	if err := core.InitLedger(os.Getenv("LEDGER_PATH")); err != nil {
+	if _, err := config.LoadFromEnv(); err != nil {
+		log.Fatalf("config: %v", err)
+	}
+	if err := core.InitLedger(utils.EnvOrDefault("LEDGER_PATH", "")); err != nil {
 		log.Fatalf("ledger init: %v", err)
 	}
 	logger := log.New()
 	core.InitAMM(logger, nil)
 
-	addr := os.Getenv("DEX_API_ADDR")
-	if addr == "" {
-		addr = "127.0.0.1:8081"
-	}
+	addr := utils.EnvOrDefault("DEX_API_ADDR", "127.0.0.1:8081")
 	http.HandleFunc("/api/pools", poolsHandler)
 	logger.Printf("dexserver listening on %s", addr)
 	logger.Fatal(http.ListenAndServe(addr, nil))

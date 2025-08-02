@@ -1,18 +1,19 @@
 package main
 
 import (
-	"os"
-
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	cli "synnergy-network/cmd/cli"
-	config "synnergy-network/cmd/config"
+	config "synnergy-network/pkg/config"
 )
 
 func main() {
 	// Load configuration before command execution so that all CLI modules
 	// have access via viper.
-	config.LoadConfig(os.Getenv("SYNN_ENV"))
+	if _, err := config.LoadFromEnv(); err != nil {
+		log.Fatalf("config: %v", err)
+	}
 
 	rootCmd := &cobra.Command{
 		Use:   "synnergy",

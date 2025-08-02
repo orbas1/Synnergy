@@ -16,7 +16,7 @@ type AutonomousRule struct {
 
 // AutonomousAgentNode executes rules autonomously using on-chain data.
 type AutonomousAgentNode struct {
-	net   *Node
+	*BaseNode
 	led   *Ledger
 	rules []AutonomousRule
 	mu    sync.RWMutex
@@ -35,7 +35,8 @@ func NewAutonomousAgentNode(netCfg Config, ledCfg LedgerConfig) (*AutonomousAgen
 		_ = n.Close()
 		return nil, err
 	}
-	return &AutonomousAgentNode{net: n, led: led, stop: make(chan struct{})}, nil
+	base := NewBaseNode(&NodeAdapter{n})
+	return &AutonomousAgentNode{BaseNode: base, led: led, stop: make(chan struct{})}, nil
 }
 
 // AddRule registers a new autonomous rule.
@@ -62,7 +63,7 @@ func (a *AutonomousAgentNode) Start() {
 	a.wg.Add(1)
 	go func() {
 		defer a.wg.Done()
-		a.net.ListenAndServe()
+		a.ListenAndServe()
 	}()
 	a.wg.Add(1)
 	go a.loop()
@@ -72,7 +73,7 @@ func (a *AutonomousAgentNode) Start() {
 func (a *AutonomousAgentNode) Stop() error {
 	close(a.stop)
 	a.wg.Wait()
-	if err := a.net.Close(); err != nil {
+	if err := a.Close(); err != nil {
 		return err
 	}
 	return nil
@@ -107,26 +108,7 @@ func (a *AutonomousAgentNode) executeRules() {
 	}
 }
 
-// DialSeed proxies to the underlying network node.
-func (a *AutonomousAgentNode) DialSeed(peers []string) error { return a.net.DialSeed(peers) }
-
-// Broadcast proxies to the underlying network node.
-func (a *AutonomousAgentNode) Broadcast(topic string, data []byte) error {
-	return a.net.Broadcast(topic, data)
-}
-
-// Subscribe proxies to the underlying network node.
-func (a *AutonomousAgentNode) Subscribe(topic string) (<-chan Message, error) {
-	return a.net.Subscribe(topic)
-}
-
 // ListenAndServe is exposed for the opcode dispatcher.
 func (a *AutonomousAgentNode) ListenAndServe() { a.Start() }
-
-// Close stops the node.
-func (a *AutonomousAgentNode) Close() error { return a.Stop() }
-
-// Peers returns the peer list.
-func (a *AutonomousAgentNode) Peers() []*Peer { return a.net.Peers() }
 
 var _ Nodes.NodeInterface = (*AutonomousAgentNode)(nil)
