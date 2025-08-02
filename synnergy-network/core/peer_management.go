@@ -102,8 +102,13 @@ func (pm *PeerManagement) Sample(n int) []string {
 	if n > len(peers) {
 		n = len(peers)
 	}
-	if err := shufflePeerInfo(peers); err != nil {
-		return nil
+	for i := len(peers) - 1; i > 0; i-- {
+		r, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			break
+		}
+		j := int(r.Int64())
+		peers[i], peers[j] = peers[j], peers[i]
 	}
 	ids := make([]string, 0, n)
 	for i := 0; i < n; i++ {

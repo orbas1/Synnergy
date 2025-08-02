@@ -49,8 +49,9 @@ func (k *Kademlia) AddPeer(id NodeID) {
 	k.buckets[idx] = append(list, id)
 }
 
-// Store saves a value under the given key. The key is hashed with SHA-256 (truncated to 160 bits) to
-// produce the internal 160 bit key used by the DHT.
+// Store saves a value under the given key. The key is hashed with SHA‑256 and
+// truncated to 160 bits to produce the internal key used by the DHT.
+
 func (k *Kademlia) Store(key string, value []byte) {
 	hash := hash160([]byte(key))
 	k.mu.Lock()
@@ -116,4 +117,12 @@ func (k *Kademlia) distance(a NodeID, b NodeID) *big.Int {
 		diff[i] = aa[i] ^ bb[i]
 	}
 	return new(big.Int).SetBytes(diff[:])
+}
+
+// hash160 returns the first 160 bits of the SHA‑256 hash of the data.
+func hash160(data []byte) [20]byte {
+	full := sha256.Sum256(data)
+	var out [20]byte
+	copy(out[:], full[:20])
+	return out
 }
