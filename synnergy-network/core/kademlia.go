@@ -17,6 +17,13 @@ type Kademlia struct {
 	mu      sync.RWMutex
 }
 
+func hash160(data []byte) [20]byte {
+	sum := sha256.Sum256(data)
+	var h [20]byte
+	copy(h[:], sum[:20])
+	return h
+}
+
 // NewKademlia creates a new Kademlia instance bound to the given node ID.
 func NewKademlia(id NodeID) *Kademlia {
 	return &Kademlia{
@@ -44,6 +51,7 @@ func (k *Kademlia) AddPeer(id NodeID) {
 
 // Store saves a value under the given key. The key is hashed with SHA‑256 and
 // truncated to 160 bits to produce the internal key used by the DHT.
+
 func (k *Kademlia) Store(key string, value []byte) {
 	hash := hash160([]byte(key))
 	k.mu.Lock()

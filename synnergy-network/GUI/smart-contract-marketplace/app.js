@@ -1,1 +1,1 @@
-console.log('Marketplace frontend loaded');
+console.log("Marketplace frontend loaded");

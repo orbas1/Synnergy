@@ -84,6 +84,18 @@ func (pm *PeerManagement) Peers() []PeerInfo {
 	return pm.DiscoverPeers()
 }
 
+func shufflePeerInfo(peers []PeerInfo) error {
+	for i := len(peers) - 1; i > 0; i-- {
+		jBig, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(jBig.Int64())
+		peers[i], peers[j] = peers[j], peers[i]
+	}
+	return nil
+}
+
 // Sample returns up to n peer IDs at random.
 func (pm *PeerManagement) Sample(n int) []string {
 	peers := pm.Peers()

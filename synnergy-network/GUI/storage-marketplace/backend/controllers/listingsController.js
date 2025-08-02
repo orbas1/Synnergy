@@ -1,4 +1,4 @@
-const service = require('../services/storageService');
+const service = require("../services/storageService");
 
 exports.getListings = async (req, res, next) => {
   try {
@@ -21,10 +21,9 @@ exports.createListing = async (req, res, next) => {
 exports.getListing = async (req, res, next) => {
   try {
     const listing = await service.getListing(req.params.id);
-    if (!listing) return res.status(404).json({ error: 'Not found' });
+    if (!listing) return res.status(404).json({ error: "Not found" });
     res.json(listing);
   } catch (err) {
     next(err);
   }
 };
-

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -54,14 +55,22 @@ func (a *APINode) APINode_Stop() error {
 
 // handleBalance returns the balance for the given address.
 func (a *APINode) handleBalance(w http.ResponseWriter, req *http.Request) {
-	addrHex := req.URL.Path[len("/balance/"):]
+	if req.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	if a.ledger == nil {
+		http.Error(w, "ledger not initialised", http.StatusInternalServerError)
+		return
+	}
+	addrHex := strings.TrimPrefix(req.URL.Path, "/balance/")
 	addr, err := ParseAddress(addrHex)
 	if err != nil {
 		http.Error(w, "invalid address", http.StatusBadRequest)
 		return
 	}
 	bal := a.ledger.TokenBalance(IDTokenID, addr)
-	json.NewEncoder(w).Encode(map[string]uint64{"balance": bal})
+	writeJSON(w, map[string]uint64{"balance": bal})
 }
 
 // handleTx accepts a raw transaction and forwards it to the ledger pool
@@ -71,17 +80,29 @@ func (a *APINode) handleTx(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
+	if ct := req.Header.Get("Content-Type"); !strings.HasPrefix(ct, "application/json") {
+		http.Error(w, "content type must be application/json", http.StatusUnsupportedMediaType)
+		return
+	}
 	var tx Transaction
 	if err := json.NewDecoder(req.Body).Decode(&tx); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	a.ledger.AddToPool(&tx)
-	w.WriteHeader(http.StatusOK)
+	writeJSON(w, map[string]string{"status": "accepted"})
 }
 
 // handleBlock returns basic block data for the given height.
 func (a *APINode) handleBlock(w http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	if a.ledger == nil {
+		http.Error(w, "ledger not initialised", http.StatusInternalServerError)
+		return
+	}
 	h, err := strconv.Atoi(req.URL.Path[len("/block/"):])
 	if err != nil || h < 0 {
 		http.Error(w, "invalid height", http.StatusBadRequest)
@@ -92,5 +113,10 @@ func (a *APINode) handleBlock(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	json.NewEncoder(w).Encode(blk)
+	writeJSON(w, blk)
+}
+
+func writeJSON(w http.ResponseWriter, v interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(v)
 }
