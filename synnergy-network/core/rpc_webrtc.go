@@ -18,8 +18,14 @@ type RPCWebRTC struct {
 	consensus *SynnergyConsensus
 
 	srv   *http.Server
-	peers map[string]*webrtc.PeerConnection
+	peers map[string]*webRTCPeer
 	mu    sync.Mutex
+}
+
+// webRTCPeer groups a peer connection with its reusable data channels.
+type webRTCPeer struct {
+	conn     *webrtc.PeerConnection
+	channels map[string]*webrtc.DataChannel
 }
 
 // NewRPCWebRTC creates a new bridge instance.
@@ -27,7 +33,7 @@ func NewRPCWebRTC(ledger *Ledger, cons *SynnergyConsensus) *RPCWebRTC {
 	return &RPCWebRTC{
 		ledger:    ledger,
 		consensus: cons,
-		peers:     make(map[string]*webrtc.PeerConnection),
+		peers:     make(map[string]*webRTCPeer),
 	}
 }
 
@@ -46,7 +52,10 @@ func (r *RPCWebRTC) RPC_Close() error {
 	}
 	r.mu.Lock()
 	for id, p := range r.peers {
-		p.Close()
+		for _, dc := range p.channels {
+			_ = dc.Close()
+		}
+		_ = p.conn.Close()
 		delete(r.peers, id)
 	}
 	r.mu.Unlock()
@@ -55,24 +64,24 @@ func (r *RPCWebRTC) RPC_Close() error {
 
 // RPC_ConnectPeer accepts a WebRTC offer and returns the answer SDP.
 func (r *RPCWebRTC) RPC_ConnectPeer(offerSDP string) (string, error) {
-	peer, err := webrtc.NewPeerConnection(webrtc.Configuration{})
+	pc, err := webrtc.NewPeerConnection(webrtc.Configuration{})
 	if err != nil {
 		return "", err
 	}
 	offer := webrtc.SessionDescription{Type: webrtc.SDPTypeOffer, SDP: offerSDP}
-	if err := peer.SetRemoteDescription(offer); err != nil {
+	if err := pc.SetRemoteDescription(offer); err != nil {
 		return "", err
 	}
-	answer, err := peer.CreateAnswer(nil)
+	answer, err := pc.CreateAnswer(nil)
 	if err != nil {
 		return "", err
 	}
-	if err := peer.SetLocalDescription(answer); err != nil {
+	if err := pc.SetLocalDescription(answer); err != nil {
 		return "", err
 	}
 	r.mu.Lock()
-	id := fmt.Sprintf("%p", peer)
-	r.peers[id] = peer
+	id := fmt.Sprintf("%p", pc)
+	r.peers[id] = &webRTCPeer{conn: pc, channels: make(map[string]*webrtc.DataChannel)}
 	r.mu.Unlock()
 	return answer.SDP, nil
 }
@@ -82,9 +91,14 @@ func (r *RPCWebRTC) RPC_Broadcast(topic string, data []byte) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	for id, peer := range r.peers {
-		dc, err := peer.CreateDataChannel(topic, nil)
-		if err != nil {
-			return fmt.Errorf("peer %s: %w", id, err)
+		dc, ok := peer.channels[topic]
+		if !ok {
+			var err error
+			dc, err = peer.conn.CreateDataChannel(topic, nil)
+			if err != nil {
+				return fmt.Errorf("peer %s: %w", id, err)
+			}
+			peer.channels[topic] = dc
 		}
 		if err := dc.Send(data); err != nil {
 			return fmt.Errorf("peer %s send: %w", id, err)
