@@ -22,9 +22,16 @@ The repository is organised as follows:
 | `cmd/` | Command line sources, configuration files and helper scripts. CLI modules live under `cmd/cli`. |
 | `core/binary_tree_operations.go` | Ledger-backed binary search tree implementation with CLI and VM opcodes. |
 | `tests/` | Go unit tests covering each module. Run with `go test ./...`. |
+| `GUI/` | Web front-ends including `wallet`, `explorer`, `ai-marketplace` and more. |
+| `walletserver/` | Go HTTP backend powering the wallet GUI. |
+| `internal/` | Shared utilities used across CLI and services. |
+| `cmd/scripts/` | Shell helpers for common development tasks. See [`cmd/scripts/script_guide.md`](cmd/scripts/script_guide.md). |
+| `scripts/` | Top-level scripts to start local devnets or testnets. |
+| `smart_contract_guide.md` | Documentation and examples for writing contracts. |
 | `third_party/` | Vendored dependencies such as a libp2p fork used during early development. |
 | `setup_synn.sh` | Convenience script that installs Go and builds the CLI. |
 | `Synnergy.env.sh` | Optional environment bootstrap script that downloads tools and loads variables from `.env`. |
+| `WHITEPAPER.md` | Project vision and design goals. |
 
 ## Building
 
@@ -228,6 +235,42 @@ Two top level scripts provide larger network setups:
 configuration. Both build the CLI automatically and clean up all processes on
 `Ctrl+C`.
 
+## Scripts
+
+Reusable shell helpers in `cmd/scripts` automate common tasks such as funding
+accounts (`faucet_fund.sh`), deploying contracts (`contracts_deploy.sh`),
+starting network services and more. The complete reference is available in
+[`cmd/scripts/script_guide.md`](cmd/scripts/script_guide.md).
+
+Top level scripts are provided for multi-node setups:
+
+- `scripts/devnet_start.sh` – start a local developer network.
+- `scripts/testnet_start.sh` – launch an ephemeral testnet from YAML.
+
+## GUI Projects
+
+Browser-based interfaces reside under `GUI/`:
+
+- `wallet` – manage accounts using the `walletserver` backend.
+- `explorer` – query balances and transactions.
+- `ai-marketplace` – browse and purchase AI models.
+- `smart-contract-marketplace` – deploy and trade contracts.
+- `storage-marketplace` – pay for decentralized storage.
+- `nft_marketplace` – create and trade NFTs.
+- `dao-explorer` – interact with DAO governance.
+- `token-creation-tool` – generate new tokens.
+- `dex-screener` – view decentralized exchange listings.
+- `authority-node-index` – monitor authority nodes.
+- `cross-chain-management` – manage bridges and transfers.
+
+The `walletserver/` directory contains the Go HTTP backend for the wallet GUI.
+
+## Smart Contracts
+
+Example contracts live throughout the repository and are documented in
+[`smart_contract_guide.md`](smart_contract_guide.md). They demonstrate opcode
+usage for token faucets, storage markets, DAO governance and more. Contracts are
+compiled to WebAssembly and deployed via the `synnergy` CLI.
 
 ## Docker
 
