@@ -8,16 +8,16 @@ type ValuationRecord struct {
 	Timestamp time.Time
 }
 
-// SaleRecord captures sale transactions for SYN131 assets.
-type SaleRecord struct {
+// SYN131SaleRecord captures sale transactions for SYN131 assets.
+type SYN131SaleRecord struct {
 	Price     uint64
 	Buyer     Address
 	Seller    Address
 	Timestamp time.Time
 }
 
-// RentalAgreement models rental terms for an asset.
-type RentalAgreement struct {
+// SYN131RentalAgreement models rental terms for an asset.
+type SYN131RentalAgreement struct {
 	Renter Address
 	Start  time.Time
 	End    time.Time
@@ -35,8 +35,8 @@ type LicenseRecord struct {
 type SYN131Token struct {
 	*BaseToken
 	Values   []ValuationRecord
-	Sales    []SaleRecord
-	Rentals  []RentalAgreement
+	Sales    []SYN131SaleRecord
+	Rentals  []SYN131RentalAgreement
 	Licenses []LicenseRecord
 	Shares   map[Address]uint64
 }
@@ -58,11 +58,11 @@ func (t *SYN131Token) UpdateValuation(value uint64) {
 
 // RecordSale appends a sale to the history log.
 func (t *SYN131Token) RecordSale(price uint64, buyer, seller Address) {
-	t.Sales = append(t.Sales, SaleRecord{Price: price, Buyer: buyer, Seller: seller, Timestamp: time.Now().UTC()})
+	t.Sales = append(t.Sales, SYN131SaleRecord{Price: price, Buyer: buyer, Seller: seller, Timestamp: time.Now().UTC()})
 }
 
 // AddRental registers a new rental agreement.
-func (t *SYN131Token) AddRental(r RentalAgreement) {
+func (t *SYN131Token) AddRental(r SYN131RentalAgreement) {
 	t.Rentals = append(t.Rentals, r)
 }
 
@@ -88,8 +88,8 @@ func SYN131_UpdateValuation(t *SYN131Token, value uint64) { t.UpdateValuation(va
 func SYN131_RecordSale(t *SYN131Token, price uint64, buyer, seller Address) {
 	t.RecordSale(price, buyer, seller)
 }
-func SYN131_AddRental(t *SYN131Token, r RentalAgreement)  { t.AddRental(r) }
-func SYN131_IssueLicense(t *SYN131Token, l LicenseRecord) { t.IssueLicense(l) }
+func SYN131_AddRental(t *SYN131Token, r SYN131RentalAgreement) { t.AddRental(r) }
+func SYN131_IssueLicense(t *SYN131Token, l LicenseRecord)      { t.IssueLicense(l) }
 func SYN131_TransferShare(t *SYN131Token, from, to Address, share uint64) {
 	t.TransferShare(from, to, share)
 }

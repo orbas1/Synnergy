@@ -1,4 +1,4 @@
-const service = require('../services/contractService');
+const service = require("../services/contractService");
 
 exports.list = async (req, res) => {
   const listings = await service.listContracts();
@@ -29,5 +29,5 @@ exports.remove = async (req, res) => {
 exports.wasm = async (req, res) => {
   const file = await service.getWasm(req.params.id);
   if (!file) return res.status(404).end();
-  res.type('application/wasm').send(file);
+  res.type("application/wasm").send(file);
 };

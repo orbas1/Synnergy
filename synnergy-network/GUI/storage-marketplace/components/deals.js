@@ -1,12 +1,12 @@
-const API = '/api/deals';
+const API = "/api/deals";
 
 export async function renderDeals() {
   const res = await fetch(API);
   const data = await res.json();
-  const tbody = document.querySelector('#dealsTable tbody');
-  tbody.innerHTML = '';
-  data.forEach(d => {
-    const tr = document.createElement('tr');
+  const tbody = document.querySelector("#dealsTable tbody");
+  tbody.innerHTML = "";
+  data.forEach((d) => {
+    const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${d.id}</td>
       <td>${d.listingId}</td>
@@ -19,14 +19,14 @@ export async function renderDeals() {
 }
 
 export function initDealForm() {
-  const form = document.getElementById('dealForm');
-  form.addEventListener('submit', async e => {
+  const form = document.getElementById("dealForm");
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
     await fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
     form.reset();
     renderDeals();
