@@ -1572,18 +1572,34 @@ var catalogue = []struct {
 	{"Witness_GetBlock", 0x1F0005},
 }
 
-// init wires the catalogue into the live dispatcher.
+// init normalises the opcode catalogue, assigning sequential identifiers per
+// category and wiring handlers into the dispatcher.  The catalogue as committed
+// may contain duplicated numeric values; this routine deterministically
+// re-numbers them to guarantee uniqueness at runtime.
 func init() {
-	for _, entry := range catalogue {
-		nameToOp[entry.name] = entry.op
-		Register(entry.op, wrap(entry.name))
-		bin := make([]byte, 3)
-		bin[0] = byte(entry.op >> 16)
-		bin[1] = byte(entry.op >> 8)
-		bin[2] = byte(entry.op)
+	// next keeps track of the next ordinal for each category byte.
+	next := make(map[byte]uint32)
+
+	for i, entry := range catalogue {
+		// Derive the category from the high byte of the provided opcode.
+		cat := byte(entry.op >> 16)
+		next[cat]++
+
+		// Reconstruct the opcode with a unique, sequential ordinal.
+		op := Opcode(uint32(cat)<<16 | next[cat])
+		catalogue[i].op = op
+
+		nameToOp[entry.name] = op
+		Register(op, wrap(entry.name))
+
+		bin := []byte{byte(op >> 16), byte(op >> 8), byte(op)}
 		log.Printf("[OPCODES] %-32s = %08b = 0x%06X",
-			entry.name, bin, entry.op)
+			entry.name, bin, op)
 	}
+
+	// Build the gas table once opcodes have been normalised.
+	initGasTable()
+
 	log.Printf("[OPCODES] %d opcodes registered; %d gas-priced", len(opcodeTable), len(gasTable))
 }
 
