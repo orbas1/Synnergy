@@ -27,6 +27,7 @@ import (
 	"log"
 	"math"
 	"os"
+	"path/filepath"
 	"sort"
 	"sync"
 	"time"
@@ -441,6 +442,40 @@ func (a *AuditTrail) Report() ([]AuditEvent, error) {
 		return nil, err
 	}
 	return out, nil
+}
+
+// Archive copies the current audit log to dest and writes a sha256 manifest.
+// If dest is a directory, a timestamped file will be created inside it.
+// The returned checksum is the hex-encoded SHA-256 of the log contents.
+func (a *AuditTrail) Archive(dest string) (string, string, error) {
+	if a == nil || a.file == nil {
+		return "", "", errors.New("audit trail not initialised")
+	}
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if err := a.file.Sync(); err != nil {
+		return "", "", err
+	}
+	if _, err := a.file.Seek(0, 0); err != nil {
+		return "", "", err
+	}
+	data, err := io.ReadAll(a.file)
+	if err != nil {
+		return "", "", err
+	}
+	if fi, err := os.Stat(dest); err == nil && fi.IsDir() {
+		dest = filepath.Join(dest, fmt.Sprintf("audit_%d.log", time.Now().Unix()))
+	}
+	if err := os.WriteFile(dest, data, 0o600); err != nil {
+		return "", "", err
+	}
+	sum := sha256.Sum256(data)
+	checksum := fmt.Sprintf("%x", sum[:])
+	manifest := fmt.Sprintf("%s  %s\n", checksum, filepath.Base(dest))
+	if err := os.WriteFile(dest+".sha256", []byte(manifest), 0o600); err != nil {
+		return "", "", err
+	}
+	return dest, checksum, nil
 }
 
 // Close closes the underlying log file.

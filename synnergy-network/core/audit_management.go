@@ -99,6 +99,15 @@ func (am *AuditManager) Events(addr Address) ([]LedgerAuditEvent, error) {
 	return out, nil
 }
 
+// Archive exports the audit trail to the provided destination path and
+// returns the file path and sha256 checksum of the archived log.
+func (am *AuditManager) Archive(dest string) (string, string, error) {
+	if am == nil || am.trail == nil {
+		return "", "", errors.New("audit trail not configured")
+	}
+	return am.trail.Archive(dest)
+}
+
 // Close closes the underlying AuditTrail if configured.
 func (am *AuditManager) Close() error {
 	if am == nil || am.trail == nil {

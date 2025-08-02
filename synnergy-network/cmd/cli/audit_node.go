@@ -164,13 +164,34 @@ func auditEvents(cmd *cobra.Command, args []string) error {
 	return enc.Encode(evs)
 }
 
+func auditArchive(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("usage: archive <dest>")
+	}
+	audMu.RLock()
+	n := audNode
+	audMu.RUnlock()
+	if n == nil {
+		return errors.New("not running")
+	}
+	path, sum, err := n.ArchiveTrail(args[0])
+	if err != nil {
+		return err
+	}
+	fmt.Fprintf(cmd.OutOrStdout(), "archive written to %s (sha256 %s)\n", path, sum)
+	return nil
+}
+
 var auditNodeCmd = &cobra.Command{Use: "auditnode", Short: "Run audit node", PersistentPreRunE: auditInit}
 var auditNodeStart = &cobra.Command{Use: "start", Short: "Start node", RunE: auditStart}
 var auditNodeStop = &cobra.Command{Use: "stop", Short: "Stop node", RunE: auditStop}
 var auditNodeLog = &cobra.Command{Use: "log", Short: "Record event", RunE: auditLog}
 var auditNodeEvents = &cobra.Command{Use: "events", Short: "List events", RunE: auditEvents}
+var auditNodeArchive = &cobra.Command{Use: "archive", Short: "Archive audit trail", RunE: auditArchive}
 
-func init() { auditNodeCmd.AddCommand(auditNodeStart, auditNodeStop, auditNodeLog, auditNodeEvents) }
+func init() {
+	auditNodeCmd.AddCommand(auditNodeStart, auditNodeStop, auditNodeLog, auditNodeEvents, auditNodeArchive)
+}
 
 // AuditNodeCmd exported for index registration
 var AuditNodeCmd = auditNodeCmd
