@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"sync"
-	core "synnergy-network/core"
 	Tokens "synnergy-network/core/Tokens"
 )
 
@@ -13,14 +12,7 @@ var fxToken *Tokens.SYN3400Token
 
 func fxInit(cmd *cobra.Command, args []string) error {
 	fxOnce.Do(func() {
-		meta := core.Metadata{Name: "Forex Pair", Symbol: "FXPAIR", Decimals: 8, Standard: core.StdSYN3400}
-		tok, err := Tokens.NewSYN3400Token(meta, "EUR", "USD", "EURUSD", 1.0, map[core.Address]uint64{})
-		if err == nil {
-			fxToken = tok
-		}
-		if err != nil {
-			fmt.Println(err)
-		}
+		fxToken = Tokens.NewSYN3400Token("EUR", "USD", "EURUSD", 1.0)
 	})
 	if fxToken == nil {
 		return fmt.Errorf("initialisation failed")
@@ -29,15 +21,21 @@ func fxInit(cmd *cobra.Command, args []string) error {
 }
 
 func fxHandleRate(cmd *cobra.Command, _ []string) error {
-	fmt.Fprintf(cmd.OutOrStdout(), "%f\n", fxToken.Rate())
+	if _, err := fmt.Fprintf(cmd.OutOrStdout(), "%f\n", fxToken.Rate()); err != nil {
+		return fmt.Errorf("writing rate: %w", err)
+	}
 	return nil
 }
 
 func fxHandleUpdate(cmd *cobra.Command, args []string) error {
 	var rate float64
-	fmt.Sscanf(args[0], "%f", &rate)
+	if _, err := fmt.Sscanf(args[0], "%f", &rate); err != nil {
+		return fmt.Errorf("parsing rate: %w", err)
+	}
 	fxToken.UpdateRate(rate)
-	fmt.Fprintln(cmd.OutOrStdout(), "rate updated")
+	if _, err := fmt.Fprintln(cmd.OutOrStdout(), "rate updated"); err != nil {
+		return fmt.Errorf("writing confirmation: %w", err)
+	}
 	return nil
 }
 
