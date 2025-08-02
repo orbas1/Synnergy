@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"log"
 
 	core "synnergy-network/core"
 )
@@ -100,7 +98,7 @@ var lpSubmitCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Println("proposal", id.Hex())
+		logrus.WithField("proposal_id", id.Hex()).Info("proposal submitted")
 		return nil
 	},
 }
