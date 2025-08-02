@@ -83,13 +83,13 @@ func CompileWASM(srcPath string, outDir string) ([]byte, [32]byte, error) {
 // Invocation – routed through VM.
 //---------------------------------------------------------------------
 
-func (cr *ContractRegistry) Invoke(
-	caller Address, // your own 20-byte address type
+func (cr *ContractRegistry) InvokeWithReceipt(
+	caller Address,
 	addr Address,
 	method string,
 	args []byte,
 	gasLimit uint64,
-) ([]byte, error) {
+) (*Receipt, error) {
 
 	// 1. Look up the contract
 	cr.mu.RLock()
@@ -105,25 +105,38 @@ func (cr *ContractRegistry) Invoke(
 	}
 
 	// 3. Convert your Address → common.Address
-	callerAddr := common.BytesToAddress(caller[:]) // helper from go-ethereum
-	originAddr := callerAddr                       // same for now
+	callerAddr := common.BytesToAddress(caller[:])
+	originAddr := callerAddr // same for now
 
-	// 4. Build the VM context (only the fields that exist!)
+	// 4. Build the VM context
 	vmCtx := &VMContext{
 		Caller:   callerAddr,
 		Origin:   originAddr,
-		TxHash:   zeroHash, // or real hash if you have it
+		TxHash:   zeroHash,
 		GasLimit: gasLimit,
 	}
 
-	// 5. IMPORTANT: argument order is (code, ctx)
+	// 5. Execute bytecode
 	rec, err := cr.vm.Execute(sc.Bytecode, vmCtx)
 	if err != nil {
 		return nil, err
 	}
 
-	// 6. Give back the contract’s return bytes
-	return rec.ReturnData, nil // change to the actual field name
+	return rec, nil
+}
+
+func (cr *ContractRegistry) Invoke(
+	caller Address, // your own 20-byte address type
+	addr Address,
+	method string,
+	args []byte,
+	gasLimit uint64,
+) ([]byte, error) {
+	rec, err := cr.InvokeWithReceipt(caller, addr, method, args, gasLimit)
+	if err != nil {
+		return nil, err
+	}
+	return rec.ReturnData, nil
 }
 
 // Deploy registers a new smart-contract and stores code/metadata on the ledger.

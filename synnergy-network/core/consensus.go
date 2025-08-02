@@ -1,3 +1,6 @@
+//go:build tokens
+// +build tokens
+
 package core
 
 // SynnergyConsensus – hybrid PoH + PoS sub‑blocks, aggregated under PoW main block.

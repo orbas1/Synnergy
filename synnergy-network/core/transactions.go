@@ -1,3 +1,6 @@
+//go:build tokens
+// +build tokens
+
 package core
 
 // transactions.go – Synnergy Network
