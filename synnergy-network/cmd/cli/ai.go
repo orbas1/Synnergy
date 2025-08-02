@@ -154,6 +154,7 @@ var aiCmd = &cobra.Command{
 	Use:               "ai",
 	Short:             "On‑chain AI utilities (fraud, fees, model marketplace)",
 	PersistentPreRunE: ensureAIInitialised,
+	PersistentPostRun: func(cmd *cobra.Command, args []string) { core.ShutdownAI() },
 }
 
 // predict --------------------------------------------------------------------
