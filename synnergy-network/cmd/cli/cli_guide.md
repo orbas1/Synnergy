@@ -131,6 +131,101 @@ The following command groups expose the same functionality available in the core
 - **testnet** – Start an ephemeral test network from a YAML config.
 - **faucet** – Dispense test funds with rate limiting.
 
+# Newly Added Command Groups
+
+The CLI has grown considerably. The modules below expose functionality found in
+recently added Go files under `cmd/cli`.
+
+- **agriculture** – Manage agricultural campaigns and crop investments.
+- **ai_enhanced_node** – Start or stop an AI-assisted node with volume prediction.
+- **api_node** – Run the API gateway service.
+- **archival_witness_node** – Notarize transactions and witness blocks.
+- **audit_node** – Perform audit logging on-chain.
+- **autonomous_agent_node** – Launch autonomous agent services.
+- **bank_institutional_node** – Operate regulated banking nodes.
+- **biometric_security_node** – Nodes using biometric admin controls.
+- **central_banking_node** – Issue and manage central bank currency.
+- **charity_token** – Donate to charity campaigns and query progress.
+- **consensus_specific_node** – Nodes tuned for a particular consensus mode.
+- **content_node** – Serve decentralised content from storage.
+- **custodial_node** – Provide custodial wallet services.
+- **dao_token** – Manage DAO membership tokens.
+- **disaster_recovery_node** – Coordinate disaster recovery replicas.
+- **elected_authority_node** – Operate an elected authority node.
+- **employment_token** – Issue employment contracts and payroll tokens.
+- **energy_efficient_node** – Node implementing energy saving features.
+- **energy_tokens** – Register energy credits and record usage.
+- **environmental_monitoring_node** – Aggregate external sensor data.
+- **event_ticket** – Sell and transfer event tickets.
+- **experimental_node** – Run experimental consensus or features.
+- **forensic_node** – Inspect logs and network traces.
+- **forex_token** – Manage foreign exchange pegged tokens.
+- **full_node** – Operate a standard validating node.
+- **gateway_node** – Bridge data sources and chain connections.
+- **geospatial_node** – Track location based data.
+- **grant_tokens** – Manage grant disbursement tokens.
+- **historical_node** – Serve historical chain data.
+- **holographic_node** – Node for holographic/VR content.
+- **identity_token** – Issue identity verified tokens.
+- **index** – Manage search indexes for ledger data.
+- **indexing_node** – Node specialised for indexing the chain.
+- **insurance_token** – Manage insurance policies as tokens.
+- **integration_node** – Integration test harness node.
+- **iptoken** – Register intellectual property tokens.
+- **legal_token** – Track legal documents on chain.
+- **life_insurance** – Issue life insurance policies.
+- **lightning_node** – Operate a Lightning Network bridge.
+- **master_node** – Configure and monitor masternodes.
+- **military_node** – Run a military grade node.
+- **mining_node** – Execute mining operations.
+- **mobile_mining_node** – Mining node for mobile devices.
+- **mobile_node** – Lightweight mobile node.
+- **molecular_node** – Node used for molecular simulations.
+- **optimization** – Optimisation utilities for tokens.
+- **orphan_node** – Maintain orphaned blocks or offline nodes.
+- **pension_tokens** – Manage pension fund tokens.
+- **quantum_resistant_node** – Use quantum resistant cryptography.
+- **regulatory_node** – Regulatory oversight commands.
+- **rental_token** – Tokenised rentals for assets.
+- **reputation_tokens** – Issue reputation based tokens.
+- **staking_node** – Dedicated staking node commands.
+- **super_node** – High performance super node.
+- **syn10** – Manage SYN10 governance tokens.
+- **syn1000** – Stablecoin token operations.
+- **syn11** – Legacy SYN11 token utilities.
+- **syn1100** – Healthcare record tokens.
+- **syn1155** – ERC1155 style multi‑token commands.
+- **syn1200** – Advanced NFT management.
+- **syn130** – Commodity token operations.
+- **syn1300_token** – SYN1300 asset token utilities.
+- **syn131** – Multisig token management.
+- **syn1401** – Regulated security tokens.
+- **syn1600** – Cross jurisdiction asset tokens.
+- **syn1800** – Derivatives token utilities.
+- **syn1900** – Weighted index token commands.
+- **syn1967** – Historical asset tokens.
+- **syn200** – Simple utility token management.
+- **syn2100** – Bond issuance tokens.
+- **syn2200** – Real estate backed tokens.
+- **syn223** – Security token operations.
+- **syn2400** – Perpetual futures tokens.
+- **syn300** – Charity funding token standard.
+- **syn3200** – Prediction market tokens.
+- **syn3300** – Regulated commodity tokens.
+- **syn3500** – Fiat currency tokens.
+- **syn500** – Reward point token standard.
+- **syn5000** – Fixed income token standard.
+- **syn600** – Loyalty points token commands.
+- **syn70** – Generic token operations.
+- **syn721** – NFT standard token commands.
+- **syn800** – Option contract token utilities.
+- **syn845** – Debt instrument tokens.
+- **time_locked_node** – Nodes enforcing time locked execution.
+- **tokens** – Inspect and administer any token type.
+- **validator_node** – Manage validator registration.
+- **watchtower_node** – Monitor network health and detect forks.
+- **zkp_node** – Zero knowledge proof node operations.
+
 
 To use these groups, import the corresponding command constructor (e.g. `ledger.NewLedgerCommand()`) in your main program and attach it to the root `cobra.Command`.
 
@@ -1253,3 +1348,383 @@ needed in custom tooling.
 | `request <addr>` | Request faucet funds for an address. |
 | `balance` | Display remaining faucet balance. |
 | `config --amount <n> --cooldown <d>` | Update faucet parameters. |
+
+### syn10
+
+| Sub-command | Description |
+|-------------|-------------|
+| `set-rate <rate>` | Update exchange rate. |
+| `info` | Display CBDC info. |
+| `mint <to> <amt>` | Mint CBDC tokens. |
+| `burn <from> <amt>` | Burn CBDC tokens. |
+
+### syn11
+
+| Sub-command | Description |
+|-------------|-------------|
+| `issue <address> <amount>` | Issue SYN11 gilts. |
+| `redeem <address> <amount>` | Redeem gilts from an address. |
+| `set-coupon <rate>` | Update coupon rate. |
+| `pay-coupon` | Pay accrued coupons. |
+
+### syn70
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <id> <owner> <name> <game>` | Register an in-game asset. |
+| `transfer <id> <newOwner>` | Transfer asset ownership. |
+| `setattr <id> <key> <value>` | Set a custom asset attribute. |
+| `achievement <id> <name>` | Record an achievement. |
+| `info <id>` | Show asset details. |
+| `list` | List registered assets. |
+
+### syn200
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <owner> <name> <total>` | Register a carbon project. |
+| `issue <projectID> <to> <amount>` | Issue carbon credits. |
+| `retire <holder> <amount>` | Retire credits from circulation. |
+| `verify <projectID> <verifier> <verID> [status]` | Add a verification record. |
+| `verifications <projectID>` | List project verifications. |
+| `info <projectID>` | Show project info. |
+| `list` | List all carbon projects. |
+
+### syn2100
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register-document <token> <docID> <issuer> <recipient> <amount> <issue> <due> <desc>` | Register a financing document. |
+| `finance <token> <docID> <financier>` | Finance a document. |
+| `get-document <token> <docID>` | Fetch document details. |
+| `list-documents <token>` | List registered documents. |
+| `add-liquidity <token> --from <addr> --amt <n>` | Add liquidity to the pool. |
+| `remove-liquidity <token> --to <addr> --amt <n>` | Remove liquidity from the pool. |
+
+### syn2200
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --owner <addr> [--dec <d>] [--supply <n>]` | Create a payment token. |
+| `pay --id <token> --from <addr> --to <addr> --amt <n> --cur <code>` | Send a payment through the network. |
+
+### syn223
+
+| Sub-command | Description |
+|-------------|-------------|
+| `whitelist-add <token> <addr>` | Add an address to the whitelist. |
+| `whitelist-remove <token> <addr>` | Remove an address from the whitelist. |
+| `blacklist-add <token> <addr>` | Add an address to the blacklist. |
+| `blacklist-remove <token> <addr>` | Remove an address from the blacklist. |
+| `transfer <token> --from <addr> --to <addr> --amt <n>` | Perform a safe token transfer. |
+
+### syn2400
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --owner <addr> --hash <h> [--desc <d>] [--price <n>] [--supply <n>]` | Create a data token. |
+
+### syn300
+
+| Sub-command | Description |
+|-------------|-------------|
+| `delegate <owner> <delegate>` | Delegate voting power. |
+| `revoke <owner>` | Revoke delegation. |
+| `power <addr>` | Show voting power. |
+| `propose <creator> <description>` | Create a governance proposal. |
+| `vote <id> <voter> <approve>` | Cast a vote on a proposal. |
+| `execute <id> <quorum>` | Execute an approved proposal. |
+| `status <id>` | Get proposal status. |
+| `list` | List proposals. |
+
+### syn3200
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --issuer <addr> --payer <addr> --amt <n> --due <time> [--meta <m>]` | Create a bill. |
+| `pay --bill <id> --payer <addr> --amt <n>` | Pay part of a bill. |
+| `adjust --bill <id> --amt <n>` | Adjust bill amount. |
+| `info --bill <id>` | Show bill details. |
+
+### syn3300
+
+| Sub-command | Description |
+|-------------|-------------|
+| `info <id>` | Display ETF token info. |
+| `update <id> --price <n>` | Update ETF price. |
+| `mint <id> <to> --shares <n>` | Mint ETF shares. |
+| `burn <id> <from> --shares <n>` | Burn ETF shares. |
+
+### syn500
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --owner <addr> [--dec <d>] [--supply <n>]` | Create a utility token. |
+| `grant <addr> --tier <n> --max <n>` | Grant a usage tier. |
+| `use <addr>` | Record token usage. |
+
+### syn5000
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> [--dec <d>]` | Create a gambling token. |
+| `bet <bettor> --id <token> --amt <n> --odds <r> --game <type>` | Place a bet. |
+| `resolve --id <token> --bet <id> [--win]` | Resolve a bet. |
+
+### syn600
+
+| Sub-command | Description |
+|-------------|-------------|
+| `stake <addr> <amt> --days <d>` | Stake SYN600 tokens. |
+| `unstake <addr>` | Unstake tokens. |
+| `reward <addr> <amt>` | Mint staking rewards. |
+| `engage <addr> <pts>` | Record engagement points. |
+| `engagement <addr>` | Show engagement for an address. |
+
+### syn800
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <desc> <valuation> <loc> <type> <cert>` | Register an asset. |
+| `update <valuation>` | Update asset valuation. |
+| `info` | Display asset information. |
+
+### syn845
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --owner <addr> --supply <amt>` | Create a new debt token. |
+| `issue <token> <debtID> <borrower> <principal> <rate> <penalty> <due>` | Issue a debt instrument. |
+| `pay <token> <debtID> <amount>` | Record a payment toward a debt. |
+| `info <token> <debtID>` | Display debt information. |
+
+### syn1000
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> [--dec <d>]` | Create a SYN1000 stablecoin. |
+| `reserve --id <token> --asset <name> --amt <n>` | Add a reserve backing asset. |
+| `setprice --id <token> --asset <name> --price <p>` | Update reserve price. |
+| `value --id <token>` | Display total reserve value. |
+
+### syn1100
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <id> <owner> <hexdata>` | Add a healthcare record. |
+| `grant <id> <grantee>` | Grant access to a record. |
+| `revoke <id> <grantee>` | Revoke record access. |
+| `get <id> <caller>` | Fetch a record. |
+| `transfer <id> <newowner>` | Transfer record ownership. |
+
+### syn1155
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --owner <addr>` | Create a multi-asset token. |
+| `batch-transfer --id <token> --from <addr> --to <addr,...> --tokenids <ids> --amounts <amts>` | Batch transfer assets. |
+| `approve-all --id <token> --owner <addr> --operator <addr> --approve` | Set or revoke operator approval. |
+
+### syn1200
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add-bridge <token> <chain> <addr>` | Add a bridge address. |
+| `swap <token> --id <swap> --chain <name> --from <addr> --to <addr> --amt <n>` | Start an atomic swap. |
+| `status <token> <id>` | Check swap status. |
+
+### syn130
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <id> <owner> <meta> <value>` | Register a tangible asset. |
+| `value <id> <val>` | Update asset valuation. |
+| `sale <id> <buyer> <price>` | Record a sale. |
+| `lease <id> <lessee> <pay> <start> <end>` | Start a lease. |
+| `endlease <id>` | End a lease. |
+
+### syn1300_token
+
+| Sub-command | Description |
+|-------------|-------------|
+| `info` | Show SYN1300 token info. |
+
+### syn131
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --owner <addr>` | Create an intangible asset token. |
+| `value --id <token> --val <n>` | Update token valuation. |
+
+### syn1401
+
+| Sub-command | Description |
+|-------------|-------------|
+| `issue --id <id> --owner <addr> --principal <n> --rate <r> --maturity <days>` | Issue an investment. |
+| `accrue <id>` | Accrue interest on an investment. |
+| `redeem <id> --to <addr>` | Redeem an investment. |
+| `info <id>` | Show investment details. |
+
+### syn1600
+
+| Sub-command | Description |
+|-------------|-------------|
+| `info` | Show music metadata. |
+| `update --title <t> --artist <a> --album <a>` | Update music info. |
+| `distribute --amt <n>` | Distribute royalties. |
+
+### syn1700
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create-event --name <n> --desc <d> --location <loc> --start <unix> --end <unix> --supply <n>` | Create an event. |
+| `issue --event <id> --owner <addr> --class <c> --type <t> --price <p>` | Issue a ticket. |
+| `transfer --ticket <id> --from <addr> --to <addr>` | Transfer a ticket. |
+| `verify --ticket <id> --holder <addr>` | Verify ticket ownership. |
+
+### syn1800
+
+| Sub-command | Description |
+|-------------|-------------|
+| `emit <owner> <amount> <desc> <source>` | Record a carbon emission. |
+| `offset <owner> <amount> <desc> <source>` | Record an offset action. |
+| `balance <owner>` | Show net carbon balance. |
+| `records <owner>` | List footprint records. |
+
+### syn1900
+
+| Sub-command | Description |
+|-------------|-------------|
+| `issue --id <token> --credit <id> --course <id> --cname <name> --issuer <addr> --recipient <addr> --value <n> --meta <m> --expiry <time>` | Issue an education credit. |
+| `verify <creditID> --id <token>` | Verify a credit. |
+| `revoke <creditID> --id <token>` | Revoke a credit. |
+| `get <creditID> --id <token>` | Show credit info. |
+| `list <recipient> --id <token>` | List credits for a recipient. |
+
+### syn1967
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --commodity <c> --unit <u> --price <n> --owner <addr> --supply <n>` | Create a commodity token. |
+| `update-price <tok> <price>` | Update spot price. |
+| `price <tok>` | Show current price. |
+| `history <tok>` | Show price history. |
+
+### syn3500
+
+| Sub-command | Description |
+|-------------|-------------|
+| `set-rate <rate>` | Update the fiat exchange rate. |
+| `info` | Display currency code, issuer and current rate. |
+| `mint <to> <amt>` | Mint currency tokens. |
+| `redeem <from> <amt>` | Redeem currency tokens for fiat. |
+
+### charity_token
+
+| Sub-command | Description |
+|-------------|-------------|
+| `donate <symbol> --from <addr> --amt <n> [--purpose <p>]` | Donate to a charity campaign. |
+| `progress <symbol>` | Show campaign progress. |
+
+### employmenttoken
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <id> <employer> <employee> <salary> --position <title>` | Create an employment contract. |
+| `pay <id>` | Pay salary for a contract. |
+| `show <id>` | Display contract details. |
+
+### energy-token
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <owner> <type> <qty> <validUnix> <location> <cert>` | Register an energy asset. |
+| `transfer <assetID> <to>` | Transfer asset ownership. |
+| `record <assetID> <info>` | Record sustainability info. |
+| `info <assetID>` | Show asset info. |
+| `list` | List energy assets. |
+
+### forex_token
+
+| Sub-command | Description |
+|-------------|-------------|
+| `rate` | Display current forex rate. |
+| `update <rate>` | Update the exchange rate. |
+
+### granttoken
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create <beneficiary> <name> <amount>` | Create a grant. |
+| `disburse <id> <amount> [note]` | Disburse grant funds. |
+| `info <id>` | Show grant details. |
+| `list` | List all grants. |
+
+### idtoken
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <addr> --name <n> --dob <date> --nat <c>` | Register identity details. |
+| `verify <addr> --method <m>` | Record a verification method. |
+| `info <addr>` | Retrieve identity info. |
+| `logs <addr>` | Show verification logs. |
+
+### insurance_token
+
+| Sub-command | Description |
+|-------------|-------------|
+| `issue <holder> --coverage <desc> --premium <n> --payout <n> --deductible <n> --limit <n> --start <time> --end <time>` | Issue a policy. |
+| `claim <policyID>` | Claim an insurance policy. |
+| `info <policyID>` | Show policy info. |
+
+### iptoken
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <token> --id <id> --title <t> --desc <d> --creator <c> --owner <addr>` | Register an IP asset. |
+| `license <token> --id <id> --type <t> --licensee <addr> --royalty <n>` | Create a license. |
+| `royalty <token> --id <id> --licensee <addr> --amount <n>` | Record a royalty payment. |
+
+### legal_token
+
+| Sub-command | Description |
+|-------------|-------------|
+| `create --name <n> --symbol <s> --doctype <t> --hash <h> --expiry <time> --owner <addr> [--supply <n>] --party <addr>...` | Create a legal document token. |
+| `sign <id> <party> <sig>` | Add a party signature. |
+| `revoke <id> <party>` | Revoke a signature. |
+| `status <id> <status>` | Update token status. |
+| `dispute <id> <action> [result]` | Start or resolve a dispute. |
+
+### life
+
+| Sub-command | Description |
+|-------------|-------------|
+| `example` | Show example life insurance policy metadata. |
+
+### pension
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register <owner> <name> <maturity> [schedule]` | Register a pension plan. |
+| `contribute <planID> <to> <amount>` | Contribute to a plan. |
+| `withdraw <planID> <holder> <amount>` | Withdraw vested tokens. |
+| `info <planID>` | Show plan info. |
+| `list` | List pension plans. |
+
+### rental_token
+
+| Sub-command | Description |
+|-------------|-------------|
+| `register --token <id> --property <id> --tenant <addr> --landlord <addr> --rent <n> --deposit <n> --start <time> --end <time>` | Register a rental agreement. |
+| `pay <agreementID> <amount>` | Pay rent. |
+| `terminate <agreementID>` | Terminate an agreement. |
+
+### reputation
+
+| Sub-command | Description |
+|-------------|-------------|
+| `add <addr> <points> [desc]` | Add reputation activity. |
+| `penalize <addr> <points> [reason]` | Penalize reputation. |
+| `score <addr>` | Show reputation score. |
+| `history <addr>` | Show reputation events. |
+
