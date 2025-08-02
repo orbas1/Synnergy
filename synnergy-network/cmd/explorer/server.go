@@ -6,19 +6,17 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-
-	core "synnergy-network/core"
 )
 
 // Server exposes ledger data over a small HTTP API.
 type Server struct {
 	router     *mux.Router
 	httpServer *http.Server
-	service    *LedgerService
+	service    ExplorerService
 }
 
 // NewServer constructs the router and HTTP server.
-func NewServer(addr string, svc *LedgerService) *Server {
+func NewServer(addr string, svc ExplorerService) *Server {
 	s := &Server{router: mux.NewRouter(), service: svc}
 	s.routes()
 	s.httpServer = &http.Server{Addr: addr, Handler: s.router}
@@ -40,32 +38,26 @@ func (s *Server) routes() {
 }
 
 func (s *Server) handleBlocks(w http.ResponseWriter, r *http.Request) {
-	led := core.CurrentLedger()
-	if led == nil {
-		http.Error(w, "ledger not initialised", http.StatusInternalServerError)
-		return
+	count := 10
+	if c := r.URL.Query().Get("count"); c != "" {
+		n, err := strconv.Atoi(c)
+		if err != nil || n <= 0 {
+			http.Error(w, "invalid count", http.StatusBadRequest)
+			return
+		}
+		count = n
 	}
-	blocks := led.Blocks
-	n := len(blocks)
-	start := n - 10
-	if start < 0 {
-		start = 0
-	}
-	out := make([]map[string]interface{}, 0, n-start)
-	for i := start; i < n; i++ {
-		blk := blocks[i]
-		out = append(out, map[string]interface{}{
-			"height": blk.Header.Height,
-			"hash":   blk.Hash().Hex(),
-			"txs":    len(blk.Transactions),
-		})
-	}
-	writeJSON(w, out)
+	writeJSON(w, s.service.LatestBlocks(count))
 }
 
 func (s *Server) handleBlock(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	h, _ := strconv.ParseUint(vars["height"], 10, 64)
+	hStr := vars["height"]
+	h, err := strconv.ParseUint(hStr, 10, 64)
+	if err != nil {
+		http.Error(w, "invalid height", http.StatusBadRequest)
+		return
+	}
 	blk, err := s.service.BlockByHeight(h)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
