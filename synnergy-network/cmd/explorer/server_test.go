@@ -92,3 +92,40 @@ func TestHandleBlocksSuccess(t *testing.T) {
 		t.Fatalf("unexpected response: %v", res)
 	}
 }
+
+func TestHandleTxSuccess(t *testing.T) {
+	srv := newTestServer()
+	req := httptest.NewRequest(http.MethodGet, "/api/tx/abc", nil)
+	rr := httptest.NewRecorder()
+	srv.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", rr.Code)
+	}
+}
+
+func TestHandleTxNotFound(t *testing.T) {
+	srv := newTestServer()
+	req := httptest.NewRequest(http.MethodGet, "/api/tx/zzz", nil)
+	rr := httptest.NewRecorder()
+	srv.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusNotFound {
+		t.Fatalf("expected 404, got %d", rr.Code)
+	}
+}
+
+func TestHandleInfo(t *testing.T) {
+	srv := newTestServer()
+	req := httptest.NewRequest(http.MethodGet, "/api/info", nil)
+	rr := httptest.NewRecorder()
+	srv.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", rr.Code)
+	}
+	var res map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &res); err != nil {
+		t.Fatalf("decode failed: %v", err)
+	}
+	if res["height"].(float64) != 1 {
+		t.Fatalf("unexpected response: %v", res)
+	}
+}
