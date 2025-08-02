@@ -855,3 +855,11 @@ func (l *Ledger) AllNodeLocations() map[NodeID]Location {
 	l.mu.RUnlock()
 	return out
 }
+
+// Close releases any underlying resources such as the WAL file.
+func (l *Ledger) Close() error {
+	if l == nil || l.walFile == nil {
+		return nil
+	}
+	return l.walFile.Close()
+}
