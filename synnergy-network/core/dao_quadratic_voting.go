@@ -41,6 +41,9 @@ func SubmitQuadraticVote(pID string, voter Address, tokens uint64, approve bool)
 	raw, _ := json.Marshal(rec)
 	qvMu.Lock()
 	defer qvMu.Unlock()
+	if val, _ := CurrentStore().Get([]byte(key)); val != nil {
+		return fmt.Errorf("vote already recorded")
+	}
 	return CurrentStore().Set([]byte(key), raw)
 }
 
