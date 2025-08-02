@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"math/big"
 	"sync"
 
@@ -101,7 +102,8 @@ func (cb *CentralBankingNode) IssueDigitalCurrency(addr Address, amount uint64) 
 func (cb *CentralBankingNode) RecordSettlement(tx *Transaction) error {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
-	h := tx.Hash().Hex()
+	tx.HashTx()
+	h := fmt.Sprintf("%x", tx.Hash)
 	cb.ledger.TxPool[h] = tx
 	logrus.WithField("tx", h).Info("settlement recorded")
 	return nil

@@ -75,7 +75,11 @@ func (n *BankInstitutionalNode) SubmitTx(tx *Transaction) error {
 	if n.txpool == nil {
 		return errors.New("txpool not configured")
 	}
-	return n.txpool.AddTx(tx)
+	n.txpool.mu.Lock()
+	defer n.txpool.mu.Unlock()
+	n.txpool.lookup[tx.Hash] = tx
+	n.txpool.queue = append(n.txpool.queue, tx)
+	return nil
 }
 
 // ComplianceReport returns a JSON encoded summary of analytics.

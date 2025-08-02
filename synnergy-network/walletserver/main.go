@@ -13,7 +13,9 @@ import (
 )
 
 func main() {
-	config.Load()
+	if err := config.Load(); err != nil {
+		logrus.Fatalf("failed to load config: %v", err)
+	}
 	svc := services.NewService()
 	ctrl := controllers.NewWalletController(svc)
 

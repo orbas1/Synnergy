@@ -75,11 +75,11 @@ func CurrentQuorumTracker() *QuorumTracker {
 	return globalQuorum
 }
 
-// Quorum_AddVote exposes AddVote for opcode use.
-func Quorum_AddVote(addr Address) int { return CurrentQuorumTracker().AddVote(addr) }
+// QuorumAddVote exposes AddVote for opcode use.
+func QuorumAddVote(addr Address) int { return CurrentQuorumTracker().AddVote(addr) }
 
-// Quorum_HasQuorum checks if the threshold is met.
-func Quorum_HasQuorum() bool { return CurrentQuorumTracker().HasQuorum() }
+// QuorumHasQuorum checks if the threshold is met.
+func QuorumHasQuorum() bool { return CurrentQuorumTracker().HasQuorum() }
 
-// Quorum_Reset clears the global vote map.
-func Quorum_Reset() { CurrentQuorumTracker().Reset() }
+// QuorumReset clears the global vote map.
+func QuorumReset() { CurrentQuorumTracker().Reset() }
