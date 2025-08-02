@@ -1,8 +1,9 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-#pool-table th, #pool-table td {
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid #e2e8f0;
+#pool-table th,
+#pool-table td {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
 }

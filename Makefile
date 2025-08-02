@@ -9,6 +9,9 @@ go-build:
 go-test:
 >cd $(GO_MODULE_DIR) && go test ./...
 
+go-cycle:
+>./scripts/check_circular_imports.sh
+
 node-install:
 >cd synnergy-network/GUI/token-creation-tool/server && npm ci
 >cd synnergy-network/GUI/dao-explorer/backend && npm ci
@@ -27,3 +30,4 @@ all: go-build node-install
 
 build-matrix:
 >scripts/build_matrix.sh
+

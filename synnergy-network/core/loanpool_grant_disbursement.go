@@ -1,12 +1,12 @@
 package core
 
 import (
-    "crypto/sha256"
-    "encoding/binary"
-    "encoding/json"
-    "errors"
-    log "github.com/sirupsen/logrus"
-    "time"
+	"crypto/sha256"
+	"encoding/binary"
+	"encoding/json"
+	"errors"
+	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 // Grant represents a one-off payment from the loan pool treasury.
@@ -23,8 +23,8 @@ func (g *Grant) Marshal() []byte { b, _ := json.Marshal(g); return b }
 
 // GrantDisbursement handles creation and release of grants funded by the loan pool.
 type GrantDisbursement struct {
-    ledger  StateRW
-    logger  *log.Logger
+	ledger  StateRW
+	logger  *log.Logger
 	counter uint64
 }
 
