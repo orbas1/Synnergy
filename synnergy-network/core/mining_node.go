@@ -2,12 +2,13 @@ package core
 
 import (
 	"context"
+
 	"github.com/sirupsen/logrus"
 )
 
 // MiningNode bundles networking, ledger and consensus components for PoW mining.
 type MiningNode struct {
-	net    *Node
+	*BaseNode
 	ledger *Ledger
 	cons   *SynnergyConsensus
 	pool   *TxPool
@@ -48,30 +49,23 @@ func NewMiningNode(cfg *MiningNodeConfig) (*MiningNode, error) {
 		return nil, err
 	}
 
-	return &MiningNode{net: n, ledger: led, cons: cons, pool: pool, ctx: ctx, cancel: cancel}, nil
+	base := NewBaseNode(&NodeAdapter{n})
+	return &MiningNode{BaseNode: base, ledger: led, cons: cons, pool: pool, ctx: ctx, cancel: cancel}, nil
 }
 
 // StartMining launches the networking and consensus loops.
 func (m *MiningNode) StartMining() {
-	go m.net.ListenAndServe()
+	go m.ListenAndServe()
 	m.cons.Start(m.ctx)
 }
 
 // StopMining gracefully shuts down the mining node.
 func (m *MiningNode) StopMining() error {
 	m.cancel()
-	return m.net.Close()
+	return m.Close()
 }
 
 // AddTransaction validates and queues a transaction for inclusion in a block.
 func (m *MiningNode) AddTransaction(tx *Transaction) error {
 	return m.pool.AddTx(tx)
 }
-
-// DialSeed proxies to the underlying network node.
-func (m *MiningNode) DialSeed(seeds []string) error                 { return m.net.DialSeed(seeds) }
-func (m *MiningNode) Broadcast(topic string, data []byte) error     { return m.net.Broadcast(topic, data) }
-func (m *MiningNode) Subscribe(topic string) (<-chan []byte, error) { return m.net.Subscribe(topic) }
-func (m *MiningNode) ListenAndServe()                               { m.net.ListenAndServe() }
-func (m *MiningNode) Close() error                                  { return m.net.Close() }
-func (m *MiningNode) Peers() []string                               { return m.net.Peers() }

@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"sort"
 	"time"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // ContentNetworkNode mirrors Nodes.ContentNode information for registry.
@@ -51,7 +49,7 @@ func RegisterContentNode(n ContentNetworkNode) error {
 	if err := CurrentStore().Set([]byte(key), raw); err != nil {
 		return err
 	}
-	Broadcast(Nodes.TopicCDNNodeRegistry, raw) // reuse topic for simplicity
+	Broadcast(TopicCDNNodeRegistry, raw) // reuse topic for simplicity
 	return nil
 }
 
@@ -75,8 +73,8 @@ func UploadContent(data, key []byte) (string, error) {
 		}
 		return a
 	}()})
-	Broadcast(Nodes.TopicCDNReplication, payload)
-	meta := Nodes.ContentMeta{CID: cid, Size: uint64(len(data)), Uploaded: time.Now().UTC()}
+	Broadcast(TopicCDNReplication, payload)
+	meta := ContentMeta{CID: cid, Size: uint64(len(data)), Uploaded: time.Now().UTC()}
 	raw, _ := json.Marshal(meta)
 	if err := CurrentStore().Set([]byte("content:meta:"+cid), raw); err != nil {
 		return cid, err

@@ -18,7 +18,7 @@ var ErrInsufficientBalance = errors.New("insufficient balance")
 
 // CustodialNode provides secure asset custody and management services.
 type CustodialNode struct {
-	net    *Node
+	*BaseNode
 	ledger *Ledger
 	store  map[Address]map[TokenID]uint64
 	mu     sync.RWMutex
@@ -35,15 +35,16 @@ func NewCustodialNode(cfg CustodialConfig) (*CustodialNode, error) {
 		_ = n.Close()
 		return nil, err
 	}
-	c := &CustodialNode{net: n, ledger: led, store: make(map[Address]map[TokenID]uint64)}
+	base := NewBaseNode(&NodeAdapter{n})
+	c := &CustodialNode{BaseNode: base, ledger: led, store: make(map[Address]map[TokenID]uint64)}
 	return c, nil
 }
 
 // Start begins the underlying network services.
-func (c *CustodialNode) Start() { go c.net.ListenAndServe() }
+func (c *CustodialNode) Start() { go c.ListenAndServe() }
 
 // Stop closes network connections and flushes state.
-func (c *CustodialNode) Stop() error { return c.net.Close() }
+func (c *CustodialNode) Stop() error { return c.Close() }
 
 // Register prepares internal storage for the account.
 func (c *CustodialNode) Register(addr Address) {

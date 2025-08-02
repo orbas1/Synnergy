@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/hex"
 	"github.com/sirupsen/logrus"
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // ConsensusSpecificNode implements a node tuned for a particular consensus algorithm.
@@ -66,5 +65,3 @@ func (csn *ConsensusSpecificNode) ProcessTx(tx *Transaction) error {
 	csn.Ledger.TxPool[hex.EncodeToString(tx.Hash[:])] = tx
 	return nil
 }
-
-var _ Nodes.ConsensusNodeInterface = (*ConsensusSpecificNode)(nil)

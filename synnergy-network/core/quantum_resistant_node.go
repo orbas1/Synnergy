@@ -13,7 +13,7 @@ type QuantumNodeConfig struct {
 // QuantumResistantNode extends a basic network node with quantum-safe
 // cryptography primitives and integrated ledger access.
 type QuantumResistantNode struct {
-	net     *Node
+	*BaseNode
 	ledger  *Ledger
 	encKey  []byte
 	pubKey  []byte
@@ -45,21 +45,22 @@ func NewQuantumResistantNode(cfg *QuantumNodeConfig) (*QuantumResistantNode, err
 		_ = led.Close()
 		return nil, err
 	}
+	base := NewBaseNode(&NodeAdapter{n})
 	return &QuantumResistantNode{
-		net:     n,
-		ledger:  led,
-		encKey:  key,
-		pubKey:  pub,
-		privKey: priv,
+		BaseNode: base,
+		ledger:   led,
+		encKey:   key,
+		pubKey:   pub,
+		privKey:  priv,
 	}, nil
 }
 
 // Start begins network operations.
-func (q *QuantumResistantNode) Start() { go q.net.ListenAndServe() }
+func (q *QuantumResistantNode) Start() { go q.ListenAndServe() }
 
 // Stop gracefully shuts down the node and ledger.
 func (q *QuantumResistantNode) Stop() error {
-	if err := q.net.Close(); err != nil {
+	if err := q.Close(); err != nil {
 		return err
 	}
 	return q.ledger.Close()
@@ -71,12 +72,12 @@ func (q *QuantumResistantNode) SecureBroadcast(topic string, data []byte) error 
 	if err != nil {
 		return err
 	}
-	return q.net.Broadcast(topic, enc)
+	return q.Broadcast(topic, enc)
 }
 
 // SecureSubscribe decrypts incoming messages for the subscribed topic.
 func (q *QuantumResistantNode) SecureSubscribe(topic string) (<-chan []byte, error) {
-	ch, err := q.net.Subscribe(topic)
+	ch, err := q.Subscribe(topic)
 	if err != nil {
 		return nil, err
 	}
@@ -116,6 +117,3 @@ func (q *QuantumResistantNode) Verify(msg, sig []byte) (bool, error) {
 
 // Ledger exposes the underlying ledger for integrations.
 func (q *QuantumResistantNode) Ledger() *Ledger { return q.ledger }
-
-// Node exposes the underlying networking component.
-func (q *QuantumResistantNode) Node() *Node { return q.net }

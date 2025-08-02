@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // AIEnhancedConfig aggregates configuration required to start an AI enhanced node.
@@ -18,7 +17,6 @@ type AIEnhancedConfig struct {
 
 // AIEnhancedNode couples a standard network node with a ledger instance and
 // exposes AI assisted helpers for predictive analytics. The struct satisfies
-// Nodes.AIEnhancedNodeInterface so it can be used without a direct dependency
 // on the core package.
 type AIEnhancedNode struct {
 	*Node
@@ -93,5 +91,3 @@ func (a *AIEnhancedNode) AnalyseTx(data []byte) (map[string]float32, error) {
 	}
 	return out, nil
 }
-
-var _ Nodes.AIEnhancedNodeInterface = (*AIEnhancedNode)(nil)
