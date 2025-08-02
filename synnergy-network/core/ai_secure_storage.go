@@ -15,7 +15,7 @@ func (ai *AIEngine) StoreModelParams(hash [32]byte, params []byte) error {
 	if ai.encKey == nil {
 		return fmt.Errorf("encryption key not initialised")
 	}
-	ct, err := encrypt(ai.encKey, params)
+	ct, err := encryptGCM(ai.encKey, params)
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func (ai *AIEngine) FetchModelParams(hash [32]byte) ([]byte, error) {
 	if err != nil || raw == nil {
 		return nil, fmt.Errorf("params not found: %w", err)
 	}
-	return decrypt(ai.encKey, raw)
+	return decryptGCM(ai.encKey, raw)
 }
 
 // StoreDataset encrypts and persists training data referenced by ID.
@@ -41,7 +41,7 @@ func (ai *AIEngine) StoreDataset(id string, data []byte) error {
 	if ai.encKey == nil {
 		return fmt.Errorf("encryption key not initialised")
 	}
-	ct, err := encrypt(ai.encKey, data)
+	ct, err := encryptGCM(ai.encKey, data)
 	if err != nil {
 		return err
 	}
@@ -59,10 +59,12 @@ func (ai *AIEngine) FetchDataset(id string) ([]byte, error) {
 	if err != nil || raw == nil {
 		return nil, fmt.Errorf("dataset not found: %w", err)
 	}
-	return decrypt(ai.encKey, raw)
+	return decryptGCM(ai.encKey, raw)
 }
 
-func encrypt(key, plain []byte) ([]byte, error) {
+// encryptGCM encrypts plain text using AES-GCM and returns the nonce-prefixed
+// ciphertext.
+func encryptGCM(key, plain []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -78,7 +80,8 @@ func encrypt(key, plain []byte) ([]byte, error) {
 	return gcm.Seal(nonce, nonce, plain, nil), nil
 }
 
-func decrypt(key, cipherText []byte) ([]byte, error) {
+// decryptGCM reverses encryptGCM and recovers the original plaintext.
+func decryptGCM(key, cipherText []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err

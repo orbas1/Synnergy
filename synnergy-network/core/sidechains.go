@@ -297,6 +297,10 @@ func depositKey(id SidechainID, n uint64) []byte {
 	return append([]byte("sc:dep:"), b...)
 }
 func withdrawnKey(hash [32]byte) []byte { return append([]byte("sc:wd:"), hash[:]...) }
+
+// sidechainBridgeAccount derives the special bridge account used for transfers
+// between the main chain and a given sidechain. The unique prefix ensures the
+// address space does not collide with other bridge mechanisms.
 func sidechainBridgeAccount(id SidechainID, token TokenID) Address {
 	var a Address
 	copy(a[:4], []byte("BRG1"))
