@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	"synnergy-network/cmd/xchainserver/server"
 )
@@ -15,8 +16,8 @@ func main() {
 	}
 	r := server.NewRouter()
 
-	log.Printf("cross-chain server listening on %s", addr)
+	log.Infof("cross-chain server listening on %s", addr)
 	if err := http.ListenAndServe(addr, r); err != nil {
-		log.Fatal(err)
+		log.Fatalf("server error: %v", err)
 	}
 }
