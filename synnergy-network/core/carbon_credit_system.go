@@ -1,3 +1,6 @@
+//go:build tokens
+// +build tokens
+
 package core
 
 import (
@@ -6,19 +9,26 @@ import (
 	"fmt"
 	"sync"
 	"time"
-
-	Tokens "synnergy-network/core/Tokens"
 )
+
+// VerificationRecord captures third-party verification details for a project.
+// It is defined locally to avoid cyclic imports between core and token packages.
+type VerificationRecord struct {
+	ID        string    `json:"id"`
+	Verifier  Address   `json:"verifier"`
+	Timestamp time.Time `json:"timestamp"`
+	Status    string    `json:"status"`
+}
 
 // CarbonProject represents a verified carbon offset project recorded on chain.
 type CarbonProject struct {
-	ID            uint64                      `json:"id"`
-	Name          string                      `json:"name"`
-	Owner         Address                     `json:"owner"`
-	Total         uint64                      `json:"total"`
-	Remaining     uint64                      `json:"remaining"`
-	Verified      bool                        `json:"verified"`
-	Verifications []Tokens.VerificationRecord `json:"verifications"`
+	ID            uint64               `json:"id"`
+	Name          string               `json:"name"`
+	Owner         Address              `json:"owner"`
+	Total         uint64               `json:"total"`
+	Remaining     uint64               `json:"remaining"`
+	Verified      bool                 `json:"verified"`
+	Verifications []VerificationRecord `json:"verifications"`
 }
 
 // CarbonEngine manages carbon credit issuance and retirement. Projects are
@@ -26,7 +36,7 @@ type CarbonProject struct {
 // the built‑in SYN-CO2 token.
 type CarbonEngine struct {
 	ledger  StateRW
-	mu      sync.Mutex
+	mu      sync.RWMutex
 	nextID  uint64
 	tokenID TokenID
 }
@@ -127,12 +137,21 @@ func (e *CarbonEngine) RetireCredits(holder Address, amount uint64) error {
 }
 
 // AddVerification records a verification entry for the specified project.
-func (e *CarbonEngine) AddVerification(id uint64, ver Tokens.VerificationRecord) error {
+func (e *CarbonEngine) AddVerification(id uint64, ver VerificationRecord) error {
+	if ver.ID == "" {
+		return errors.New("verification id required")
+	}
+	ver.Timestamp = time.Now().UTC()
 	e.mu.Lock()
 	defer e.mu.Unlock()
 	proj, err := e.getProject(id)
 	if err != nil {
 		return err
+	}
+	for _, existing := range proj.Verifications {
+		if existing.ID == ver.ID {
+			return fmt.Errorf("verification %s exists", ver.ID)
+		}
 	}
 	proj.Verifications = append(proj.Verifications, ver)
 	if ver.Status == "verified" {
@@ -143,20 +162,22 @@ func (e *CarbonEngine) AddVerification(id uint64, ver Tokens.VerificationRecord)
 }
 
 // ListVerifications returns verification records for a project.
-func (e *CarbonEngine) ListVerifications(id uint64) ([]Tokens.VerificationRecord, error) {
-	e.mu.Lock()
-	defer e.mu.Unlock()
+func (e *CarbonEngine) ListVerifications(id uint64) ([]VerificationRecord, error) {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
 	proj, err := e.getProject(id)
 	if err != nil {
 		return nil, err
 	}
-	return proj.Verifications, nil
+	out := make([]VerificationRecord, len(proj.Verifications))
+	copy(out, proj.Verifications)
+	return out, nil
 }
 
 // ProjectInfo returns a project by id.
 func (e *CarbonEngine) ProjectInfo(id uint64) (*CarbonProject, bool) {
-	e.mu.Lock()
-	defer e.mu.Unlock()
+	e.mu.RLock()
+	defer e.mu.RUnlock()
 	proj, err := e.getProject(id)
 	if err != nil {
 		return nil, false
@@ -166,6 +187,8 @@ func (e *CarbonEngine) ProjectInfo(id uint64) (*CarbonProject, bool) {
 
 // ListProjects enumerates all projects in the ledger.
 func (e *CarbonEngine) ListProjects() ([]CarbonProject, error) {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
 	iter := e.ledger.PrefixIterator([]byte("ccs:proj:"))
 	var list []CarbonProject
 	for iter.Next() {
@@ -175,7 +198,7 @@ func (e *CarbonEngine) ListProjects() ([]CarbonProject, error) {
 		}
 		list = append(list, p)
 	}
-	return list, nil
+	return list, iter.Error()
 }
 
 // End of carbon_credit_system.go

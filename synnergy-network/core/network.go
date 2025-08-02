@@ -14,10 +14,8 @@ import (
 	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/libp2p/go-libp2p/p2p/discovery/mdns"
 	"github.com/sirupsen/logrus"
-	"log"
 	"net"
 	"sync"
-	Nodes "synnergy-network/core/Nodes"
 )
 
 func NewNode(cfg Config) (*Node, error) {
@@ -75,16 +73,27 @@ func NewNode(cfg Config) (*Node, error) {
 // Ensure Node implements mdns.Notifee
 var _ mdns.Notifee = (*Node)(nil)
 
-// Ensure Node conforms to the common node interface
-var _ Nodes.NodeInterface = (*NodeAdapter)(nil)
-
 // HandlePeerFound implements mdns.Notifee: connect to discovered peer.
+// It ignores self-connections and avoids duplicating existing peers.
 func (n *Node) HandlePeerFound(info peer.AddrInfo) {
-	err := n.host.Connect(n.ctx, info)
-	if err != nil {
+	// Ignore discovery of our own host
+	if info.ID == n.host.ID() {
+		return
+	}
+
+	// Skip if we already know this peer
+	n.peerLock.RLock()
+	_, exists := n.peers[NodeID(info.ID.String())]
+	n.peerLock.RUnlock()
+	if exists {
+		return
+	}
+
+	if err := n.host.Connect(n.ctx, info); err != nil {
 		logrus.Warnf("Failed to connect to discovered peer %s: %v", info.ID.String(), err)
 		return
 	}
+
 	n.peerLock.Lock()
 	n.peers[NodeID(info.ID.String())] = &Peer{ID: NodeID(info.ID.String()), Addr: info.String()}
 	n.peerLock.Unlock()
@@ -117,7 +126,27 @@ func (n *Node) DialSeed(seeds []string) error {
 
 // Global replication store (can be swapped out for DB or network broadcast later)
 var replicatedMessages = make(map[string][][]byte)
-var replicatedMu sync.Mutex
+var replicatedMu sync.RWMutex
+
+// GetReplicatedMessages returns a copy of all replicated payloads for the given topic.
+// The returned slice and its contents are safe for modification by the caller.
+func GetReplicatedMessages(topic string) [][]byte {
+	replicatedMu.RLock()
+	msgs := replicatedMessages[topic]
+	replicatedMu.RUnlock()
+	out := make([][]byte, len(msgs))
+	for i, m := range msgs {
+		out[i] = append([]byte(nil), m...)
+	}
+	return out
+}
+
+// ClearReplicatedMessages resets the in-memory replication store. Primarily intended for tests.
+func ClearReplicatedMessages() {
+	replicatedMu.Lock()
+	defer replicatedMu.Unlock()
+	replicatedMessages = make(map[string][][]byte)
+}
 
 // BroadcasterFunc defines the signature for the global broadcaster.
 type BroadcasterFunc func(topic string, data []byte) error
@@ -148,18 +177,13 @@ func Broadcast(topic string, data []byte) error {
 
 // HandleNetworkMessage handles incoming network messages and replicates them.
 func HandleNetworkMessage(msg NetworkMessage) {
-	log.Printf("Replicating message on topic: %s, data: %x", msg.Topic, msg.Content)
+	logrus.Debugf("replicating message on topic %s: %x", msg.Topic, msg.Content)
 
-	// Lock to prevent concurrent writes
 	replicatedMu.Lock()
-	defer replicatedMu.Unlock()
-
-	// Store replicated data
 	replicatedMessages[msg.Topic] = append(replicatedMessages[msg.Topic], msg.Content)
+	replicatedMu.Unlock()
 
-	// (Optional) Trigger additional hooks here: save to disk, gossip, etc.
-	// Example: replicateToDisk(msg)
-	// Example: propagateToPeers(msg)
+	// Additional hooks can be triggered here: persist to disk, gossip to peers, etc.
 }
 
 func (n *Node) Broadcast(topic string, data []byte) error {

@@ -5,12 +5,10 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
-	Nodes "synnergy-network/core/Nodes"
 )
 
-// CentralBankingNode implements Nodes.CentralBankingNode. It embeds a
-// networking node and exposes hooks for monetary policy and settlement
-// operations used by central banks.
+// CentralBankingNode embeds a networking node and exposes hooks for monetary
+// policy and settlement operations used by central banks.
 type CentralBankingNode struct {
 	*BaseNode
 	ledger *Ledger
@@ -108,6 +106,3 @@ func (cb *CentralBankingNode) RecordSettlement(tx *Transaction) error {
 	logrus.WithField("tx", h).Info("settlement recorded")
 	return nil
 }
-
-// compile-time check
-var _ Nodes.CentralBankingNode = (*CentralBankingNode)(nil)

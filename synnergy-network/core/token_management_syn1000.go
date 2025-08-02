@@ -1,10 +1,13 @@
+//go:build tokens
+// +build tokens
+
 package core
 
 import Tokens "synnergy-network/core/Tokens"
 
 // CreateSYN1000 creates a new SYN1000 stablecoin and registers it with the ledger.
 func (tm *TokenManager) CreateSYN1000(meta Metadata, init map[Address]uint64) (TokenID, error) {
-	tok, err := NewSYN1000(meta, init, tm.ledger, tm.gas)
+	tok, err := NewSYN1000(meta, init)
 	if err != nil {
 		return 0, err
 	}

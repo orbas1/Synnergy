@@ -3,8 +3,6 @@ package core
 import (
 	"context"
 	"sync"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // StakingNode combines networking with staking management for PoS consensus.
@@ -82,3 +80,4 @@ func (s *StakingNode) Status() string {
 }
 
 var _ Nodes.StakingNodeInterface = (*StakingNode)(nil)
+

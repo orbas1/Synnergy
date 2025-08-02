@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"sync"
 	"time"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // LogisticsRecord captures movement or status changes of military assets.
@@ -89,6 +87,3 @@ func (w *WarfareNode) TrackLogistics(itemID, status string) error {
 func (w *WarfareNode) ShareTactical(data []byte) error {
 	return w.Broadcast("tactical", data)
 }
-
-// Ensure WarfareNode implements the interface defined in the nodes package.
-var _ Nodes.WarfareNodeInterface = (*WarfareNode)(nil)

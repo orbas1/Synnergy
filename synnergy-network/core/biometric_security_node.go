@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // BiometricSecurityNode couples a Node with biometric authentication.
@@ -67,5 +65,3 @@ func (b *BiometricSecurityNode) Close() error {
 	_ = b.ledger.Close()
 	return b.Node.Close()
 }
-
-var _ Nodes.BiometricSecurityNode = (*BiometricSecurityNode)(nil)

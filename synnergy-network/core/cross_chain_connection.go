@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -106,3 +107,46 @@ func ListChainConnections() ([]ChainConnection, error) {
 	}
 	return out, it.Error()
 }
+
+// HasActiveConnection reports whether an active connection exists between the
+// given local and remote chains. If local is empty, any local chain matches.
+func HasActiveConnection(local, remote string) bool {
+	conns, err := ListChainConnections()
+	if err != nil {
+		return false
+	}
+	for _, c := range conns {
+		if !c.Active {
+			continue
+		}
+		if c.RemoteChain == remote && (local == "" || c.LocalChain == local) {
+			return true
+		}
+	}
+	return false
+}
+
+// ListActiveConnections returns only connections that are currently marked
+// as active. If local is non-empty, the results are filtered to that local
+// chain identifier.
+func ListActiveConnections(local string) ([]ChainConnection, error) {
+	conns, err := ListChainConnections()
+	if err != nil {
+		return nil, err
+	}
+	var active []ChainConnection
+	for _, c := range conns {
+		if !c.Active {
+			continue
+		}
+		if local != "" && c.LocalChain != local {
+			continue
+		}
+		active = append(active, c)
+	}
+	return active, nil
+}
+
+// ErrNoActiveConnection is returned when an operation requires an active
+// cross-chain connection but none is found.
+var ErrNoActiveConnection = errors.New("no active chain connection")

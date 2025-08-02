@@ -69,6 +69,23 @@ The CLI exposes dozens of commands grouped by module: AI management, token opera
 
 The Go packages in `core/` implement the blockchain runtime. Important modules include consensus, ledger storage, networking layers, data replication, sharding and the virtual machine. Development helpers in `core/helpers.go` allow the CLI to run without a full node. A summary of every file lives in [`core/module_guide.md`](synnergy-network/core/module_guide.md).
 
+## AI Integration
+
+Synnergy's AI engine supports fraud detection, fee optimisation and on‑chain
+model marketplaces. Sensitive model parameters and training datasets are
+encrypted at rest using a 32‑byte symmetric key supplied via the
+`AI_STORAGE_KEY` environment variable. Set this variable before starting any
+services that rely on the AI subsystem:
+
+```bash
+export AI_STORAGE_KEY="$(openssl rand -hex 16)"
+```
+
+The engine exposes gRPC endpoints defined in `ai.proto` for model inference,
+training job management and performance drift monitoring. Training jobs are
+started through `StartTraining`, their progress is queried with
+`TrainingStatus` and completed models can be uploaded via `UploadModel`.
+
 ## GUI Projects
 
 Web front‑ends are provided under `GUI/`. Each directory contains a standalone project with its own README. Highlights include:
@@ -97,6 +114,16 @@ go test ./...
 ```
 
 Some tests expect running services or mock implementations. `go vet` and `go build` can be run in the same way to lint and compile the modules.
+
+## Security Scan
+
+Run static analysis with [gosec](https://github.com/securego/gosec) to detect common vulnerabilities:
+
+```bash
+./scripts/security_scan.sh
+```
+
+High severity findings must be addressed before merging changes.
 
 ## Contributing
 

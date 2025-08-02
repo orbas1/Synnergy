@@ -2,10 +2,6 @@ package Tokens
 
 import "time"
 
-// Address defines a 20-byte account identifier compatible with core.Address
-// but declared locally to avoid circular dependencies.
-type Address [20]byte
-
 // HealthcareRecord represents encrypted healthcare data tied to an owner.
 type HealthcareRecord struct {
 	ID        string

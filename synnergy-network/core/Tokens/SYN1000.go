@@ -1,8 +1,11 @@
+//go:build tokens
+// +build tokens
+
 package Tokens
 
 import (
+	"fmt"
 	"sync"
-	core "synnergy-network/core"
 	"time"
 )
 
@@ -16,23 +19,24 @@ type ReserveEntry struct {
 
 // SYN1000Token defines the stablecoin token with reserve management.
 type SYN1000Token struct {
-	*core.BaseToken
+	*BaseToken
 	mu       sync.RWMutex
 	reserves map[string]*ReserveEntry
 }
 
-// NewSYN1000Token creates a SYN1000 stablecoin bound to the ledger and gas model.
-func NewSYN1000Token(meta core.Metadata, init map[core.Address]uint64, ledger *core.Ledger, gas core.GasCalculator) (*SYN1000Token, error) {
-	tok, err := (core.Factory{}).Create(meta, init)
-	if err != nil {
-		return nil, err
+// NewSYN1000Token creates and registers a SYN1000 stablecoin.
+func NewSYN1000Token(meta Metadata, init map[Address]uint64) *SYN1000Token {
+	if meta.Created.IsZero() {
+		meta.Created = time.Now().UTC()
 	}
-	bt := tok.(*core.BaseToken)
+	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
+	for a, v := range init {
+		bt.balances.Set(bt.id, a, v)
+		bt.meta.TotalSupply += v
+	}
 	sc := &SYN1000Token{BaseToken: bt, reserves: make(map[string]*ReserveEntry)}
-	bt.ledger = ledger
-	bt.gas = gas
-	core.RegisterToken(sc)
-	return sc, nil
+	RegisterToken(sc)
+	return sc
 }
 
 // AddReserve adds collateral to the stablecoin reserve.
@@ -54,7 +58,7 @@ func (t *SYN1000Token) RemoveReserve(asset string, amt uint64) error {
 	defer t.mu.Unlock()
 	r, ok := t.reserves[asset]
 	if !ok || r.Amount < amt {
-		return core.ErrInvalidAsset
+		return fmt.Errorf("insufficient reserve")
 	}
 	r.Amount -= amt
 	r.Updated = time.Now().UTC()

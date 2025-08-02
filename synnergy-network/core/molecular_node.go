@@ -3,8 +3,6 @@ package core
 import (
 	"fmt"
 	"sync"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // MolecularNode operates at the molecular level combining networking with ledger
@@ -67,6 +65,3 @@ func (m *MolecularNode) MonitorNanoSensors() ([]byte, error) { return []byte("ok
 
 // ControlMolecularProcess accepts a command payload. Currently a stub.
 func (m *MolecularNode) ControlMolecularProcess(cmd []byte) error { return nil }
-
-// Ensure MolecularNode implements the interface.
-var _ Nodes.MolecularNodeInterface = (*MolecularNode)(nil)

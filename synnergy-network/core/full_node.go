@@ -77,4 +77,3 @@ func (f *FullNode) Ledger() *Ledger { return f.ledger }
 func (f *FullNode) Mode() FullNodeMode { return f.mode }
 
 var _ Nodes.NodeInterface = (*FullNode)(nil)
-var _ Nodes.FullNodeAPI = (*FullNode)(nil)

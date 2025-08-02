@@ -82,3 +82,12 @@ func (a *AuditNode) AuditEvents(addr Address) ([]LedgerAuditEvent, error) {
 	}
 	return a.mgr.Events(addr)
 }
+
+// ArchiveTrail exports the audit trail to dest and returns the created path
+// and sha256 checksum of the log file.
+func (a *AuditNode) ArchiveTrail(dest string) (string, string, error) {
+	if a.mgr == nil {
+		return "", "", errors.New("audit manager not initialised")
+	}
+	return a.mgr.Archive(dest)
+}

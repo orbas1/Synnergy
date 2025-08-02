@@ -6,7 +6,7 @@ import "time"
 type RentalTokenMetadata struct {
 	TokenID     uint64    `json:"token_id"`
 	PropertyID  string    `json:"property_id"`
-	Tenant      string    `json:"tenant"`
+	Tenant      Address   `json:"tenant"`
 	LeaseStart  time.Time `json:"lease_start"`
 	LeaseEnd    time.Time `json:"lease_end"`
 	MonthlyRent uint64    `json:"monthly_rent"`

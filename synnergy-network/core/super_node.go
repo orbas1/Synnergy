@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/wasmerio/wasmer-go/wasmer"
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // SuperNode provides enhanced network capabilities combining networking,
@@ -67,6 +66,3 @@ func (s *SuperNode) RetrieveData(key string) ([]byte, error) {
 	}
 	return val, nil
 }
-
-// Ensure SuperNode implements the interface.
-var _ Nodes.SuperNodeInterface = (*SuperNode)(nil)

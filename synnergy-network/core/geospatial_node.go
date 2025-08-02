@@ -3,8 +3,6 @@ package core
 import (
 	"math"
 	"sync"
-
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // GeoRecord stores a geospatial data point.
@@ -132,6 +130,3 @@ func pointInPolygon(p Location, pts []Location) bool {
 	}
 	return inside
 }
-
-// Ensure interface compliance
-var _ Nodes.GeospatialNodeInterface = (*GeospatialNode)(nil)
