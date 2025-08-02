@@ -101,6 +101,22 @@ func InitAI(led StateRW, grpcEndpoint string, client AIStubClient) error {
 
 func AI() *AIEngine { return engine }
 
+// Close releases the underlying gRPC connection.
+func (ai *AIEngine) Close() error {
+	if ai == nil || ai.conn == nil {
+		return nil
+	}
+	return ai.conn.Close()
+}
+
+// ShutdownAI closes the singleton AI engine if initialised.
+func ShutdownAI() {
+	if engine != nil {
+		_ = engine.Close()
+		engine = nil
+	}
+}
+
 //---------------------------------------------------------------------
 // PredictAnomaly – returns fraud risk [0,1]; triggers compliance if threshold crossed.
 //---------------------------------------------------------------------

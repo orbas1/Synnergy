@@ -49,6 +49,7 @@ func NewHealthChecker(ping Pinger, changer ViewChanger, initial []Address) *Heal
 		maxMisses: 3,
 		ping:      ping,
 		changer:   changer,
+		stop:      make(chan struct{}),
 	}
 	for _, p := range initial {
 		hc.peers[p] = &peerStat{}
@@ -63,8 +64,26 @@ func NewHealthChecker(ping Pinger, changer ViewChanger, initial []Address) *Heal
 
 func (hc *HealthChecker) loop() {
 	t := time.NewTicker(hc.interval)
-	for range t.C {
-		hc.tick()
+	defer t.Stop()
+	for {
+		select {
+		case <-t.C:
+			hc.tick()
+		case <-hc.stop:
+			return
+		}
+	}
+}
+
+// Stop terminates background health checks.
+func (hc *HealthChecker) Stop() {
+	hc.mu.Lock()
+	defer hc.mu.Unlock()
+	select {
+	case <-hc.stop:
+		return
+	default:
+		close(hc.stop)
 	}
 }
 
@@ -316,6 +335,13 @@ type RecoveryManager struct {
 
 func NewRecoveryManager(l *Ledger, hc *HealthChecker, vc ViewChanger) *RecoveryManager {
 	return &RecoveryManager{ledger: l, changer: vc, hc: hc}
+}
+
+// Stop terminates background health monitoring.
+func (rm *RecoveryManager) Stop() {
+	if rm.hc != nil {
+		rm.hc.Stop()
+	}
 }
 
 // Restore loads a snapshot from disk and replaces the in-memory ledger state.

@@ -59,6 +59,9 @@ func (d *DisasterRecoveryNode) Stop() error {
 	if d.backup != nil {
 		d.backup.Stop()
 	}
+	if d.recovery != nil {
+		d.recovery.Stop()
+	}
 	return d.Close()
 }
 

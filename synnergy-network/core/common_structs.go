@@ -249,6 +249,7 @@ type HealthChecker struct {
 	maxMisses int
 	ping      Pinger
 	changer   ViewChanger
+	stop      chan struct{}
 }
 
 type PeerInfo struct {
