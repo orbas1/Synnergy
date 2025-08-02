@@ -65,6 +65,7 @@ The repository is organised as follows:
    `.env`.
 4. For GUI projects install Node.js 18+ and your preferred package manager.
 
+
 ## Building
 
 Once the environment is prepared, compile the main binary from the repository
