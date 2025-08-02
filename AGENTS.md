@@ -795,6 +795,7 @@ Each stage contains strategic subtasks for teams to execute in parallel once pre
     - Containerize services and implement CI/CD with infrastructure-as-code.
     - Provide staging and production environment parity.
     - Automate rollbacks and canary releases.
+    - CI pipeline runs gofmt, go vet, go test, shellcheck, yamllint and kustomize validation.
 21. **Stage 21 – Documentation**
     - Produce comprehensive developer docs, API references and examples.
     - Generate end-user manuals for GUI and CLI tools.
@@ -860,6 +861,9 @@ Each stage groups related modules so multiple agents can work in parallel once p
     - Integrate system health logging, metrics and alerting pipelines.
 20. **Stage 20 – DevOps and Deployment**
     - Containerize services and implement CI/CD with infrastructure-as-code.
+    - Provide staging and production environment parity.
+    - Automate rollbacks and canary releases.
+    - CI pipeline runs gofmt, go vet, go test, shellcheck, yamllint and kustomize validation.
 21. **Stage 21 – Documentation**
     - Produce comprehensive developer docs, API references and examples.
 22. **Stage 22 – Compliance and Auditing**

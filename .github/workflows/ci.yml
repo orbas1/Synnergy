@@ -1,0 +1,96 @@
+---
+name: CI/CD
+
+'on':
+  push:
+    branches: ['staging', 'main']
+  pull_request:
+
+env:
+  REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME: synnergy
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+      - name: Go fmt
+        run: gofmt -w $(go list -f '{{.Dir}}' ./...)
+      - name: Go vet
+        run: go vet ./...
+      - name: Go test
+        run: go test ./...
+      - name: Build
+        run: go build ./...
+      - name: Shellcheck
+        run: shellcheck scripts/deploy.sh
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Yamllint
+        run: >-
+          yamllint .github/workflows/ci.yml
+          infrastructure/k8s/base/deployment.yaml
+          infrastructure/k8s/base/service.yaml
+          infrastructure/k8s/base/kustomization.yaml
+          infrastructure/k8s/overlays/staging/replicas.yaml
+          infrastructure/k8s/overlays/staging/kustomization.yaml
+          infrastructure/k8s/overlays/production/replicas.yaml
+          infrastructure/k8s/overlays/production/kustomization.yaml
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: '1.27.1'
+      - name: Validate kustomize overlays
+        run: |
+          kubectl kustomize infrastructure/k8s/overlays/staging >/dev/null
+          kubectl kustomize infrastructure/k8s/overlays/production >/dev/null
+      - name: Docker build
+        run: docker build \
+          -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} .
+      - name: Push image
+        if: github.event_name == 'push'
+        env:
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+        run: |
+          echo "$GHCR_TOKEN" | docker login ghcr.io \
+            -u "${{ github.actor }}" --password-stdin
+          docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_ENV: >-
+        ${{ github.ref == 'refs/heads/main'
+            && 'production' || 'staging' }}
+    environment: ${{ env.DEPLOY_ENV }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: '1.27.1'
+      - name: Configure kubectl
+        run: |
+          kubectl config set-cluster cluster \
+            --server="$KUBE_SERVER" \
+            --certificate-authority=<(echo "$KUBE_CA" | base64 -d)
+          kubectl config set-credentials deployer \
+            --token="$KUBE_TOKEN"
+          kubectl config set-context ctx --cluster=cluster \
+            --user=deployer --namespace="$KUBE_NAMESPACE"
+          kubectl config use-context ctx
+        env:
+          KUBE_SERVER: ${{ secrets.KUBE_SERVER }}
+          KUBE_CA: ${{ secrets.KUBE_CA }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+          KUBE_NAMESPACE: >-
+            ${{ env.DEPLOY_ENV == 'production'
+                && 'prod' || 'staging' }}
+      - name: Deploy
+        env:
+          IMAGE: $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+        run: scripts/deploy.sh $DEPLOY_ENV

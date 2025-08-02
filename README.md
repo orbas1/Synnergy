@@ -98,6 +98,11 @@ go test ./...
 
 Some tests expect running services or mock implementations. `go vet` and `go build` can be run in the same way to lint and compile the modules.
 
+## CI/CD and Deployment
+
+A GitHub Actions workflow at [`.github/workflows/ci.yml`](.github/workflows/ci.yml) builds the container image and deploys to Kubernetes. Pushes to `staging` roll out to the staging namespace while pushes to `main` target production. [`scripts/deploy.sh`](scripts/deploy.sh) performs a canary rollout and automatic rollback using manifests from [`infrastructure/k8s`](infrastructure/k8s).
+The workflow also runs `gofmt`, `go vet`, `go test`, `shellcheck`, `yamllint` and validates the kustomize overlays before building the image.
+
 ## Contributing
 
 Development follows the staged workflow described in [`AGENTS.md`](AGENTS.md). Work through the stages sequentially and modify no more than three files per pull request. Run `go fmt`, `go vet`, `go build` and `go test` on the packages you touch. Mark progress in `AGENTS.md` so others know which files are complete.
