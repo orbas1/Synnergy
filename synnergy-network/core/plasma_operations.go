@@ -190,6 +190,7 @@ func (p *BridgeCoordinator) ListExits(owner Address) ([]PlasmaBridgeExit, error)
 // plasmaBridgeAccount returns the address used as a bridge for Plasma
 // operations. It includes a distinct prefix to avoid collisions with other
 // bridge types.
+
 func plasmaBridgeAccount(token TokenID) Address {
 	var a Address
 	copy(a[:4], []byte("PLSM"))

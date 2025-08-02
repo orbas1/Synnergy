@@ -1,103 +1,147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Storage Marketplace</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="styles/style.css" rel="stylesheet">
-</head>
-<body class="container py-4">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+  <body class="container py-4">
     <h1 class="display-4 mb-4">Storage Marketplace</h1>
 
     <section id="listings" class="mb-5">
-        <h2>Storage Listings</h2>
-        <table class="table table-bordered" id="listingsTable">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Provider</th>
-                    <th>Price/GB</th>
-                    <th>Capacity (GB)</th>
-                    <th>Created</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+      <h2>Storage Listings</h2>
+      <table class="table table-bordered" id="listingsTable">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Provider</th>
+            <th>Price/GB</th>
+            <th>Capacity (GB)</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-        <h3>Add Listing</h3>
-        <form id="listingForm" class="row g-3">
-            <div class="col-md-3">
-                <input type="text" class="form-control" name="provider" placeholder="Provider Address" required>
-            </div>
-            <div class="col-md-2">
-                <input type="number" class="form-control" name="pricePerGB" placeholder="Price/GB" required>
-            </div>
-            <div class="col-md-2">
-                <input type="number" class="form-control" name="capacityGB" placeholder="Capacity" required>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-primary" type="submit">Create</button>
-            </div>
-        </form>
+      <h3>Add Listing</h3>
+      <form id="listingForm" class="row g-3">
+        <div class="col-md-3">
+          <input
+            type="text"
+            class="form-control"
+            name="provider"
+            placeholder="Provider Address"
+            required
+          />
+        </div>
+        <div class="col-md-2">
+          <input
+            type="number"
+            class="form-control"
+            name="pricePerGB"
+            placeholder="Price/GB"
+            required
+          />
+        </div>
+        <div class="col-md-2">
+          <input
+            type="number"
+            class="form-control"
+            name="capacityGB"
+            placeholder="Capacity"
+            required
+          />
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary" type="submit">Create</button>
+        </div>
+      </form>
     </section>
 
     <section id="deals">
-        <h2>Storage Deals</h2>
-        <table class="table table-bordered" id="dealsTable">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Listing ID</th>
-                    <th>Client</th>
-                    <th>Duration</th>
-                    <th>Created</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+      <h2>Storage Deals</h2>
+      <table class="table table-bordered" id="dealsTable">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Listing ID</th>
+            <th>Client</th>
+            <th>Duration</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-        <h3>Open Deal</h3>
-        <form id="dealForm" class="row g-3">
-            <div class="col-md-3">
-                <input type="text" class="form-control" name="listingId" placeholder="Listing ID" required>
-            </div>
-            <div class="col-md-3">
-                <input type="text" class="form-control" name="client" placeholder="Client Address" required>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" name="duration" placeholder="Duration (e.g., 720h)" required>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-success" type="submit">Open</button>
-            </div>
-        </form>
+      <h3>Open Deal</h3>
+      <form id="dealForm" class="row g-3">
+        <div class="col-md-3">
+          <input
+            type="text"
+            class="form-control"
+            name="listingId"
+            placeholder="Listing ID"
+            required
+          />
+        </div>
+        <div class="col-md-3">
+          <input
+            type="text"
+            class="form-control"
+            name="client"
+            placeholder="Client Address"
+            required
+          />
+        </div>
+        <div class="col-md-2">
+          <input
+            type="text"
+            class="form-control"
+            name="duration"
+            placeholder="Duration (e.g., 720h)"
+            required
+          />
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-success" type="submit">Open</button>
+        </div>
+      </form>
     </section>
 
     <section id="files" class="mt-5">
-        <h2>Pinned Files</h2>
-        <table class="table table-bordered" id="pinsTable">
-            <thead class="table-light">
-                <tr>
-                    <th>CID</th>
-                    <th>Pinned</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+      <h2>Pinned Files</h2>
+      <table class="table table-bordered" id="pinsTable">
+        <thead class="table-light">
+          <tr>
+            <th>CID</th>
+            <th>Pinned</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-        <h3>Pin File</h3>
-        <form id="pinForm" class="row g-3">
-            <div class="col-md-6">
-                <input type="text" class="form-control" name="cid" placeholder="CID" required>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-secondary" type="submit">Pin</button>
-            </div>
-        </form>
+      <h3>Pin File</h3>
+      <form id="pinForm" class="row g-3">
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            name="cid"
+            placeholder="CID"
+            required
+          />
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-secondary" type="submit">Pin</button>
+        </div>
+      </form>
     </section>
 
-
     <script type="module" src="app.js"></script>
-</body>
+  </body>
 </html>

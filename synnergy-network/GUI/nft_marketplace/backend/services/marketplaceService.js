@@ -25,7 +25,7 @@ module.exports = {
 
   async purchase(id) {
     await buyNFT(id);
-    const idx = listings.findIndex(l => l.id === Number(id));
+    const idx = listings.findIndex((l) => l.id === Number(id));
     if (idx !== -1) listings.splice(idx, 1);
-  }
+  },
 };
