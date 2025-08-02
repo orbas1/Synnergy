@@ -28,34 +28,37 @@ func NewEnergyNode(cfg Config, led *Ledger, validator Address) (*EnergyEfficient
 	return &EnergyEfficientNode{Node: n, ledger: led, validator: validator}, nil
 }
 
-// EnergyNode_Start begins serving network traffic.
-func EnergyNode_Start(en *EnergyEfficientNode) {
+// EnergyNodeStart begins serving network traffic.
+func EnergyNodeStart(en *EnergyEfficientNode) {
 	if en == nil {
 		return
 	}
 	go en.ListenAndServe()
 }
 
-// EnergyNode_Stop gracefully shuts down the node.
-func EnergyNode_Stop(en *EnergyEfficientNode) error {
+// EnergyNodeStop gracefully shuts down the node.
+func EnergyNodeStop(en *EnergyEfficientNode) error {
 	if en == nil {
 		return nil
 	}
 	return en.Close()
 }
 
-// EnergyNode_Record stores usage statistics for the validator.
-func EnergyNode_Record(en *EnergyEfficientNode, txs uint64, kwh float64) error {
+// EnergyNodeRecord stores usage statistics for the validator.
+func EnergyNodeRecord(en *EnergyEfficientNode, txs uint64, kwh float64) error {
 	if en == nil {
 		return ErrInvalidNode
+	}
+	if kwh <= 0 {
+		return fmt.Errorf("kwh must be positive")
 	}
 	en.mu.Lock()
 	defer en.mu.Unlock()
 	return EnergyEff().RecordStats(en.validator, txs, kwh)
 }
 
-// EnergyNode_Efficiency returns the validator's current transactions-per-kWh.
-func EnergyNode_Efficiency(en *EnergyEfficientNode) (float64, error) {
+// EnergyNodeEfficiency returns the validator's current transactions-per-kWh.
+func EnergyNodeEfficiency(en *EnergyEfficientNode) (float64, error) {
 	if en == nil {
 		return 0, ErrInvalidNode
 	}
@@ -64,8 +67,8 @@ func EnergyNode_Efficiency(en *EnergyEfficientNode) (float64, error) {
 	return EnergyEff().EfficiencyOf(en.validator)
 }
 
-// EnergyNode_NetworkAvg returns the network-wide transactions-per-kWh score.
-func EnergyNode_NetworkAvg(en *EnergyEfficientNode) (float64, error) {
+// EnergyNodeNetworkAvg returns the network-wide transactions-per-kWh score.
+func EnergyNodeNetworkAvg(en *EnergyEfficientNode) (float64, error) {
 	if en == nil {
 		return 0, ErrInvalidNode
 	}

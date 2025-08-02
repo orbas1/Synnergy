@@ -645,11 +645,11 @@ Operations related to energy efficiency.
 | `NetworkAverage` | `100` |
 | `ListEfficiency` | `100` |
 | `NewEnergyNode` | `2000` |
-| `EnergyNode_Start` | `50` |
-| `EnergyNode_Stop` | `50` |
-| `EnergyNode_Record` | `300` |
-| `EnergyNode_Efficiency` | `100` |
-| `EnergyNode_NetworkAvg` | `100` |
+| `EnergyNodeStart` | `50` |
+| `EnergyNodeStop` | `50` |
+| `EnergyNodeRecord` | `300` |
+| `EnergyNodeEfficiency` | `100` |
+| `EnergyNodeNetworkAvg` | `100` |
 
 
 ### Ledger / UTXO / Account-Model
@@ -1872,7 +1872,7 @@ Operations related to token utilities.
 | `Edu_GetCredit` | `0` |
 | `Edu_ListCredits` | `0` |
 | `Tokens_CreateSYN2200` | `0` |
-| `Tokens_CreateSYN1000` | `0` |
+| `TokensCreateSYN1000` | `0` |
 | `SYN1000_AddReserve` | `0` |
 | `SYN1000_RemoveReserve` | `0` |
 | `SYN1000_SetPrice` | `0` |
