@@ -325,9 +325,28 @@ var txCreateCmd = &cobra.Command{
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		cf := txCreateFlags{}
 		cf.to, _ = cmd.Flags().GetString("to")
+		if cf.to == "" {
+			return fmt.Errorf("--to required")
+		}
+		if _, err := core.StringToAddress(cf.to); err != nil {
+			return fmt.Errorf("invalid --to address: %w", err)
+		}
+
 		cf.value, _ = cmd.Flags().GetUint64("value")
+		if cf.value == 0 {
+			return fmt.Errorf("--value must be greater than 0")
+		}
+
 		cf.gasLimit, _ = cmd.Flags().GetUint64("gas")
+		if cf.gasLimit == 0 {
+			return fmt.Errorf("--gas must be greater than 0")
+		}
+
 		cf.gasPrice, _ = cmd.Flags().GetUint64("price")
+		if cf.gasPrice == 0 {
+			return fmt.Errorf("--price must be greater than 0")
+		}
+
 		cf.nonce, _ = cmd.Flags().GetUint64("nonce")
 		cf.payload, _ = cmd.Flags().GetString("payload")
 		cf.txType, _ = cmd.Flags().GetString("type")
@@ -396,7 +415,9 @@ var txPoolCmd = &cobra.Command{
 func init() {
 	// create flags
 	txCreateCmd.Flags().String("to", "", "hex recipient address (0x…)")
+	txCreateCmd.MarkFlagRequired("to")
 	txCreateCmd.Flags().Uint64("value", 0, "value in wei")
+	txCreateCmd.MarkFlagRequired("value")
 	txCreateCmd.Flags().Uint64("gas", 21_000, "gas limit")
 	txCreateCmd.Flags().Uint64("price", 1, "gas price in wei")
 	txCreateCmd.Flags().Uint64("nonce", 0, "transaction nonce")

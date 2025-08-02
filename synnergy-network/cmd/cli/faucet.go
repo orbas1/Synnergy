@@ -74,11 +74,33 @@ var faucetConfigCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Update faucet parameters",
 	Args:  cobra.NoArgs,
+	PreRunE: func(cmd *cobra.Command, _ []string) error {
+		if !cmd.Flags().Changed("amount") && !cmd.Flags().Changed("cooldown") {
+			return fmt.Errorf("provide at least one of --amount or --cooldown")
+		}
+		if cmd.Flags().Changed("amount") {
+			amt, _ := cmd.Flags().GetUint64("amount")
+			if amt == 0 {
+				return fmt.Errorf("--amount must be greater than 0")
+			}
+		}
+		if cmd.Flags().Changed("cooldown") {
+			cd, _ := cmd.Flags().GetDuration("cooldown")
+			if cd <= 0 {
+				return fmt.Errorf("--cooldown must be positive")
+			}
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, _ []string) error {
 		amt, _ := cmd.Flags().GetUint64("amount")
 		cd, _ := cmd.Flags().GetDuration("cooldown")
-		faucet.SetAmount(amt)
-		faucet.SetCooldown(cd)
+		if cmd.Flags().Changed("amount") {
+			faucet.SetAmount(amt)
+		}
+		if cmd.Flags().Changed("cooldown") {
+			faucet.SetCooldown(cd)
+		}
 		fmt.Fprintln(cmd.OutOrStdout(), "updated")
 		return nil
 	},
