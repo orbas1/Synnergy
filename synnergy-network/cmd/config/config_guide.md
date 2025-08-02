@@ -1,13 +1,13 @@
 # Synnergy Configuration Guide
 
-This document describes how to configure a Synnergy node using the YAML files in `cmd/config/`. The configuration loader merges `default.yaml` with an optional environment specific file identified by the `SYNN_ENV` variable. All values can be overridden by environment variables thanks to Viper's `AutomaticEnv` integration and the project `.env` file.
+This document describes how to configure a Synnergy node using the YAML files in `cmd/config/`. The configuration loader merges `default.yaml` with an optional environment specific file identified by the `SYNN_ENV` variable. Applications should call `config.LoadFromEnv()` which implements this behaviour. All values can be overridden by environment variables thanks to Viper's `AutomaticEnv` integration and the project `.env` file.
 
 ## Loading Sequence
 
 1. `default.yaml` is loaded first and establishes sane defaults for development.
 2. If `SYNN_ENV` is set (for example `prod` or `bootstrap`) a file with the same name is merged in.
 3. Environment variables are then applied. Keys use dot notation matching the YAML structure (e.g. `network.max_peers`).
-4. The resulting configuration is unmarshaled into the `FullConfig` struct defined in `config.go` and made available as `config.AppConfig`.
+4. The resulting configuration is unmarshaled into the `Config` struct defined in `pkg/config/config.go` and made available as `config.AppConfig`.
 
 Running the CLI without `SYNN_ENV` uses only the default settings which are safe for local testing.
 
@@ -92,7 +92,7 @@ Configuration for the embedded virtual machine.
 
 ## Environment Files and Overrides
 
-The repository contains a `.env` file with additional variables such as API endpoints and secrets. `LoadConfig` reads these values automatically so they can override YAML fields. Typical variables include `API_BIND`, `GOVERNANCE_API_ADDR`, and `JWT_SECRET`. When running in production make sure to provide secure values for any secrets.
+The repository contains a `.env` file with additional variables such as API endpoints and secrets. `config.Load` reads these values automatically so they can override YAML fields. Typical variables include `API_BIND`, `GOVERNANCE_API_ADDR`, and `JWT_SECRET`. When running in production make sure to provide secure values for any secrets.
 
 ## Example Configurations
 
@@ -130,4 +130,8 @@ At start-up the ledger reads this file and creates the first block with the spec
 ## Conclusion
 
 The configuration system is intentionally simple: a layered YAML approach backed by environment variables. By editing these files and the genesis block you can tailor a Synnergy deployment for local testing, dedicated bootstrap nodes or a full production network.
+
+## API Version
+
+The configuration loader API is currently versioned as **v0.1.0**. Future changes will follow semantic versioning guidelines.
 
