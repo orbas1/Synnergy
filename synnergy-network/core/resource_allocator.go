@@ -2,6 +2,7 @@ package core
 
 // ResourceAllocator tracks per-address gas allowances.
 type ResourceAllocator struct {
+
 	limits map[Address]uint64
 }
 

@@ -5,8 +5,8 @@ package core
 // during CLI diagnostics or integration tests without external dependencies.
 
 import (
-	"math/rand"
-	"time"
+	"crypto/rand"
+	"math/big"
 )
 
 // SimulateBFT runs a naive Monte Carlo simulation to estimate the probability
@@ -28,14 +28,17 @@ func SimulateBFTWith(n, f, rounds int, failProb float64) float64 {
 	if n >= 3*f+1 {
 		return 1
 	}
-	src := rand.New(rand.NewSource(time.Now().UnixNano()))
 	success := 0
 	honest := n - f
 	for i := 0; i < rounds; i++ {
 		votes := 0
 		for j := 0; j < honest; j++ {
 			// each honest node may be delayed or fail with given probability
-			if src.Float64() >= failProb {
+			rf, err := randFloat64()
+			if err != nil {
+				return 0
+			}
+			if rf >= failProb {
 				votes++
 			}
 		}
@@ -50,6 +53,17 @@ func SimulateBFTWith(n, f, rounds int, failProb float64) float64 {
 // honest nodes.
 func SimulateBFT(n, f, rounds int) float64 {
 	return SimulateBFTWith(n, f, rounds, 0.01)
+}
+
+// randFloat64 returns a cryptographically secure random float64 in [0,1).
+func randFloat64() (float64, error) {
+	const maxBits = 53
+	max := big.NewInt(1 << maxBits)
+	n, err := rand.Int(rand.Reader, max)
+	if err != nil {
+		return 0, err
+	}
+	return float64(n.Int64()) / float64(1<<maxBits), nil
 }
 
 // END bft_simulation.go

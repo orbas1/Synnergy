@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"context"
 	"encoding/hex"
 	"fmt"
 	"strconv"
@@ -68,19 +69,65 @@ var rentalCmd = &cobra.Command{
 	Short: "Manage SYN3000 rental agreements",
 }
 
+type regFlagsKey struct{}
+
+type regFlags struct {
+	tokenID    uint32
+	propertyID string
+	tenant     string
+	landlord   string
+	rent       uint64
+	deposit    uint64
+	start      string
+	end        string
+}
+
 var rtRegisterCmd = &cobra.Command{
 	Use:   "register",
 	Short: "Register a rental agreement",
-	RunE: func(cmd *cobra.Command, args []string) error {
+	Args:  cobra.NoArgs,
+	PreRunE: func(cmd *cobra.Command, _ []string) error {
 		tokenID, _ := cmd.Flags().GetUint32("token")
+		if tokenID == 0 {
+			return fmt.Errorf("--token must be greater than 0")
+		}
 		propertyID, _ := cmd.Flags().GetString("property")
 		tenant, _ := cmd.Flags().GetString("tenant")
 		landlord, _ := cmd.Flags().GetString("landlord")
 		rent, _ := cmd.Flags().GetUint64("rent")
+		if rent == 0 {
+			return fmt.Errorf("--rent must be greater than 0")
+		}
 		deposit, _ := cmd.Flags().GetUint64("deposit")
 		start, _ := cmd.Flags().GetString("start")
 		end, _ := cmd.Flags().GetString("end")
-		return rentalCtrl{}.register(tokenID, propertyID, tenant, landlord, rent, deposit, start, end)
+		st, err := time.Parse(time.RFC3339, start)
+		if err != nil {
+			return fmt.Errorf("invalid --start: %w", err)
+		}
+		en, err := time.Parse(time.RFC3339, end)
+		if err != nil {
+			return fmt.Errorf("invalid --end: %w", err)
+		}
+		if !en.After(st) {
+			return fmt.Errorf("--end must be after --start")
+		}
+		rf := regFlags{
+			tokenID:    tokenID,
+			propertyID: propertyID,
+			tenant:     tenant,
+			landlord:   landlord,
+			rent:       rent,
+			deposit:    deposit,
+			start:      start,
+			end:        end,
+		}
+		cmd.SetContext(context.WithValue(cmd.Context(), regFlagsKey{}, rf))
+		return nil
+	},
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		rf := cmd.Context().Value(regFlagsKey{}).(regFlags)
+		return rentalCtrl{}.register(rf.tokenID, rf.propertyID, rf.tenant, rf.landlord, rf.rent, rf.deposit, rf.start, rf.end)
 	},
 }
 
@@ -92,6 +139,9 @@ var rtPayCmd = &cobra.Command{
 		amount, err := parseUint64(args[1])
 		if err != nil {
 			return err
+		}
+		if amount == 0 {
+			return fmt.Errorf("amount must be greater than 0")
 		}
 		return rentalCtrl{}.pay(args[0], amount)
 	},
@@ -115,9 +165,11 @@ func init() {
 	rtRegisterCmd.Flags().Uint64("deposit", 0, "security deposit")
 	rtRegisterCmd.Flags().String("start", time.Now().Format(time.RFC3339), "lease start")
 	rtRegisterCmd.Flags().String("end", time.Now().AddDate(0, 6, 0).Format(time.RFC3339), "lease end")
+	rtRegisterCmd.MarkFlagRequired("token")
 	rtRegisterCmd.MarkFlagRequired("property")
 	rtRegisterCmd.MarkFlagRequired("tenant")
 	rtRegisterCmd.MarkFlagRequired("landlord")
+	rtRegisterCmd.MarkFlagRequired("rent")
 
 	rentalCmd.AddCommand(rtRegisterCmd, rtPayCmd, rtTerminateCmd)
 }

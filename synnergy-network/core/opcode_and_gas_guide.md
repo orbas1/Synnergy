@@ -500,9 +500,9 @@ Operations related to governance.
 | `GetProposal` | `100` |
 | `ListProposals` | `200` |
 | `NewQuorumTracker` | `100` |
-| `Quorum_AddVote` | `0` |
-| `Quorum_HasQuorum` | `0` |
-| `Quorum_Reset` | `0` |
+| `QuorumAddVote` | `0` |
+| `QuorumHasQuorum` | `0` |
+| `QuorumReset` | `0` |
 | `SubmitQuadraticVote` | `350` |
 | `QuadraticResults` | `200` |
 | `QuadraticWeight` | `5` |
@@ -559,9 +559,9 @@ Operations related to governance.
 | `GetProposal` | `100` |
 | `ListProposals` | `200` |
 | `NewQuorumTracker` | `100` |
-| `Quorum_AddVote` | `0` |
-| `Quorum_HasQuorum` | `0` |
-| `Quorum_Reset` | `0` |
+| `QuorumAddVote` | `0` |
+| `QuorumHasQuorum` | `0` |
+| `QuorumReset` | `0` |
 | `SubmitQuadraticVote` | `350` |
 | `QuadraticResults` | `200` |
 | `QuadraticWeight` | `5` |
@@ -580,12 +580,12 @@ Operations related to governance.
 | `ExecuteRepGovProposal` | `1500` |
 | `GetRepGovProposal` | `100` |
 | `ListRepGovProposals` | `200` |
-| `Rep_AddActivity` | `200` |
-| `Rep_Endorse` | `200` |
-| `Rep_Penalize` | `200` |
-| `Rep_Score` | `50` |
-| `Rep_Level` | `50` |
-| `Rep_History` | `100` |
+| `RepAddActivity` | `200` |
+| `RepEndorse` | `200` |
+| `RepPenalize` | `200` |
+| `RepScore` | `50` |
+| `RepLevel` | `50` |
+| `RepHistory` | `100` |
 | `CastTokenVote` | `400` |
 | `DAO_Stake` | `0` |
 | `DAO_Unstake` | `0` |
@@ -1635,11 +1635,11 @@ Operations related to token utilities.
 | `SYN223_SetRequiredSigs` | `0` |
 | `SYN223_IsWhitelisted` | `0` |
 | `SYN223_IsBlacklisted` | `0` |
-| `SYN131_UpdateValuation` | `0` |
-| `SYN131_RecordSale` | `0` |
-| `SYN131_AddRental` | `0` |
-| `SYN131_IssueLicense` | `0` |
-| `SYN131_TransferShare` | `0` |
+| `SYN131UpdateValuation` | `0` |
+| `SYN131RecordSale` | `0` |
+| `SYN131AddRental` | `0` |
+| `SYN131IssueLicense` | `0` |
+| `SYN131TransferShare` | `0` |
 | `SYN130_UpdateValuation` | `0` |
 | `SYN130_RecordSale` | `0` |
 | `SYN130_StartLease` | `0` |
@@ -2487,11 +2487,11 @@ Operations related to forum.
 
 | Opcode | Gas Cost |
 |---|---|
-| `Forum_CreateThread` | `0` |
-| `Forum_GetThread` | `0` |
-| `Forum_ListThreads` | `0` |
-| `Forum_AddComment` | `0` |
-| `Forum_ListComments` | `0` |
+| `ForumCreateThread` | `0` |
+| `ForumGetThread` | `0` |
+| `ForumListThreads` | `0` |
+| `ForumAddComment` | `0` |
+| `ForumListComments` | `0` |
 
 
 ### Blockchain Compression
@@ -2630,12 +2630,12 @@ Operations related to escrow management.
 
 | Opcode | Gas Cost |
 |---|---|
-| `Escrow_Create` | `0` |
-| `Escrow_Deposit` | `0` |
-| `Escrow_Release` | `0` |
-| `Escrow_Cancel` | `0` |
-| `Escrow_Get` | `0` |
-| `Escrow_List` | `0` |
+| `EscrowCreate` | `0` |
+| `EscrowDeposit` | `0` |
+| `EscrowRelease` | `0` |
+| `EscrowCancel` | `0` |
+| `EscrowGet` | `0` |
+| `EscrowList` | `0` |
 
 
 ### Faucet
@@ -2687,12 +2687,12 @@ Operations related to warehouse records.
 
 | Opcode | Gas Cost |
 |---|---|
-| `Warehouse_New` | `0` |
-| `Warehouse_AddItem` | `0` |
-| `Warehouse_RemoveItem` | `0` |
-| `Warehouse_MoveItem` | `0` |
-| `Warehouse_ListItems` | `0` |
-| `Warehouse_GetItem` | `0` |
+| `WarehouseNew` | `0` |
+| `WarehouseAddItem` | `0` |
+| `WarehouseRemoveItem` | `0` |
+| `WarehouseMoveItem` | `0` |
+| `WarehouseListItems` | `0` |
+| `WarehouseGetItem` | `0` |
 
 
 ### Integration Node

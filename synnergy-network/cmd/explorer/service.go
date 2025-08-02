@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -68,7 +69,7 @@ func (s *LedgerService) TxByID(hexID string) (*core.Transaction, error) {
 		for i := range blk.Transactions {
 			tx := blk.Transactions[i]
 			h := tx.ID()
-			if string(h[:]) == string(id) {
+			if len(id) == len(h) && bytes.Equal(h[:], id) {
 				return tx, nil
 			}
 		}
