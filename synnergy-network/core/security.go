@@ -453,12 +453,12 @@ type AuditEvent struct {
 type AuditTrail struct {
 	mu     sync.Mutex
 	file   *os.File
-	ledger StateRW
+	ledger *Ledger
 }
 
 // NewAuditTrail creates or opens an append-only log file. If ledger is non-nil
 // each entry hash is also stored on-chain for tamper evidence.
-func NewAuditTrail(path string, ledger StateRW) (*AuditTrail, error) {
+func NewAuditTrail(path string, ledger *Ledger) (*AuditTrail, error) {
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
 		return nil, err
