@@ -211,19 +211,6 @@ func (as *AuthoritySet) RandomElectorate(size int) ([]Address, error) {
 	return sel[:size], nil
 }
 
-// shuffleAddresses performs an in-place Fisher-Yates shuffle using crypto/rand.
-func shuffleAddresses(pool []Address) error {
-	for i := len(pool) - 1; i > 0; i-- {
-		n, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
-		if err != nil {
-			return err
-		}
-		j := int(n.Int64())
-		pool[i], pool[j] = pool[j], pool[i]
-	}
-	return nil
-}
-
 // GetAuthority returns the AuthorityNode information for the given address.
 // An error is returned if the address is not registered.
 func (as *AuthoritySet) GetAuthority(addr Address) (AuthorityNode, error) {
