@@ -76,7 +76,7 @@ func (e *ExperimentalNode) RollbackFeature(name string) error {
 
 // SimulateTransaction adds a raw transaction to the ledger's pool.
 func (e *ExperimentalNode) SimulateTransaction(data []byte) error {
-	tx, err := DecodeTransaction(data)
+	tx, err := decodeExperimentalTx(data)
 	if err != nil {
 		return err
 	}
@@ -94,8 +94,8 @@ func (e *ExperimentalNode) TestContract(bytecode []byte) error {
 	return nil
 }
 
-// DecodeTransaction decodes JSON encoded transaction data.
-func DecodeTransaction(data []byte) (*Transaction, error) {
+// decodeExperimentalTx decodes JSON encoded transaction data.
+func decodeExperimentalTx(data []byte) (*Transaction, error) {
 	var tx Transaction
 	if err := json.Unmarshal(data, &tx); err != nil {
 		return nil, err
