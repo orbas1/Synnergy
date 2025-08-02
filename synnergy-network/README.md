@@ -12,31 +12,64 @@ sub‑commands through the
 `core/helpers.go` allow the CLI to operate without a full node while modules are
 implemented incrementally.
 
+## Key Features
+
+- **Modular architecture** – each blockchain capability lives in its own Go
+  package and can be enabled or disabled independently.
+- **AI enhanced compliance** – optional machine learning modules analyse
+  transactions for risk and assist with on‑chain regulation.
+- **Cross‑chain communication** – bridges, rollups and consensus hopping modules
+  allow assets to move between networks and adapt to different environments.
+- **Advanced governance** – quadratic voting, DAO tooling and reputation systems
+  support enterprise decision making.
+- **Extensive GUI suite** – wallet, explorers and marketplaces provide rich web
+  interfaces backed by REST services.
+
 ## Directory Layout
 
 The repository is organised as follows:
 
 | Path | Description |
 |------|-------------|
-| `core/` | Core blockchain modules such as consensus, storage and smart contract logic. A detailed list is available in [`core/module_guide.md`](core/module_guide.md). |
-| `cmd/` | Command line sources, configuration files and helper scripts. CLI modules live under `cmd/cli`. |
-| `core/binary_tree_operations.go` | Ledger-backed binary search tree implementation with CLI and VM opcodes. |
+| `core/` | Core blockchain modules such as consensus, storage, networking and smart contract logic. See [`core/module_guide.md`](core/module_guide.md) for a file-by-file summary. |
+| `cmd/cli/` | CLI command implementations using Cobra. Each file registers a command group. |
+| `cmd/config/` | Default YAML configuration files and schema documentation. |
+| `cmd/synnergy/` | Entry point for the `synnergy` binary and network setup walkthroughs. |
+| `cmd/scripts/` | Shell helpers for common development tasks. See [`cmd/scripts/script_guide.md`](cmd/scripts/script_guide.md). |
+| `cmd/smart_contracts/` | Example WebAssembly contracts bundled with the CLI. |
+| `scripts/` | Top-level scripts to start local devnets or testnets. |
 | `tests/` | Go unit tests covering each module. Run with `go test ./...`. |
 | `GUI/` | Web front-ends including `wallet`, `explorer`, `ai-marketplace` and more. |
 | `walletserver/` | Go HTTP backend powering the wallet GUI. |
 | `internal/` | Shared utilities used across CLI and services. |
-| `cmd/scripts/` | Shell helpers for common development tasks. See [`cmd/scripts/script_guide.md`](cmd/scripts/script_guide.md). |
-| `scripts/` | Top-level scripts to start local devnets or testnets. |
+| `ai.proto` | gRPC definitions for AI-related services. |
 | `smart_contract_guide.md` | Documentation and examples for writing contracts. |
 | `third_party/` | Vendored dependencies such as a libp2p fork used during early development. |
 | `setup_synn.sh` | Convenience script that installs Go and builds the CLI. |
 | `Synnergy.env.sh` | Optional environment bootstrap script that downloads tools and loads variables from `.env`. |
 | `WHITEPAPER.md` | Project vision and design goals. |
 
+## Environment Setup
+
+1. Install [Go](https://go.dev/dl/) 1.20 or newer and ensure `$GOPATH/bin` is on
+   your `PATH`.
+2. Clone the repository and download dependencies:
+
+   ```bash
+   git clone https://github.com/synnergy_network/Synnergy.git
+   cd Synnergy/synnergy-network
+   go mod tidy
+   ```
+3. Run `../setup_synn.sh` for a minimal toolchain or `../Synnergy.env.sh` for a
+   full environment with additional dependencies and variables loaded from
+   `.env`.
+4. For GUI projects install Node.js 18+ and your preferred package manager.
+
+
 ## Building
 
-Go 1.20 or newer is recommended. Clone the repository and run the build command
-from the repository root:
+Once the environment is prepared, compile the main binary from the repository
+root:
 
 ```bash
 cd synnergy-network
@@ -219,6 +252,8 @@ basic steps are:
 ```bash
 synnergy ledger init --path ./ledger.db
 synnergy network start &
+synnergy wallet create --out wallet.json
+synnergy coin mint $(jq -r .address wallet.json) 1000
 ```
 
 By default the node attempts to open the listening port on your router using
@@ -286,24 +321,37 @@ The container launches networking, consensus, replication and VM services automa
 
 ## Testing
 
-Unit tests are located in the `tests` directory. Run them using:
+Unit tests are located in the `tests` directory and mirror the structure of the
+`core` packages. For any code change run the standard toolchain:
 
 ```bash
+go fmt ./...
+go vet ./...
+go build ./...
 go test ./...
 ```
 
-Some tests rely on running services such as the network or security daemon. They
-may require additional environment variables or mock implementations.
+Some modules depend on live services such as the network or security daemon.
+Those tests may require additional environment variables or mock
+implementations; consult the comments within each test file for setup
+instructions.
 
 ## Contributing
 
-Development tasks are organised in stages described in [`AGENTS.md`](../AGENTS.md).
-When contributing code, work through the stages sequentially and modify no more
-than three files per commit.  Run `go fmt`, `go vet` and `go build` on the
-packages you touch, then execute the relevant unit tests.  Mark completed files
-in `AGENTS.md` so others know which tasks are in progress.
+Development tasks are organised in stages described in
+[`AGENTS.md`](../AGENTS.md). When contributing code:
 
-The `setup_synn.sh` script should be used when preparing a new environment.
+1. Work through the stages sequentially and modify no more than three files per
+   commit or pull request.
+2. Run `go fmt`, `go vet`, `go build` and `go test` on the packages you touch
+   before committing.
+3. Update any relevant documentation and cross-reference new features in this
+   README or the module guide.
+4. Mark completed files in `AGENTS.md` so others know which tasks are in
+   progress.
+
+Use the `setup_synn.sh` script when preparing a new environment; it installs
+Go, fetches dependencies and builds the CLI.
 
 ## License
 
