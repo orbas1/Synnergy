@@ -150,8 +150,8 @@ func (s *Storage) Pin(ctx context.Context, data []byte, payer Address) (string, 
 	}
 
 	var meta struct {
-		Hash string `json:"Hash"`
-		Size string `json:"Size"`
+		Hash string `json:"hash"`
+		Size string `json:"size"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&meta); err != nil {
 		return "", 0, fmt.Errorf("decode: %w", err)

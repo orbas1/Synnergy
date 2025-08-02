@@ -32,7 +32,7 @@ func NewCoin(lg *Ledger) (*Coin, error) {
 
 	// extract the TokenBalances field
 	var state struct {
-		TokenBalances map[string]uint64 `json:"TokenBalances"`
+		TokenBalances map[string]uint64 `json:"token_balances"`
 	}
 	if err := json.Unmarshal(snap, &state); err != nil {
 		return nil, fmt.Errorf("coin: failed to unmarshal snapshot: %w", err)

@@ -266,9 +266,9 @@ func TestVerifyWithdraw(t *testing.T) {
 
 	recipient := scAddr(0x99)
 	payload := struct {
-		Recipient Address `json:"Recipient"`
-		Token     TokenID `json:"Token"`
-		Amount    uint64  `json:"Amount"`
+		Recipient Address `json:"recipient"`
+		Token     TokenID `json:"token"`
+		Amount    uint64  `json:"amount"`
 	}{Recipient: recipient, Token: 1, Amount: 42}
 	txData, _ := json.Marshal(payload)
 
