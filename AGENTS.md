@@ -1,5 +1,6 @@
 # Synnergy Core Cleanup Plan
 
+
 This file lists every current file under `synnergy-network/core` and outlines a fifteen-stage process to bring the project to production readiness. There are 281 files in total.
 
 ## File Inventory
@@ -286,38 +287,59 @@ This file lists every current file under `synnergy-network/core` and outlines a 
 280. synnergy-network/core/zero_trust_data_channels.go
 281. synnergy-network/core/zkp_node.go
 
-## 15-Stage Cleanup and Production Plan
+## 25-Stage Cleanup and Production Plan
 
-Each stage groups related modules so multiple agents can work simultaneously. Stages may proceed in parallel once dependencies are satisfied.
+Each stage groups related modules so multiple agents can work in parallel once prerequisites are satisfied.  The goal is a robust production network with hardened security, clear documentation and automated deployment.
 
-1. **Stage 1 – Node Infrastructure**
-   - Focus on base node implementations (`full_node.go`, `lightning_node.go`, etc.)
-2. **Stage 2 – Authority and Staking**
-   - Clean authority node management files and staking logic.
-3. **Stage 3 – Resource and Supply Chain**
-   - Address resource management and supply chain modules.
-4. **Stage 4 – Governance and DAO**
-   - Refine governance contracts and DAO voting code.
-5. **Stage 5 – Token Standards**
-   - Review token implementations including SYN token files.
-6. **Stage 6 – Cross-Chain and Bridges**
-   - Harmonize cross-chain protocols and bridge contracts.
-7. **Stage 7 – Smart Contracts**
-   - Audit smart contract helpers and opcode dispatchers.
-8. **Stage 8 – Sharding, Sidechains and Rollups**
-   - Solidify scaling mechanics like sharding and rollup logic.
-9. **Stage 9 – Consensus and Fault Tolerance**
-   - Stabilize consensus algorithms and fault recovery modules.
-10. **Stage 10 – Storage and Ledger**
-    - Ensure storage routines and ledger operations are production ready.
-11. **Stage 11 – AI and Machine Learning**
-    - Polish AI model management and inference analysis modules.
-12. **Stage 12 – Security and Encryption**
-    - Strengthen firewall, biometrics and quantum resistant code.
-13. **Stage 13 – Utilities and Helpers**
-    - Cleanup helpers and general utility libraries.
-14. **Stage 14 – Testing and Benchmarking**
-    - Provide comprehensive tests and benchmark scripts.
-15. **Stage 15 – Documentation and Final Polish**
-    - Final documentation pass and integration of all pieces.
+1. **Stage 1 – Inventory Audit**
+   - Verify the file list, remove obsolete modules and identify missing pieces.
+2. **Stage 2 – Build Environment Setup**
+   - Standardize Go toolchains, mod dependencies and continuous integration.
+3. **Stage 3 – Core Node Infrastructure**
+   - Consolidate base node implementations and unify network interfaces.
+4. **Stage 4 – Node Networking**
+   - Review connection pools, peer discovery and data synchronization logic.
+5. **Stage 5 – Authority Systems**
+   - Refine authority node operations, staking management and penalties.
+6. **Stage 6 – Resource and Supply Chain**
+   - Optimize resource allocation, carbon credit and supply chain code.
+7. **Stage 7 – Governance and DAO**
+   - Enhance DAO modules with quadratic voting and on-chain proposals.
+8. **Stage 8 – Token Standards**
+   - Consolidate token implementations to align with SYN specifications.
+9. **Stage 9 – Cross-Chain Communication**
+   - Harmonize bridges and cross-chain contract compatibility.
+10. **Stage 10 – Smart Contract Framework**
+    - Establish a standard VM execution layer and contract testing routines.
+11. **Stage 11 – Sharding and Rollups**
+    - Finalize sharding strategies, rollup circuits and state channel code.
+12. **Stage 12 – Consensus and Fault Tolerance**
+    - Review algorithms for dynamic consensus hopping and failover.
+13. **Stage 13 – Storage and Ledger**
+    - Harden ledger persistence, replication and compression mechanisms.
+14. **Stage 14 – AI Integration**
+    - Define ML pipelines, model management and inference APIs.
+15. **Stage 15 – Security and Encryption**
+    - Implement zero-trust channels, biometric security and quantum resistance.
+16. **Stage 16 – Utility Libraries**
+    - Deduplicate helper functions, standardize error handling and configs.
+17. **Stage 17 – Testing Framework**
+    - Expand unit and integration tests with fuzzing and sandbox tooling.
+18. **Stage 18 – Performance Optimization**
+    - Benchmark node operations and optimize for throughput and memory.
+19. **Stage 19 – Monitoring and Observability**
+    - Integrate system health logging, metrics and alerting pipelines.
+20. **Stage 20 – DevOps and Deployment**
+    - Containerize services and implement CI/CD with infrastructure-as-code.
+21. **Stage 21 – Documentation**
+    - Produce comprehensive developer docs, API references and examples.
+22. **Stage 22 – Compliance and Auditing**
+    - Validate regulatory compliance and audit logging practices.
+23. **Stage 23 – User Feedback and UX**
+    - Gather community feedback and refine GUIs and CLI tooling.
+24. **Stage 24 – Final Security Audit**
+    - Run external penetration tests and finalize cryptographic modules.
+25. **Stage 25 – Production Launch**
+    - Deploy the stable release and handoff to operations for maintenance.
+
 
