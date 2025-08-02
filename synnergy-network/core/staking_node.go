@@ -80,4 +80,3 @@ func (s *StakingNode) Status() string {
 }
 
 var _ Nodes.StakingNodeInterface = (*StakingNode)(nil)
-
