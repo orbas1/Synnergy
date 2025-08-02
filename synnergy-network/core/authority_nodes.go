@@ -12,11 +12,12 @@ package core
 // Compile‑time dependencies: common, ledger, security (sig verify).
 
 import (
+	crand "crypto/rand"
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"github.com/sirupsen/logrus"
-	"math/rand"
+	"math/big"
 	"time"
 )
 
@@ -161,6 +162,18 @@ const (
 	authoritySlashFraction    float64 = 0.25
 )
 
+func shuffleAddresses(addrs []Address) error {
+	for i := len(addrs) - 1; i > 0; i-- {
+		jBig, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(jBig.Int64())
+		addrs[i], addrs[j] = addrs[j], addrs[i]
+	}
+	return nil
+}
+
 func (as *AuthoritySet) RandomElectorate(size int) ([]Address, error) {
 	as.mu.RLock()
 	defer as.mu.RUnlock()
@@ -187,7 +200,9 @@ func (as *AuthoritySet) RandomElectorate(size int) ([]Address, error) {
 	}
 
 	// Sample without replacement
-	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	if err := shuffleAddresses(pool); err != nil {
+		return nil, err
+	}
 	sel := unique(pool)
 	if len(sel) < size {
 		size = len(sel)
