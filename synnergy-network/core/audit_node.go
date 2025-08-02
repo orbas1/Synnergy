@@ -55,7 +55,8 @@ func (a *AuditNode) Broadcast(topic string, data []byte) error {
 
 // Subscribe proxies to the underlying network node.
 func (a *AuditNode) Subscribe(topic string) (<-chan []byte, error) {
-	return a.node.net.Subscribe(topic)
+	ch, err := a.node.net.Subscribe(topic)
+	return ch, err
 }
 
 // ListenAndServe runs the embedded network node.

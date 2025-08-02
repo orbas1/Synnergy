@@ -1,10 +1,8 @@
 package core
 
-import "sync"
-
-// ResourceAllocator tracks per-address gas limits for contracts or accounts.
+// ResourceAllocator tracks per-address gas allowances.
 type ResourceAllocator struct {
-	mu     sync.Mutex
+
 	limits map[Address]uint64
 }
 
@@ -13,9 +11,10 @@ func NewResourceAllocator() *ResourceAllocator {
 	return &ResourceAllocator{limits: make(map[Address]uint64)}
 }
 
-// Adjust sets the gas limit for addr to gas.
+// Adjust sets the gas limit for the given address.
 func (r *ResourceAllocator) Adjust(addr Address, gas uint64) {
-	r.mu.Lock()
+	if r == nil {
+		return
+	}
 	r.limits[addr] = gas
-	r.mu.Unlock()
 }

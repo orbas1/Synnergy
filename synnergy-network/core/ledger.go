@@ -865,15 +865,10 @@ func (l *Ledger) AllNodeLocations() map[NodeID]Location {
 	return out
 }
 
-// Close releases file descriptors associated with the ledger.
-// It is safe to call multiple times.
+// Close releases any underlying resources such as the WAL file.
 func (l *Ledger) Close() error {
-	l.mu.Lock()
-	defer l.mu.Unlock()
-	if l.walFile != nil {
-		err := l.walFile.Close()
-		l.walFile = nil
-		return err
+	if l == nil || l.walFile == nil {
+		return nil
 	}
-	return nil
+	return l.walFile.Close()
 }
