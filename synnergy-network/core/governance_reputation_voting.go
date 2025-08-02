@@ -8,9 +8,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// reputation token derived from token standard
-var reputationTokenID = deriveID(StdSYN1500)
-
 // AddReputation mints SYN-REP tokens to the specified address.
 func AddReputation(addr Address, amount uint64) error {
 	tok, ok := TokenLedger[reputationTokenID]
