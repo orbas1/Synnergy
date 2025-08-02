@@ -153,15 +153,28 @@ func (l *Ledger) MintBig(addr []byte, amount *big.Int) {
 }
 
 func (l *Ledger) EmitApproval(tokenID TokenID, owner, spender Address, amount uint64) {
-	fmt.Printf("[EmitApproval] token: %v, owner: %v, spender: %v, amount: %d\n", tokenID, owner, spender, amount)
+	logrus.WithFields(logrus.Fields{
+		"token":   tokenID,
+		"owner":   owner,
+		"spender": spender,
+		"amount":  amount,
+	}).Info("EmitApproval")
 }
 
 func (l *Ledger) EmitTransfer(tokenID TokenID, from, to Address, amount uint64) {
-	fmt.Printf("[EmitTransfer] token: %v, from: %v, to: %v, amount: %d\n", tokenID, from, to, amount)
+	logrus.WithFields(logrus.Fields{
+		"token":  tokenID,
+		"from":   from,
+		"to":     to,
+		"amount": amount,
+	}).Info("EmitTransfer")
 }
 
 func (l *Ledger) DeductGas(addr Address, amount uint64) {
-	fmt.Printf("[DeductGas] from: %v, gas: %d\n", addr, amount)
+	logrus.WithFields(logrus.Fields{
+		"from": addr,
+		"gas":  amount,
+	}).Info("DeductGas")
 }
 
 func (l *Ledger) WithinBlock(fn func() error) error {
