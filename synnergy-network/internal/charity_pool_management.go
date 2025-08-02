@@ -21,9 +21,9 @@ type CharityPoolManager struct {
 var (
 	// ErrAmountZero is returned when the supplied token amount is zero.
 	ErrAmountZero = errors.New("amount must be greater than zero")
-	// ErrInsufficientBalance is returned when an account lacks the funds
+	// errInsufficientBalance is returned when an account lacks the funds
 	// required to complete an operation.
-	ErrInsufficientBalance = errors.New("insufficient balance")
+	errInsufficientBalance = errors.New("insufficient balance")
 )
 
 // CharityBalances represents the current fund distribution between the
@@ -64,7 +64,7 @@ func (m *CharityPoolManager) WithdrawInternal(to core.Address, amount uint64) er
 	defer m.mu.Unlock()
 	bal := m.ledger.BalanceOf(core.InternalCharityAccount)
 	if amount > bal {
-		return ErrInsufficientBalance
+		return errInsufficientBalance
 	}
 	m.logger.Printf("internal withdrawal %d to %s", amount, to.Short())
 	return m.ledger.Transfer(core.InternalCharityAccount, to, amount)

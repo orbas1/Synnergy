@@ -23,7 +23,7 @@ func CastTokenVote(tv *TokenVote) error {
 
 	tok, ok := TokenLedger[tv.TokenID]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if tok.BalanceOf(tv.Voter) < tv.Amount {
 		return ErrUnauthorized

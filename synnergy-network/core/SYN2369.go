@@ -69,10 +69,10 @@ func (t *SYN2369Token) TransferItem(id uint64, from, to Address) error {
 	defer t.mu.Unlock()
 	it, ok := t.items[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if it.Owner != from {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if err := t.Transfer(from, to, 1); err != nil {
 		return err
@@ -87,7 +87,7 @@ func (t *SYN2369Token) UpdateAttributes(id uint64, attrs map[string]string) erro
 	defer t.mu.Unlock()
 	it, ok := t.items[id]
 	if !ok {
-		return ErrInvalidAsset
+		return errInvalidAsset
 	}
 	if it.Attributes == nil {
 		it.Attributes = make(map[string]string)
