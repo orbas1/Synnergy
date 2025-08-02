@@ -60,6 +60,7 @@ func newHC(interval time.Duration, p Pinger, c ViewChanger, peers []Address) *He
 		maxMisses: 3,
 		ping:      p,
 		changer:   c,
+		stop:      make(chan struct{}),
 	}
 	for _, peer := range peers {
 		hc.peers[peer] = &peerStat{}
