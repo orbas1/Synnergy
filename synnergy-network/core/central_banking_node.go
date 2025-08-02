@@ -12,7 +12,7 @@ import (
 // networking node and exposes hooks for monetary policy and settlement
 // operations used by central banks.
 type CentralBankingNode struct {
-	net    *Node
+	*BaseNode
 	ledger *Ledger
 	cons   *SynnergyConsensus
 
@@ -34,8 +34,9 @@ func NewCentralBankingNode(netCfg Config, ledCfg LedgerConfig, cons *SynnergyCon
 		_ = n.Close()
 		return nil, err
 	}
+	base := NewBaseNode(&NodeAdapter{n})
 	cb := &CentralBankingNode{
-		net:                n,
+		BaseNode:           base,
 		ledger:             led,
 		cons:               cons,
 		interestRate:       0,
@@ -46,21 +47,13 @@ func NewCentralBankingNode(netCfg Config, ledCfg LedgerConfig, cons *SynnergyCon
 
 // Start begins network services.
 func (cb *CentralBankingNode) Start() {
-	go cb.net.ListenAndServe()
+	go cb.ListenAndServe()
 }
 
 // Stop shuts down the networking layer.
 func (cb *CentralBankingNode) Stop() error {
-	return cb.net.Close()
+	return cb.Close()
 }
-
-// DialSeed proxies to the underlying node.
-func (cb *CentralBankingNode) DialSeed(peers []string) error             { return cb.net.DialSeed(peers) }
-func (cb *CentralBankingNode) Broadcast(t string, d []byte) error        { return cb.net.Broadcast(t, d) }
-func (cb *CentralBankingNode) Subscribe(t string) (<-chan []byte, error) { return cb.net.Subscribe(t) }
-func (cb *CentralBankingNode) ListenAndServe()                           { cb.net.ListenAndServe() }
-func (cb *CentralBankingNode) Close() error                              { return cb.net.Close() }
-func (cb *CentralBankingNode) Peers() []string                           { return cb.net.Peers() }
 
 // SetInterestRate updates the reference interest rate used by the monetary
 // policy tools.

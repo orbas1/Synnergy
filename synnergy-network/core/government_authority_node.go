@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+
 	Nodes "synnergy-network/core/Nodes"
 )
 
@@ -19,7 +20,7 @@ type GovernmentAuthorityNodeInterface interface {
 // GovernmentAuthorityNode provides integration between the networking layer,
 // ledger and compliance engine to fulfil government oversight requirements.
 type GovernmentAuthorityNode struct {
-	net    Nodes.NodeInterface
+	*BaseNode
 	ledger *Ledger
 	comp   *ComplianceEngine
 	ctx    context.Context
@@ -29,30 +30,12 @@ type GovernmentAuthorityNode struct {
 // NewGovernmentAuthorityNode wires the required components together.
 func NewGovernmentAuthorityNode(net Nodes.NodeInterface, led *Ledger, comp *ComplianceEngine) *GovernmentAuthorityNode {
 	ctx, cancel := context.WithCancel(context.Background())
-	return &GovernmentAuthorityNode{net: net, ledger: led, comp: comp, ctx: ctx, cancel: cancel}
+	base := NewBaseNode(net)
+	return &GovernmentAuthorityNode{BaseNode: base, ledger: led, comp: comp, ctx: ctx, cancel: cancel}
 }
-
-// ListenAndServe begins processing of network events.
-func (g *GovernmentAuthorityNode) ListenAndServe() { g.net.ListenAndServe() }
 
 // Close gracefully shuts down the node.
-func (g *GovernmentAuthorityNode) Close() error { g.cancel(); return g.net.Close() }
-
-// DialSeed proxies to the underlying network interface.
-func (g *GovernmentAuthorityNode) DialSeed(seeds []string) error { return g.net.DialSeed(seeds) }
-
-// Broadcast proxies to network.
-func (g *GovernmentAuthorityNode) Broadcast(topic string, data []byte) error {
-	return g.net.Broadcast(topic, data)
-}
-
-// Subscribe proxies to network.
-func (g *GovernmentAuthorityNode) Subscribe(topic string) (<-chan []byte, error) {
-	return g.net.Subscribe(topic)
-}
-
-// Peers returns the peer list.
-func (g *GovernmentAuthorityNode) Peers() []string { return g.net.Peers() }
+func (g *GovernmentAuthorityNode) Close() error { g.cancel(); return g.BaseNode.Close() }
 
 // CheckCompliance runs a compliance check on a transaction and halts it if risk detected.
 func (g *GovernmentAuthorityNode) CheckCompliance(tx *Transaction) error {

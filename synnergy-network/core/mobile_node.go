@@ -11,7 +11,7 @@ import (
 // MobileNode is a lightweight node designed for mobile devices. It wraps the
 // standard Node and maintains an optional transaction queue for offline usage.
 type MobileNode struct {
-	net   *Node
+	*BaseNode
 	led   *Ledger
 	queue []*Transaction
 	mu    sync.Mutex
@@ -26,39 +26,24 @@ type MobileConfig struct {
 
 // NewMobileNode creates a new MobileNode with the given configuration.
 func NewMobileNode(cfg *MobileConfig) (*MobileNode, error) {
-	net, err := NewNode(cfg.Network)
+	n, err := NewNode(cfg.Network)
 	if err != nil {
 		return nil, err
 	}
 	led, err := NewLedger(cfg.Ledger)
 	if err != nil {
-		_ = net.Close()
+		_ = n.Close()
 		return nil, err
 	}
-	return &MobileNode{net: net, led: led}, nil
+	base := NewBaseNode(&NodeAdapter{n})
+	return &MobileNode{BaseNode: base, led: led}, nil
 }
 
 // Start begins network operations.
-func (m *MobileNode) Start() { go m.net.ListenAndServe() }
+func (m *MobileNode) Start() { go m.ListenAndServe() }
 
 // Stop gracefully shuts down the node.
-func (m *MobileNode) Stop() error { return m.net.Close() }
-
-// DialSeed proxies to the underlying network node.
-func (m *MobileNode) DialSeed(peers []string) error { return m.net.DialSeed(peers) }
-
-// Broadcast sends a message on the network.
-func (m *MobileNode) Broadcast(topic string, data []byte) error {
-	return m.net.Broadcast(topic, data)
-}
-
-// Subscribe returns a channel of raw messages for the topic.
-func (m *MobileNode) Subscribe(topic string) (<-chan Message, error) {
-	return m.net.Subscribe(topic)
-}
-
-// Peers proxies the peer list from the network node.
-func (m *MobileNode) Peers() []*Peer { return m.net.Peers() }
+func (m *MobileNode) Stop() error { return m.Close() }
 
 // QueueTx stores the transaction until the device is online.
 func (m *MobileNode) QueueTx(tx *Transaction) {
