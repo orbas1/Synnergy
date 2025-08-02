@@ -18,9 +18,11 @@ import (
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/sha256"
+	"crypto/subtle"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"io"
@@ -360,6 +362,77 @@ func NewTLSConfig(certPath, keyPath string, requireClientCert bool) (*tls.Config
 		cfg.ClientCAs = pool
 		cfg.ClientAuth = tls.RequireAndVerifyClientCert
 	}
+	return cfg, nil
+}
+
+// CertFingerprint returns the SHA-256 fingerprint of a PEM encoded certificate.
+func CertFingerprint(certPath string) ([]byte, error) {
+	pemData, err := os.ReadFile(certPath)
+	if err != nil {
+		return nil, err
+	}
+	block, _ := pem.Decode(pemData)
+	if block == nil {
+		return nil, errors.New("failed to parse certificate PEM")
+	}
+	sum := sha256.Sum256(block.Bytes)
+	fp := make([]byte, len(sum))
+	copy(fp, sum[:])
+	return fp, nil
+}
+
+// NewZeroTrustTLSConfig constructs a TLS 1.3 config with certificate pinning and
+// optional mutual TLS.
+func NewZeroTrustTLSConfig(certPath, keyPath, caPath string, pinnedFingerprint []byte) (*tls.Config, error) {
+	certPEM, err := os.ReadFile(certPath)
+	if err != nil {
+		return nil, err
+	}
+	keyPEM, err := os.ReadFile(keyPath)
+	if err != nil {
+		return nil, err
+	}
+	cert, err := tls.X509KeyPair(certPEM, keyPEM)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg := &tls.Config{
+		MinVersion:             tls.VersionTLS13,
+		MaxVersion:             tls.VersionTLS13,
+		Certificates:           []tls.Certificate{cert},
+		CurvePreferences:       []tls.CurveID{tls.X25519, tls.CurveP256},
+		SessionTicketsDisabled: true,
+	}
+
+	if caPath != "" {
+		caPEM, err := os.ReadFile(caPath)
+		if err != nil {
+			return nil, err
+		}
+		pool := x509.NewCertPool()
+		if !pool.AppendCertsFromPEM(caPEM) {
+			return nil, errors.New("failed to load CA certificate")
+		}
+		cfg.ClientCAs = pool
+		cfg.ClientAuth = tls.RequireAndVerifyClientCert
+	}
+
+	if len(pinnedFingerprint) > 0 {
+		fp := make([]byte, len(pinnedFingerprint))
+		copy(fp, pinnedFingerprint)
+		cfg.VerifyPeerCertificate = func(rawCerts [][]byte, _ [][]*x509.Certificate) error {
+			if len(rawCerts) == 0 {
+				return errors.New("no peer certificate provided")
+			}
+			hash := sha256.Sum256(rawCerts[0])
+			if subtle.ConstantTimeCompare(hash[:], fp) != 1 {
+				return fmt.Errorf("unexpected peer certificate fingerprint")
+			}
+			return nil
+		}
+	}
+
 	return cfg, nil
 }
 

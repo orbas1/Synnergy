@@ -98,6 +98,16 @@ go test ./...
 
 Some tests expect running services or mock implementations. `go vet` and `go build` can be run in the same way to lint and compile the modules.
 
+## Security Scan
+
+Run static analysis with [gosec](https://github.com/securego/gosec) to detect common vulnerabilities:
+
+```bash
+./scripts/security_scan.sh
+```
+
+High severity findings must be addressed before merging changes.
+
 ## Contributing
 
 Development follows the staged workflow described in [`AGENTS.md`](AGENTS.md). Work through the stages sequentially and modify no more than three files per pull request. Run `go fmt`, `go vet`, `go build` and `go test` on the packages you touch. Mark progress in `AGENTS.md` so others know which files are complete.
