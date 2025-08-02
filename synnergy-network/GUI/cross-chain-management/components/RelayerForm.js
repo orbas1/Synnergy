@@ -1,5 +1,5 @@
 export function attachRelayerForm(container, { onAuthorize, onRevoke }) {
-    container.innerHTML = `
+  container.innerHTML = `
         <form id="relayerForm" class="row gy-2 gx-2 align-items-center">
             <div class="col-auto">
                 <input type="text" class="form-control" id="relayerAddr" placeholder="Relayer Address" required>
@@ -12,16 +12,16 @@ export function attachRelayerForm(container, { onAuthorize, onRevoke }) {
             </div>
         </form>`;
 
-    const form = container.querySelector('#relayerForm');
-    const addrInput = form.querySelector('#relayerAddr');
-    form.querySelector('#authBtn').addEventListener('click', async (e) => {
-        e.preventDefault();
-        await onAuthorize({ addr: addrInput.value });
-        addrInput.value = '';
-    });
-    form.querySelector('#revokeBtn').addEventListener('click', async (e) => {
-        e.preventDefault();
-        await onRevoke({ addr: addrInput.value });
-        addrInput.value = '';
-    });
+  const form = container.querySelector("#relayerForm");
+  const addrInput = form.querySelector("#relayerAddr");
+  form.querySelector("#authBtn").addEventListener("click", async (e) => {
+    e.preventDefault();
+    await onAuthorize({ addr: addrInput.value });
+    addrInput.value = "";
+  });
+  form.querySelector("#revokeBtn").addEventListener("click", async (e) => {
+    e.preventDefault();
+    await onRevoke({ addr: addrInput.value });
+    addrInput.value = "";
+  });
 }

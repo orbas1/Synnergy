@@ -1,4 +1,4 @@
-const service = require('../services/proposalService');
+const service = require("../services/proposalService");
 
 exports.list = async (req, res, next) => {
   try {
@@ -11,7 +11,7 @@ exports.list = async (req, res, next) => {
 exports.get = async (req, res, next) => {
   try {
     const proposal = await service.getProposal(req.params.id);
-    if (!proposal) return res.status(404).json({ message: 'Not found' });
+    if (!proposal) return res.status(404).json({ message: "Not found" });
     res.json(proposal);
   } catch (err) {
     next(err);
@@ -32,7 +32,7 @@ exports.vote = async (req, res, next) => {
     const { id } = req.params;
     const { approve } = req.body;
     const proposal = await service.castVote(id, approve);
-    if (!proposal) return res.status(404).json({ message: 'Not found' });
+    if (!proposal) return res.status(404).json({ message: "Not found" });
     res.json(proposal);
   } catch (err) {
     next(err);

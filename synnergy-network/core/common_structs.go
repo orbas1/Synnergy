@@ -9,6 +9,8 @@ package core
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"math/big"
 	"net"
@@ -131,10 +133,10 @@ type SynnergyConsensus struct {
 	logger *log.Logger // or *log.Logger—whichever you use
 
 	ledger *Ledger // ← pointer, not value
-	p2p    networkAdapter
-	crypto securityAdapter
-	pool   txPool
-	auth   authorityAdapter
+	p2p    interface{}
+	crypto interface{}
+	pool   interface{}
+	auth   interface{}
 
 	mu            sync.Mutex
 	nextSubHeight uint64
@@ -612,6 +614,10 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
+// TxType categorises transaction kinds. It mirrors the definition in
+// transactions.go but is repeated here to avoid build tag dependencies.
+type TxType uint8
+
 type Transaction struct {
 	// core fields
 	Type             TxType            `json:"type"`
@@ -634,6 +640,12 @@ type Transaction struct {
 	StateChanges     map[string][]byte `json:"state,omitempty"`
 	Contract         *Contract         `json:"contract,omitempty"`
 	TokenTransfers   []TokenTransfer   `json:"token_transfers,omitempty"`
+}
+
+// HashTx returns a simple SHA-256 hash of the transaction contents.
+func (tx *Transaction) HashTx() Hash {
+	b, _ := json.Marshal(tx)
+	return sha256.Sum256(b)
 }
 
 type TxInput struct {
@@ -815,6 +827,11 @@ type TxContext struct {
 	State       StateRW
 }
 
+// Stack is a minimal placeholder for the VM stack structure.
+type Stack struct {
+	data []interface{}
+}
+
 // Context is an alias used throughout the codebase for TxContext.
 type Context = TxContext
 
@@ -839,11 +856,6 @@ type Registry struct {
 	mu      sync.RWMutex
 	Entries map[string][]byte
 	tokens  map[TokenID]Token
-}
-
-type BalanceTable struct {
-	mu       sync.RWMutex
-	balances map[TokenID]map[Address]uint64
 }
 
 type TxPool struct {

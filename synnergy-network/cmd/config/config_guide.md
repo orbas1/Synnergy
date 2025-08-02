@@ -122,10 +122,11 @@ At start-up the ledger reads this file and creates the first block with the spec
 
 ## Creating a New Configuration
 
-1. Copy `default.yaml` to a new file name such as `staging.yaml`.
+1. Copy `default.yaml` to a new file name such as `staging.yaml`. An example `staging.yaml` is included in this repository for release candidate testing.
 2. Modify any fields required for your environment—commonly the `genesis_file` path and `bootstrap_peers`.
 3. Set `SYNN_ENV=staging` before running the `synnergy` binary.
 4. Optionally create or edit a `.env` file to supply secrets and service endpoints.
+5. Use `../scripts/staging_validate.sh` to spin up the staging network and run a sample token transfer.
 
 ## Conclusion
 

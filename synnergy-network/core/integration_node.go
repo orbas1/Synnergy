@@ -5,10 +5,13 @@ import Nodes "synnergy-network/core/Nodes"
 // IntegrationNode extends a network node with facilities to track external APIs
 // and blockchain bridges. The struct lives in the core package to avoid import
 // cycles with the Nodes subpackage.
+// IntegrationNode represents a network participant that can interface with
+// external APIs and other blockchains. JSON tags are provided for clarity when
+// serialising this structure.
 type IntegrationNode struct {
-	Nodes.NodeInterface
-	Ledger   *Ledger
-	Registry *IntegrationRegistry
+	Nodes.NodeInterface `json:"-"`
+	Ledger              *Ledger              `json:"ledger"`
+	Registry            *IntegrationRegistry `json:"registry"`
 }
 
 // NewIntegrationNode creates a new instance using the provided network node and

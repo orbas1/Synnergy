@@ -1,4 +1,4 @@
-const service = require('../services/marketplaceService');
+const service = require("../services/marketplaceService");
 
 exports.create = async (req, res) => {
   const { tokenId, price } = req.body;

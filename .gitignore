@@ -4,6 +4,9 @@ synnergy-network/bin
 *.exe
 *.out
 
+# Build matrix output
+dist/
+
 # Node modules
 node_modules/
 */node_modules/

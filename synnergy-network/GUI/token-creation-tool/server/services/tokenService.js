@@ -1,14 +1,28 @@
-import fs from 'fs';
-import path from 'path';
-import solc from 'solc';
-import { ethers } from 'ethers';
+import fs from "fs";
+import path from "path";
+import solc from "solc";
+import { ethers } from "ethers";
 
-const dbPath = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'tokens.json');
-const contractPath = path.join(path.dirname(new URL(import.meta.url).pathname), '..', '..', '..', 'cmd', 'smart_contracts', 'token_factory.sol');
+const dbPath = path.join(
+  path.dirname(new URL(import.meta.url).pathname),
+  "..",
+  "tokens.json",
+);
+const contractPath = path.join(
+  path.dirname(new URL(import.meta.url).pathname),
+  "..",
+  "..",
+  "..",
+  "cmd",
+  "smart_contracts",
+  "token_factory.sol",
+);
 
 export async function createToken(data) {
-  const tokens = fs.existsSync(dbPath) ? JSON.parse(fs.readFileSync(dbPath)) : [];
-  const tokenId = '0x' + Date.now().toString(16);
+  const tokens = fs.existsSync(dbPath)
+    ? JSON.parse(fs.readFileSync(dbPath))
+    : [];
+  const tokenId = "0x" + Date.now().toString(16);
   tokens.push({ id: tokenId, ...data });
   fs.writeFileSync(dbPath, JSON.stringify(tokens, null, 2));
   return tokenId;
@@ -19,10 +33,14 @@ export async function listTokens() {
 }
 
 export async function compileContract() {
-  const source = fs.readFileSync(contractPath, 'utf8');
-  const input = JSON.stringify({ language: 'Solidity', sources: { 'token_factory.sol': { content: source } }, settings: { outputSelection: { '*': { '*': ['abi', 'evm.bytecode'] } } } });
+  const source = fs.readFileSync(contractPath, "utf8");
+  const input = JSON.stringify({
+    language: "Solidity",
+    sources: { "token_factory.sol": { content: source } },
+    settings: { outputSelection: { "*": { "*": ["abi", "evm.bytecode"] } } },
+  });
   const output = JSON.parse(solc.compile(input));
-  const contract = output.contracts['token_factory.sol'].TokenFactory;
+  const contract = output.contracts["token_factory.sol"].TokenFactory;
   return { abi: contract.abi, bytecode: contract.evm.bytecode.object };
 }
 

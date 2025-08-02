@@ -9,8 +9,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// InsurancePolicy represents a blockchain based insurance policy.
-type InsurancePolicy struct {
+// TokenInsurancePolicy represents a blockchain based insurance policy.
+type TokenInsurancePolicy struct {
 	ID            string    `json:"id"`
 	Holder        Address   `json:"holder"`
 	Coverage      string    `json:"coverage"`
@@ -27,13 +27,13 @@ type InsurancePolicy struct {
 type InsuranceToken struct {
 	*BaseToken
 	mu       sync.RWMutex
-	policies map[string]InsurancePolicy
+	policies map[string]TokenInsurancePolicy
 }
 
 // NewInsuranceToken constructs an empty insurance token.
 func NewInsuranceToken(meta Metadata) *InsuranceToken {
 	bt := &BaseToken{id: deriveID(meta.Standard), meta: meta, balances: NewBalanceTable()}
-	return &InsuranceToken{BaseToken: bt, policies: make(map[string]InsurancePolicy)}
+	return &InsuranceToken{BaseToken: bt, policies: make(map[string]TokenInsurancePolicy)}
 }
 
 func (it *InsuranceToken) policyKey(id string) []byte {
@@ -48,7 +48,7 @@ func (it *InsuranceToken) IssuePolicy(holder Address, coverage string, premium, 
 		return "", fmt.Errorf("ledger not initialised")
 	}
 	pid := uuid.New().String()
-	pol := InsurancePolicy{ID: pid, Holder: holder, Coverage: coverage, Premium: premium, Payout: payout, Deductible: deductible, CoverageLimit: limit, StartDate: start, EndDate: end, Active: true}
+	pol := TokenInsurancePolicy{ID: pid, Holder: holder, Coverage: coverage, Premium: premium, Payout: payout, Deductible: deductible, CoverageLimit: limit, StartDate: start, EndDate: end, Active: true}
 	blob, _ := json.Marshal(pol)
 	if err := it.ledger.SetState(it.policyKey(pid), blob); err != nil {
 		return "", err
@@ -61,7 +61,7 @@ func (it *InsuranceToken) IssuePolicy(holder Address, coverage string, premium, 
 }
 
 // GetPolicy loads the policy by ID.
-func (it *InsuranceToken) GetPolicy(id string) (InsurancePolicy, bool) {
+func (it *InsuranceToken) GetPolicy(id string) (TokenInsurancePolicy, bool) {
 	it.mu.RLock()
 	defer it.mu.RUnlock()
 	pol, ok := it.policies[id]
@@ -74,11 +74,11 @@ func (it *InsuranceToken) GetPolicy(id string) (InsurancePolicy, bool) {
 			return pol, true
 		}
 	}
-	return InsurancePolicy{}, false
+	return TokenInsurancePolicy{}, false
 }
 
 // UpdatePolicy writes updated policy data to the ledger.
-func (it *InsuranceToken) UpdatePolicy(pol InsurancePolicy) error {
+func (it *InsuranceToken) UpdatePolicy(pol TokenInsurancePolicy) error {
 	it.mu.Lock()
 	defer it.mu.Unlock()
 	if it.ledger == nil {

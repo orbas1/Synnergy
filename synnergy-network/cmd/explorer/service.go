@@ -8,6 +8,16 @@ import (
 	core "synnergy-network/core"
 )
 
+// ExplorerService defines the API exposed to the HTTP layer.
+// It allows the server to be tested with mock implementations.
+type ExplorerService interface {
+	LatestBlocks(count int) []map[string]interface{}
+	BlockByHeight(h uint64) (*core.Block, error)
+	TxByID(hexID string) (*core.Transaction, error)
+	Balance(addrHex string) (uint64, error)
+	Info() map[string]interface{}
+}
+
 // LedgerService wraps common ledger queries used by the Explorer.
 type LedgerService struct {
 	ledger *core.Ledger

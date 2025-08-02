@@ -17,6 +17,7 @@ package core
 import (
 	"crypto/ed25519"
 	"crypto/hmac"
+	crand "crypto/rand"
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/binary"
@@ -26,7 +27,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	bip39 "github.com/tyler-smith/go-bip39"
 	"golang.org/x/crypto/ripemd160"
-	"math/rand"
 	"time"
 )
 
@@ -239,7 +239,7 @@ func RandomMnemonicEntropy(bits int) ([]byte, error) {
 		return nil, errors.New("entropy bits must be multiple of 32")
 	}
 	b := make([]byte, bits/8)
-	if _, err := rand.Read(b); err != nil {
+	if _, err := crand.Read(b); err != nil {
 		return nil, err
 	}
 	return b, nil
