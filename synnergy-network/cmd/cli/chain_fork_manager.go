@@ -25,7 +25,7 @@ func forkInit(cmd *cobra.Command, _ []string) error {
 		}
 		forkLedger, forkErr = core.OpenLedger(path)
 		if forkErr == nil {
-			core.InitForkManager(forkLedger)
+			forkErr = core.InitForkManager(forkLedger)
 		}
 	})
 	return forkErr
@@ -41,6 +41,10 @@ func forkList(_ *cobra.Command, _ []string) error {
 
 func forkResolve(_ *cobra.Command, _ []string) error {
 	return core.ResolveForks()
+}
+
+func forkRecover(_ *cobra.Command, _ []string) error {
+	return core.RecoverLongestFork()
 }
 
 var forkCmd = &cobra.Command{
@@ -61,8 +65,14 @@ var forkResolveCmd = &cobra.Command{
 	RunE:  forkResolve,
 }
 
+var forkRecoverCmd = &cobra.Command{
+	Use:   "recover",
+	Short: "Rebuild the chain to the longest known fork",
+	RunE:  forkRecover,
+}
+
 func init() {
-	forkCmd.AddCommand(forkListCmd, forkResolveCmd)
+	forkCmd.AddCommand(forkListCmd, forkResolveCmd, forkRecoverCmd)
 }
 
 var ForkCmd = forkCmd
