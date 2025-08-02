@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/binary"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"sync"
 )
@@ -35,13 +36,15 @@ func (rm *ResourceAllocator) SetLimit(addr Address, limit uint64) error {
 	return rm.ledger.SetState(resourceKey(addr), buf[:])
 }
 
-// GetLimit returns the gas limit for an address. If none exists a default is returned.
-func (rm *ResourceAllocator) GetLimit(addr Address) (uint64, error) {
-	rm.mu.RLock()
-	defer rm.mu.RUnlock()
+// fetchLimit retrieves the gas limit for an address without acquiring locks.
+// A missing entry returns the default limit; other errors are propagated.
+func (rm *ResourceAllocator) fetchLimit(addr Address) (uint64, error) {
 	val, err := rm.ledger.GetState(resourceKey(addr))
 	if err != nil {
-		return defaultGasLimit, nil
+		if errors.Is(err, ErrNotFound) {
+			return defaultGasLimit, nil
+		}
+		return 0, err
 	}
 	if len(val) != 8 {
 		return 0, fmt.Errorf("corrupt gas limit for %s", hex.EncodeToString(addr[:]))
@@ -49,15 +52,20 @@ func (rm *ResourceAllocator) GetLimit(addr Address) (uint64, error) {
 	return binary.BigEndian.Uint64(val), nil
 }
 
+// GetLimit returns the gas limit for an address. If none exists a default is returned.
+func (rm *ResourceAllocator) GetLimit(addr Address) (uint64, error) {
+	rm.mu.RLock()
+	defer rm.mu.RUnlock()
+	return rm.fetchLimit(addr)
+}
+
 // Consume deducts gas from the limit of an address.
 func (rm *ResourceAllocator) Consume(addr Address, amt uint64) error {
 	rm.mu.Lock()
 	defer rm.mu.Unlock()
-	key := resourceKey(addr)
-	val, err := rm.ledger.GetState(key)
-	limit := defaultGasLimit
-	if err == nil && len(val) == 8 {
-		limit = binary.BigEndian.Uint64(val)
+	limit, err := rm.fetchLimit(addr)
+	if err != nil {
+		return err
 	}
 	if limit < amt {
 		return fmt.Errorf("insufficient limit for %s", hex.EncodeToString(addr[:]))
@@ -65,21 +73,24 @@ func (rm *ResourceAllocator) Consume(addr Address, amt uint64) error {
 	limit -= amt
 	var buf [8]byte
 	binary.BigEndian.PutUint64(buf[:], limit)
-	return rm.ledger.SetState(key, buf[:])
+	return rm.ledger.SetState(resourceKey(addr), buf[:])
 }
 
 // TransferLimit moves a portion of one address limit to another address.
 func (rm *ResourceAllocator) TransferLimit(from, to Address, amt uint64) error {
 	rm.mu.Lock()
 	defer rm.mu.Unlock()
-	fromLimit, err := rm.GetLimit(from)
+	fromLimit, err := rm.fetchLimit(from)
 	if err != nil {
 		return err
 	}
 	if fromLimit < amt {
 		return fmt.Errorf("insufficient limit for %s", hex.EncodeToString(from[:]))
 	}
-	toLimit, _ := rm.GetLimit(to)
+	toLimit, err := rm.fetchLimit(to)
+	if err != nil {
+		return err
+	}
 	fromLimit -= amt
 	toLimit += amt
 	var buf [8]byte
@@ -112,4 +123,11 @@ func (rm *ResourceAllocator) ListLimits() (map[Address]uint64, error) {
 		}
 	}
 	return out, it.Error()
+}
+
+// DeleteLimit removes the explicit gas limit for an address so the default applies.
+func (rm *ResourceAllocator) DeleteLimit(addr Address) error {
+	rm.mu.Lock()
+	defer rm.mu.Unlock()
+	return rm.ledger.DelState(resourceKey(addr))
 }
