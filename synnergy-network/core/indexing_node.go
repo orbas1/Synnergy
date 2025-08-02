@@ -8,7 +8,7 @@ import (
 
 // IndexingNode provides fast query capabilities by indexing ledger data.
 type IndexingNode struct {
-	net    *Node
+	*BaseNode
 	ledger *Ledger
 
 	mu      sync.RWMutex
@@ -25,12 +25,13 @@ type IndexingNodeConfig struct {
 // NewIndexingNode constructs a new node with optional initial indexing of the
 // provided ledger.
 func NewIndexingNode(cfg IndexingNodeConfig, led *Ledger) (*IndexingNode, error) {
-	net, err := NewNode(cfg.Network)
+	n, err := NewNode(cfg.Network)
 	if err != nil {
 		return nil, err
 	}
+	base := NewBaseNode(&NodeAdapter{n})
 	idx := &IndexingNode{
-		net:        net,
+		BaseNode:   base,
 		ledger:     led,
 		txIndex:    make(map[Address][]*Transaction),
 		stateIndex: make(map[Address]map[string][]byte),
@@ -95,17 +96,6 @@ func (i *IndexingNode) QueryState(addr Address, key string) ([]byte, bool) {
 	val, ok := m[key]
 	return val, ok
 }
-
-// ---- Network integration ----
-
-func (i *IndexingNode) DialSeed(peers []string) error { return i.net.DialSeed(peers) }
-func (i *IndexingNode) Broadcast(topic string, data []byte) error {
-	return i.net.Broadcast(topic, data)
-}
-func (i *IndexingNode) Subscribe(topic string) (<-chan []byte, error) { return i.net.Subscribe(topic) }
-func (i *IndexingNode) ListenAndServe()                               { i.net.ListenAndServe() }
-func (i *IndexingNode) Close() error                                  { return i.net.Close() }
-func (i *IndexingNode) Peers() []string                               { return i.net.Peers() }
 
 // Ensure IndexingNode implements the shared interface.
 var _ Nodes.NodeInterface = (*IndexingNode)(nil)

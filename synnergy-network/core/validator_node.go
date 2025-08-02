@@ -11,7 +11,7 @@ import (
 // ValidatorNode bundles networking, ledger access and consensus participation.
 // It exposes helper methods used by opcode handlers and CLI tooling.
 type ValidatorNode struct {
-	net  *Node
+	*BaseNode
 	led  *Ledger
 	cons *SynnergyConsensus
 
@@ -57,8 +57,9 @@ func NewValidatorNode(cfg ValidatorNodeConfig) (*ValidatorNode, error) {
 		return nil, err
 	}
 
+	base := NewBaseNode(&NodeAdapter{n})
 	vn := &ValidatorNode{
-		net:       n,
+		BaseNode:  base,
 		led:       led,
 		cons:      cons,
 		mgr:       mgr,
@@ -76,7 +77,7 @@ func NewValidatorNode(cfg ValidatorNodeConfig) (*ValidatorNode, error) {
 func (vn *ValidatorNode) Start() {
 	vn.mu.Lock()
 	defer vn.mu.Unlock()
-	go vn.net.ListenAndServe()
+	go vn.ListenAndServe()
 	vn.cons.Start(vn.ctx)
 }
 
@@ -85,7 +86,7 @@ func (vn *ValidatorNode) Stop() error {
 	vn.mu.Lock()
 	defer vn.mu.Unlock()
 	vn.cancel()
-	return vn.net.Close()
+	return vn.Close()
 }
 
 // EnablePoH toggles the Proof of History component.

@@ -5,13 +5,12 @@ import (
 	"fmt"
 
 	"github.com/wasmerio/wasmer-go/wasmer"
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // SuperNode provides enhanced network capabilities combining networking,
 // ledger services and contract execution.
 type SuperNode struct {
-	net    *Node
+	*BaseNode
 	ledger *Ledger
 	ctx    context.Context
 	cancel context.CancelFunc
@@ -31,49 +30,14 @@ func NewSuperNode(netCfg Config, ledCfg LedgerConfig) (*SuperNode, error) {
 		_ = n.Close()
 		return nil, err
 	}
-	return &SuperNode{net: n, ledger: led, ctx: ctx, cancel: cancel}, nil
+	base := NewBaseNode(&NodeAdapter{n})
+	return &SuperNode{BaseNode: base, ledger: led, ctx: ctx, cancel: cancel}, nil
 }
-
-// DialSeed proxies to the underlying network node.
-func (s *SuperNode) DialSeed(peers []string) error { return s.net.DialSeed(peers) }
-
-// Broadcast proxies to the network node.
-func (s *SuperNode) Broadcast(topic string, data []byte) error {
-	return s.net.Broadcast(topic, data)
-}
-
-// Subscribe adapts message subscriptions to raw byte channels.
-func (s *SuperNode) Subscribe(topic string) (<-chan []byte, error) {
-	ch, err := s.net.Subscribe(topic)
-	if err != nil {
-		return nil, err
-	}
-	out := make(chan []byte)
-	go func() {
-		for m := range ch {
-			out <- m.Data
-		}
-	}()
-	return out, nil
-}
-
-// ListenAndServe starts serving network traffic.
-func (s *SuperNode) ListenAndServe() { s.net.ListenAndServe() }
 
 // Close shuts down the node and ledger.
 func (s *SuperNode) Close() error {
 	s.cancel()
-	return s.net.Close()
-}
-
-// Peers returns the current peer list.
-func (s *SuperNode) Peers() []string {
-	ps := s.net.Peers()
-	out := make([]string, len(ps))
-	for i, p := range ps {
-		out[i] = string(p.ID)
-	}
-	return out
+	return s.BaseNode.Close()
 }
 
 // ExecuteContract runs bytecode using the ledger's in-memory state.
@@ -102,6 +66,3 @@ func (s *SuperNode) RetrieveData(key string) ([]byte, error) {
 	}
 	return val, nil
 }
-
-// Ensure SuperNode implements the interface.
-var _ Nodes.SuperNodeInterface = (*SuperNode)(nil)

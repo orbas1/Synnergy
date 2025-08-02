@@ -3,7 +3,6 @@ package core
 import (
 	"errors"
 	"sync"
-	Nodes "synnergy-network/core/Nodes"
 )
 
 // MasterNode provides enhanced transaction processing, privacy services and
@@ -92,6 +91,3 @@ func (m *MasterNode) VoteProposal(id uint64, approve bool) error {
 	m.gov.Vote(id, m.address, approve)
 	return nil
 }
-
-// Ensure MasterNode implements the interface.
-var _ Nodes.MasterNodeInterface = (*MasterNode)(nil)

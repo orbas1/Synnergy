@@ -27,7 +27,7 @@ type envTrigger struct {
 // ledger. It polls registered sensors and triggers actions based on the
 // configured conditions.
 type EnvironmentalMonitoringNode struct {
-	node   *Node
+	*BaseNode
 	ledger *Ledger
 
 	pollInterval time.Duration
@@ -47,8 +47,9 @@ func NewEnvironmentalMonitoringNode(netCfg Config, led *Ledger) (*EnvironmentalM
 		return nil, err
 	}
 	ctx, cancel := context.WithCancel(context.Background())
+	base := NewBaseNode(&NodeAdapter{n})
 	return &EnvironmentalMonitoringNode{
-		node:         n,
+		BaseNode:     base,
 		ledger:       led,
 		pollInterval: 15 * time.Second,
 		triggers:     make(map[string][]envTrigger),
@@ -84,14 +85,14 @@ func (e *EnvironmentalMonitoringNode) AddTrigger(id string, cond EnvCondition, a
 
 // Start begins polling sensors and serving the underlying network node.
 func (e *EnvironmentalMonitoringNode) Start() {
-	go e.node.ListenAndServe()
+	go e.ListenAndServe()
 	go e.loop()
 }
 
 // Stop terminates polling and closes the network node.
 func (e *EnvironmentalMonitoringNode) Stop() error {
 	e.cancel()
-	return e.node.Close()
+	return e.Close()
 }
 
 // internal polling loop
@@ -129,35 +130,6 @@ func (e *EnvironmentalMonitoringNode) handle(id string, data []byte) {
 			_ = t.act(e, e.ledger, data)
 		}
 	}
-}
-
-// ---- NodeInterface passthroughs ----
-func (e *EnvironmentalMonitoringNode) DialSeed(peers []string) error { return e.node.DialSeed(peers) }
-func (e *EnvironmentalMonitoringNode) Broadcast(topic string, data []byte) error {
-	return e.node.Broadcast(topic, data)
-}
-func (e *EnvironmentalMonitoringNode) Subscribe(topic string) (<-chan []byte, error) {
-	ch, err := e.node.Subscribe(topic)
-	if err != nil {
-		return nil, err
-	}
-	out := make(chan []byte)
-	go func() {
-		for msg := range ch {
-			out <- msg.Data
-		}
-	}()
-	return out, nil
-}
-func (e *EnvironmentalMonitoringNode) ListenAndServe() { e.node.ListenAndServe() }
-func (e *EnvironmentalMonitoringNode) Close() error    { e.cancel(); return e.node.Close() }
-func (e *EnvironmentalMonitoringNode) Peers() []string {
-	peers := e.node.Peers()
-	out := make([]string, len(peers))
-	for i, p := range peers {
-		out[i] = string(p.ID)
-	}
-	return out
 }
 
 // Ensure compliance with the generic node interface.
