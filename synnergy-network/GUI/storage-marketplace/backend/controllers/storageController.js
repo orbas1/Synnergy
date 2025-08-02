@@ -1,4 +1,4 @@
-const service = require('../services/storageService');
+const service = require("../services/storageService");
 
 exports.pin = async (req, res, next) => {
   try {
@@ -21,7 +21,7 @@ exports.listPins = async (req, res, next) => {
 exports.retrieve = async (req, res, next) => {
   try {
     const file = await service.retrieve(req.params.cid);
-    if (!file) return res.status(404).json({ error: 'Not found' });
+    if (!file) return res.status(404).json({ error: "Not found" });
     res.json(file);
   } catch (err) {
     next(err);

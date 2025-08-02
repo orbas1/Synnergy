@@ -3,14 +3,14 @@
  * interact with the DAOExplorer Solidity contract using ethers.js. Otherwise it
  * falls back to an in-memory store for demonstration purposes.
  */
-const config = require('../config/config');
+const config = require("../config/config");
 let contract;
 let proposals = new Map();
 let idCounter = 1;
 
 if (config.contractAddress) {
   // Lazy load contractService only when needed to keep environment setup simple
-  contract = require('./contractService');
+  contract = require("./contractService");
 }
 
 async function listProposals() {
@@ -73,5 +73,5 @@ module.exports = {
   submitProposal,
   castVote,
   execute,
-  balance
+  balance,
 };

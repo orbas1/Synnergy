@@ -26,6 +26,5 @@ func Bytecodes() map[string]string {
 		"PrivateKey":          opPrivateKey.Hex(),
 		"NewAddress":          opNewAddress.Hex(),
 		"SignTx":              opSignTx.Hex(),
-
 	}
 }

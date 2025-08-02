@@ -1,7 +1,7 @@
-import { renderPools } from './components/poolTable.js';
+import { renderPools } from "./components/poolTable.js";
 
 function init() {
-    renderPools();
+  renderPools();
 }
 
 window.onload = init;
