@@ -2,9 +2,6 @@ package Tokens
 
 import "time"
 
-// Address defines a 20 byte account address independent of core dependencies.
-type Address [20]byte
-
 // CarbonCreditMetadata captures details about a carbon credit.
 type CarbonCreditMetadata struct {
 	CreditID  string
