@@ -1,0 +1,15 @@
+{
+  "title": "Synnergy GUI Overview",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Page Load Time",
+      "targets": [{ "expr": "synnergy_gui_load_seconds" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Active Users",
+      "targets": [{ "expr": "synnergy_gui_active_users" }]
+    }
+  ]
+}

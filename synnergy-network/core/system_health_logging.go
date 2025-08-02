@@ -1,12 +1,17 @@
 package core
 
 import (
+	"context"
 	"encoding/hex"
+	"errors"
+	"net/http"
 	"os"
 	"runtime"
 	"sync"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 )
 
@@ -32,6 +37,15 @@ type HealthLogger struct {
 	log  *logrus.Logger
 	file *os.File
 	mu   sync.Mutex
+
+	registry         *prometheus.Registry
+	heightGauge      prometheus.Gauge
+	pendingTxGauge   prometheus.Gauge
+	peerCountGauge   prometheus.Gauge
+	totalSupplyGauge prometheus.Gauge
+	memAllocGauge    prometheus.Gauge
+	goroutinesGauge  prometheus.Gauge
+	errorCounter     prometheus.Counter
 }
 
 // NewHealthLogger configures a HealthLogger writing JSON logs to the given path.
@@ -43,8 +57,50 @@ func NewHealthLogger(l *Ledger, n *Node, c *Coin, tp *TxPool, path string) (*Hea
 	lg := logrus.New()
 	lg.SetFormatter(&logrus.JSONFormatter{})
 	lg.SetOutput(f)
+	reg := prometheus.NewRegistry()
 
-	return &HealthLogger{ledger: l, network: n, coin: c, txpool: tp, log: lg, file: f}, nil
+	h := &HealthLogger{ledger: l, network: n, coin: c, txpool: tp, log: lg, file: f, registry: reg}
+
+	h.heightGauge = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "synnergy_block_height",
+		Help: "Current block height of the node",
+	})
+	h.pendingTxGauge = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "synnergy_pending_transactions",
+		Help: "Number of pending transactions",
+	})
+	h.peerCountGauge = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "synnergy_peer_count",
+		Help: "Number of connected peers",
+	})
+	h.totalSupplyGauge = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "synnergy_total_supply",
+		Help: "Total supply of the native coin",
+	})
+	h.memAllocGauge = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "synnergy_mem_alloc_bytes",
+		Help: "Current memory allocation in bytes",
+	})
+	h.goroutinesGauge = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "synnergy_goroutines",
+		Help: "Number of running goroutines",
+	})
+	h.errorCounter = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "synnergy_log_errors_total",
+		Help: "Total number of error events logged",
+	})
+
+	reg.MustRegister(
+		h.heightGauge,
+		h.pendingTxGauge,
+		h.peerCountGauge,
+		h.totalSupplyGauge,
+		h.memAllocGauge,
+		h.goroutinesGauge,
+		h.errorCounter,
+	)
+
+	return h, nil
 }
 
 // Close releases the underlying log file.
@@ -73,6 +129,9 @@ func (h *HealthLogger) Rotate(path string) error {
 // LogEvent records an arbitrary message with the specified log level.
 func (h *HealthLogger) LogEvent(level logrus.Level, msg string) {
 	h.mu.Lock()
+	if level >= logrus.ErrorLevel {
+		h.errorCounter.Inc()
+	}
 	h.log.Log(level, msg)
 	h.mu.Unlock()
 }
@@ -101,4 +160,49 @@ func (h *HealthLogger) MetricsSnapshot() Metrics {
 		m.TotalSupply = h.coin.TotalSupply()
 	}
 	return m
+}
+
+// RecordMetrics captures the current snapshot and updates Prometheus gauges.
+func (h *HealthLogger) RecordMetrics() {
+	m := h.MetricsSnapshot()
+	h.heightGauge.Set(float64(m.Height))
+	h.pendingTxGauge.Set(float64(m.PendingTx))
+	h.peerCountGauge.Set(float64(m.PeerCount))
+	h.totalSupplyGauge.Set(float64(m.TotalSupply))
+	h.memAllocGauge.Set(float64(m.MemAlloc))
+	h.goroutinesGauge.Set(float64(m.NumGoroutines))
+	h.LogEvent(logrus.InfoLevel, "metrics recorded")
+}
+
+// RunMetricsCollector periodically records metrics until the context is canceled.
+func (h *HealthLogger) RunMetricsCollector(ctx context.Context, interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			h.RecordMetrics()
+		case <-ctx.Done():
+			return
+		}
+	}
+}
+
+// StartMetricsServer exposes a Prometheus metrics endpoint on the given address.
+// It returns the underlying http.Server so callers may manage its lifecycle.
+func (h *HealthLogger) StartMetricsServer(addr string) (*http.Server, error) {
+	mux := http.NewServeMux()
+	mux.Handle("/metrics", promhttp.HandlerFor(h.registry, promhttp.HandlerOpts{}))
+	srv := &http.Server{Addr: addr, Handler: mux}
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			h.LogEvent(logrus.ErrorLevel, err.Error())
+		}
+	}()
+	return srv, nil
+}
+
+// ShutdownMetricsServer gracefully stops the metrics HTTP server.
+func (h *HealthLogger) ShutdownMetricsServer(ctx context.Context, srv *http.Server) error {
+	return srv.Shutdown(ctx)
 }

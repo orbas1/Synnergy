@@ -1,0 +1,15 @@
+{
+  "title": "Synnergy CLI Overview",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Command Latency",
+      "targets": [{ "expr": "synnergy_cli_command_latency_seconds" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Commands Executed",
+      "targets": [{ "expr": "synnergy_cli_commands_total" }]
+    }
+  ]
+}
