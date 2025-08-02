@@ -207,16 +207,26 @@ func init() {
 	tokTransferCmd.Flags().String("from", "", "source address")
 	tokTransferCmd.Flags().String("to", "", "destination address")
 	tokTransferCmd.Flags().Uint64("amt", 0, "amount")
+	tokTransferCmd.MarkFlagRequired("from")
+	tokTransferCmd.MarkFlagRequired("to")
+	tokTransferCmd.MarkFlagRequired("amt")
 
 	tokMintCmd.Flags().String("to", "", "recipient address")
 	tokMintCmd.Flags().Uint64("amt", 0, "amount")
+	tokMintCmd.MarkFlagRequired("to")
+	tokMintCmd.MarkFlagRequired("amt")
 
 	tokBurnCmd.Flags().String("from", "", "address to burn from")
 	tokBurnCmd.Flags().Uint64("amt", 0, "amount")
+	tokBurnCmd.MarkFlagRequired("from")
+	tokBurnCmd.MarkFlagRequired("amt")
 
 	tokApproveCmd.Flags().String("owner", "", "owner address")
 	tokApproveCmd.Flags().String("spender", "", "spender address")
 	tokApproveCmd.Flags().Uint64("amt", 0, "amount")
+	tokApproveCmd.MarkFlagRequired("owner")
+	tokApproveCmd.MarkFlagRequired("spender")
+	tokApproveCmd.MarkFlagRequired("amt")
 
 	tokensCmd.AddCommand(tokListCmd, tokInfoCmd, tokBalanceCmd, tokTransferCmd, tokMintCmd, tokBurnCmd, tokApproveCmd, tokAllowanceCmd)
 }
