@@ -1,8 +1,10 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
+	"fmt"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type ServerConfig struct {
@@ -11,11 +13,14 @@ type ServerConfig struct {
 
 var AppConfig ServerConfig
 
-func Load() {
-	_ = godotenv.Load("walletserver/.env")
+func Load() error {
+	if err := godotenv.Load("walletserver/.env"); err != nil {
+		return fmt.Errorf("loading env: %w", err)
+	}
 	port := os.Getenv("WALLET_PORT")
 	if port == "" {
 		port = "8081"
 	}
 	AppConfig = ServerConfig{Port: port}
+	return nil
 }
