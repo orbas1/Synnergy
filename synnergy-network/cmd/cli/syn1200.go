@@ -34,7 +34,9 @@ func syn1200HandleAddBridge(cmd *cobra.Command, args []string) error {
 	var addr core.Address
 	copy(addr[:], addrBytes)
 	tok.AddBridge(chain, addr)
-	fmt.Fprintln(cmd.OutOrStdout(), "bridge added")
+	if _, err := fmt.Fprintln(cmd.OutOrStdout(), "bridge added"); err != nil {
+		return fmt.Errorf("writing confirmation: %w", err)
+	}
 	return nil
 }
 
@@ -43,11 +45,26 @@ func syn1200HandleAtomicSwap(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	id, _ := cmd.Flags().GetString("id")
-	chain, _ := cmd.Flags().GetString("chain")
-	fromStr, _ := cmd.Flags().GetString("from")
-	toStr, _ := cmd.Flags().GetString("to")
-	amt, _ := cmd.Flags().GetUint64("amt")
+	id, err := cmd.Flags().GetString("id")
+	if err != nil {
+		return fmt.Errorf("id flag: %w", err)
+	}
+	chain, err := cmd.Flags().GetString("chain")
+	if err != nil {
+		return fmt.Errorf("chain flag: %w", err)
+	}
+	fromStr, err := cmd.Flags().GetString("from")
+	if err != nil {
+		return fmt.Errorf("from flag: %w", err)
+	}
+	toStr, err := cmd.Flags().GetString("to")
+	if err != nil {
+		return fmt.Errorf("to flag: %w", err)
+	}
+	amt, err := cmd.Flags().GetUint64("amt")
+	if err != nil {
+		return fmt.Errorf("amt flag: %w", err)
+	}
 	from, err := tokParseAddr(fromStr)
 	if err != nil {
 		return err
@@ -59,7 +76,9 @@ func syn1200HandleAtomicSwap(cmd *cobra.Command, args []string) error {
 	if err := tok.AtomicSwap(id, chain, from, to, amt); err != nil {
 		return err
 	}
-	fmt.Fprintln(cmd.OutOrStdout(), "swap initiated")
+	if _, err := fmt.Fprintln(cmd.OutOrStdout(), "swap initiated"); err != nil {
+		return fmt.Errorf("writing confirmation: %w", err)
+	}
 	return nil
 }
 
@@ -72,7 +91,9 @@ func syn1200HandleSwapStatus(cmd *cobra.Command, args []string) error {
 	if !ok {
 		return fmt.Errorf("swap not found")
 	}
-	fmt.Fprintf(cmd.OutOrStdout(), "%+v\n", *rec)
+	if _, err := fmt.Fprintf(cmd.OutOrStdout(), "%+v\n", *rec); err != nil {
+		return fmt.Errorf("writing status: %w", err)
+	}
 	return nil
 }
 
