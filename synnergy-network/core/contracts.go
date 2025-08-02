@@ -32,12 +32,12 @@ import (
 
 var (
 	contractOnce sync.Once
-	reg          *ContractRegistry
+	contractReg  *ContractRegistry
 )
 
 func InitContracts(led *Ledger, vmm VM) {
 	contractOnce.Do(func() {
-		reg = &ContractRegistry{
+		contractReg = &ContractRegistry{
 			ledger: led,
 			vm:     vmm,
 			byAddr: make(map[Address]*SmartContract),
@@ -46,7 +46,7 @@ func InitContracts(led *Ledger, vmm VM) {
 }
 
 // GetContractRegistry exposes the singleton instance for other packages.
-func GetContractRegistry() *ContractRegistry { return reg }
+func GetContractRegistry() *ContractRegistry { return contractReg }
 
 //---------------------------------------------------------------------
 // Compile & Deploy pipeline

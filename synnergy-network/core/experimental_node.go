@@ -94,15 +94,6 @@ func (e *ExperimentalNode) TestContract(bytecode []byte) error {
 	return nil
 }
 
-// DecodeTransaction decodes JSON encoded transaction data.
-func DecodeTransaction(data []byte) (*Transaction, error) {
-	var tx Transaction
-	if err := json.Unmarshal(data, &tx); err != nil {
-		return nil, err
-	}
-	return &tx, nil
-}
-
 // RandomAddress returns a pseudo-random address useful for testing.
 func RandomAddress() Address {
 	var a Address

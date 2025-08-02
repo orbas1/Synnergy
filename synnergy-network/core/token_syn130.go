@@ -11,8 +11,8 @@ var (
 	ErrSyn130AssetNotFound = errors.New("asset not found")
 )
 
-// SaleRecord tracks sale price history for tangible assets
-type SaleRecord struct {
+// AssetSaleRecord tracks sale price history for tangible assets
+type AssetSaleRecord struct {
 	Price     uint64
 	Buyer     Address
 	Seller    Address
@@ -43,7 +43,7 @@ type AssetInfo struct {
 	Owner       Address
 	Value       uint64
 	Metadata    string
-	SaleHistory []SaleRecord
+	SaleHistory []AssetSaleRecord
 	Lease       *LeaseRecord
 }
 
@@ -103,7 +103,7 @@ func (t *SYN130Token) RecordSale(id string, buyer Address, price uint64) error {
 	if !ok {
 		return ErrSyn130AssetNotFound
 	}
-	sale := SaleRecord{Price: price, Buyer: buyer, Seller: a.Owner, Timestamp: time.Now().UTC()}
+	sale := AssetSaleRecord{Price: price, Buyer: buyer, Seller: a.Owner, Timestamp: time.Now().UTC()}
 	a.SaleHistory = append(a.SaleHistory, sale)
 	a.Owner = buyer
 	return nil

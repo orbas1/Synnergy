@@ -24,6 +24,26 @@ import (
 	"google.golang.org/grpc"
 )
 
+// Placeholder interfaces allowing SynnergyConsensus to compile without optional
+// consensus engine build tags.
+type networkAdapter interface{}
+type securityAdapter interface{}
+type txPool interface{}
+type authorityAdapter interface{}
+
+// TxType classifies transaction operations; lightweight placeholder.
+type TxType uint8
+
+// Stack represents a minimal stack for VM operations.
+type Stack struct {
+	data []interface{}
+}
+
+// Push adds an element to the top of the stack.
+func (s *Stack) Push(v *big.Int) {
+	s.data = append(s.data, v)
+}
+
 //---------------------------------------------------------------------
 // Coin (minting cap manager)
 //---------------------------------------------------------------------
@@ -839,11 +859,6 @@ type Registry struct {
 	mu      sync.RWMutex
 	Entries map[string][]byte
 	tokens  map[TokenID]Token
-}
-
-type BalanceTable struct {
-	mu       sync.RWMutex
-	balances map[TokenID]map[Address]uint64
 }
 
 type TxPool struct {

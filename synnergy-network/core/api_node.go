@@ -8,6 +8,9 @@ import (
 	"sync"
 )
 
+// IDTokenID identifies the default identity token used by the API node.
+const IDTokenID TokenID = 0
+
 // APINode exposes a HTTP API gateway backed by a network node and
 // ledger. It is designed for high throughput
 // read/write access to the blockchain state.

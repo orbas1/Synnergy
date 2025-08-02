@@ -389,18 +389,19 @@ func (p *PredictiveFailureDetector) FailureProb(addr Address) float64 {
 	return avg / p.threshold
 }
 
-// ResourceAllocator dynamically adjusts VM resource limits based on usage.
-type ResourceAllocator struct {
+// VMResourceAllocator dynamically adjusts VM resource limits based on usage.
+type VMResourceAllocator struct {
 	mu     sync.Mutex
 	limits map[Address]uint64
 }
 
-func NewResourceAllocator() *ResourceAllocator {
-	return &ResourceAllocator{limits: make(map[Address]uint64)}
+// NewVMResourceAllocator creates a fresh allocator instance.
+func NewVMResourceAllocator() *VMResourceAllocator {
+	return &VMResourceAllocator{limits: make(map[Address]uint64)}
 }
 
 // Adjust sets the new gas limit for a contract address.
-func (r *ResourceAllocator) Adjust(addr Address, gas uint64) {
+func (r *VMResourceAllocator) Adjust(addr Address, gas uint64) {
 	r.mu.Lock()
 	r.limits[addr] = gas
 	r.mu.Unlock()

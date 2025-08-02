@@ -42,8 +42,8 @@ const (
 	StdSYN500  TokenStandard = 50
 	StdSYN600  TokenStandard = 60
 	StdSYN700  TokenStandard = 70
-	StdSYN721  TokenStandard = 72
-	StdSYN722  TokenStandard = 72
+	StdSYN721  TokenStandard = 721
+	StdSYN722  TokenStandard = 722
 	StdSYN800  TokenStandard = 80
 	StdSYN845  TokenStandard = 84
 	StdSYN900  TokenStandard = 90

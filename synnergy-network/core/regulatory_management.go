@@ -15,16 +15,16 @@ type Regulator struct {
 }
 
 var (
-	regMu      sync.RWMutex
-	regulators map[string]Regulator
-	regLedger  *Ledger
+	regulationMu sync.RWMutex
+	regulators   map[string]Regulator
+	regLedger    *Ledger
 )
 
 // InitRegulatory sets the ledger used for persistence. It must be
 // called before any other regulatory management function.
 func InitRegulatory(led *Ledger) {
-	regMu.Lock()
-	defer regMu.Unlock()
+	regulationMu.Lock()
+	defer regulationMu.Unlock()
 	regLedger = led
 	if regulators == nil {
 		regulators = make(map[string]Regulator)
@@ -36,8 +36,8 @@ func RegisterRegulator(id, name, jurisdiction string) error {
 	if id == "" || name == "" {
 		return errors.New("id and name required")
 	}
-	regMu.Lock()
-	defer regMu.Unlock()
+	regulationMu.Lock()
+	defer regulationMu.Unlock()
 	if _, ok := regulators[id]; ok {
 		return errors.New("regulator exists")
 	}
@@ -52,9 +52,9 @@ func RegisterRegulator(id, name, jurisdiction string) error {
 
 // GetRegulator retrieves a regulator from memory or ledger.
 func GetRegulator(id string) (Regulator, bool) {
-	regMu.RLock()
+	regulationMu.RLock()
 	r, ok := regulators[id]
-	regMu.RUnlock()
+	regulationMu.RUnlock()
 	if ok {
 		return r, true
 	}
@@ -68,20 +68,20 @@ func GetRegulator(id string) (Regulator, bool) {
 	if err := json.Unmarshal(b, &r); err != nil {
 		return Regulator{}, false
 	}
-	regMu.Lock()
+	regulationMu.Lock()
 	regulators[id] = r
-	regMu.Unlock()
+	regulationMu.Unlock()
 	return r, true
 }
 
 // ListRegulators returns all currently registered regulators.
 func ListRegulators() []Regulator {
-	regMu.RLock()
+	regulationMu.RLock()
 	list := make([]Regulator, 0, len(regulators))
 	for _, r := range regulators {
 		list = append(list, r)
 	}
-	regMu.RUnlock()
+	regulationMu.RUnlock()
 	return list
 }
 
@@ -91,9 +91,9 @@ func EvaluateRuleSet(tx *Transaction) error {
 	if tx == nil {
 		return errors.New("nil tx")
 	}
-	regMu.RLock()
+	regulationMu.RLock()
 	led := regLedger
-	regMu.RUnlock()
+	regulationMu.RUnlock()
 	if led == nil {
 		return nil
 	}

@@ -1,27 +1,30 @@
-package core
+package integrationnodes
 
-import Nodes "synnergy-network/core/Nodes"
+import (
+	core "synnergy-network/core"
+	Nodes "synnergy-network/core/Nodes"
+)
 
 // IntegrationNode extends a network node with facilities to track external APIs
 // and blockchain bridges. The struct lives in the core package to avoid import
 // cycles with the Nodes subpackage.
 type IntegrationNode struct {
 	Nodes.NodeInterface
-	Ledger   *Ledger
-	Registry *IntegrationRegistry
+	Ledger   *core.Ledger
+	Registry *core.IntegrationRegistry
 }
 
 // NewIntegrationNode creates a new instance using the provided network node and
 // ledger. If reg is nil a fresh registry is used.
-func NewIntegrationNode(n Nodes.NodeInterface, led *Ledger, reg *IntegrationRegistry) *IntegrationNode {
+func NewIntegrationNode(n Nodes.NodeInterface, led *core.Ledger, reg *core.IntegrationRegistry) *IntegrationNode {
 	if reg == nil {
-		reg = NewIntegrationRegistry()
+		reg = core.NewIntegrationRegistry()
 	}
 	return &IntegrationNode{NodeInterface: n, Ledger: led, Registry: reg}
 }
 
 // RelayTransaction places a transaction onto the local ledger pool.
-func (in *IntegrationNode) RelayTransaction(tx *Transaction) error {
+func (in *IntegrationNode) RelayTransaction(tx *core.Transaction) error {
 	if in.Ledger == nil || tx == nil {
 		return nil
 	}

@@ -25,15 +25,15 @@ type SYN600Token struct {
 }
 
 const (
-	stakePrefix  = "syn600:stake:"
-	engagePrefix = "syn600:eng:"
+	syn600StakePrefix = "syn600:stake:"
+	engagePrefix      = "syn600:eng:"
 )
 
 func NewSYN600Token(bt *BaseToken, led StateRW) *SYN600Token {
 	return &SYN600Token{BaseToken: bt, ledger: led}
 }
 
-func (t *SYN600Token) stakeKey(a Address) []byte  { return []byte(stakePrefix + a.String()) }
+func (t *SYN600Token) stakeKey(a Address) []byte  { return []byte(syn600StakePrefix + a.String()) }
 func (t *SYN600Token) engageKey(a Address) []byte { return []byte(engagePrefix + a.String()) }
 
 // Stake locks tokens for a period and records the stake in the ledger state.
@@ -94,9 +94,9 @@ func (t *SYN600Token) EngagementOf(addr Address) uint64 {
 // DistributeStakingRewards mints a percentage of the staked amount as reward.
 // rate is interpreted as parts-per-hundred (e.g. 5 = 5%).
 func (t *SYN600Token) DistributeStakingRewards(rate uint64) error {
-	it := t.ledger.PrefixIterator([]byte(stakePrefix))
+	it := t.ledger.PrefixIterator([]byte(syn600StakePrefix))
 	for it.Next() {
-		key := it.Key()[len(stakePrefix):]
+		key := it.Key()[len(syn600StakePrefix):]
 		b, err := hex.DecodeString(string(key))
 		if err != nil || len(b) != 20 {
 			continue

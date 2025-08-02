@@ -8,8 +8,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// RentalAgreement holds the on-chain details for a house rental.
-type RentalAgreement struct {
+// HousingRentalAgreement holds the on-chain details for a house rental.
+type HousingRentalAgreement struct {
 	ID          string    `json:"id"`
 	TokenID     TokenID   `json:"token_id"`
 	PropertyID  string    `json:"property_id"`
@@ -27,7 +27,7 @@ func rentalKey(id string) []byte { return []byte(fmt.Sprintf("rental:agr:%s", id
 
 // RegisterRentalAgreement stores a new agreement and transfers the deposit from
 // the tenant to the rental module account.
-func RegisterRentalAgreement(ctx *Context, agr *RentalAgreement) (*RentalAgreement, error) {
+func RegisterRentalAgreement(ctx *Context, agr *HousingRentalAgreement) (*HousingRentalAgreement, error) {
 	if agr == nil {
 		return nil, fmt.Errorf("nil agreement")
 	}
@@ -57,7 +57,7 @@ func PayRent(ctx *Context, id string, amount uint64) error {
 	if err != nil || raw == nil {
 		return fmt.Errorf("agreement not found")
 	}
-	var agr RentalAgreement
+	var agr HousingRentalAgreement
 	if err := json.Unmarshal(raw, &agr); err != nil {
 		return err
 	}
@@ -79,7 +79,7 @@ func TerminateRentalAgreement(ctx *Context, id string) error {
 	if err != nil || raw == nil {
 		return fmt.Errorf("agreement not found")
 	}
-	var agr RentalAgreement
+	var agr HousingRentalAgreement
 	if err := json.Unmarshal(raw, &agr); err != nil {
 		return err
 	}
@@ -101,12 +101,12 @@ func TerminateRentalAgreement(ctx *Context, id string) error {
 }
 
 // GetRentalAgreement fetches an agreement by ID.
-func GetRentalAgreement(id string) (*RentalAgreement, error) {
+func GetRentalAgreement(id string) (*HousingRentalAgreement, error) {
 	raw, err := CurrentStore().Get(rentalKey(id))
 	if err != nil || raw == nil {
 		return nil, fmt.Errorf("agreement not found")
 	}
-	var agr RentalAgreement
+	var agr HousingRentalAgreement
 	if err := json.Unmarshal(raw, &agr); err != nil {
 		return nil, err
 	}
