@@ -6,38 +6,30 @@ import (
 )
 
 func BenchmarkEnvOrDefault(b *testing.B) {
-	const key = "BENCH_KEY"
-	os.Setenv(key, "value")
-	clearEnvCache(key)
-	// warm cache
-	EnvOrDefault(key, "fallback")
-	b.ResetTimer()
+	if err := os.Unsetenv("BENCH_KEY"); err != nil {
+		b.Fatalf("Unsetenv: %v", err)
+	}
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		EnvOrDefault(key, "fallback")
-	}
+		EnvOrDefault("BENCH_KEY", "fallback")
 }
 
 func BenchmarkEnvOrDefaultInt(b *testing.B) {
-	const key = "BENCH_INT"
-	os.Setenv(key, "123")
-	clearEnvCache(key)
-	EnvOrDefaultInt(key, 0)
-	b.ResetTimer()
+	if err := os.Setenv("BENCH_INT", "123"); err != nil {
+		b.Fatalf("Setenv: %v", err)
+	}
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		EnvOrDefaultInt(key, 0)
+		EnvOrDefaultInt("BENCH_INT", 0)
 	}
 }
 
 func BenchmarkEnvOrDefaultUint64(b *testing.B) {
-	const key = "BENCH_UINT"
-	os.Setenv(key, "123")
-	clearEnvCache(key)
-	EnvOrDefaultUint64(key, 0)
-	b.ResetTimer()
+	if err := os.Setenv("BENCH_UINT", "123"); err != nil {
+		b.Fatalf("Setenv: %v", err)
+	}
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		EnvOrDefaultUint64(key, 0)
+		EnvOrDefaultUint64("BENCH_UINT", 0)
 	}
 }
