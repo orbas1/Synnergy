@@ -123,6 +123,7 @@ func TestHandleTxSuccess(t *testing.T) {
 	}
 }
 
+
 func TestHandleInfo(t *testing.T) {
 	srv := newTestServer()
 	req := httptest.NewRequest(http.MethodGet, "/api/info", nil)
