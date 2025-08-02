@@ -19,7 +19,7 @@ type IndexingNode struct {
 
 // IndexingNodeConfig contains the network configuration for a new indexing node.
 type IndexingNodeConfig struct {
-	Network Config
+	Network Config `json:"network"`
 }
 
 // NewIndexingNode constructs a new node with optional initial indexing of the

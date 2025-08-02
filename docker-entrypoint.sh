@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd synnergy-network
-
 ./synnergy network start &
 NET_PID=$!
 

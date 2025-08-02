@@ -9,9 +9,9 @@ import (
 
 // RegulatoryConfig aggregates config required to bootstrap a regulatory node.
 type RegulatoryConfig struct {
-	Network        Config
-	Ledger         LedgerConfig
-	TrustedIssuers [][]byte
+	Network        Config       `json:"network"`
+	Ledger         LedgerConfig `json:"ledger"`
+	TrustedIssuers [][]byte     `json:"trusted_issuers"`
 }
 
 // RegulatoryNode enforces compliance rules and exposes network services.

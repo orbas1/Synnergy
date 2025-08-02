@@ -4,7 +4,6 @@ import (
 	"sort"
 	"sync"
 
-	core "synnergy-network/core"
 	coreNodes "synnergy-network/core/Nodes"
 )
 
@@ -12,12 +11,12 @@ import (
 // and basic load balancing.
 type OptimizationNode struct {
 	base   coreNodes.NodeInterface
-	ledger *core.Ledger
+	ledger Ledger
 	mu     sync.Mutex
 }
 
 // NewOptimizationNode creates a node using an existing network node and ledger.
-func NewOptimizationNode(base coreNodes.NodeInterface, led *core.Ledger) *OptimizationNode {
+func NewOptimizationNode(base coreNodes.NodeInterface, led Ledger) *OptimizationNode {
 	return &OptimizationNode{base: base, ledger: led}
 }
 
@@ -40,7 +39,7 @@ func (o *OptimizationNode) Close() error { return o.base.Close() }
 func (o *OptimizationNode) Peers() []string { return o.base.Peers() }
 
 // OptimizeTransactions orders transactions by gas price descending.
-func (o *OptimizationNode) OptimizeTransactions(txs []*core.Transaction) []*core.Transaction {
+func (o *OptimizationNode) OptimizeTransactions(txs []*Transaction) []*Transaction {
 	sort.Slice(txs, func(i, j int) bool {
 		return txs[i].GasPrice > txs[j].GasPrice
 	})
@@ -54,7 +53,7 @@ func (o *OptimizationNode) BalanceLoad(peers []string) {
 }
 
 // ProcessPool fetches transactions from the ledger pool and optimizes them.
-func (o *OptimizationNode) ProcessPool(limit int) []*core.Transaction {
+func (o *OptimizationNode) ProcessPool(limit int) []*Transaction {
 	if o.ledger == nil {
 		return nil
 	}

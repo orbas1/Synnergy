@@ -187,15 +187,18 @@ func HandleNetworkMessage(msg NetworkMessage) {
 }
 
 func (n *Node) Broadcast(topic string, data []byte) error {
+	n.topicLock.Lock()
 	t, ok := n.topics[topic]
 	if !ok {
 		var err error
 		t, err = n.pubsub.Join(topic)
 		if err != nil {
+			n.topicLock.Unlock()
 			return fmt.Errorf("join topic %s: %w", topic, err)
 		}
 		n.topics[topic] = t
 	}
+	n.topicLock.Unlock()
 	if err := t.Publish(n.ctx, data); err != nil {
 		return fmt.Errorf("publish topic %s: %w", topic, err)
 	}
@@ -235,15 +238,18 @@ func (n *Node) SubscribeOrphanBlocks() (<-chan *Block, error) {
 
 // Subscribe listens for messages on a topic.
 func (n *Node) Subscribe(topic string) (<-chan Message, error) {
+	n.subLock.Lock()
 	sub, ok := n.subs[topic]
 	if !ok {
 		var err error
 		sub, err = n.pubsub.Subscribe(topic)
 		if err != nil {
+			n.subLock.Unlock()
 			return nil, fmt.Errorf("subscribe topic %s: %w", topic, err)
 		}
 		n.subs[topic] = sub
 	}
+	n.subLock.Unlock()
 	out := make(chan Message)
 	go func() {
 		for {
@@ -309,7 +315,7 @@ func (d *Dialer) Dial(ctx context.Context, address string) (net.Conn, error) {
 
 	conn, err := dialer.DialContext(ctx, "tcp", address)
 	if err != nil {
-		return nil, errors.New("dialer: failed to connect: " + err.Error())
+		return nil, fmt.Errorf("dialer: failed to connect to %s: %w", address, err)
 	}
 	return conn, nil
 }

@@ -117,9 +117,21 @@ func encryptSeed(seed []byte, password string) (*keystore, error) {
 }
 
 func decryptSeed(ks *keystore, password string) ([]byte, error) {
-	salt, _ := hex.DecodeString(ks.Salt)
-	nonce, _ := hex.DecodeString(ks.Nonce)
-	cipherText, _ := hex.DecodeString(ks.Cipher)
+	salt, err := hex.DecodeString(ks.Salt)
+	if err != nil {
+		return nil, fmt.Errorf("invalid salt encoding: %w", err)
+	}
+	if len(salt) != 16 {
+		return nil, fmt.Errorf("invalid salt length: %d", len(salt))
+	}
+	nonce, err := hex.DecodeString(ks.Nonce)
+	if err != nil {
+		return nil, fmt.Errorf("invalid nonce encoding: %w", err)
+	}
+	cipherText, err := hex.DecodeString(ks.Cipher)
+	if err != nil {
+		return nil, fmt.Errorf("invalid cipher encoding: %w", err)
+	}
 	key := deriveKey(password, salt)
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -128,6 +140,9 @@ func decryptSeed(ks *keystore, password string) ([]byte, error) {
 	gcm, err := cipher.NewGCM(block)
 	if err != nil {
 		return nil, err
+	}
+	if len(nonce) != gcm.NonceSize() {
+		return nil, fmt.Errorf("invalid nonce length: %d", len(nonce))
 	}
 	return gcm.Open(nil, nonce, cipherText, nil)
 }

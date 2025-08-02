@@ -138,40 +138,40 @@ func (f *ForumEngine) ListComments(tid Hash) ([]Comment, error) {
 	return out, it.Error()
 }
 
-// Forum_CreateThread is exposed as a VM opcode.
-func Forum_CreateThread(author Address, title, body string) (Hash, error) {
+// ForumCreateThread is exposed as a VM opcode.
+func ForumCreateThread(author Address, title, body string) (Hash, error) {
 	if forum == nil {
 		return Hash{}, errors.New("forum not initialised")
 	}
 	return forum.CreateThread(author, title, body)
 }
 
-// Forum_GetThread retrieves a thread by id via opcode.
-func Forum_GetThread(id Hash) (*Thread, error) {
+// ForumGetThread retrieves a thread by id via opcode.
+func ForumGetThread(id Hash) (*Thread, error) {
 	if forum == nil {
 		return nil, errors.New("forum not initialised")
 	}
 	return forum.GetThread(id)
 }
 
-// Forum_ListThreads lists all threads via opcode.
-func Forum_ListThreads() ([]Thread, error) {
+// ForumListThreads lists all threads via opcode.
+func ForumListThreads() ([]Thread, error) {
 	if forum == nil {
 		return nil, errors.New("forum not initialised")
 	}
 	return forum.ListThreads()
 }
 
-// Forum_AddComment adds a comment via opcode.
-func Forum_AddComment(tid Hash, author Address, body string) (Hash, error) {
+// ForumAddComment adds a comment via opcode.
+func ForumAddComment(tid Hash, author Address, body string) (Hash, error) {
 	if forum == nil {
 		return Hash{}, errors.New("forum not initialised")
 	}
 	return forum.AddComment(tid, author, body)
 }
 
-// Forum_ListComments lists comments for a thread via opcode.
-func Forum_ListComments(tid Hash) ([]Comment, error) {
+// ForumListComments lists comments for a thread via opcode.
+func ForumListComments(tid Hash) ([]Comment, error) {
 	if forum == nil {
 		return nil, errors.New("forum not initialised")
 	}
