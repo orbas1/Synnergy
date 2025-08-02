@@ -966,17 +966,17 @@ func Burn(ctx *Context, asset AssetRef, from Address, amount uint64) error {
 	}
 }
 
-// Utilities_Transfer exposes Transfer for opcode handlers.
-func Utilities_Transfer(ctx *Context, asset AssetRef, from, to Address, amount uint64) error {
+// UtilitiesTransfer exposes Transfer for opcode handlers.
+func UtilitiesTransfer(ctx *Context, asset AssetRef, from, to Address, amount uint64) error {
 	return Transfer(ctx, asset, from, to, amount)
 }
 
-// Utilities_Mint wraps Mint for VM opcode dispatch.
-func Utilities_Mint(ctx *Context, asset AssetRef, to Address, amount uint64) error {
+// UtilitiesMint wraps Mint for VM opcode dispatch.
+func UtilitiesMint(ctx *Context, asset AssetRef, to Address, amount uint64) error {
 	return Mint(ctx, asset, to, amount)
 }
 
-// Utilities_Burn wraps Burn for VM opcode dispatch.
-func Utilities_Burn(ctx *Context, asset AssetRef, from Address, amount uint64) error {
+// UtilitiesBurn wraps Burn for VM opcode dispatch.
+func UtilitiesBurn(ctx *Context, asset AssetRef, from Address, amount uint64) error {
 	return Burn(ctx, asset, from, amount)
 }

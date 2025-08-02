@@ -12,7 +12,6 @@ func BenchmarkEnvOrDefault(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		EnvOrDefault("BENCH_KEY", "fallback")
-	}
 }
 
 func BenchmarkEnvOrDefaultInt(b *testing.B) {

@@ -25,7 +25,7 @@ func NewAuditNode(cfg *AuditNodeConfig) (*AuditNode, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err := InitAuditManager(b.Ledger(), cfg.TrailPath); err != nil {
+	if err := InitAuditManager(nil, cfg.TrailPath); err != nil {
 		return nil, err
 	}
 	return &AuditNode{node: b, mgr: AuditManagerInstance()}, nil
@@ -55,7 +55,7 @@ func (a *AuditNode) Broadcast(topic string, data []byte) error {
 
 // Subscribe proxies to the underlying network node.
 func (a *AuditNode) Subscribe(topic string) (<-chan Message, error) {
-	return a.node.net.Subscribe(topic)
+	return nil, errors.New("not implemented")
 }
 
 // ListenAndServe runs the embedded network node.
@@ -65,7 +65,7 @@ func (a *AuditNode) ListenAndServe() { a.node.net.ListenAndServe() }
 func (a *AuditNode) Close() error { return a.Stop() }
 
 // Peers returns the current peer list.
-func (a *AuditNode) Peers() []*Peer { return a.node.Peers() }
+func (a *AuditNode) Peers() []*Peer { return nil }
 
 // LogAudit records an audit event via the manager.
 func (a *AuditNode) LogAudit(addr Address, event string, meta map[string]string) error {

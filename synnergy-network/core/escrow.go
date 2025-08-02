@@ -33,9 +33,9 @@ func escrowKey(id string) []byte {
 	return []byte(fmt.Sprintf("escrow:%s", id))
 }
 
-// Escrow_Create initialises a new escrow and transfers the total amount from
+// EscrowCreate initialises a new escrow and transfers the total amount from
 // the caller to the escrow module account.
-func Escrow_Create(ctx *Context, parties []EscrowParty) (*EscrowContract, error) {
+func EscrowCreate(ctx *Context, parties []EscrowParty) (*EscrowContract, error) {
 	if len(parties) == 0 {
 		return nil, fmt.Errorf("no parties supplied")
 	}
@@ -69,8 +69,8 @@ func Escrow_Create(ctx *Context, parties []EscrowParty) (*EscrowContract, error)
 	return esc, nil
 }
 
-// Escrow_Deposit adds additional funds to an existing escrow from the caller.
-func Escrow_Deposit(ctx *Context, id string, amount uint64) error {
+// EscrowDeposit adds additional funds to an existing escrow from the caller.
+func EscrowDeposit(ctx *Context, id string, amount uint64) error {
 	if amount == 0 {
 		return fmt.Errorf("amount must be >0")
 	}
@@ -97,9 +97,9 @@ func Escrow_Deposit(ctx *Context, id string, amount uint64) error {
 	return CurrentStore().Set(escrowKey(id), data)
 }
 
-// Escrow_Release transfers escrow funds to all parties according to their
+// EscrowRelease transfers escrow funds to all parties according to their
 // allocations. Funds are sent from the escrow module account.
-func Escrow_Release(ctx *Context, id string) error {
+func EscrowRelease(ctx *Context, id string) error {
 	escrowMu.Lock()
 	defer escrowMu.Unlock()
 
@@ -130,9 +130,9 @@ func Escrow_Release(ctx *Context, id string) error {
 	return CurrentStore().Set(escrowKey(id), data)
 }
 
-// Escrow_Cancel refunds the remaining balance back to the creator if the escrow
+// EscrowCancel refunds the remaining balance back to the creator if the escrow
 // has not been released yet.
-func Escrow_Cancel(ctx *Context, id string) error {
+func EscrowCancel(ctx *Context, id string) error {
 	escrowMu.Lock()
 	defer escrowMu.Unlock()
 
@@ -155,8 +155,8 @@ func Escrow_Cancel(ctx *Context, id string) error {
 	return CurrentStore().Delete(escrowKey(id))
 }
 
-// Escrow_Get returns details for an escrow by ID.
-func Escrow_Get(id string) (*EscrowContract, error) {
+// EscrowGet returns details for an escrow by ID.
+func EscrowGet(id string) (*EscrowContract, error) {
 	raw, err := CurrentStore().Get(escrowKey(id))
 	if err != nil || raw == nil {
 		return nil, fmt.Errorf("escrow not found")
@@ -168,8 +168,8 @@ func Escrow_Get(id string) (*EscrowContract, error) {
 	return &esc, nil
 }
 
-// Escrow_List lists all escrows currently stored.
-func Escrow_List() ([]EscrowContract, error) {
+// EscrowList lists all escrows currently stored.
+func EscrowList() ([]EscrowContract, error) {
 	it := CurrentStore().Iterator([]byte("escrow:"), nil)
 	defer it.Close()
 	var out []EscrowContract

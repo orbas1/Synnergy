@@ -1,9 +1,9 @@
 package core_test
 
 import (
-	core "synnergy-network/core"
+	"math/big"
+	. "synnergy-network/core"
 	"testing"
-	"time"
 )
 
 // TestRegisterBridge ensures a bridge is persisted and retrievable
@@ -108,5 +108,4 @@ func (l *simpleLedger) CallContract(Address, Address, []byte, *big.Int, uint64) 
 func (l *simpleLedger) StaticCall(Address, Address, []byte, uint64) ([]byte, bool, error) {
 	return nil, false, nil
 }
-func (l *simpleLedger) SelfDestruct(Address, Address)          {}
-func (l *simpleLedger) Burn(addr Address, amount uint64) error { return nil }
+func (l *simpleLedger) SelfDestruct(Address, Address) {}
