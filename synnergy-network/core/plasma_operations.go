@@ -187,7 +187,6 @@ func (p *BridgeCoordinator) ListExits(owner Address) ([]PlasmaBridgeExit, error)
 	return out, nil
 }
 
-
 // plasmaBridgeAccount returns the address used as a bridge for Plasma
 // operations. It includes a distinct prefix to avoid collisions with other
 // bridge types.

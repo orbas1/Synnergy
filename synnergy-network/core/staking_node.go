@@ -78,3 +78,6 @@ func (s *StakingNode) Status() string {
 		return "running"
 	}
 }
+
+var _ Nodes.StakingNodeInterface = (*StakingNode)(nil)
+
