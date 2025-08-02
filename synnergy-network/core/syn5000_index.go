@@ -1,20 +1,5 @@
 package core
 
-import "time"
-
-// BetRecord defines bet metadata for the SYN5000 standard.
-type BetRecord struct {
-	ID       uint64
-	GameType string
-	Bettor   Address
-	Amount   uint64
-	Odds     float64
-	Placed   time.Time
-	Resolved bool
-	Won      bool
-	Payout   uint64
-}
-
 // GamblingToken exposes methods of the SYN5000 token.
 type GamblingToken interface {
 	Token

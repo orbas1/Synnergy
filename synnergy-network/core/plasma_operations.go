@@ -73,7 +73,7 @@ func (p *BridgeCoordinator) Deposit(from Address, token TokenID, amount uint64, 
 	if !ok {
 		return PlasmaBridgeDeposit{}, errors.New("token unknown")
 	}
-	bridge := bridgeAccount(token)
+	bridge := plasmaBridgeAccount(token)
 	if err := tok.Transfer(from, bridge, amount); err != nil {
 		return PlasmaBridgeDeposit{}, err
 	}
@@ -100,7 +100,7 @@ func (p *BridgeCoordinator) StartExit(owner Address, token TokenID, amount uint6
 	if amount == 0 {
 		return PlasmaBridgeExit{}, errors.New("zero amount")
 	}
-	bridge := bridgeAccount(token)
+	bridge := plasmaBridgeAccount(token)
 	bal := p.Ledger.BalanceOf(bridge)
 	if bal < amount {
 		return PlasmaBridgeExit{}, fmt.Errorf("insufficient bridge balance: %d", bal)
@@ -140,7 +140,7 @@ func (p *BridgeCoordinator) FinalizeExit(nonce uint64) error {
 	if !ok {
 		return errors.New("token unknown")
 	}
-	bridge := bridgeAccount(ex.Token)
+	bridge := plasmaBridgeAccount(ex.Token)
 	if err := tok.Transfer(bridge, ex.Owner, ex.Amount); err != nil {
 		return err
 	}
@@ -187,7 +187,7 @@ func (p *BridgeCoordinator) ListExits(owner Address) ([]PlasmaBridgeExit, error)
 	return out, nil
 }
 
-func bridgeAccount(token TokenID) Address {
+func plasmaBridgeAccount(token TokenID) Address {
 	var a Address
 	copy(a[:4], []byte("PLSM"))
 	a[4] = byte(token >> 24)

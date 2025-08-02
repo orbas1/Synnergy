@@ -16,19 +16,19 @@ func resourceKey(addr Address) []byte {
 // Default gas limit assigned when no entry exists.
 const defaultGasLimit uint64 = 1_000_000
 
-// ResourceAllocator stores per-address gas allowances on the ledger.
-type ResourceAllocator struct {
+// LedgerResourceAllocator stores per-address gas allowances on the ledger.
+type LedgerResourceAllocator struct {
 	ledger *Ledger
 	mu     sync.RWMutex
 }
 
-// NewResourceManager creates a new manager bound to the given ledger.
-func NewResourceAllocator(ledger *Ledger) *ResourceAllocator {
-	return &ResourceAllocator{ledger: ledger}
+// NewLedgerResourceAllocator creates a new manager bound to the given ledger.
+func NewLedgerResourceAllocator(ledger *Ledger) *LedgerResourceAllocator {
+	return &LedgerResourceAllocator{ledger: ledger}
 }
 
 // SetLimit sets the gas limit for an address.
-func (rm *ResourceAllocator) SetLimit(addr Address, limit uint64) error {
+func (rm *LedgerResourceAllocator) SetLimit(addr Address, limit uint64) error {
 	rm.mu.Lock()
 	defer rm.mu.Unlock()
 	var buf [8]byte
@@ -38,7 +38,7 @@ func (rm *ResourceAllocator) SetLimit(addr Address, limit uint64) error {
 
 // fetchLimit retrieves the gas limit for an address without acquiring locks.
 // A missing entry returns the default limit; other errors are propagated.
-func (rm *ResourceAllocator) fetchLimit(addr Address) (uint64, error) {
+func (rm *LedgerResourceAllocator) fetchLimit(addr Address) (uint64, error) {
 	val, err := rm.ledger.GetState(resourceKey(addr))
 	if err != nil {
 		if errors.Is(err, ErrNotFound) {
@@ -53,14 +53,14 @@ func (rm *ResourceAllocator) fetchLimit(addr Address) (uint64, error) {
 }
 
 // GetLimit returns the gas limit for an address. If none exists a default is returned.
-func (rm *ResourceAllocator) GetLimit(addr Address) (uint64, error) {
+func (rm *LedgerResourceAllocator) GetLimit(addr Address) (uint64, error) {
 	rm.mu.RLock()
 	defer rm.mu.RUnlock()
 	return rm.fetchLimit(addr)
 }
 
 // Consume deducts gas from the limit of an address.
-func (rm *ResourceAllocator) Consume(addr Address, amt uint64) error {
+func (rm *LedgerResourceAllocator) Consume(addr Address, amt uint64) error {
 	rm.mu.Lock()
 	defer rm.mu.Unlock()
 	limit, err := rm.fetchLimit(addr)
@@ -77,7 +77,7 @@ func (rm *ResourceAllocator) Consume(addr Address, amt uint64) error {
 }
 
 // TransferLimit moves a portion of one address limit to another address.
-func (rm *ResourceAllocator) TransferLimit(from, to Address, amt uint64) error {
+func (rm *LedgerResourceAllocator) TransferLimit(from, to Address, amt uint64) error {
 	rm.mu.Lock()
 	defer rm.mu.Unlock()
 	fromLimit, err := rm.fetchLimit(from)
@@ -103,7 +103,7 @@ func (rm *ResourceAllocator) TransferLimit(from, to Address, amt uint64) error {
 }
 
 // ListLimits returns all stored address limits.
-func (rm *ResourceAllocator) ListLimits() (map[Address]uint64, error) {
+func (rm *LedgerResourceAllocator) ListLimits() (map[Address]uint64, error) {
 	rm.mu.RLock()
 	defer rm.mu.RUnlock()
 	it := rm.ledger.PrefixIterator([]byte("resalloc:limit:"))
@@ -126,7 +126,7 @@ func (rm *ResourceAllocator) ListLimits() (map[Address]uint64, error) {
 }
 
 // DeleteLimit removes the explicit gas limit for an address so the default applies.
-func (rm *ResourceAllocator) DeleteLimit(addr Address) error {
+func (rm *LedgerResourceAllocator) DeleteLimit(addr Address) error {
 	rm.mu.Lock()
 	defer rm.mu.Unlock()
 	return rm.ledger.DelState(resourceKey(addr))

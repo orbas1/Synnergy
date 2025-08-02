@@ -42,8 +42,8 @@ const (
 	StdSYN500  TokenStandard = 50
 	StdSYN600  TokenStandard = 60
 	StdSYN700  TokenStandard = 70
-	StdSYN721  TokenStandard = 72
-	StdSYN722  TokenStandard = 72
+	StdSYN721  TokenStandard = 721
+	StdSYN722  TokenStandard = 722
 	StdSYN800  TokenStandard = 80
 	StdSYN845  TokenStandard = 84
 	StdSYN900  TokenStandard = 90
@@ -328,8 +328,8 @@ func (b *BaseToken) Burn(from Address, amount uint64) error {
 // -----------------------------------------------------------------------------
 
 var (
-	regMu sync.RWMutex
-	reg   = make(map[TokenID]Token)
+	tokenRegMu    sync.RWMutex
+	tokenRegistry = make(map[TokenID]Token)
 )
 
 // deriveID returns a deterministic identifier for the given token standard.  The
@@ -341,25 +341,25 @@ func deriveID(standard TokenStandard) TokenID {
 
 // RegisterToken adds the token to the global registry.
 func RegisterToken(t Token) {
-	regMu.Lock()
-	defer regMu.Unlock()
-	reg[t.ID()] = t
+	tokenRegMu.Lock()
+	defer tokenRegMu.Unlock()
+	tokenRegistry[t.ID()] = t
 }
 
 // GetToken retrieves a token by identifier.
 func GetToken(id TokenID) (Token, bool) {
-	regMu.RLock()
-	defer regMu.RUnlock()
-	t, ok := reg[id]
+	tokenRegMu.RLock()
+	defer tokenRegMu.RUnlock()
+	t, ok := tokenRegistry[id]
 	return t, ok
 }
 
 // GetRegistryTokens returns all registered tokens sorted by ID.
 func GetRegistryTokens() []Token {
-	regMu.RLock()
-	defer regMu.RUnlock()
-	list := make([]Token, 0, len(reg))
-	for _, t := range reg {
+	tokenRegMu.RLock()
+	defer tokenRegMu.RUnlock()
+	list := make([]Token, 0, len(tokenRegistry))
+	for _, t := range tokenRegistry {
 		list = append(list, t)
 	}
 	sort.Slice(list, func(i, j int) bool { return list[i].ID() < list[j].ID() })
