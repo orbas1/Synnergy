@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-type Address [20]byte
-
 // DebtMetadata stores comprehensive data about a debt instrument.
 type DebtMetadata struct {
 	ID              string

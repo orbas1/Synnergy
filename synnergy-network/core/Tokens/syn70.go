@@ -11,7 +11,7 @@ import (
 type SYN70Asset struct {
 	TokenID      uint32            // globally unique token identifier
 	Name         string            // item or currency name
-	Owner        string            // hex encoded owner address
+	Owner        Address           // owner address
 	Balance      uint64            // optional quantity for fungible assets
 	GameID       string            // identifier of the game this asset belongs to
 	Attributes   map[string]string // extensible key/value attributes
@@ -53,7 +53,7 @@ func (t *SYN70Token) RegisterAsset(id string, asset *SYN70Asset) error {
 }
 
 // TransferAsset updates ownership of an existing asset.
-func (t *SYN70Token) TransferAsset(id, newOwner string) error {
+func (t *SYN70Token) TransferAsset(id string, newOwner Address) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	a, ok := t.assets[id]
