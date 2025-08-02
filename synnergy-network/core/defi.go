@@ -43,7 +43,8 @@ func (dm *DeFiManager) mint(to Address, token string, amt uint64) error {
 // Insurance
 // ------------------------------------------------------------------
 
-type InsurancePolicy struct {
+// DefiInsurancePolicy represents a basic on-chain insurance record.
+type DefiInsurancePolicy struct {
 	ID      Hash    `json:"id"`
 	Holder  Address `json:"holder"`
 	Premium uint64  `json:"premium"`
@@ -59,7 +60,7 @@ func (dm *DeFiManager) CreateInsurance(id Hash, holder Address, premium, payout 
 	if ok, _ := dm.ledger.HasState(k); ok {
 		return fmt.Errorf("exists")
 	}
-	pol := InsurancePolicy{ID: id, Holder: holder, Premium: premium, Payout: payout, Active: true, Created: time.Now().Unix()}
+	pol := DefiInsurancePolicy{ID: id, Holder: holder, Premium: premium, Payout: payout, Active: true, Created: time.Now().Unix()}
 	if err := dm.ledger.Transfer(holder, BurnAddress, premium); err != nil {
 		return err
 	}
@@ -70,7 +71,7 @@ func (dm *DeFiManager) ClaimInsurance(id Hash) error {
 	dm.mu.Lock()
 	defer dm.mu.Unlock()
 	k := append([]byte("ins:"), id[:]...)
-	var pol InsurancePolicy
+	var pol DefiInsurancePolicy
 	if err := dm.load(k, &pol); err != nil {
 		return err
 	}
