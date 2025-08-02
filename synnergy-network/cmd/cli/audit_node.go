@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"strconv"
 	"sync"
 	"syscall"
 
@@ -17,28 +16,13 @@ import (
 	"github.com/spf13/viper"
 
 	core "synnergy-network/core"
+	"synnergy-network/pkg/utils"
 )
 
 var (
 	audNode *core.AuditNode
 	audMu   sync.RWMutex
 )
-
-func auditEnvOr(key, def string) string {
-	if v := os.Getenv(key); v != "" {
-		return v
-	}
-	return def
-}
-
-func auditEnvOrInt(k string, def int) int {
-	if v := os.Getenv(k); v != "" {
-		if n, err := strconv.Atoi(v); err == nil {
-			return n
-		}
-	}
-	return def
-}
 
 func auditInit(cmd *cobra.Command, _ []string) error {
 	if audNode != nil {
@@ -56,9 +40,9 @@ func auditInit(cmd *cobra.Command, _ []string) error {
 		BootstrapPeers: viper.GetStringSlice("network.bootstrap_peers"),
 		DiscoveryTag:   viper.GetString("network.discovery_tag"),
 	}
-	wal := auditEnvOr("LEDGER_WAL", "./ledger.wal")
-	snap := auditEnvOr("LEDGER_SNAPSHOT", "./ledger.snap")
-	interval := auditEnvOrInt("LEDGER_SNAPSHOT_INTERVAL", 100)
+	wal := utils.EnvOrDefault("LEDGER_WAL", "./ledger.wal")
+	snap := utils.EnvOrDefault("LEDGER_SNAPSHOT", "./ledger.snap")
+	interval := utils.EnvOrDefaultInt("LEDGER_SNAPSHOT_INTERVAL", 100)
 	ledCfg := core.LedgerConfig{WALPath: wal, SnapshotPath: snap, SnapshotInterval: interval}
 	boot := core.BootstrapConfig{Network: netCfg, Ledger: ledCfg, Replication: nil}
 	cfg := core.AuditNodeConfig{Bootstrap: boot, TrailPath: os.Getenv("AUDIT_FILE")}
