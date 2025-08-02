@@ -3,7 +3,31 @@ package utils
 import (
 	"os"
 	"strconv"
+
 )
+
+// envCache stores previously fetched non-empty environment variable values so
+// repeat lookups avoid the relatively expensive syscall interaction.
+var envCache sync.Map // map[string]string
+
+// getEnv retrieves the value for key from the cache or the environment.
+// Only non-empty values are cached.
+func getEnv(key string) (string, bool) {
+	if v, ok := envCache.Load(key); ok {
+		return v.(string), true
+	}
+	if v := os.Getenv(key); v != "" {
+		envCache.Store(key, v)
+		return v, true
+	}
+	return "", false
+}
+
+// clearEnvCache removes any cached value for key. It is primarily used in
+// tests where environment variables are modified between calls.
+func clearEnvCache(key string) {
+	envCache.Delete(key)
+}
 
 // EnvOrDefault returns the value of the environment variable identified by key
 // or the provided fallback if the variable is unset or empty.

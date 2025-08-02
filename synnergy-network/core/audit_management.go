@@ -14,7 +14,7 @@ import (
 // initialised via InitAuditManager.
 
 type AuditManager struct {
-	ledger StateRW
+	ledger *Ledger
 	trail  *AuditTrail
 }
 
@@ -25,7 +25,7 @@ var (
 
 // InitAuditManager creates the global audit manager. Subsequent calls are
 // ignored. A non-empty file path enables on-disk logging via AuditTrail.
-func InitAuditManager(ledger StateRW, trailPath string) error {
+func InitAuditManager(ledger *Ledger, trailPath string) error {
 	var initErr error
 	auditOnce.Do(func() {
 		var at *AuditTrail

@@ -12,13 +12,13 @@ import (
 // Data is persisted using the global KV store.
 
 type DataResourceManager struct {
-	alloc *ResourceAllocator
+	alloc *DynamicResourceAllocator
 	mu    sync.Mutex
 }
 
 // NewDataResourceManager returns a ready-to-use manager instance.
 func NewDataResourceManager() *DataResourceManager {
-	return &DataResourceManager{alloc: NewResourceAllocator()}
+	return &DataResourceManager{alloc: NewDynamicResourceAllocator()}
 }
 
 func (m *DataResourceManager) key(owner Address, k string) []byte {

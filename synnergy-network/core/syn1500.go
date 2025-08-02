@@ -130,29 +130,29 @@ func (e *ReputationEngine) updateLevel(r *ReputationRecord) {
 
 // --- VM opcode helpers -------------------------------------------------------
 
-// Rep_AddActivity is exposed to the VM for reputation scoring.
-func Rep_AddActivity(ctx *Context, addr Address, delta int64, desc string) error {
+// RepAddActivity is exposed to the VM for reputation scoring.
+func RepAddActivity(ctx *Context, addr Address, delta int64, desc string) error {
 	return Reputation().AddActivity(addr, delta, desc)
 }
 
-// Rep_Endorse exposes Endorse for opcodes.
-func Rep_Endorse(ctx *Context, addr, from Address, pts int64, comment string) error {
+// RepEndorse exposes Endorse for opcodes.
+func RepEndorse(ctx *Context, addr, from Address, pts int64, comment string) error {
 	return Reputation().Endorse(addr, from, pts, comment)
 }
 
-// Rep_Penalize exposes Penalize for opcodes.
-func Rep_Penalize(ctx *Context, addr Address, pts int64, reason string) error {
+// RepPenalize exposes Penalize for opcodes.
+func RepPenalize(ctx *Context, addr Address, pts int64, reason string) error {
 	return Reputation().Penalize(addr, pts, reason)
 }
 
-// Rep_Score pushes the score onto the stack.
-func Rep_Score(ctx *Context, addr Address) int64 { return Reputation().Score(addr) }
+// RepScore pushes the score onto the stack.
+func RepScore(ctx *Context, addr Address) int64 { return Reputation().Score(addr) }
 
-// Rep_Level returns the trust level string.
-func Rep_Level(ctx *Context, addr Address) string { return Reputation().Level(addr) }
+// RepLevel returns the trust level string.
+func RepLevel(ctx *Context, addr Address) string { return Reputation().Level(addr) }
 
-// Rep_History returns reputation events as JSON bytes.
-func Rep_History(ctx *Context, addr Address) []byte {
+// RepHistory returns reputation events as JSON bytes.
+func RepHistory(ctx *Context, addr Address) []byte {
 	events := Reputation().History(addr)
 	b, _ := json.Marshal(events)
 	return b

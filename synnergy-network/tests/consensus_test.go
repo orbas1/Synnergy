@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"math/big"
 	"sync"
-	core "synnergy-network/core"
+	. "synnergy-network/core"
 	"testing"
 	"time"
 
@@ -52,6 +52,8 @@ func (m *mockCrypto) Sign(_ string, data []byte) ([]byte, error) {
 }
 
 func (m *mockCrypto) Verify(_, _, _ []byte) bool { return true }
+
+type mockAuthority struct{}
 
 func (m *mockAuthority) ValidatorPubKey(role string) []byte {
 	return []byte("validator-pubkey")

@@ -44,9 +44,13 @@ for platform in "${platforms[@]}"; do
 
 done
 
-# Build and validate Docker image
-cd "$ROOT"
-echo "Building Docker image synnergy:latest..."
-docker build -t synnergy:latest .
-docker image inspect synnergy:latest >/dev/null
-echo "Docker image synnergy:latest built successfully"
+# Build and validate Docker image when docker is available
+if command -v docker >/dev/null 2>&1; then
+  cd "$ROOT"
+  echo "Building Docker image synnergy:latest..."
+  docker build -t synnergy:latest .
+  docker image inspect synnergy:latest >/dev/null
+  echo "Docker image synnergy:latest built successfully"
+else
+  echo "Docker not found; skipping Docker image build"
+fi

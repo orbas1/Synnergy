@@ -20,17 +20,17 @@ func escParseAddr(hexStr string) (core.Address, error) {
 type EscrowController struct{}
 
 func (EscrowController) Create(parties []core.EscrowParty) (*core.EscrowContract, error) {
-	return core.Escrow_Create(&core.Context{}, parties)
+	return core.EscrowCreate(&core.Context{}, parties)
 }
 
 func (EscrowController) Deposit(id string, amt uint64) error {
-	return core.Escrow_Deposit(&core.Context{}, id, amt)
+	return core.EscrowDeposit(&core.Context{}, id, amt)
 }
 
-func (EscrowController) Release(id string) error                     { return core.Escrow_Release(&core.Context{}, id) }
-func (EscrowController) Cancel(id string) error                      { return core.Escrow_Cancel(&core.Context{}, id) }
-func (EscrowController) Get(id string) (*core.EscrowContract, error) { return core.Escrow_Get(id) }
-func (EscrowController) List() ([]core.EscrowContract, error)        { return core.Escrow_List() }
+func (EscrowController) Release(id string) error                     { return core.EscrowRelease(&core.Context{}, id) }
+func (EscrowController) Cancel(id string) error                      { return core.EscrowCancel(&core.Context{}, id) }
+func (EscrowController) Get(id string) (*core.EscrowContract, error) { return core.EscrowGet(id) }
+func (EscrowController) List() ([]core.EscrowContract, error)        { return core.EscrowList() }
 
 // ------------------------------ CLI ---------------------------------
 

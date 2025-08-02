@@ -1,14 +1,18 @@
 package server
 
 import (
-	"log"
 	"net/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
-// RequestLogger writes basic request info to the standard logger.
+// RequestLogger writes basic request info using structured logging.
 func RequestLogger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s", r.Method, r.URL.Path)
+		log.WithFields(log.Fields{
+			"method": r.Method,
+			"path":   r.URL.Path,
+		}).Info("incoming request")
 		next.ServeHTTP(w, r)
 	})
 }

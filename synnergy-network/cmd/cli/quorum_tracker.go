@@ -41,7 +41,7 @@ var quorumVoteCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		n := core.Quorum_AddVote(addr)
+		n := core.QuorumAddVote(addr)
 		logrus.Infof("vote recorded (%d total)", n)
 		return nil
 	},
@@ -51,7 +51,7 @@ var quorumCheckCmd = &cobra.Command{
 	Use:   "check",
 	Short: "Check if quorum reached",
 	Run: func(cmd *cobra.Command, args []string) {
-		if core.Quorum_HasQuorum() {
+		if core.QuorumHasQuorum() {
 			logrus.Info("quorum reached")
 		} else {
 			logrus.Info("quorum not reached")
@@ -63,7 +63,7 @@ var quorumResetCmd = &cobra.Command{
 	Use:   "reset",
 	Short: "Clear recorded votes",
 	Run: func(cmd *cobra.Command, args []string) {
-		core.Quorum_Reset()
+		core.QuorumReset()
 		logrus.Info("quorum tracker reset")
 	},
 }
