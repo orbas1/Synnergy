@@ -315,7 +315,7 @@ func (d *Dialer) Dial(ctx context.Context, address string) (net.Conn, error) {
 
 	conn, err := dialer.DialContext(ctx, "tcp", address)
 	if err != nil {
-		return nil, errors.New("dialer: failed to connect: " + err.Error())
+		return nil, fmt.Errorf("dialer: failed to connect to %s: %w", address, err)
 	}
 	return conn, nil
 }
