@@ -54,8 +54,8 @@ func (a *AuditNode) Broadcast(topic string, data []byte) error {
 }
 
 // Subscribe proxies to the underlying network node.
-func (a *AuditNode) Subscribe(topic string) (<-chan Message, error) {
-	return nil, errors.New("not implemented")
+func (a *AuditNode) Subscribe(topic string) (<-chan []byte, error) {
+	return a.node.net.Subscribe(topic)
 }
 
 // ListenAndServe runs the embedded network node.
@@ -65,7 +65,8 @@ func (a *AuditNode) ListenAndServe() { a.node.net.ListenAndServe() }
 func (a *AuditNode) Close() error { return a.Stop() }
 
 // Peers returns the current peer list.
-func (a *AuditNode) Peers() []*Peer { return nil }
+func (a *AuditNode) Peers() []string { return a.node.Peers() }
+
 
 // LogAudit records an audit event via the manager.
 func (a *AuditNode) LogAudit(addr Address, event string, meta map[string]string) error {

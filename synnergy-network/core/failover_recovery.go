@@ -61,7 +61,7 @@ func PredictFailure(det *PredictiveFailureDetector, addr Address, rtt float64) f
 }
 
 // AdjustResources updates the gas allocation for a contract address.
-func AdjustResources(ra *ResourceAllocator, addr Address, gas uint64) {
+func AdjustResources(ra *DynamicResourceAllocator, addr Address, gas uint64) {
 	if ra == nil {
 		return
 	}
