@@ -1,7 +1,7 @@
 .RECIPEPREFIX := >
 GO_MODULE_DIR := synnergy-network
 
-.PHONY: go-build go-test node-install node-test all
+.PHONY: go-build go-test node-install node-test build-matrix all
 
 go-build:
 >cd $(GO_MODULE_DIR) && go build ./...
@@ -24,3 +24,6 @@ node-test:
 >cd synnergy-network/GUI/nft_marketplace/backend && npm run test --if-present
 
 all: go-build node-install
+
+build-matrix:
+>scripts/build_matrix.sh
