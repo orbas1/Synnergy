@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",

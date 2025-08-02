@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.21 AS builder
+FROM golang:1.24.3 AS builder
 WORKDIR /src
 COPY . .
 RUN cd synnergy-network && go mod download && GOFLAGS="-trimpath" go build -o synnergy ./cmd/synnergy
