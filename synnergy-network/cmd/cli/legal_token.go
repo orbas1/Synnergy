@@ -60,7 +60,7 @@ var ltCreateCmd = &cobra.Command{
 			return err
 		}
 		meta := core.Metadata{Name: name, Symbol: symbol, Decimals: 0}
-		id, err := core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator()).NewLegalToken(meta, docType, hash, parties, expiry, map[core.Address]uint64{owner: supply})
+		id, err := core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator(core.DefaultGasPrice)).NewLegalToken(meta, docType, hash, parties, expiry, map[core.Address]uint64{owner: supply})
 		if err != nil {
 			return err
 		}
@@ -83,7 +83,7 @@ var ltSignCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		return core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator()).LegalAddSignature(core.TokenID(id64), party, sig)
+		return core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator(core.DefaultGasPrice)).LegalAddSignature(core.TokenID(id64), party, sig)
 	},
 }
 
@@ -97,7 +97,7 @@ var ltRevokeCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		return core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator()).LegalRevokeSignature(core.TokenID(id64), party)
+		return core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator(core.DefaultGasPrice)).LegalRevokeSignature(core.TokenID(id64), party)
 	},
 }
 
@@ -107,7 +107,7 @@ var ltStatusCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		id64, _ := strconv.ParseUint(args[0], 10, 32)
-		return core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator()).LegalUpdateStatus(core.TokenID(id64), args[1])
+		return core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator(core.DefaultGasPrice)).LegalUpdateStatus(core.TokenID(id64), args[1])
 	},
 }
 
@@ -118,7 +118,7 @@ var ltDisputeCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		id64, _ := strconv.ParseUint(args[0], 10, 32)
 		action := args[1]
-		mgr := core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator())
+		mgr := core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator(core.DefaultGasPrice))
 		if action == "start" {
 			return mgr.LegalStartDispute(core.TokenID(id64))
 		}
