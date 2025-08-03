@@ -1,10 +1,11 @@
 package cli
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/spf13/cobra"
 	"synnergy-network/core"
@@ -23,7 +24,7 @@ func offwalletCreate(cmd *cobra.Command, _ []string) error {
 	seed := wallet.Seed()
 	ks := map[string]string{"seed": fmt.Sprintf("%x", seed)}
 	data, _ := json.MarshalIndent(ks, "", "  ")
-	if err := ioutil.WriteFile(out, data, 0o600); err != nil {
+	if err := os.WriteFile(out, data, 0o600); err != nil {
 		return err
 	}
 	fmt.Fprintf(cmd.OutOrStdout(), "mnemonic: %s\n", mnemonic)
@@ -40,7 +41,7 @@ func offwalletSign(cmd *cobra.Command, _ []string) error {
 	if walletFile == "" || inFile == "" {
 		return errors.New("--wallet and --in required")
 	}
-	data, err := ioutil.ReadFile(walletFile)
+	data, err := os.ReadFile(walletFile)
 	if err != nil {
 		return err
 	}
@@ -57,7 +58,7 @@ func offwalletSign(cmd *cobra.Command, _ []string) error {
 		return err
 	}
 	ow := &core.OffChainWallet{HDWallet: w}
-	raw, err := ioutil.ReadFile(inFile)
+	raw, err := os.ReadFile(inFile)
 	if err != nil {
 		return err
 	}
@@ -70,7 +71,7 @@ func offwalletSign(cmd *cobra.Command, _ []string) error {
 	}
 	out, _ := json.MarshalIndent(&tx, "", "  ")
 	if outFile != "" {
-		if err := ioutil.WriteFile(outFile, out, 0o600); err != nil {
+		if err := os.WriteFile(outFile, out, 0o600); err != nil {
 			return err
 		}
 	} else {
@@ -81,12 +82,7 @@ func offwalletSign(cmd *cobra.Command, _ []string) error {
 }
 
 func hexToBytes(s string) ([]byte, error) {
-	b := make([]byte, len(s)/2)
-	_, err := fmt.Sscanf(s, "%x", &b)
-	if err != nil {
-		return nil, err
-	}
-	return b, nil
+	return hex.DecodeString(s)
 }
 
 var offWalletCmd = &cobra.Command{
