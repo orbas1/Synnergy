@@ -25,6 +25,25 @@ implemented incrementally.
 - **Extensive GUI suite** – wallet, explorers and marketplaces provide rich web
   interfaces backed by REST services.
 
+## Role-based Financial Controls
+
+- Authority nodes register with dedicated wallets and receive unique job keys
+  for decrypting randomly assigned governance tasks.
+- LoanPool grants distribute 5% of each payout to five selected authority
+  wallets. Proposals require concurrent approval from authority and public
+  voters to pass.
+- ID tokens remain inactive until validated by an authority node, preventing
+  double voting across governance systems.
+- Only **Central Bank** nodes may deploy the SYN‑10/11/12 token standards.
+- Regulated instruments such as ETFs, bonds and real‑estate tokens may only be
+  issued by Government, Regulator, Creditor Bank or Central Bank nodes. Bill
+  tokens are limited to creditor nodes while benefit tokens are exclusive to the
+  government.
+- Monetary and fiscal controls on SYN‑10/11/12 tokens are reserved for the
+  government role and cannot be applied elsewhere.
+- Regulator nodes can initiate security upgrades but final activation requires a
+  community vote for decentralised acceptance.
+
 ## Directory Layout
 
 The repository is organised as follows:
@@ -97,7 +116,8 @@ all modules from the core library. Highlights include:
 - `ai_mgmt` – manage AI model marketplace listings
 - `ai_infer` – advanced inference and transaction analysis
 - `amm` – swap tokens and manage liquidity pools
-- `authority_node` – validator registration and voting
+- `authority_node` – validator registration and voting; each authority registers
+  with a dedicated wallet address and activates after meeting voting thresholds
 - `access` – manage role based access permissions
 - `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
@@ -207,6 +227,17 @@ all modules from the core library. Highlights include:
 - `finalization_management` – finalize blocks, rollup batches and channels
 - `quorum` – simple quorum tracker management
 - `virtual_machine` – run the on‑chain VM service
+
+### Authority Node Policy
+
+Authority nodes are specialised participants that oversee sensitive network
+operations. When registering, each node must provide a wallet address for
+payments and fees. Approval requires both public and authority votes to reach
+configured thresholds. Their multi-signature approval is required for actions
+like transaction reversals, loan pool authorisation and regulated token
+issuance. Privileged roles – Government, Regulator, Creditor Bank and Central
+Bank – restrict deployment of certain financial instruments and SYN‑10/11/12
+tokens.
 - `sandbox` – manage VM sandboxes
 - `workflow` – automate multi-step tasks with triggers and webhooks
 - `supply` – manage supply chain assets on chain

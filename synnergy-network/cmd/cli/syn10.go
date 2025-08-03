@@ -17,7 +17,7 @@ func ensureSYN10(cmd *cobra.Command, _ []string) error {
 	if led == nil {
 		return fmt.Errorf("ledger not initialised")
 	}
-	gas := core.NewFlatGasCalculator()
+	gas := core.NewFlatGasCalculator(core.DefaultGasPrice)
 	core.InitSYN10(led, gas, "USD", "CentralBank")
 	return nil
 }

@@ -75,6 +75,35 @@ The Dockerfile can build a containerised node which runs the networking, consens
 
 The CLI exposes dozens of commands grouped by module: AI management, token operations, governance tools, cross‑chain utilities and many more. Each file under `cmd/cli` registers a command group. Refer to [`synnergy-network/README.md`](synnergy-network/README.md) and `cmd/cli/cli_guide.md` for the full catalogue and examples.
 
+## Authority Node Policies
+
+Authority nodes participate in governance and sensitive financial operations. Each
+authority node must register with a dedicated wallet address which receives any
+rewards or fee distributions. Candidate nodes are activated only after gathering
+the required public and authority votes. Their signatures are also required for
+transaction reversals and other critical actions. Specific roles such as
+`CentralBankNode` or `GovernmentNode` gate privileged functionality like issuing
+SYN‑10/11/12 tokens or authorising regulated financial instruments.
+
+- Upon activation, each authority receives a unique job key used to decrypt
+  randomly assigned governance tasks from its local keystore.
+- Reversal transactions and other high‑risk operations demand multisignature
+  approval from active authorities.
+- LoanPool grants distribute 5% of the awarded amount to five randomly selected
+  authority wallets as compensation for their votes.
+- ID tokens remain invalid until verified by an authority node to prevent double
+  voting within governance systems.
+- Only **CentralBankNode** members may deploy the SYN‑10/11/12 token standards
+  and only **Government**, **Regulator**, **Creditor Bank** or **Central Bank**
+  nodes can issue regulated instruments such as ETFs, bonds or real‑estate
+  tokens. Creditors alone may originate bill tokens while benefit tokens are
+  limited to government nodes.
+- Monetary and fiscal controls on SYN‑10/11/12 tokens are exclusively available
+  to government nodes and cannot be applied to other token types.
+- Regulator nodes hold privileged access for security upgrades which still
+  require community approval through a decentralised vote.
+
+
 ## Core Modules
 
 The Go packages in `core/` implement the blockchain runtime. Important modules include consensus, ledger storage, networking layers, data replication, sharding and the virtual machine. Development helpers in `core/helpers.go` allow the CLI to run without a full node. A summary of every file lives in [`core/module_guide.md`](synnergy-network/core/module_guide.md).
@@ -114,6 +143,14 @@ Web front‑ends are provided under `GUI/`. Each directory contains a standalone
 ## Smart Contracts
 
 Example contracts demonstrating Synnergy's opcode catalogue are located throughout `smart_contract_guide.md` and under various GUI directories. They illustrate token faucets, storage markets, DAO governance and more. Contracts are compiled to WebAssembly and deployed via the CLI. See [`synnergy-network/smart_contract_guide.md`](synnergy-network/smart_contract_guide.md) for a step‑by‑step tutorial.
+
+## Opcode Tooling and Plugins
+
+Run `go run ./cmd/opcode-lint` to verify that the opcode catalogue remains free of collisions. The linter imports the dispatcher and fails on duplicate names or values.
+
+External teams can extend the opcode set without modifying core files by implementing the `core.OpcodeModule` interface and loading it via `core.RegisterModule`. Modules receive a registrar callback for wiring new handlers, enabling a lightweight plugin model.
+
+Gas prices may be adjusted at runtime using `core.UpdateGasCost`, allowing governance or off-chain configuration to tune fees dynamically. The exported `core.Catalogue` and `core.GasTable` helpers provide capability discovery for tools and dashboards.
 
 ## Tests
 

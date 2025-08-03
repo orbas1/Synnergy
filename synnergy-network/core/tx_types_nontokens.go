@@ -3,10 +3,16 @@
 package core
 
 // TxType identifiers for basic transaction categories.
-// These values are provided here for builds that do not
-// include the full token implementation (build tag "tokens").
-// When the "tokens" tag is enabled, an extended set of
-// transaction logic is compiled in transactions.go.
+//
+// In builds that do not include the full token stack (the "tokens" build tag
+// is absent) the comprehensive transaction types defined in transactions.go are
+// not compiled.  This file provides the minimal subset of types required by
+// lightweight components such as wallet management so that code depending on a
+// basic payment transfer still compiles.
+
+// TxType enumerates high level transaction categories.
+// It mirrors the definition in transactions.go when the "tokens" tag is set.
+type TxType uint8
 
 const (
 	// TxPayment represents a standard currency transfer.

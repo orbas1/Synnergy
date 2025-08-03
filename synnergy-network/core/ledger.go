@@ -827,10 +827,11 @@ func (l *Ledger) AddLog(log *Log) {
 	l.logs = append(l.logs, log)
 }
 
-// Call executes a contract located at the address `to` using the provided input
-// and gas limit. The execution is performed in an isolated in-memory state and
-// does not persist any side effects to the ledger. This is a lightweight helper
-// intended primarily for modules requiring read-only contract interactions.
+// Call executes a contract located at `to` using the current ledger state as the
+// execution context. The call runs inside a transient in-memory state to ensure
+// that any side effects are discarded, mirroring the behaviour of an Ethereum
+// `eth_call`. It returns the raw bytes produced by the contract or an error if
+// execution fails.
 func (l *Ledger) Call(from, to Address, input []byte, value *big.Int, gas uint64) ([]byte, error) {
 	if l == nil {
 		return nil, fmt.Errorf("ledger is nil")
@@ -838,23 +839,40 @@ func (l *Ledger) Call(from, to Address, input []byte, value *big.Int, gas uint64
 
 	l.mu.RLock()
 	c, ok := l.Contracts[to.String()]
-	l.mu.RUnlock()
 	if !ok {
+		l.mu.RUnlock()
 		return nil, fmt.Errorf("contract not found at %s", to.String())
 	}
 
-	// Execute the contract using an ephemeral in-memory state. The
-	// temporary state reuses the VM implementation provided by memState.
-	state, err := NewInMemory()
-	if err != nil {
-		return nil, err
-	}
-	ms, ok := state.(*memState)
-	if !ok {
-		return nil, fmt.Errorf("unexpected state implementation %T", state)
+	// Clone the ledger's key/value state to avoid mutating the live ledger.
+	stateCopy := make(map[string][]byte, len(l.State))
+	for k, v := range l.State {
+		stateCopy[k] = append([]byte(nil), v...)
 	}
 
-	ms.contracts[to] = c.Bytecode
+	// Snapshot nonce values so contracts querying account nonces observe a
+	// consistent view.
+	nonceCopy := make(map[Address]uint64, len(l.nonces))
+	for k, v := range l.nonces {
+		nonceCopy[k] = v
+	}
+
+	// Copy token metadata to satisfy calls that inspect token properties.
+	tokenCopy := make(map[TokenID]Token, len(l.tokens))
+	for k, v := range l.tokens {
+		tokenCopy[k] = v
+	}
+	l.mu.RUnlock()
+
+	ms := &memState{
+		data:       stateCopy,
+		balances:   make(map[Address]uint64),
+		lpBalances: make(map[Address]map[PoolID]uint64),
+		contracts:  map[Address][]byte{to: c.Bytecode},
+		tokens:     tokenCopy,
+		codeHashes: make(map[Address]Hash),
+		nonces:     nonceCopy,
+	}
 
 	return ms.Call(from, to, input, value, gas)
 }
@@ -864,7 +882,7 @@ func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 		return nil
 	}
 	cost := uint64(bytes)
-	zero := Address{}
+	zero := AddressZero
 	return l.Transfer(addr, zero, cost)
 }
 

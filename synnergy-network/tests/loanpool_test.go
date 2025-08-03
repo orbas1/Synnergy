@@ -97,6 +97,13 @@ func (m mockElector) RandomElectorate(_ int) ([]Address, error) {
 }
 func (m mockElector) IsAuthority(a Address) bool { return m.authSet[a] }
 
+func (m mockElector) GetAuthority(a Address) (AuthorityNode, error) {
+	if !m.authSet[a] {
+		return AuthorityNode{}, errors.New("not found")
+	}
+	return AuthorityNode{Addr: a, Wallet: a, Active: true}, nil
+}
+
 //------------------------------------------------------------
 // helper generate id quickly
 //------------------------------------------------------------

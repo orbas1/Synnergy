@@ -1,4 +1,5 @@
 //go:build !tokens
+// +build !tokens
 
 package core
 

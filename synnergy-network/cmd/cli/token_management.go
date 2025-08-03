@@ -33,7 +33,7 @@ func tmInit(cmd *cobra.Command, _ []string) error {
 			err = e
 			return
 		}
-		gas := core.NewFlatGasCalculator()
+		gas := core.NewFlatGasCalculator(core.DefaultGasPrice)
 		tmMgr = core.NewTokenManager(led, gas)
 	})
 	return err

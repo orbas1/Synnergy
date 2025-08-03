@@ -95,7 +95,7 @@ func (t *SYN721Token) MintWithMeta(to Address, md SYN721Metadata) (uint64, error
 	t.metaStore[id] = md
 	t.meta.TotalSupply++
 	if t.BaseToken.ledger != nil {
-		t.BaseToken.ledger.EmitTransfer(t.BaseToken.id, Address{}, to, 1)
+		t.BaseToken.ledger.EmitTransfer(t.BaseToken.id, AddressZero, to, 1)
 	}
 	return id, nil
 }
@@ -122,7 +122,7 @@ func (t *SYN721Token) Burn(from Address, nftID uint64) error {
 	delete(t.approvals, nftID)
 	t.meta.TotalSupply--
 	if t.BaseToken.ledger != nil {
-		t.BaseToken.ledger.EmitTransfer(t.BaseToken.id, from, Address{}, 1)
+		t.BaseToken.ledger.EmitTransfer(t.BaseToken.id, from, AddressZero, 1)
 	}
 	return nil
 }

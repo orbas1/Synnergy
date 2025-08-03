@@ -76,12 +76,16 @@ type edge struct {
 //---------------------------------------------------------------------
 
 type AuthorityNode struct {
-	Addr        Address       `json:"addr"`
-	Role        AuthorityRole `json:"role"`
-	Active      bool          `json:"active"`
-	PublicVotes uint32        `json:"pv"`
-	AuthVotes   uint32        `json:"av"`
-	CreatedAt   int64         `json:"since"`
+        Addr        Address       `json:"addr"`
+        // Wallet holds the payment address associated with the authority
+        // node. It may differ from the node's network address and is used
+        // when distributing fees or processing on-chain payments.
+        Wallet      Address       `json:"wallet"`
+        Role        AuthorityRole `json:"role"`
+        Active      bool          `json:"active"`
+        PublicVotes uint32        `json:"pv"`
+        AuthVotes   uint32        `json:"av"`
+        CreatedAt   int64         `json:"since"`
 }
 
 type AuthoritySet struct {
@@ -627,9 +631,12 @@ const (
 	TxPayment TxType = iota + 1
 	// TxContractCall executes a smart contract.
 	TxContractCall
-	// TxReversal denotes a reversal of a previous transaction.
+	// TxReversal denotes a reversal of a previous transaction. It requires
+	// multiple authority co‑signatures and refunds the original sender minus
+	// a protocol‑defined fee.
 	TxReversal
 )
+
 
 type Transaction struct {
 	// core fields
@@ -662,7 +669,16 @@ func (tx *Transaction) HashTx() Hash {
 }
 
 // IDHex returns the transaction hash as a hex string.
+// If the hash is zero (e.g. not yet computed), it will be generated
+// using HashTx and stored on the Transaction before encoding.
+// A nil receiver results in an empty string.
 func (tx *Transaction) IDHex() string {
+	if tx == nil {
+		return ""
+	}
+	if tx.Hash == (Hash{}) {
+		tx.Hash = tx.HashTx()
+	}
 	return hex.EncodeToString(tx.Hash[:])
 }
 
@@ -700,7 +716,7 @@ type Address [20]byte
 
 // AddressZero represents the zero-value address (all bytes zero).
 // It is used as a sentinel in token and ledger operations.
-var AddressZero Address
+var AddressZero = Address{}
 
 // Hash represents a 32‑byte cryptographic hash.
 type Hash [32]byte
@@ -849,9 +865,12 @@ type TxContext struct {
 	State       StateRW
 }
 
-// Stack is a minimal placeholder for the VM stack structure.
+// Stack is a minimal placeholder for the VM stack structure. It stores
+// 256-bit words as *big.Int values in a simple slice-backed stack.
+// Using a concrete type avoids interface overhead and ensures type safety
+// throughout VM execution.
 type Stack struct {
-	data []interface{}
+	data []*big.Int
 }
 
 // Push adds a *big.Int value onto the stack. A nil value will panic to avoid
