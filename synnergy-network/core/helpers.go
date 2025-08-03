@@ -75,8 +75,16 @@ func (tfStubClient) Analyse(_ context.Context, _ *TFRequest) (*TFResponse, error
 // Simple flat gas calculator used by CLI stubs
 // ------------------------------------------------------------------
 
+// DefaultGasPrice defines the flat price used when estimating or calculating
+// gas for token operations. Exported so other packages can reuse a consistent
+// base price when constructing a FlatGasCalculator.
+const DefaultGasPrice uint64 = 1
+
+// FlatGasCalculator implements a trivial GasCalculator that multiplies a
+// constant price by the provided amount.
 type FlatGasCalculator struct{ Price uint64 }
 
+// NewFlatGasCalculator returns a FlatGasCalculator with the supplied price.
 func NewFlatGasCalculator(p uint64) *FlatGasCalculator { return &FlatGasCalculator{Price: p} }
 
 func (f *FlatGasCalculator) Estimate(_ []byte) (uint64, error)     { return 0, nil }
