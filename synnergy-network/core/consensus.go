@@ -123,6 +123,10 @@ func NewConsensus(
 	auth authorityAdapter,
 ) (*SynnergyConsensus, error) {
 
+	if lg == nil {
+		lg = logrus.StandardLogger()
+	}
+
 	diff := new(big.Int)
 	if _, ok := diff.SetString(initialDifficultyHex, 16); !ok {
 		return nil, fmt.Errorf("invalid difficulty hex %q", initialDifficultyHex)
