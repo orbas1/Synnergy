@@ -1,15 +1,15 @@
-import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+import fsPromises from "fs/promises";
 import solc from "solc";
 import { ethers } from "ethers";
 
-const dbPath = path.join(
-  path.dirname(new URL(import.meta.url).pathname),
-  "..",
-  "tokens.json",
-);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const dbPath = path.join(__dirname, "..", "tokens.json");
 const contractPath = path.join(
-  path.dirname(new URL(import.meta.url).pathname),
+  __dirname,
   "..",
   "..",
   "..",
@@ -19,21 +19,31 @@ const contractPath = path.join(
 );
 
 export async function createToken(data) {
-  const tokens = fs.existsSync(dbPath)
-    ? JSON.parse(fs.readFileSync(dbPath))
-    : [];
+  let tokens = [];
+  try {
+    const json = await fsPromises.readFile(dbPath, "utf8");
+    tokens = JSON.parse(json);
+  } catch {
+    // If the file doesn't exist or is invalid, start with an empty array.
+  }
+
   const tokenId = "0x" + Date.now().toString(16);
   tokens.push({ id: tokenId, ...data });
-  fs.writeFileSync(dbPath, JSON.stringify(tokens, null, 2));
+  await fsPromises.writeFile(dbPath, JSON.stringify(tokens, null, 2));
   return tokenId;
 }
 
 export async function listTokens() {
-  return fs.existsSync(dbPath) ? JSON.parse(fs.readFileSync(dbPath)) : [];
+  try {
+    const json = await fsPromises.readFile(dbPath, "utf8");
+    return JSON.parse(json);
+  } catch {
+    return [];
+  }
 }
 
 export async function compileContract() {
-  const source = fs.readFileSync(contractPath, "utf8");
+  const source = await fsPromises.readFile(contractPath, "utf8");
   const input = JSON.stringify({
     language: "Solidity",
     sources: { "token_factory.sol": { content: source } },
