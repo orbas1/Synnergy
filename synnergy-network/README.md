@@ -97,7 +97,8 @@ all modules from the core library. Highlights include:
 - `ai_mgmt` – manage AI model marketplace listings
 - `ai_infer` – advanced inference and transaction analysis
 - `amm` – swap tokens and manage liquidity pools
-- `authority_node` – validator registration and voting
+- `authority_node` – validator registration and voting; each authority registers
+  with a dedicated wallet address and activates after meeting voting thresholds
 - `access` – manage role based access permissions
 - `authority_apply` – submit and approve authority node applications
 - `charity_pool` – query and disburse community funds
@@ -207,6 +208,17 @@ all modules from the core library. Highlights include:
 - `finalization_management` – finalize blocks, rollup batches and channels
 - `quorum` – simple quorum tracker management
 - `virtual_machine` – run the on‑chain VM service
+
+### Authority Node Policy
+
+Authority nodes are specialised participants that oversee sensitive network
+operations. When registering, each node must provide a wallet address for
+payments and fees. Approval requires both public and authority votes to reach
+configured thresholds. Their multi-signature approval is required for actions
+like transaction reversals, loan pool authorisation and regulated token
+issuance. Privileged roles – Government, Regulator, Creditor Bank and Central
+Bank – restrict deployment of certain financial instruments and SYN‑10/11/12
+tokens.
 - `sandbox` – manage VM sandboxes
 - `workflow` – automate multi-step tasks with triggers and webhooks
 - `supply` – manage supply chain assets on chain

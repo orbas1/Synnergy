@@ -11,6 +11,9 @@ import "time"
 // of direct core dependencies.
 type Address [20]byte
 
+// AddressZero is the zero-value address (all bytes zero).
+var AddressZero = Address{}
+
 // TokenStandard mirrors core.TokenStandard.  It enumerates every supported token
 // specification within the Synnergy ecosystem.  Each constant corresponds to a
 // dedicated file containing the token's implementation (e.g. syn10.go,

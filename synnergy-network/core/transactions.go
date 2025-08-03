@@ -19,7 +19,6 @@ import (
 	"log"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	Tokens "synnergy-network/core/Tokens"
 )
@@ -27,17 +26,6 @@ import (
 // Static check to ensure token interfaces are available
 // Reference to TokenInterfaces for package usage
 var _ Tokens.TokenInterfaces
-
-// -----------------------------------------------------------------------------
-// Address helper (our 20-byte address type ↔ go-ethereum common.Address)
-// -----------------------------------------------------------------------------
-
-// Converts go-ethereum common.Address → your custom Address
-func FromCommon(a common.Address) Address {
-	var out Address
-	copy(out[:], a.Bytes())
-	return out
-}
 
 // -----------------------------------------------------------------------------
 // Tx hashing / signing / verification
@@ -210,10 +198,6 @@ func NewTxPool(
 	}
 }
 
-func (tx *Transaction) IDHex() string {
-	return hex.EncodeToString(tx.Hash[:])
-}
-
 // -----------------------------------------------------------------------------
 // TxPool operations
 // -----------------------------------------------------------------------------
@@ -299,18 +283,6 @@ func (tp *TxPool) Snapshot() []*Transaction {
 func (tp *TxPool) Run(ctx context.Context) {
 	<-ctx.Done()
 }
-
-// -----------------------------------------------------------------------------
-// interfaces & stubs just to make the file compile
-// -----------------------------------------------------------------------------
-
-type TxType uint8
-
-const (
-	TxPayment TxType = iota + 1
-	TxContractCall
-	TxReversal
-)
 
 func (a *AuthoritySet) ActiveAddresses() []Address { return nil }
 

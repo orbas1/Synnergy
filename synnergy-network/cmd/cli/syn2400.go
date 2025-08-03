@@ -30,7 +30,7 @@ func syn2400Init(cmd *cobra.Command, _ []string) error {
 	if e != nil {
 		return e
 	}
-	dtMgr = core.NewTokenManager(led, core.NewFlatGasCalculator())
+	dtMgr = core.NewTokenManager(led, core.NewFlatGasCalculator(core.DefaultGasPrice))
 	return nil
 }
 

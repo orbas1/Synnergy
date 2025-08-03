@@ -60,7 +60,7 @@ func (t *Syn3200Token) CreateBill(issuer, payer Address, amount uint64, due time
 	t.bills[id] = b
 	_ = t.Mint(payer, amount)
 	if t.ledger != nil {
-		t.ledger.EmitTransfer(t.ID(), Address{}, payer, amount)
+		t.ledger.EmitTransfer(t.ID(), AddressZero, payer, amount)
 	}
 	return id
 }
