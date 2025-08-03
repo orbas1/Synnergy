@@ -7,6 +7,7 @@ package cli
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -104,8 +105,7 @@ var coordMintCmd = &cobra.Command{
 }
 
 func parseUint(s string) (uint64, error) {
-	var v uint64
-	_, err := fmt.Sscan(s, &v)
+	v, err := strconv.ParseUint(s, 10, 64)
 	if err != nil {
 		return 0, fmt.Errorf("invalid number %q", s)
 	}

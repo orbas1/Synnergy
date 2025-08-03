@@ -3,7 +3,8 @@ package cli
 import (
 	"encoding/hex"
 	"fmt"
-	"io/ioutil"
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -34,7 +35,7 @@ func (c *DataResourceController) store(owner, key, file string, gas uint64) erro
 	if err != nil {
 		return err
 	}
-	data, err := ioutil.ReadFile(file)
+	data, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
@@ -54,7 +55,7 @@ func (c *DataResourceController) load(owner, key, out string) error {
 		fmt.Printf("%s", string(data))
 		return nil
 	}
-	return ioutil.WriteFile(out, data, 0o644)
+	return os.WriteFile(out, data, 0o644)
 }
 
 func (c *DataResourceController) del(owner, key string) error {
@@ -113,7 +114,5 @@ func init() {
 var ResourceCmd = resourceCmd
 
 func parseUint(s string) (uint64, error) {
-	var v uint64
-	_, err := fmt.Sscan(s, &v)
-	return v, err
+	return strconv.ParseUint(s, 10, 64)
 }

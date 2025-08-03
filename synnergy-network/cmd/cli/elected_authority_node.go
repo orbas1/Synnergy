@@ -23,22 +23,30 @@ func ensureElectedNode(cmd *cobra.Command, _ []string) error {
 
 type ElectedAuthController struct{}
 
-func (c *ElectedAuthController) vote(addr string) {
+func (c *ElectedAuthController) vote(addr string) error {
 	var a core.Address
-	b, _ := hex.DecodeString(strings.TrimPrefix(addr, "0x"))
+	b, err := hex.DecodeString(strings.TrimPrefix(addr, "0x"))
+	if err != nil || len(b) != len(a) {
+		return fmt.Errorf("invalid address")
+	}
 	copy(a[:], b)
 	var na Nodes.Address
 	copy(na[:], a[:])
 	electedNode.RecordVote(na)
+	return nil
 }
 
-func (c *ElectedAuthController) report(addr string) {
+func (c *ElectedAuthController) report(addr string) error {
 	var a core.Address
-	b, _ := hex.DecodeString(strings.TrimPrefix(addr, "0x"))
+	b, err := hex.DecodeString(strings.TrimPrefix(addr, "0x"))
+	if err != nil || len(b) != len(a) {
+		return fmt.Errorf("invalid address")
+	}
 	copy(a[:], b)
 	var na Nodes.Address
 	copy(na[:], a[:])
 	electedNode.ReportMisbehaviour(na)
+	return nil
 }
 
 //---------------------------------------------------------------------
@@ -55,10 +63,13 @@ var electedVoteCmd = &cobra.Command{
 	Use:   "vote <addr>",
 	Short: "Vote to elect the node",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &ElectedAuthController{}
-		ctrl.vote(args[0])
+		if err := ctrl.vote(args[0]); err != nil {
+			return err
+		}
 		fmt.Fprintln(cmd.OutOrStdout(), "vote recorded")
+		return nil
 	},
 }
 
@@ -66,10 +77,13 @@ var electedReportCmd = &cobra.Command{
 	Use:   "report <addr>",
 	Short: "Report the node for misbehaviour",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		ctrl := &ElectedAuthController{}
-		ctrl.report(args[0])
+		if err := ctrl.report(args[0]); err != nil {
+			return err
+		}
 		fmt.Fprintln(cmd.OutOrStdout(), "report recorded")
+		return nil
 	},
 }
 

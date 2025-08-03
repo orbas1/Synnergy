@@ -9,6 +9,8 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strconv"
+
 	"github.com/spf13/cobra"
 	core "synnergy-network/core"
 )
@@ -73,9 +75,7 @@ func defiClaim(cmd *cobra.Command, args []string) error {
 
 // minimal helper to parse uint
 func parseUintArg(s string) (uint64, error) {
-	var v uint64
-	_, err := fmt.Sscanf(s, "%d", &v)
-	return v, err
+	return strconv.ParseUint(s, 10, 64)
 }
 
 var defiCmd = &cobra.Command{
