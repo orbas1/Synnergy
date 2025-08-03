@@ -19,7 +19,6 @@ import (
 	"log"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	Tokens "synnergy-network/core/Tokens"
 )
@@ -27,17 +26,6 @@ import (
 // Static check to ensure token interfaces are available
 // Reference to TokenInterfaces for package usage
 var _ Tokens.TokenInterfaces
-
-// -----------------------------------------------------------------------------
-// Address helper (our 20-byte address type ↔ go-ethereum common.Address)
-// -----------------------------------------------------------------------------
-
-// Converts go-ethereum common.Address → your custom Address
-func FromCommon(a common.Address) Address {
-	var out Address
-	copy(out[:], a.Bytes())
-	return out
-}
 
 // -----------------------------------------------------------------------------
 // Tx hashing / signing / verification
