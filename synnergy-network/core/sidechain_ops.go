@@ -64,14 +64,23 @@ func (sc *SidechainCoordinator) RemoveSidechain(id SidechainID) error {
 		return err
 	}
 	hdrPrefix := append([]byte("sc:hdr:"), uint32ToBytes(uint32(id))...)
-	it := sc.Ledger.PrefixIterator(hdrPrefix)
-	for it.Next() {
-		_ = sc.Ledger.DeleteState(it.Key())
+	hdrIt := sc.Ledger.PrefixIterator(hdrPrefix)
+	defer hdrIt.Close()
+	for hdrIt.Next() {
+		if err := sc.Ledger.DeleteState(hdrIt.Key()); err != nil {
+			return err
+		}
+	}
+	if err := hdrIt.Error(); err != nil {
+		return err
 	}
 	depPrefix := append([]byte("sc:dep:"), uint32ToBytes(uint32(id))...)
-	it = sc.Ledger.PrefixIterator(depPrefix)
-	for it.Next() {
-		_ = sc.Ledger.DeleteState(it.Key())
+	depIt := sc.Ledger.PrefixIterator(depPrefix)
+	defer depIt.Close()
+	for depIt.Next() {
+		if err := sc.Ledger.DeleteState(depIt.Key()); err != nil {
+			return err
+		}
 	}
-	return nil
+	return depIt.Error()
 }

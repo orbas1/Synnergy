@@ -79,7 +79,10 @@ func OpenResourceDeal(d *ResourceDeal) (*Escrow, error) {
 		return nil, err
 	}
 	escKey := fmt.Sprintf("resource:escrow:%s", esc.ID)
-	data, _ := json.Marshal(esc)
+	data, err := json.Marshal(esc)
+	if err != nil {
+		return nil, err
+	}
 	if err := CurrentStore().Set([]byte(escKey), data); err != nil {
 		return nil, err
 	}
@@ -89,7 +92,10 @@ func OpenResourceDeal(d *ResourceDeal) (*Escrow, error) {
 	}
 	d.CreatedAt = time.Now().UTC()
 	dealKey := fmt.Sprintf("resource:deal:%s", d.ID)
-	rawDeal, _ := json.Marshal(d)
+	rawDeal, err := json.Marshal(d)
+	if err != nil {
+		return nil, err
+	}
 	if err := CurrentStore().Set([]byte(dealKey), rawDeal); err != nil {
 		return nil, err
 	}
@@ -118,7 +124,10 @@ func CloseResourceDeal(ctx *Context, dealID string) error {
 	d.Closed = true
 	now := time.Now().UTC()
 	d.ClosedAt = &now
-	updated, _ := json.Marshal(&d)
+	updated, err := json.Marshal(&d)
+	if err != nil {
+		return err
+	}
 	if err := CurrentStore().Set([]byte(dealKey), updated); err != nil {
 		return err
 	}
@@ -144,7 +153,10 @@ func releaseResourceEscrow(ctx *Context, escrowID string) error {
 		return err
 	}
 	esc.State = "released"
-	updated, _ := json.Marshal(esc)
+	updated, err := json.Marshal(esc)
+	if err != nil {
+		return err
+	}
 	return CurrentStore().Set([]byte(key), updated)
 }
 

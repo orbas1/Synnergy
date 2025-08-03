@@ -36,7 +36,10 @@ func (spm *StakePenaltyManager) AdjustStake(addr Address, delta int64) error {
 	spm.mu.Lock()
 	defer spm.mu.Unlock()
 	key := stakeKey(addr)
-	curRaw, _ := spm.led.GetState(key)
+	curRaw, err := spm.led.GetState(key)
+	if err != nil {
+		return err
+	}
 	var cur int64
 	if len(curRaw) != 0 {
 		cur = int64(binary.BigEndian.Uint64(curRaw))
@@ -54,8 +57,8 @@ func (spm *StakePenaltyManager) AdjustStake(addr Address, delta int64) error {
 func (spm *StakePenaltyManager) StakeOf(addr Address) uint64 {
 	spm.mu.RLock()
 	defer spm.mu.RUnlock()
-	raw, _ := spm.led.GetState(stakeKey(addr))
-	if len(raw) == 0 {
+	raw, err := spm.led.GetState(stakeKey(addr))
+	if err != nil || len(raw) == 0 {
 		return 0
 	}
 	return binary.BigEndian.Uint64(raw)
@@ -68,7 +71,10 @@ func (spm *StakePenaltyManager) Penalize(addr Address, points uint32, reason str
 	spm.mu.Lock()
 	defer spm.mu.Unlock()
 	key := penaltyKey(addr)
-	raw, _ := spm.led.GetState(key)
+	raw, err := spm.led.GetState(key)
+	if err != nil {
+		return err
+	}
 	var cur uint32
 	if len(raw) != 0 {
 		cur = binary.BigEndian.Uint32(raw)
@@ -87,8 +93,8 @@ func (spm *StakePenaltyManager) Penalize(addr Address, points uint32, reason str
 func (spm *StakePenaltyManager) PenaltyOf(addr Address) uint32 {
 	spm.mu.RLock()
 	defer spm.mu.RUnlock()
-	raw, _ := spm.led.GetState(penaltyKey(addr))
-	if len(raw) == 0 {
+	raw, err := spm.led.GetState(penaltyKey(addr))
+	if err != nil || len(raw) == 0 {
 		return 0
 	}
 	return binary.BigEndian.Uint32(raw)
@@ -109,7 +115,10 @@ func (spm *StakePenaltyManager) SlashStake(addr Address, fraction float64) (uint
 	}
 
 	key := stakeKey(addr)
-	raw, _ := spm.led.GetState(key)
+	raw, err := spm.led.GetState(key)
+	if err != nil {
+		return 0, err
+	}
 	if len(raw) == 0 {
 		return 0, errors.New("no stake recorded")
 	}
