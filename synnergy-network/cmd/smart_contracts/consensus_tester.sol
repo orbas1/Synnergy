@@ -1,3 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
-// Placeholder for consensus_tester contract. Uses opcodes from opcode_dispatcher.go with gas costs defined in gas_table.go.
+
+/// @title ConsensusTester
+/// @notice Simple voting contract useful for consensus experiments.
+contract ConsensusTester {
+    mapping(bytes32 => uint256) public votes;
+
+    event Voted(address indexed voter, bytes32 indexed proposal);
+
+    /// @notice Cast a vote for a proposal identifier.
+    function vote(bytes32 proposal) external {
+        votes[proposal] += 1;
+        emit Voted(msg.sender, proposal);
+    }
+}
+
