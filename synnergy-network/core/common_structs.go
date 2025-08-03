@@ -76,16 +76,16 @@ type edge struct {
 //---------------------------------------------------------------------
 
 type AuthorityNode struct {
-        Addr        Address       `json:"addr"`
-        // Wallet holds the payment address associated with the authority
-        // node. It may differ from the node's network address and is used
-        // when distributing fees or processing on-chain payments.
-        Wallet      Address       `json:"wallet"`
-        Role        AuthorityRole `json:"role"`
-        Active      bool          `json:"active"`
-        PublicVotes uint32        `json:"pv"`
-        AuthVotes   uint32        `json:"av"`
-        CreatedAt   int64         `json:"since"`
+	Addr Address `json:"addr"`
+	// Wallet holds the payment address associated with the authority
+	// node. It may differ from the node's network address and is used
+	// when distributing fees or processing on-chain payments.
+	Wallet      Address       `json:"wallet"`
+	Role        AuthorityRole `json:"role"`
+	Active      bool          `json:"active"`
+	PublicVotes uint32        `json:"pv"`
+	AuthVotes   uint32        `json:"av"`
+	CreatedAt   int64         `json:"since"`
 }
 
 type AuthoritySet struct {
@@ -637,7 +637,6 @@ const (
 	TxReversal
 )
 
-
 type Transaction struct {
 	// core fields
 	Type             TxType            `json:"type"`
@@ -874,8 +873,9 @@ type Stack struct {
 	data []*big.Int
 }
 
-// Push adds a *big.Int value onto the stack. A nil value will panic to avoid
-// ambiguous entries which could mask programming errors during VM execution.
+// Push appends a 256-bit word onto the stack. Pushing a nil value would
+// introduce ambiguity into VM execution, so it intentionally panics to surface
+// programmer errors early.
 func (s *Stack) Push(v *big.Int) {
 	if v == nil {
 		panic("nil value pushed to stack")
@@ -883,20 +883,15 @@ func (s *Stack) Push(v *big.Int) {
 	s.data = append(s.data, v)
 }
 
-// Pop removes and returns the most recently pushed *big.Int. It panics on an
-// empty stack or if the stored value is not a *big.Int, ensuring the VM stack
-// remains type-safe.
+// Pop removes and returns the most recently pushed 256-bit word. It panics if
+// the stack is empty, mirroring EVM-style stack semantics.
 func (s *Stack) Pop() *big.Int {
 	if len(s.data) == 0 {
 		panic("stack underflow")
 	}
 	idx := len(s.data) - 1
-	raw := s.data[idx]
+	val := s.data[idx]
 	s.data = s.data[:idx]
-	val, ok := raw.(*big.Int)
-	if !ok {
-		panic("stack element is not *big.Int")
-	}
 	return val
 }
 
