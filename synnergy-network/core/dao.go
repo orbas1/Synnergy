@@ -38,10 +38,10 @@ func CreateDAO(name string, creator Address) (*DAO, error) {
 	id := uuid.New().String()
 	key := fmt.Sprintf("dao:meta:%s", id)
 	raw, err := CurrentStore().Get([]byte(key))
-	if err != nil {
+	if err != nil && !errors.Is(err, ErrNotFound) {
 		return nil, err
 	}
-	if raw != nil {
+	if err == nil && raw != nil {
 		return nil, ErrDAOExists
 	}
 	d := &DAO{
@@ -63,11 +63,11 @@ func CreateDAO(name string, creator Address) (*DAO, error) {
 func JoinDAO(id string, member Address) error {
 	key := fmt.Sprintf("dao:meta:%s", id)
 	raw, err := CurrentStore().Get([]byte(key))
+	if errors.Is(err, ErrNotFound) || raw == nil {
+		return ErrDAONotFound
+	}
 	if err != nil {
 		return err
-	}
-	if raw == nil {
-		return ErrDAONotFound
 	}
 	var d DAO
 	if err := json.Unmarshal(raw, &d); err != nil {
@@ -90,11 +90,11 @@ func JoinDAO(id string, member Address) error {
 func LeaveDAO(id string, member Address) error {
 	key := fmt.Sprintf("dao:meta:%s", id)
 	raw, err := CurrentStore().Get([]byte(key))
+	if errors.Is(err, ErrNotFound) || raw == nil {
+		return ErrDAONotFound
+	}
 	if err != nil {
 		return err
-	}
-	if raw == nil {
-		return ErrDAONotFound
 	}
 	var d DAO
 	if err := json.Unmarshal(raw, &d); err != nil {
@@ -117,11 +117,11 @@ func LeaveDAO(id string, member Address) error {
 func DAOInfo(id string) (*DAO, error) {
 	key := fmt.Sprintf("dao:meta:%s", id)
 	raw, err := CurrentStore().Get([]byte(key))
+	if errors.Is(err, ErrNotFound) || raw == nil {
+		return nil, ErrDAONotFound
+	}
 	if err != nil {
 		return nil, err
-	}
-	if raw == nil {
-		return nil, ErrDAONotFound
 	}
 	var d DAO
 	if err := json.Unmarshal(raw, &d); err != nil {
