@@ -61,7 +61,9 @@ func (e *ChannelEngine) CancelClose(id ChannelID) error {
 	if err := e.led.SetState(chKey(id), mustJSON(ch)); err != nil {
 		return err
 	}
-	e.led.DeleteState(pendingKey(id))
+	if err := e.led.DeleteState(pendingKey(id)); err != nil {
+		return err
+	}
 	return nil
 }
 
