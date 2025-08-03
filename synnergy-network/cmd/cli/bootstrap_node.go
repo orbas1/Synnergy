@@ -80,16 +80,13 @@ func bootStart(cmd *cobra.Command, _ []string) error {
 	if b == nil {
 		return fmt.Errorf("not initialised")
 	}
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	b.Start()
-	go func() {
-		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
-		<-sig
-		_ = b.Stop()
-		os.Exit(0)
-	}()
 	fmt.Fprintln(cmd.OutOrStdout(), "bootstrap node started")
-	return nil
+	<-sig
+	signal.Stop(sig)
+	return b.Stop()
 }
 
 func bootStop(cmd *cobra.Command, _ []string) error {
