@@ -847,6 +847,10 @@ func (l *Ledger) Call(from, to Address, input []byte, value *big.Int, gas uint64
 		return nil, fmt.Errorf("contract not found at %s", to.String())
 	}
 
+	// Make a defensive copy of the contract bytecode so the in-memory call
+	// cannot accidentally mutate the original slice stored on the ledger.
+	code := append([]byte(nil), c.Bytecode...)
+
 	// Clone the ledger's key/value state to avoid mutating the live ledger.
 	stateCopy := make(map[string][]byte, len(l.State))
 	for k, v := range l.State {
@@ -871,7 +875,7 @@ func (l *Ledger) Call(from, to Address, input []byte, value *big.Int, gas uint64
 		data:       stateCopy,
 		balances:   make(map[Address]uint64),
 		lpBalances: make(map[Address]map[PoolID]uint64),
-		contracts:  map[Address][]byte{to: c.Bytecode},
+		contracts:  map[Address][]byte{to: code},
 		tokens:     tokenCopy,
 		codeHashes: make(map[Address]Hash),
 		nonces:     nonceCopy,
