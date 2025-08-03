@@ -827,6 +827,38 @@ func (l *Ledger) AddLog(log *Log) {
 	l.logs = append(l.logs, log)
 }
 
+// Call executes a contract located at the address `to` using the provided input
+// and gas limit. The execution is performed in an isolated in-memory state and
+// does not persist any side effects to the ledger. This is a lightweight helper
+// intended primarily for modules requiring read-only contract interactions.
+func (l *Ledger) Call(from, to Address, input []byte, value *big.Int, gas uint64) ([]byte, error) {
+	if l == nil {
+		return nil, fmt.Errorf("ledger is nil")
+	}
+
+	l.mu.RLock()
+	c, ok := l.Contracts[to.String()]
+	l.mu.RUnlock()
+	if !ok {
+		return nil, fmt.Errorf("contract not found at %s", to.String())
+	}
+
+	// Execute the contract using an ephemeral in-memory state. The
+	// temporary state reuses the VM implementation provided by memState.
+	state, err := NewInMemory()
+	if err != nil {
+		return nil, err
+	}
+	ms, ok := state.(*memState)
+	if !ok {
+		return nil, fmt.Errorf("unexpected state implementation %T", state)
+	}
+
+	ms.contracts[to] = c.Bytecode
+
+	return ms.Call(from, to, input, value, gas)
+}
+
 func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 	if bytes <= 0 {
 		return nil
