@@ -20,6 +20,4 @@ const (
 	// TxReversal denotes an authority-approved reversal of a previous
 	// transaction. The recipient refunds the sender minus a protocol fee.
 	TxReversal
-
-
 )
