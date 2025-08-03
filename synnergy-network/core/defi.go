@@ -58,9 +58,16 @@ func (dm *DeFiManager) CreateInsurance(id Hash, holder Address, premium, payout 
 	defer dm.mu.Unlock()
 	k := append([]byte("ins:"), id[:]...)
 	if ok, _ := dm.ledger.HasState(k); ok {
-		return fmt.Errorf("exists")
+		return fmt.Errorf("policy %x already exists", id[:])
 	}
-	pol := DefiInsurancePolicy{ID: id, Holder: holder, Premium: premium, Payout: payout, Active: true, Created: time.Now().Unix()}
+	pol := DefiInsurancePolicy{
+		ID:      id,
+		Holder:  holder,
+		Premium: premium,
+		Payout:  payout,
+		Active:  true,
+		Created: time.Now().Unix(),
+	}
 	if err := dm.ledger.Transfer(holder, BurnAddress, premium); err != nil {
 		return err
 	}
