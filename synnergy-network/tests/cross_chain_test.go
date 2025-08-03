@@ -88,7 +88,7 @@ func (l *simpleLedger) GetCode(Address) []byte                              { re
 func (l *simpleLedger) GetCodeHash(Address) Hash                            { return Hash{} }
 func (l *simpleLedger) AddLog(*Log)                                         {}
 func (l *simpleLedger) CreateContract(Address, []byte, *big.Int, uint64) (Address, []byte, bool, error) {
-	return Address{}, nil, false, nil
+	return AddressZero, nil, false, nil
 }
 func (l *simpleLedger) DelegateCall(Address, Address, []byte, *big.Int, uint64) error { return nil }
 func (l *simpleLedger) Call(Address, Address, []byte, *big.Int, uint64) ([]byte, error) {

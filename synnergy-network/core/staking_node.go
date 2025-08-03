@@ -81,4 +81,4 @@ func (s *StakingNode) Status() string {
 	}
 }
 
-var _ Nodes.StakingNodeInterface = (*StakingNode)(nil)
+var _ nodes.StakingNodeInterface = (*StakingNode)(nil)

@@ -14,7 +14,7 @@ func ensureMaster(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 	n, _ := core.NewNode(core.Config{})
-	master = core.NewMasterNode(n, &core.Ledger{}, &core.SynnergyConsensus{}, nil, core.Address{}, 0)
+	master = core.NewMasterNode(n, &core.Ledger{}, &core.SynnergyConsensus{}, nil, core.AddressZero, 0)
 	return nil
 }
 

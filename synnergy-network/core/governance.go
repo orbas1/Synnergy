@@ -99,7 +99,7 @@ func quorumReached(p *GovProposal) bool {
 func ParseAddress(s string) (Address, error) {
 	b, err := hex.DecodeString(s)
 	if err != nil || len(b) != 20 {
-		return Address{}, fmt.Errorf("invalid address: %s", s)
+		return AddressZero, fmt.Errorf("invalid address: %s", s)
 	}
 	var a Address
 	copy(a[:], b)

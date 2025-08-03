@@ -27,12 +27,12 @@ func TestHeavyVMInvokeWithReceipt(t *testing.T) {
 	vm := core.NewHeavyVM(led, core.NewGasMeter(1_000_000), wasmer.NewEngine())
 	core.InitContracts(led, vm)
 
-	addr := core.DeriveContractAddress(core.Address{}, wasm)
+	addr := core.DeriveContractAddress(core.AddressZero, wasm)
 	if err := core.GetContractRegistry().Deploy(addr, wasm, nil, 1_000_000); err != nil {
 		t.Fatalf("deploy contract: %v", err)
 	}
 
-	rec, err := core.GetContractRegistry().InvokeWithReceipt(core.Address{}, addr, "", nil, 0)
+	rec, err := core.GetContractRegistry().InvokeWithReceipt(core.AddressZero, addr, "", nil, 0)
 	if err != nil || !rec.Status {
 		t.Fatalf("invoke error: %v %+v", err, rec)
 	}

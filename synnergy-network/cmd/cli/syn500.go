@@ -58,7 +58,7 @@ func syn500HandleCreate(cmd *cobra.Command, _ []string) error {
 		return err
 	}
 	meta := core.Metadata{Name: name, Symbol: symbol, Decimals: dec, Standard: core.StdSYN500}
-	mgr := core.NewTokenManager(syn500Ledger, core.NewFlatGasCalculator())
+	mgr := core.NewTokenManager(syn500Ledger, core.NewFlatGasCalculator(core.DefaultGasPrice))
 	tok, err := mgr.CreateSYN500(meta, map[core.Address]uint64{owner: supply})
 	if err != nil {
 		return err

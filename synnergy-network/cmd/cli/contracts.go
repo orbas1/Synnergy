@@ -155,7 +155,7 @@ func handleDeploy(cmd *cobra.Command, _ []string) error {
 	}
 
 	// derive address & register
-	caller := core.Address{} // system account 0x0…; could be flag in future
+	caller := core.AddressZero // system account 0x0…; could be flag in future
 	addr := core.DeriveContractAddress(caller, code)
 	cr := core.GetContractRegistry()
 	if err := cr.Deploy(addr, code, ricData, df.gas); err != nil {
@@ -191,7 +191,7 @@ func handleInvoke(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("args must be hex bytes")
 	}
 
-	caller := core.Address{} // could add flag later
+	caller := core.AddressZero // could add flag later
 	out, err := core.GetContractRegistry().Invoke(caller, addr, inv.method, argBytes, inv.gas)
 	if err != nil {
 		return err
@@ -214,7 +214,7 @@ func handleDebug(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("args must be hex bytes")
 	}
 
-	caller := core.Address{}
+	caller := core.AddressZero
 	rec, err := core.GetContractRegistry().InvokeWithReceipt(caller, addr, df.method, argBytes, df.gas)
 	if err != nil {
 		return err
