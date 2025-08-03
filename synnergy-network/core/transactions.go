@@ -1,6 +1,3 @@
-//go:build tokens
-// +build tokens
-
 package core
 
 // transactions.go – Synnergy Network
@@ -30,38 +27,6 @@ var _ Tokens.TokenInterfaces
 // -----------------------------------------------------------------------------
 // Tx hashing / signing / verification
 // -----------------------------------------------------------------------------
-
-func (tx *Transaction) HashTx() Hash {
-	h := sha256.New()
-	h.Write([]byte{byte(tx.Type)})
-	h.Write(tx.From[:])
-	h.Write(tx.To[:])
-
-	buf := make([]byte, 8)
-	binary.LittleEndian.PutUint64(buf, tx.Value)
-	h.Write(buf)
-
-	binary.LittleEndian.PutUint64(buf, tx.GasLimit)
-	h.Write(buf)
-
-	binary.LittleEndian.PutUint64(buf, tx.GasPrice)
-	h.Write(buf)
-
-	binary.LittleEndian.PutUint64(buf, tx.Nonce)
-	h.Write(buf)
-
-	h.Write(tx.Payload)
-	h.Write(tx.EncryptedPayload)
-	h.Write(tx.OriginalTx[:])
-
-	binary.LittleEndian.PutUint64(buf, uint64(tx.Timestamp))
-	h.Write(buf)
-
-	d := h.Sum(nil)
-	e := sha256.Sum256(d)
-	copy(tx.Hash[:], e[:])
-	return tx.Hash
-}
 
 func (tx *Transaction) Sign(priv *ecdsa.PrivateKey) error {
 	if priv == nil {
@@ -99,6 +64,10 @@ func (tx *Transaction) VerifySig() error {
 		return errors.New("sender mismatch")
 	}
 	return nil
+}
+
+func (l *Ledger) CallCode(from, to Address, input []byte, value *big.Int, gas uint64) ([]byte, bool, error) {
+	return nil, false, nil
 }
 
 // -----------------------------------------------------------------------------

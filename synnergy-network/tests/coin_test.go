@@ -16,15 +16,15 @@ import (
 */
 
 // bytesToAddress converts an arbitrary byte slice into an Address.
-func bytesToAddress(b []byte) Address {
-	var a Address
+func bytesToAddress(b []byte) core.Address {
+	var a core.Address
 	copy(a[:], b)
 	return a
 }
 
 // keyForLedgerBalance replicates the key format used by Ledger.MintToken.
-func keyForLedgerBalance(a Address) string {
-	return fmt.Sprintf("%s:%s", a.String(), Code)
+func keyForLedgerBalance(a core.Address) string {
+	return fmt.Sprintf("%s:%s", a.String(), core.Code)
 }
 
 /*
@@ -56,7 +56,7 @@ func TestNewCoin(t *testing.T) {
 		{
 			name: "total exceeds MaxSupply",
 			tokenBalances: map[string]uint64{
-				keyForLedgerBalance(addrA): MaxSupply + 1,
+				keyForLedgerBalance(addrA): core.MaxSupply + 1,
 			},
 			wantErr: true,
 		},
@@ -66,11 +66,11 @@ func TestNewCoin(t *testing.T) {
 		tc := tc // capture
 		t.Run(tc.name, func(t *testing.T) {
 			// Build an in-memory ledger with the desired balances.
-			ldg := &Ledger{
+			ldg := &core.Ledger{
 				TokenBalances: tc.tokenBalances,
 			}
 
-			c, err := NewCoin(ldg)
+			c, err := core.NewCoin(ldg)
 			if gotErr := err != nil; gotErr != tc.wantErr {
 				t.Fatalf("expected err=%v, got err=%v (%v)", tc.wantErr, gotErr, err)
 			}
@@ -115,7 +115,7 @@ func TestCoinMint(t *testing.T) {
 		},
 		{
 			name:       "mint exceeds cap",
-			startTotal: MaxSupply - 10,
+			startTotal: core.MaxSupply - 10,
 			mintAmount: 20,
 			wantErr:    true,
 		},
@@ -124,9 +124,9 @@ func TestCoinMint(t *testing.T) {
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			ldg := &Ledger{TokenBalances: map[string]uint64{}}
+			ldg := &core.Ledger{TokenBalances: map[string]uint64{}}
 
-			c := &Coin{
+			c := &core.Coin{
 				ledger:      ldg,
 				totalMinted: tc.startTotal,
 			}
@@ -158,10 +158,10 @@ func TestCoinMint(t *testing.T) {
 */
 
 // Ensure Ledger’s Snapshot method still matches what Coin expects.
-var _ = (&Ledger{}).Snapshot
+var _ = (&core.Ledger{}).Snapshot
 
 // Ensure Ledger’s MintToken matches what Coin.Mint uses.
-var _ = (&Ledger{}).MintToken
+var _ = (&core.Ledger{}).MintToken
 
 // Mutex is unused directly in the tests, but including it prevents
 // accidental data races when running `go test -race`.
@@ -170,7 +170,7 @@ var _ sync.Mutex
 // Quick sanity check: Snapshot must marshal without error; the test suite
 // relies on this behaviour to stay hermetic.
 func TestLedgerSnapshotMarshals(t *testing.T) {
-	ldg := &Ledger{}
+	ldg := &core.Ledger{}
 	if _, err := ldg.Snapshot(); err != nil {
 		t.Fatalf("Snapshot() unexpected error: %v", err)
 	}
@@ -183,17 +183,17 @@ func TestLedgerSnapshotMarshals(t *testing.T) {
 */
 
 func TestLedgerMintTokenZeroAmount(t *testing.T) {
-	ldg := &Ledger{TokenBalances: map[string]uint64{}}
-	var addr Address
-	err := ldg.MintToken(addr, Code, 0)
+	ldg := &core.Ledger{TokenBalances: map[string]uint64{}}
+	var addr core.Address
+	err := ldg.MintToken(addr, core.Code, 0)
 	if !errors.Is(err, fmt.Errorf("mint amount must be positive")) && err == nil {
 		t.Fatalf("expected non-nil error on zero mint, got %v", err)
 	}
 }
 
 func TestBlockRewardAtHalving(t *testing.T) {
-	r1 := BlockRewardAt(0)
-	r2 := BlockRewardAt(RewardHalvingPeriod)
+	r1 := core.BlockRewardAt(0)
+	r2 := core.BlockRewardAt(core.RewardHalvingPeriod)
 	expected := new(big.Int).Rsh(r1, 1)
 	if expected.Cmp(r2) != 0 {
 		t.Fatalf("halving mismatch: got %v want %v", r2, expected)
