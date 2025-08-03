@@ -637,6 +637,7 @@ const (
 	TxReversal
 )
 
+
 type Transaction struct {
 	// core fields
 	Type             TxType            `json:"type"`
