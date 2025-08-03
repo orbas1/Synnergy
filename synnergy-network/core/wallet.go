@@ -44,6 +44,12 @@ func SetWalletLogger(l *log.Logger) { globalLogger = l }
 
 var globalLogger = log.New()
 
+func zeroBytes(b []byte) {
+	for i := range b {
+		b[i] = 0
+	}
+}
+
 //---------------------------------------------------------------------
 // HDWallet structure
 //---------------------------------------------------------------------
@@ -79,11 +85,14 @@ func NewRandomWallet(entropyBits int) (*HDWallet, string, error) {
 	if err != nil {
 		return nil, "", fmt.Errorf("entropy: %w", err)
 	}
+	defer zeroBytes(entropy)
+
 	mnemonic, err := bip39.NewMnemonic(entropy)
 	if err != nil {
 		return nil, "", fmt.Errorf("mnemonic: %w", err)
 	}
 	seed := bip39.NewSeed(mnemonic, "")
+	defer zeroBytes(seed)
 	w, err := NewHDWalletFromSeed(seed, globalLogger)
 	if err != nil {
 		return nil, "", err
@@ -97,6 +106,7 @@ func WalletFromMnemonic(mnemonic, passphrase string) (*HDWallet, error) {
 		return nil, errors.New("invalid mnemonic checksum")
 	}
 	seed := bip39.NewSeed(mnemonic, passphrase)
+	defer zeroBytes(seed)
 	return NewHDWalletFromSeed(seed, globalLogger)
 }
 
@@ -106,11 +116,19 @@ func NewHDWalletFromSeed(seed []byte, lg *log.Logger) (*HDWallet, error) {
 	}
 
 	I := hmacSHA512([]byte(masterHMACKey), seed)
+	masterKey := make([]byte, 32)
+	masterChain := make([]byte, 32)
+	copy(masterKey, I[:32])
+	copy(masterChain, I[32:])
+	zeroBytes(I)
+
+	seedCopy := make([]byte, len(seed))
+	copy(seedCopy, seed)
 
 	w := &HDWallet{
-		seed:        seed,
-		masterKey:   I[:32],
-		masterChain: I[32:],
+		seed:        seedCopy,
+		masterKey:   masterKey,
+		masterChain: masterChain,
 		logger:      lg,
 	}
 
@@ -134,8 +152,12 @@ func derivePrivate(parentKey, parentChain []byte, index uint32) (key, ccode []by
 	binary.BigEndian.PutUint32(data[33:], index)
 
 	I := hmacSHA512(parentChain, data)
-	key = I[:32]
-	ccode = I[32:]
+	zeroBytes(data)
+	key = make([]byte, 32)
+	ccode = make([]byte, 32)
+	copy(key, I[:32])
+	copy(ccode, I[32:])
+	zeroBytes(I)
 	return key, ccode, nil
 }
 
