@@ -30,7 +30,7 @@ type AuthApplication struct {
 	ID           Hash          `json:"id"`
 	Candidate    Address       `json:"candidate"`
 	Role         AuthorityRole `json:"role"`
-	Description  string        `json:"desc"`
+	Description  string        `json:"description"`
 	Electorate   []Address     `json:"electorate"`
 	VotesFor     uint32        `json:"votes_for"`
 	VotesAgainst uint32        `json:"votes_against"`

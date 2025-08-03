@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"sync"
-	core "synnergy-network/core"
+	. "synnergy-network/core"
 	"testing"
 	"time"
 )
@@ -109,12 +109,11 @@ func addrWith(b byte) Address { return Address{b} }
 
 func TestLoanPoolSubmit(t *testing.T) {
 	led := newLpLedger()
-	lpCfg := &LoanPool{}
-	lpCfg.cfg.ElectorateSize = 3
-	lpCfg.cfg.VotePeriod = time.Hour
-	lpCfg.cfg.SpamFee = 0
-	lpCfg.cfg.Rules = map[ProposalType]VoteRule{
-		StandardLoan: {EnableAuthVotes: true},
+	lpCfg := &LoanPoolConfig{
+		ElectorateSize: 3,
+		VotePeriod:     time.Hour,
+		SpamFee:        0,
+		Rules:          map[ProposalType]VoteRule{StandardLoan: {EnableAuthVotes: true}},
 	}
 	elector := mockElector{authSet: map[Address]bool{addrWith(1): true}, elect: []Address{addrWith(1)}}
 	lp := NewLoanPool(nil, led, elector, lpCfg)
@@ -163,10 +162,11 @@ func TestLoanPoolVote(t *testing.T) {
 	rules := map[ProposalType]VoteRule{
 		EducationGrant: {EnableAuthVotes: true, EnablePublicVotes: true, AuthQuorum: 1, AuthMajority: 50, PubQuorum: 1, PubMajority: 50},
 	}
-	cfgLP := &LoanPool{}
-	cfgLP.cfg.ElectorateSize = 1
-	cfgLP.cfg.VotePeriod = time.Hour
-	cfgLP.cfg.Rules = rules
+	cfgLP := &LoanPoolConfig{
+		ElectorateSize: 1,
+		VotePeriod:     time.Hour,
+		Rules:          rules,
+	}
 	lp := NewLoanPool(nil, led, mockElector{authSet: map[Address]bool{authAddr: true}, elect: []Address{authAddr}}, cfgLP)
 	id, _ := lp.Submit(authAddr, addrWith(9), EducationGrant, 100, "edu")
 
@@ -201,8 +201,7 @@ func TestLoanPoolDisburse(t *testing.T) {
 	led := newLpLedger()
 	recipient := addrWith(5)
 
-	cfg := &LoanPool{}
-	cfg.cfg.Rules = map[ProposalType]VoteRule{}
+	cfg := &LoanPoolConfig{Rules: map[ProposalType]VoteRule{}}
 	lp := NewLoanPool(nil, led, mockElector{}, cfg)
 	id := Hash(sha256.Sum256([]byte("x")))
 	prop := Proposal{ID: id, Status: Passed, Recipient: recipient, Amount: 77}
@@ -231,9 +230,10 @@ func TestLoanPoolDisburse(t *testing.T) {
 
 func TestLoanPoolTick(t *testing.T) {
 	led := newLpLedger()
-	cfg := &LoanPool{}
-	cfg.cfg.Rules = map[ProposalType]VoteRule{StandardLoan: {EnableAuthVotes: false, EnablePublicVotes: false}}
-	cfg.cfg.VotePeriod = time.Second
+	cfg := &LoanPoolConfig{
+		Rules:      map[ProposalType]VoteRule{StandardLoan: {EnableAuthVotes: false, EnablePublicVotes: false}},
+		VotePeriod: time.Second,
+	}
 	lp := NewLoanPool(nil, led, mockElector{}, cfg)
 
 	id, _ := lp.Submit(addrWith(3), addrWith(4), StandardLoan, 50, "short")

@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 // APINode exposes a HTTP API gateway backed by a network node and
@@ -35,8 +36,16 @@ func (a *APINode) APINode_Start(addr string) error {
 	mux.HandleFunc("/balance/", a.handleBalance)
 	mux.HandleFunc("/tx", a.handleTx)
 	mux.HandleFunc("/block/", a.handleBlock)
-	a.srv = &http.Server{Addr: addr, Handler: mux}
-	go a.node.ListenAndServe()
+	a.srv = &http.Server{
+		Addr:         addr,
+		Handler:      mux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
+	if a.node != nil {
+		go a.node.ListenAndServe()
+	}
 	return a.srv.ListenAndServe()
 }
 
@@ -88,8 +97,12 @@ func (a *APINode) handleTx(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "content type must be application/json", http.StatusUnsupportedMediaType)
 		return
 	}
+	req.Body = http.MaxBytesReader(w, req.Body, 1<<20) // 1MB limit
+	defer req.Body.Close()
+	dec := json.NewDecoder(req.Body)
+	dec.DisallowUnknownFields()
 	var tx Transaction
-	if err := json.NewDecoder(req.Body).Decode(&tx); err != nil {
+	if err := dec.Decode(&tx); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -108,12 +121,12 @@ func (a *APINode) handleBlock(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "ledger not initialised", http.StatusInternalServerError)
 		return
 	}
-	h, err := strconv.Atoi(req.URL.Path[len("/block/"):])
-	if err != nil || h < 0 {
+	h, err := strconv.ParseUint(req.URL.Path[len("/block/"):], 10, 64)
+	if err != nil {
 		http.Error(w, "invalid height", http.StatusBadRequest)
 		return
 	}
-	blk, err := a.ledger.GetBlock(uint64(h))
+	blk, err := a.ledger.GetBlock(h)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return

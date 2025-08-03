@@ -1,5 +1,8 @@
 export default [
   {
+    ignores: ["eslint.config.js"],
+  },
+  {
     files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: 2021,

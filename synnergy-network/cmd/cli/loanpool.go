@@ -35,7 +35,7 @@ func ensureLoanPool(cmd *cobra.Command, _ []string) error {
 		return errors.New("ledger not initialised")
 	}
 	std := log.New(logrus.StandardLogger().Out, "", log.LstdFlags)
-	loanPool = core.NewLoanPool(std, led, lpElector{}, &core.LoanPool{})
+	loanPool = core.NewLoanPool(std, led, lpElector{}, &core.LoanPoolConfig{})
 	return nil
 }
 

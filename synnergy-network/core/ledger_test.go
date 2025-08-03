@@ -42,13 +42,13 @@ func TestNewLedgerInit(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			cfg, _ := tmpLedgerConfig(t, tc.genesis)
-			led, err := NewLedger(cfg)
+			config, _ := tmpLedgerConfig(t, tc.genesis)
+			ledger, err := NewLedger(config)
 			if err != nil {
 				t.Fatalf("init err: %v", err)
 			}
-			if len(led.Blocks) != tc.wantBlocks {
-				t.Fatalf("blocks=%d want %d", len(led.Blocks), tc.wantBlocks)
+			if len(ledger.Blocks) != tc.wantBlocks {
+				t.Fatalf("blocks=%d want %d", len(ledger.Blocks), tc.wantBlocks)
 			}
 		})
 	}
@@ -60,12 +60,12 @@ func TestNewLedgerInit(t *testing.T) {
 
 func TestAddBlockHeightMismatch(t *testing.T) {
 	genesis := &Block{Header: BlockHeader{Height: 0}}
-	cfg, _ := tmpLedgerConfig(t, genesis)
-	led, _ := NewLedger(cfg)
+	config, _ := tmpLedgerConfig(t, genesis)
+	ledger, _ := NewLedger(config)
 
 	// create block with incorrect height (should be 1)
-	bad := &Block{Header: BlockHeader{Height: 2}}
-	if err := led.AddBlock(bad); err == nil {
+	badBlock := &Block{Header: BlockHeader{Height: 2}}
+	if err := ledger.AddBlock(badBlock); err == nil {
 		t.Fatalf("expected height mismatch error")
 	}
 }
@@ -79,13 +79,13 @@ func TestMintTokenBalance(t *testing.T) {
 	led, _ := NewLedger(cfg)
 	addr := Address{0xAA}
 
-	if err := led.MintToken(addr, "SYNN", 0); err == nil {
+	if err := ledger.MintToken(addr, "SYNN", 0); err == nil {
 		t.Fatalf("expected zero amount error")
 	}
-	if err := led.MintToken(addr, "SYNN", 500); err != nil {
+	if err := ledger.MintToken(addr, "SYNN", 500); err != nil {
 		t.Fatalf("mint err %v", err)
 	}
-	bal := led.BalanceOf(addr)
+	bal := ledger.BalanceOf(addr)
 	if bal != 500 {
 		t.Fatalf("balance %d want 500", bal)
 	}
@@ -96,19 +96,19 @@ func TestMintTokenBalance(t *testing.T) {
 //-------------------------------------------------------------
 
 func TestSnapshotRoundTrip(t *testing.T) {
-	cfg, _ := tmpLedgerConfig(t, nil)
-	led, _ := NewLedger(cfg)
-	led.State["foo"] = []byte("bar")
-	data, err := led.Snapshot()
+	config, _ := tmpLedgerConfig(t, nil)
+	ledger, _ := NewLedger(config)
+	ledger.State["foo"] = []byte("bar")
+	data, err := ledger.Snapshot()
 	if err != nil {
 		t.Fatalf("snapshot err %v", err)
 	}
 
-	var out Ledger
-	if err := json.Unmarshal(data, &out); err != nil {
+	var outLedger Ledger
+	if err := json.Unmarshal(data, &outLedger); err != nil {
 		t.Fatalf("unmarshal snapshot %v", err)
 	}
-	if val := out.State["foo"]; string(val) != "bar" {
+	if val := outLedger.State["foo"]; string(val) != "bar" {
 		t.Fatalf("snapshot state mismatch")
 	}
 }
@@ -119,20 +119,20 @@ func TestSnapshotRoundTrip(t *testing.T) {
 
 func TestAppendSubBlockHeightCheck(t *testing.T) {
 	// bootstrap ledger with one block that has no subheaders yet
-	blk := &Block{Header: BlockHeader{Height: 0}, Body: BlockBody{SubHeaders: []SubBlockHeader{}}}
-	cfg, _ := tmpLedgerConfig(t, blk)
-	led, _ := NewLedger(cfg)
+	block := &Block{Header: BlockHeader{Height: 0}, Body: BlockBody{SubHeaders: []SubBlockHeader{}}}
+	config, _ := tmpLedgerConfig(t, block)
+	ledger, _ := NewLedger(config)
 
 	// first sub-block height 0 ok
-	sb0 := &SubBlock{Header: SubBlockHeader{Height: 0}}
-	sb0.Body.Transactions = [][]byte{[]byte("tx")}
-	if err := led.AppendSubBlock(sb0); err != nil {
+	sbZero := &SubBlock{Header: SubBlockHeader{Height: 0}}
+	sbZero.Body.Transactions = [][]byte{[]byte("tx")}
+	if err := ledger.AppendSubBlock(sbZero); err != nil {
 		t.Fatalf("append subblock 0 err %v", err)
 	}
 
 	// next sub-block with same height should fail
-	sbBad := &SubBlock{Header: SubBlockHeader{Height: 0}}
-	if err := led.AppendSubBlock(sbBad); err == nil {
+	sbDuplicate := &SubBlock{Header: SubBlockHeader{Height: 0}}
+	if err := ledger.AppendSubBlock(sbDuplicate); err == nil {
 		t.Fatalf("expected height mismatch error")
 	}
 }
@@ -143,28 +143,28 @@ func TestAppendSubBlockHeightCheck(t *testing.T) {
 
 func TestPruneArchivesBlocks(t *testing.T) {
 	genesis := &Block{Header: BlockHeader{Height: 0}}
-	cfg, cleanup := tmpLedgerConfig(t, genesis)
+	config, cleanup := tmpLedgerConfig(t, genesis)
 	defer cleanup()
-	cfg.PruneInterval = 2
-	led, err := NewLedger(cfg)
+	config.PruneInterval = 2
+	ledger, err := NewLedger(config)
 	if err != nil {
 		t.Fatalf("ledger init: %v", err)
 	}
 
 	// add blocks 1,2,3 - block 0 should be pruned
 	for i := 1; i <= 3; i++ {
-		blk := &Block{Header: BlockHeader{Height: uint64(i)}}
-		if err := led.AddBlock(blk); err != nil {
+		block := &Block{Header: BlockHeader{Height: uint64(i)}}
+		if err := ledger.AddBlock(block); err != nil {
 			t.Fatalf("add block %d: %v", i, err)
 		}
 	}
 
-	if got := len(led.Blocks); got != 2 {
+	if got := len(ledger.Blocks); got != 2 {
 		t.Fatalf("expected 2 blocks after prune, got %d", got)
 	}
 
 	// ensure archive file has data
-	info, err := os.Stat(cfg.ArchivePath)
+	info, err := os.Stat(config.ArchivePath)
 	if err != nil {
 		t.Fatalf("archive stat: %v", err)
 	}
@@ -178,19 +178,19 @@ func TestPruneArchivesBlocks(t *testing.T) {
 //-------------------------------------------------------------
 
 func TestStateRootDeterministic(t *testing.T) {
-	cfg, cleanup := tmpLedgerConfig(t, nil)
+	config, cleanup := tmpLedgerConfig(t, nil)
 	defer cleanup()
-	ledA, _ := NewLedger(cfg)
-	ledA.State["a"] = []byte("1")
-	ledA.State["b"] = []byte("2")
+	ledgerA, _ := NewLedger(config)
+	ledgerA.State["a"] = []byte("1")
+	ledgerA.State["b"] = []byte("2")
 
-	cfg2, cleanup2 := tmpLedgerConfig(t, nil)
+	config2, cleanup2 := tmpLedgerConfig(t, nil)
 	defer cleanup2()
-	ledB, _ := NewLedger(cfg2)
-	ledB.State["b"] = []byte("2")
-	ledB.State["a"] = []byte("1")
+	ledgerB, _ := NewLedger(config2)
+	ledgerB.State["b"] = []byte("2")
+	ledgerB.State["a"] = []byte("1")
 
-	if ledA.StateRoot() != ledB.StateRoot() {
+	if ledgerA.StateRoot() != ledgerB.StateRoot() {
 		t.Fatalf("state roots mismatch")
 	}
 }

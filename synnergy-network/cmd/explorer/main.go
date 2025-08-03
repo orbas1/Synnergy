@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 
@@ -22,7 +20,7 @@ func main() {
 		ledgerPath = "./ledger.db"
 	}
 	if err := core.InitLedger(ledgerPath); err != nil {
-		log.Fatalf("ledger init: %v", err)
+		logger.Fatalf("ledger init: %v", err)
 	}
 
 	addr := viper.GetString("EXPLORER_BIND")
@@ -32,13 +30,13 @@ func main() {
 
 	svc, err := NewLedgerService()
 	if err != nil {
-		log.Fatalf("init service: %v", err)
+		logger.Fatalf("init service: %v", err)
 	}
 
 	srv := NewServer(addr, svc)
 
-	log.Printf("Explorer listening on %s", addr)
+	logger.Printf("listening on %s", addr)
 	if err := srv.Start(); err != nil {
-		log.Fatalf("server: %v", err)
+		logger.Fatalf("server: %v", err)
 	}
 }

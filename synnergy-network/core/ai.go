@@ -83,7 +83,7 @@ func InitAI(led StateRW, grpcEndpoint string, client AIStubClient) error {
 		}
 		conn, e := grpc.Dial(grpcEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if e != nil {
-			err = e
+			err = fmt.Errorf("dial AI service: %w", e)
 			return
 		}
 		engine = &AIEngine{
@@ -112,7 +112,9 @@ func (ai *AIEngine) Close() error {
 // ShutdownAI closes the singleton AI engine if initialised.
 func ShutdownAI() {
 	if engine != nil {
-		_ = engine.Close()
+		if err := engine.Close(); err != nil {
+			zap.L().Sugar().Errorw("failed to close AI engine", "error", err)
+		}
 		engine = nil
 	}
 }
@@ -126,19 +128,24 @@ func (ai *AIEngine) PredictAnomaly(tx *Transaction) (float32, error) {
 		return 0, errors.New("AI engine not initialised")
 	}
 
-	b, _ := json.Marshal(tx)
+	b, err := json.Marshal(tx)
+	if err != nil {
+		return 0, fmt.Errorf("marshal transaction: %w", err)
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
 	resp, err := ai.client.Anomaly(ctx, &TFRequest{Payload: b})
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("anomaly inference: %w", err)
 	}
 
 	modelHash := sha256.Sum256(resp.Result)
 	if meta, ok := ai.modelMeta(modelHash); ok && meta.RoyaltyBp > 0 {
 		fee := tx.GasPrice * uint64(meta.RoyaltyBp) / 10_000
-		_ = ai.led.Transfer(tx.From, meta.Creator, fee)
+		if err := ai.led.Transfer(tx.From, meta.Creator, fee); err != nil {
+			return 0, fmt.Errorf("royalty transfer: %w", err)
+		}
 	}
 	return resp.Score, nil
 }
@@ -161,18 +168,21 @@ type TxVolume struct {
 }
 
 func (ai *AIEngine) OptimizeFees(stats []BlockStats) (uint64, error) {
-	b, _ := json.Marshal(stats)
+	b, err := json.Marshal(stats)
+	if err != nil {
+		return 0, fmt.Errorf("marshal block stats: %w", err)
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	resp, err := ai.client.FeeOpt(ctx, &TFRequest{Payload: b})
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("fee optimisation: %w", err)
 	}
 
 	var target uint64
 	if err := json.Unmarshal(resp.Result, &target); err != nil {
-		return 0, err
+		return 0, fmt.Errorf("unmarshal fee target: %w", err)
 	}
 	return target, nil
 }
@@ -184,18 +194,21 @@ func (ai *AIEngine) PredictVolume(vol []TxVolume) (uint64, error) {
 	if ai == nil {
 		return 0, errors.New("AI engine not initialised")
 	}
-	b, _ := json.Marshal(vol)
+	b, err := json.Marshal(vol)
+	if err != nil {
+		return 0, fmt.Errorf("marshal volume metrics: %w", err)
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	resp, err := ai.client.Volume(ctx, &TFRequest{Payload: b})
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("volume prediction: %w", err)
 	}
 
 	var count uint64
 	if err := json.Unmarshal(resp.Result, &count); err != nil {
-		return 0, err
+		return 0, fmt.Errorf("unmarshal volume: %w", err)
 	}
 	return count, nil
 }
@@ -218,7 +231,13 @@ func (ai *AIEngine) PublishModel(cid string, creator Address, royaltyBp uint16) 
 	ai.mu.Lock()
 	ai.models[h] = meta
 	ai.mu.Unlock()
-	ai.led.SetState(modelKey(h), mustJSON(meta))
+	data, err := json.Marshal(meta)
+	if err != nil {
+		return [32]byte{}, fmt.Errorf("marshal model metadata: %w", err)
+	}
+	if err := ai.led.SetState(modelKey(h), data); err != nil {
+		return [32]byte{}, fmt.Errorf("persist model metadata: %w", err)
+	}
 	return h, nil
 }
 
@@ -285,17 +304,20 @@ func resolveEscrow(ctx *Context, e *Escrow) error {
 	// Transfer funds from escrow account to seller
 	if err := Transfer(ctx, AssetRef{Kind: AssetCoin}, escrowAcc, e.Seller, e.Amount); err != nil {
 		logger.Errorw("failed to release escrow funds", "escrow", e.ID, "error", err)
-		return err
+		return fmt.Errorf("transfer escrow funds: %w", err)
 	}
 
 	e.State = "released"
 
 	key := fmt.Sprintf("ai_marketplace:escrow:%s", e.ID)
-	data, _ := json.Marshal(e)
-
+	data, err := json.Marshal(e)
+	if err != nil {
+		logger.Errorw("failed to marshal escrow state", "escrow", e.ID, "error", err)
+		return fmt.Errorf("marshal escrow: %w", err)
+	}
 	if err := CurrentStore().Set([]byte(key), data); err != nil {
 		logger.Errorw("failed to persist escrow state", "escrow", e.ID, "error", err)
-		return err
+		return fmt.Errorf("persist escrow: %w", err)
 	}
 
 	logger.Infow("escrow released", "escrow", e.ID)
@@ -378,7 +400,10 @@ func BuyModel(ctx *Context, listingID string, buyer Address) (*Escrow, error) {
 
 	// Persist escrow
 	eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", esc.ID)
-	data, _ := json.Marshal(esc)
+	data, err := json.Marshal(esc)
+	if err != nil {
+		return nil, fmt.Errorf("marshal escrow: %w", err)
+	}
 	if err := CurrentStore().Set([]byte(eskKey), data); err != nil {
 		return nil, fmt.Errorf("persist escrow: %w", err)
 	}
@@ -422,7 +447,10 @@ func RentModel(ctx *Context, listingID string, renter Address, duration time.Dur
 	}
 
 	eskKey := fmt.Sprintf("ai_marketplace:escrow:%s", esc.ID)
-	data, _ := json.Marshal(esc)
+	data, err := json.Marshal(esc)
+	if err != nil {
+		return nil, fmt.Errorf("marshal escrow: %w", err)
+	}
 	if err := CurrentStore().Set([]byte(eskKey), data); err != nil {
 		return nil, fmt.Errorf("persist escrow: %w", err)
 	}

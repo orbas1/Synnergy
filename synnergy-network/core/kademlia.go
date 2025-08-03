@@ -25,7 +25,6 @@ func hash160(data []byte) [20]byte {
 	return h
 }
 
-
 // NewKademlia creates a new Kademlia instance bound to the given node ID.
 func NewKademlia(id NodeID) *Kademlia {
 	return &Kademlia{

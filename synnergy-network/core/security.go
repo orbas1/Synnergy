@@ -288,7 +288,7 @@ func Decrypt(key, blob, aad []byte) ([]byte, error) {
 		return nil, errors.New("ciphertext too short")
 	}
 
-	nonce, ciphertext := blob[:chacha20poly1305.NonceSizeX], blob[minLen-len(blob):]
+	nonce, ciphertext := blob[:chacha20poly1305.NonceSizeX], blob[chacha20poly1305.NonceSizeX:]
 	aead, err := chacha20poly1305.NewX(key)
 	if err != nil {
 		return nil, err
