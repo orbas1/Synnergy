@@ -623,7 +623,6 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
-
 // TxType categorises transaction kinds. It mirrors the definition in
 // transactions.go but is repeated here to avoid build tag dependencies.
 type TxType uint8
@@ -638,7 +637,6 @@ const (
 	// a protocol‑defined fee.
 	TxReversal
 )
-
 
 type Transaction struct {
 	// core fields
@@ -668,24 +666,24 @@ type Transaction struct {
 // contents. The resulting hash is stored on the Transaction so subsequent
 // calls avoid recomputing it.
 func (tx *Transaction) HashTx() Hash {
-        b, _ := json.Marshal(tx)
-        h := sha256.Sum256(b)
-        tx.Hash = h
-        return h
+	b, _ := json.Marshal(tx)
+	h := sha256.Sum256(b)
+	tx.Hash = h
+	return h
 }
 
 // IDHex returns the transaction hash as a hex string. If the hash has not yet
 // been computed, it derives it from the transaction contents to ensure a
 // stable identifier.
 func (tx *Transaction) IDHex() string {
-        if tx == nil {
-                return ""
-        }
+	if tx == nil {
+		return ""
+	}
 
-        if tx.Hash == (Hash{}) {
-                tx.HashTx()
-        }
-        return hex.EncodeToString(tx.Hash[:])
+	if tx.Hash == (Hash{}) {
+		tx.HashTx()
+	}
+	return hex.EncodeToString(tx.Hash[:])
 }
 
 type TxInput struct {
