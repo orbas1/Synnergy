@@ -60,6 +60,9 @@ const (
 // Wire‑up interfaces (keeps core independent of concrete impls)
 //---------------------------------------------------------------------
 
+// txPool defines the minimal transaction pool capabilities required by the
+// consensus engine. In addition to selecting transactions for new sub-blocks,
+// the pool must be able to validate incoming transactions.
 type txPool interface {
 	Pick(max int) [][]byte
 	ValidateTx(tx *Transaction) error
