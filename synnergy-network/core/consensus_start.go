@@ -14,6 +14,17 @@ func (sc *SynnergyConsensus) Start(ctx context.Context) {
 		ctx = context.Background()
 	}
 
+	ctx, cancel := context.WithCancel(ctx)
+
+	sc.mu.Lock()
+	if sc.cancel != nil {
+		sc.mu.Unlock()
+		cancel()
+		return
+	}
+	sc.cancel = cancel
+	sc.mu.Unlock()
+
 	// Launch sub‑block proposer and block sealing loops.
 	go sc.subBlockLoop(ctx)
 	go sc.blockLoop(ctx)
@@ -43,5 +54,20 @@ func (sc *SynnergyConsensus) Start(ctx context.Context) {
 			<-ctx.Done()
 			sc.logger.Println("consensus stopped")
 		}()
+	}
+}
+
+// Stop terminates the consensus engine started via Start. It is safe to call
+// multiple times.
+func (sc *SynnergyConsensus) Stop() {
+	if sc == nil {
+		return
+	}
+	sc.mu.Lock()
+	cancel := sc.cancel
+	sc.cancel = nil
+	sc.mu.Unlock()
+	if cancel != nil {
+		cancel()
 	}
 }

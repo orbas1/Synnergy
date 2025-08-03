@@ -142,6 +142,7 @@ type SynnergyConsensus struct {
 	crypto interface{}
 	pool   txPool
 	auth   interface{}
+	cancel context.CancelFunc
 
 	mu            sync.Mutex
 	nextSubHeight uint64
