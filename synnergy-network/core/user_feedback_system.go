@@ -83,13 +83,18 @@ func (f *FeedbackEngine) Submit(user Address, rating uint8, msg string) (string,
 	id := hex.EncodeToString(sum[:])
 
 	entry := FeedbackEntry{ID: id, User: user, Rating: rating, Message: msg, Timestamp: time.Now().Unix()}
-	raw, _ := json.Marshal(entry)
+	raw, err := json.Marshal(entry)
+	if err != nil {
+		return "", err
+	}
 
 	key := append([]byte("feedback:"), sum[:]...)
 	if err := f.led.SetState(key, raw); err != nil {
 		return "", err
 	}
-	_ = Broadcast("feedback", raw)
+	if err := Broadcast("feedback", raw); err != nil {
+		return "", err
+	}
 	return id, nil
 }
 
