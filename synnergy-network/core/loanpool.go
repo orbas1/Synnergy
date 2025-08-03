@@ -137,14 +137,7 @@ type LoanPool struct {
 	ledger StateRW
 	auth   electorateSelector
 
-	cfg struct {
-		ElectorateSize       int                       `yaml:"electorate_size"`
-		VotePeriod           time.Duration             `yaml:"vote_period"`
-		SpamFee              uint64                    `yaml:"spam_fee"`
-		RedistributeInterval time.Duration             `yaml:"redistribute_interval"`
-		RedistributePerc     int                       `yaml:"redistribute_perc"`
-		Rules                map[ProposalType]VoteRule `yaml:"rules"`
-	}
+	cfg LoanPoolConfig
 
 	nextRand         uint64
 	lastRedistribute int64
@@ -161,19 +154,15 @@ func init() {
 	}
 }
 
-func NewLoanPool(lg *log.Logger, led StateRW, auth electorateSelector, cfgYAML *LoanPool) *LoanPool {
-	// cfgYAML is loaded elsewhere, cast values we need.
+func NewLoanPool(lg *log.Logger, led StateRW, auth electorateSelector, cfg *LoanPoolConfig) *LoanPool {
 	lp := &LoanPool{
 		logger: lg,
 		ledger: led,
 		auth:   auth,
 	}
-	lp.cfg.ElectorateSize = cfgYAML.cfg.ElectorateSize
-	lp.cfg.VotePeriod = cfgYAML.cfg.VotePeriod
-	lp.cfg.SpamFee = cfgYAML.cfg.SpamFee
-	lp.cfg.RedistributeInterval = cfgYAML.cfg.RedistributeInterval
-	lp.cfg.RedistributePerc = cfgYAML.cfg.RedistributePerc
-	lp.cfg.Rules = cfgYAML.cfg.Rules
+	if cfg != nil {
+		lp.cfg = *cfg
+	}
 	return lp
 }
 
