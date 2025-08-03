@@ -141,6 +141,9 @@ func (s *Storage) Pin(ctx context.Context, data []byte, payer Address) (string, 
 
 	resp, err := s.client.Do(req)
 	if err != nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
 		return "", 0, err
 	}
 	defer resp.Body.Close()
@@ -187,6 +190,9 @@ func (s *Storage) Retrieve(ctx context.Context, cidStr string) ([]byte, error) {
 	}
 	resp, err := s.client.Do(req)
 	if err != nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
 		return nil, err
 	}
 	defer resp.Body.Close()

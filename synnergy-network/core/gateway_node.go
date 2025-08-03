@@ -104,6 +104,9 @@ func (g *GatewayNode) QueryExternalData(name string) ([]byte, error) {
 	}
 	resp, err := http.Get(url)
 	if err != nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
 		return nil, err
 	}
 	defer resp.Body.Close()
