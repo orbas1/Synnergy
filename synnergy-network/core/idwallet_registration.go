@@ -43,11 +43,16 @@ func RegisterIDWallet(addr Address, info string) error {
 		return fmt.Errorf("id registry not initialised")
 	}
 	key := append([]byte("idwallet:"), addr[:]...)
-	if ok, _ := idReg.led.HasState(key); ok {
+	if ok, err := idReg.led.HasState(key); err != nil {
+		return err
+	} else if ok {
 		return fmt.Errorf("wallet already registered")
 	}
 	rec := IDRegistration{Address: addr, Details: info}
-	data, _ := json.Marshal(rec)
+	data, err := json.Marshal(rec)
+	if err != nil {
+		return err
+	}
 	if err := idReg.led.SetState(key, data); err != nil {
 		return err
 	}
@@ -67,6 +72,12 @@ func IsIDWalletRegistered(addr Address) bool {
 		return false
 	}
 	key := append([]byte("idwallet:"), addr[:]...)
-	ok, _ := idReg.led.HasState(key)
+	ok, err := idReg.led.HasState(key)
+	if err != nil {
+		if idReg.logger != nil {
+			idReg.logger.WithError(err).Warn("idwallet lookup failed")
+		}
+		return false
+	}
 	return ok
 }

@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"crypto/sha256"
 	"fmt"
 	"sync"
 )
@@ -46,6 +47,9 @@ func InitTxDistributor(l *Ledger) {
 
 // CurrentTxDistributor returns the fee distributor if initialised.
 func CurrentTxDistributor() *TxDistributor { return globalDist }
+
+// HashBytes returns the SHA-256 digest of b as a Hash type.
+func HashBytes(b []byte) Hash { return sha256.Sum256(b) }
 
 // ------------------------------------------------------------------
 // TF gRPC stub client for AI module wiring
