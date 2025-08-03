@@ -63,12 +63,20 @@ func (z *ZKPNode) Subscribe(topic string) (<-chan []byte, error) {
 
 	out := make(chan []byte, 1)
 	go func() {
-		for msg := range ch {
-			data := make([]byte, len(msg.Data))
-			copy(data, msg.Data)
-			out <- data
+		defer close(out)
+		for {
+			select {
+			case msg, ok := <-ch:
+				if !ok {
+					return
+				}
+				data := make([]byte, len(msg.Data))
+				copy(data, msg.Data)
+				out <- data
+			case <-z.ctx.Done():
+				return
+			}
 		}
-		close(out)
 	}()
 
 	return out, nil
