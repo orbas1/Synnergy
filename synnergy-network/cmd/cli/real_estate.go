@@ -59,7 +59,7 @@ var reRegisterCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ownerBytes, err := hex.DecodeString(args[0])
-		if err != nil || len(ownerBytes) != len(core.Address{}) {
+		if err != nil || len(ownerBytes) != len(core.AddressZero) {
 			return fmt.Errorf("invalid owner address")
 		}
 		var owner core.Address

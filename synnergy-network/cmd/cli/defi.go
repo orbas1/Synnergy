@@ -41,7 +41,7 @@ func defiCreateInsurance(cmd *cobra.Command, args []string) error {
 	}
 	var id core.Hash
 	copy(id[:], idBytes)
-	holder := core.Address{}
+	holder := core.AddressZero
 	b, err := hex.DecodeString(args[1])
 	if err != nil || len(b) != len(holder) {
 		return fmt.Errorf("bad address")

@@ -864,7 +864,7 @@ func (l *Ledger) ChargeStorageRent(addr Address, bytes int64) error {
 		return nil
 	}
 	cost := uint64(bytes)
-	zero := Address{}
+	zero := AddressZero
 	return l.Transfer(addr, zero, cost)
 }
 

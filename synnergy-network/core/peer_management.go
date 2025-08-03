@@ -39,7 +39,7 @@ func (pm *PeerManagement) DiscoverPeers() []PeerInfo {
 	defer pm.node.peerLock.RUnlock()
 	infos := make([]PeerInfo, 0, len(pm.node.peers))
 	for _, p := range pm.node.peers {
-		infos = append(infos, PeerInfo{Address: Address{}, RTT: float64(p.Latency.Milliseconds()), Updated: time.Now().Unix()})
+		infos = append(infos, PeerInfo{Address: AddressZero, RTT: float64(p.Latency.Milliseconds()), Updated: time.Now().Unix()})
 	}
 	return infos
 }

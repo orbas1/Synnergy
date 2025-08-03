@@ -29,7 +29,7 @@ func NewTxDistributor(ledger *Ledger) *TxDistributor {
 func AddressFromPubKey(pub []byte) (Address, error) {
 	key, err := crypto.UnmarshalPubkey(pub)
 	if err != nil {
-		return Address{}, err
+		return AddressZero, err
 	}
 	return FromCommon(crypto.PubkeyToAddress(*key)), nil
 }
