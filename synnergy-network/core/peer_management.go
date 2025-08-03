@@ -84,37 +84,26 @@ func (pm *PeerManagement) Peers() []PeerInfo {
 	return pm.DiscoverPeers()
 }
 
-func shufflePeerInfo(peers []PeerInfo) error {
-	for i := len(peers) - 1; i > 0; i-- {
-		jBig, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
-		if err != nil {
-			return err
-		}
-		j := int(jBig.Int64())
-		peers[i], peers[j] = peers[j], peers[i]
-	}
-	return nil
-}
-
 // Sample returns up to n peer IDs at random.
 func (pm *PeerManagement) Sample(n int) []string {
-	peers := pm.Peers()
-	if n > len(peers) {
-		n = len(peers)
+	pm.node.peerLock.RLock()
+	ids := make([]string, 0, len(pm.node.peers))
+	for id := range pm.node.peers {
+		ids = append(ids, string(id))
 	}
-	for i := len(peers) - 1; i > 0; i-- {
+	pm.node.peerLock.RUnlock()
+	if n > len(ids) {
+		n = len(ids)
+	}
+	for i := len(ids) - 1; i > 0; i-- {
 		r, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
 		if err != nil {
 			break
 		}
 		j := int(r.Int64())
-		peers[i], peers[j] = peers[j], peers[i]
+		ids[i], ids[j] = ids[j], ids[i]
 	}
-	ids := make([]string, 0, n)
-	for i := 0; i < n; i++ {
-		ids = append(ids, string(pm.node.peers[NodeID(peers[i].Address.String())].ID))
-	}
-	return ids
+	return ids[:n]
 }
 
 // SendAsync opens a libp2p stream and sends the message code and payload.
