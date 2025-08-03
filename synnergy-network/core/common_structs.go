@@ -76,16 +76,16 @@ type edge struct {
 //---------------------------------------------------------------------
 
 type AuthorityNode struct {
-        Addr        Address       `json:"addr"`
-        // Wallet holds the payment address associated with the authority
-        // node. It may differ from the node's network address and is used
-        // when distributing fees or processing on-chain payments.
-        Wallet      Address       `json:"wallet"`
-        Role        AuthorityRole `json:"role"`
-        Active      bool          `json:"active"`
-        PublicVotes uint32        `json:"pv"`
-        AuthVotes   uint32        `json:"av"`
-        CreatedAt   int64         `json:"since"`
+	Addr Address `json:"addr"`
+	// Wallet holds the payment address associated with the authority
+	// node. It may differ from the node's network address and is used
+	// when distributing fees or processing on-chain payments.
+	Wallet      Address       `json:"wallet"`
+	Role        AuthorityRole `json:"role"`
+	Active      bool          `json:"active"`
+	PublicVotes uint32        `json:"pv"`
+	AuthVotes   uint32        `json:"av"`
+	CreatedAt   int64         `json:"since"`
 }
 
 type AuthoritySet struct {
@@ -622,21 +622,9 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
-// TxType categorises transaction kinds. It mirrors the definition in
-// transactions.go but is repeated here to avoid build tag dependencies.
-type TxType uint8
-
-const (
-	// TxPayment transfers value between addresses.
-	TxPayment TxType = iota + 1
-	// TxContractCall executes a smart contract.
-	TxContractCall
-	// TxReversal denotes a reversal of a previous transaction. It requires
-	// multiple authority co‑signatures and refunds the original sender minus
-	// a protocol‑defined fee.
-	TxReversal
-)
-
+// TxType enumerates high‑level transaction categories.  Its concrete
+// definition and associated constants (e.g. TxPayment, TxReversal) reside in
+// tx_types.go to keep this file's scope limited to structural declarations.
 
 type Transaction struct {
 	// core fields
