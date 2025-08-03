@@ -1,9 +1,15 @@
-const express = require("express");
-const morgan = require("morgan");
-const contractsRouter = require("./routes/contracts");
-const logger = require("./middleware/logger");
-const path = require("path");
-require("dotenv").config();
+import express from "express";
+import morgan from "morgan";
+import contractsRouter from "./routes/contracts.js";
+import logger from "./middleware/logger.js";
+import path from "path";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());

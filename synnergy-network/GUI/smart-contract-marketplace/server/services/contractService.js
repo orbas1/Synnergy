@@ -1,6 +1,10 @@
-const fs = require("fs");
-const path = require("path");
-const { exec } = require("child_process");
+import fs from "fs";
+import path from "path";
+import { exec } from "child_process";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DB_PATH =
   process.env.DB_FILE || path.join(__dirname, "../data/contracts.json");
@@ -19,11 +23,11 @@ function save(data) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
 }
 
-exports.listContracts = async () => {
+export async function listContracts() {
   return load();
-};
+}
 
-exports.deployContract = async (name, wasm) => {
+export async function deployContract(name, wasm) {
   const contracts = load();
   const id = `c${Date.now()}`;
   const filename = path.join(__dirname, `${id}.wasm`);
@@ -41,21 +45,21 @@ exports.deployContract = async (name, wasm) => {
   contracts.push(contract);
   save(contracts);
   return contract;
-};
+}
 
-exports.getContract = async (id) => {
+export async function getContract(id) {
   const contracts = load();
   return contracts.find((c) => c.id === id);
-};
+}
 
-exports.deleteContract = async (id) => {
+export async function deleteContract(id) {
   let contracts = load();
   contracts = contracts.filter((c) => c.id !== id);
   save(contracts);
-};
+}
 
-exports.getWasm = async (id) => {
+export async function getWasm(id) {
   const file = path.join(__dirname, `${id}.wasm`);
   if (!fs.existsSync(file)) return null;
   return fs.readFileSync(file);
-};
+}
