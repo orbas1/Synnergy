@@ -50,7 +50,8 @@ func NewValidatorNode(cfg ValidatorNodeConfig) (*ValidatorNode, error) {
 	mgr := NewValidatorManager(led)
 	penalties := NewStakePenaltyManager(logrus.StandardLogger(), led)
 
-	cons, err := NewConsensus(logrus.StandardLogger(), led, n, nil, nil, nil)
+	netAdapter := newNetworkAdapter(n)
+	cons, err := NewConsensus(logrus.StandardLogger(), led, netAdapter, nil, nil, nil)
 	if err != nil {
 		cancel()
 		_ = n.Close()
