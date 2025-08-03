@@ -2,10 +2,13 @@ package core_test
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"sync"
-	core "synnergy-network/core"
+	. "synnergy-network/core"
 	"testing"
 )
 
@@ -13,7 +16,49 @@ import (
 // Minimal in‑memory StateRW mock for sharding tests
 //------------------------------------------------------------
 
+type stateStub struct{}
+
+func (stateStub) DeleteState([]byte) error                { return nil }
+func (stateStub) IsIDTokenHolder(Address) bool            { return false }
+func (stateStub) Snapshot(func() error) error             { return nil }
+func (stateStub) MintLP(Address, PoolID, uint64) error    { return nil }
+func (stateStub) Transfer(Address, Address, uint64) error { return nil }
+func (stateStub) MintToken(Address, uint64) error         { return nil }
+func (stateStub) Burn(Address, uint64) error              { return nil }
+func (stateStub) BalanceOf(Address) uint64                { return 0 }
+func (stateStub) NonceOf(Address) uint64                  { return 0 }
+func (stateStub) BurnLP(Address, PoolID, uint64) error    { return nil }
+func (stateStub) Get([]byte, []byte) ([]byte, error)      { return nil, nil }
+func (stateStub) Set([]byte, []byte, []byte) error        { return nil }
+func (stateStub) Mint(Address, uint64) error              { return nil }
+func (stateStub) GetCode(Address) []byte                  { return nil }
+func (stateStub) GetCodeHash(Address) Hash                { return Hash{} }
+func (stateStub) AddLog(*Log)                             {}
+func (stateStub) CreateContract(Address, []byte, *big.Int, uint64) (Address, []byte, bool, error) {
+	return Address{}, nil, false, nil
+}
+func (stateStub) DelegateCall(Address, Address, []byte, *big.Int, uint64) error { return nil }
+func (stateStub) Call(Address, Address, []byte, *big.Int, uint64) ([]byte, error) {
+	return nil, nil
+}
+func (stateStub) GetContract(Address) (*Contract, error)           { return nil, nil }
+func (stateStub) GetToken(TokenID) (Token, error)                  { return Token{}, nil }
+func (stateStub) GetTokenBalance(Address, TokenID) (uint64, error) { return 0, nil }
+func (stateStub) SetTokenBalance(Address, TokenID, uint64) error   { return nil }
+func (stateStub) GetTokenSupply(TokenID) (uint64, error)           { return 0, nil }
+func (stateStub) CallCode(Address, Address, []byte, *big.Int, uint64) ([]byte, bool, error) {
+	return nil, false, nil
+}
+func (stateStub) CallContract(Address, Address, []byte, *big.Int, uint64) ([]byte, bool, error) {
+	return nil, false, nil
+}
+func (stateStub) StaticCall(Address, Address, []byte, uint64) ([]byte, bool, error) {
+	return nil, false, nil
+}
+func (stateStub) SelfDestruct(Address, Address) {}
+
 type shardMem struct {
+	stateStub
 	mu sync.RWMutex
 	kv map[string][]byte
 }
@@ -37,8 +82,6 @@ func (s *shardMem) DeleteState(k []byte) error {
 	s.mu.Unlock()
 	return nil
 }
-func (s *shardMem) Snapshot(fn func() error) error              { return fn() }
-func (s *shardMem) Transfer(from, to Address, amt uint64) error { return nil }
 func (s *shardMem) PrefixIterator(prefix []byte) StateIterator {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
@@ -57,17 +100,11 @@ func (s *shardMem) HasState(k []byte) (bool, error) {
 	_, ok := s.kv[string(k)]
 	return ok, nil
 }
-func (s *shardMem) Burn(Address, uint64) error                     { return nil }
-func (s *shardMem) BurnLP(Address, PoolID, uint64) error           { return nil }
-func (s *shardMem) MintLP(Address, PoolID, uint64) error           { return nil }
-func (s *shardMem) Mint(Address, uint64) error                     { return nil }
-func (s *shardMem) MintToken(Address, string, uint64) error        { return nil }
-func (s *shardMem) DeductGas(Address, uint64)                      {}
-func (s *shardMem) EmitApproval(TokenID, Address, Address, uint64) {}
-func (s *shardMem) EmitTransfer(TokenID, Address, Address, uint64) {}
-func (s *shardMem) BalanceOf(Address) uint64                       { return 0 }
-func (s *shardMem) WithinBlock(fn func() error) error              { return fn() }
-func (s *shardMem) NonceOf(Address) uint64                         { return 0 }
+func (s *shardMem) Mint(Address, uint64) error        { return nil }
+func (s *shardMem) MintToken(Address, uint64) error   { return nil }
+func (s *shardMem) WithinBlock(fn func() error) error { return fn() }
+func (s *shardMem) BalanceOf(Address) uint64          { return 0 }
+func (s *shardMem) NonceOf(Address) uint64            { return 0 }
 
 // iterator impl
 
@@ -93,33 +130,6 @@ func (it *smIter) Value() []byte {
 func (it *smIter) Error() error { return nil }
 
 //------------------------------------------------------------
-// Dummy Broadcaster (no network) that counts messages
-//------------------------------------------------------------
-
-type shardStubBC struct {
-	cnt  int
-	last []byte
-}
-
-func (b *shardStubBC) Broadcast(topic string, msg interface{}) error {
-	b.cnt++
-	if raw, ok := msg.([]byte); ok {
-		b.last = raw
-	}
-	return nil
-}
-
-//------------------------------------------------------------
-// Minimal CrossShardTx struct for tests (only required fields)
-//------------------------------------------------------------
-
-type CrossShardTx struct {
-	FromShard ShardID `json:"from"`
-	ToShard   ShardID `json:"to"`
-	Hash      Hash    `json:"hash"`
-}
-
-//------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------
 
@@ -129,6 +139,22 @@ func addrWithByte(b byte) Address {
 		a[i] = b
 	}
 	return a
+}
+
+func shardOfAddr(addr Address) ShardID {
+	h := sha256.Sum256(addr.Bytes())
+	idx := binary.BigEndian.Uint16(h[:2])
+	return ShardID(idx >> (16 - ShardBits))
+}
+
+func shardOfAddrNewBits(addr Address, bits uint8) ShardID {
+	h := sha256.Sum256(addr.Bytes())
+	idx := binary.BigEndian.Uint16(h[:2])
+	return ShardID(idx >> (16 - bits))
+}
+
+func xsPendingKey(to ShardID, h Hash) []byte {
+	return append([]byte(fmt.Sprintf("xs:pending:%d:", to)), h[:]...)
 }
 
 //------------------------------------------------------------
@@ -146,10 +172,8 @@ func TestShardOfAddrDeterministic(t *testing.T) {
 
 func TestSubmitCrossShardAndPull(t *testing.T) {
 	led := newShardMem()
-	bc := shardStubBC{}
-	sc := NewShardCoordinator(led, Broadcaster{}) // use empty broadcaster – we will call stub manually
-	// override internal broadcaster with stub using reflection-hack (since field exported). simpler: create coordinator then assign
-	sc.net = Broadcaster{} // zero peers, Broadcast returns nil
+	sc := NewShardCoordinator(led, Broadcaster{})
+	sc.net = Broadcaster{}
 	fromAddr := addrWithByte(0x01)
 	toAddr := addrWithByte(0x02)
 	fromShard := shardOfAddr(fromAddr)

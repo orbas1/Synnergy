@@ -4,13 +4,15 @@ import (
 	"bytes"
 	"crypto/ed25519"
 	"crypto/rand"
+	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
 	"io/ioutil"
+	"math/big"
 	"os"
-	core "synnergy-network/core"
+	. "synnergy-network/core"
 	"testing"
 	"time"
 )
@@ -21,21 +23,21 @@ import (
 
 func genSelfSignedCert(t *testing.T) (certPEM, keyPEM []byte) {
 	t.Helper()
-	priv, err := tls.GeneratePrivateKey(tls.RSAWithSHA256, 2048)
+	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 		t.Fatalf("priv gen: %v", err)
 	}
-	template := &x509.Certificate{SerialNumber: new(big.Int).SetInt64(1), NotBefore: time.Now(), NotAfter: time.Now().Add(time.Hour)}
-	der, err := x509.CreateCertificate(rand.Reader, template, template, priv.Public(), priv)
+	tmpl := &x509.Certificate{
+		SerialNumber: big.NewInt(1),
+		NotBefore:    time.Now(),
+		NotAfter:     time.Now().Add(time.Hour),
+	}
+	der, err := x509.CreateCertificate(rand.Reader, tmpl, tmpl, &priv.PublicKey, priv)
 	if err != nil {
 		t.Fatalf("cert create: %v", err)
 	}
 	certPEM = pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: der})
-	privDER, err := x509.MarshalPKCS8PrivateKey(priv)
-	if err != nil {
-		t.Fatalf("priv der: %v", err)
-	}
-	keyPEM = pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privDER})
+	keyPEM = pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(priv)})
 	return
 }
 

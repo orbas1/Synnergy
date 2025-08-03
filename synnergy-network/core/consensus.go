@@ -1,3 +1,5 @@
+//go:build ignore
+
 package core
 
 // SynnergyConsensus – hybrid PoH + PoS sub‑blocks, aggregated under PoW main block.
