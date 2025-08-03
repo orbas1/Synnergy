@@ -135,7 +135,7 @@ type SynnergyConsensus struct {
 	ledger *Ledger // ← pointer, not value
 	p2p    interface{}
 	crypto interface{}
-	pool   interface{}
+	pool   txPool
 	auth   interface{}
 
 	mu            sync.Mutex
