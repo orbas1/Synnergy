@@ -11,7 +11,7 @@ import (
 type ReputationEvent struct {
 	Timestamp   time.Time `json:"ts"`
 	Delta       int64     `json:"delta"`
-	Description string    `json:"desc"`
+	Description string    `json:"description"`
 }
 
 // ReputationRecord tracks score, trust level and history for an address.

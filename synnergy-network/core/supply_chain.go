@@ -11,9 +11,9 @@ import (
 // SupplyItem represents a tracked asset in the supply chain.
 type SupplyItem struct {
 	ID          string    `json:"id"`
-	Description string    `json:"desc"`
+	Description string    `json:"description"`
 	Owner       Address   `json:"owner"`
-	Location    string    `json:"loc"`
+	Location    string    `json:"location"`
 	Status      string    `json:"status"`
 	Updated     time.Time `json:"updated"`
 }
