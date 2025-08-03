@@ -37,7 +37,7 @@ var syn845CreateCmd = &cobra.Command{
 			return err
 		}
 		meta := core.Metadata{Name: name, Symbol: symbol, Decimals: 0}
-		id, err := core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator()).CreateDebtToken(meta, map[core.Address]uint64{owner: supply})
+		id, err := core.NewTokenManager(core.CurrentLedger(), core.NewFlatGasCalculator(core.DefaultGasPrice)).CreateDebtToken(meta, map[core.Address]uint64{owner: supply})
 		if err != nil {
 			return err
 		}

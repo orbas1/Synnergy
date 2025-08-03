@@ -28,7 +28,7 @@ func syn1000Init(cmd *cobra.Command, _ []string) error {
 			err = e
 			return
 		}
-		gas := core.NewFlatGasCalculator()
+		gas := core.NewFlatGasCalculator(core.DefaultGasPrice)
 		syn1000Mgr = core.NewTokenManager(led, gas)
 	})
 	return err
