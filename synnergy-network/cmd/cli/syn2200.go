@@ -11,7 +11,6 @@ import (
 	"github.com/spf13/cobra"
 
 	core "synnergy-network/core"
-	Tokens "synnergy-network/core/Tokens"
 )
 
 var (
