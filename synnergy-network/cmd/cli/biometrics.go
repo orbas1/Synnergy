@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"io/ioutil"
+	"os"
 
 	"github.com/spf13/cobra"
 	core "synnergy-network/core"
@@ -15,7 +15,7 @@ var biometrics = core.NewBiometricsAuth()
 func bioEnroll(cmd *cobra.Command, args []string) error {
 	addr, _ := cmd.Flags().GetString("address")
 	file, _ := cmd.Flags().GetString("file")
-	data, err := ioutil.ReadFile(file)
+	data, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func bioEnroll(cmd *cobra.Command, args []string) error {
 func bioVerify(cmd *cobra.Command, args []string) error {
 	addr, _ := cmd.Flags().GetString("address")
 	file, _ := cmd.Flags().GetString("file")
-	data, err := ioutil.ReadFile(file)
+	data, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
