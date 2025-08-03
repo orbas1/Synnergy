@@ -2,6 +2,27 @@ package core
 
 import "testing"
 
+// Minimal versions of core types required to exercise the account manager logic
+// in isolation. The full implementations live elsewhere in the codebase, but
+// for unit testing we only need an address type capable of being used as a map
+// key and a ledger structure holding token balances.
+//
+// Defining them here keeps the tests self‑contained and avoids pulling in the
+// entire core package dependency graph, which currently contains unrelated
+// components that do not compile.
+
+// Address is a 20‑byte identifier. Only the String method used by the account
+// manager is implemented.
+type Address [20]byte
+
+func (a Address) String() string { return string(a[:]) }
+
+// Ledger holds token balances for addresses. Additional fields present in the
+// production ledger are omitted as they are unnecessary for these tests.
+type Ledger struct {
+	TokenBalances map[string]uint64
+}
+
 func TestAccountManagerCreateAndBalance(t *testing.T) {
 	ledger := &Ledger{TokenBalances: make(map[string]uint64)}
 	am := NewAccountManager(ledger)
