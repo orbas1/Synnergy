@@ -61,3 +61,22 @@ func GasCost(op Opcode) uint64 {
 	log.Printf("gas_table: missing cost for opcode %d – charging default", op)
 	return DefaultGasCost
 }
+
+// UpdateGasCost overrides the gas price for a specific opcode at runtime. This
+// enables dynamic fee schedules driven by governance or off-chain configuration.
+func UpdateGasCost(op Opcode, cost uint64) {
+	if gasTable == nil {
+		gasTable = make(map[Opcode]uint64)
+	}
+	gasTable[op] = cost
+}
+
+// GasTable returns a copy of the current gas pricing table for capability
+// discovery and tooling integrations.
+func GasTable() map[Opcode]uint64 {
+	out := make(map[Opcode]uint64, len(gasTable))
+	for k, v := range gasTable {
+		out[k] = v
+	}
+	return out
+}

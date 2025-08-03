@@ -39,7 +39,7 @@ func effInit(cmd *cobra.Command, _ []string) error {
 	if err != nil {
 		return err
 	}
-	node, err := core.NewEnergyNode(cfg, led, core.Address{})
+	node, err := core.NewEnergyNode(cfg, led, core.AddressZero)
 	if err != nil {
 		return err
 	}

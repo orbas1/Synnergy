@@ -32,7 +32,7 @@ func syn1155Init(cmd *cobra.Command, _ []string) error {
 			err = e
 			return
 		}
-		gas := core.NewFlatGasCalculator()
+		gas := core.NewFlatGasCalculator(core.DefaultGasPrice)
 		syn1155Mgr = core.NewTokenManager(led, gas)
 	})
 	return err

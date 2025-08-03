@@ -66,7 +66,7 @@ func (e *EnergyEngine) sustainKey(id uint64, ts int64) []byte {
 
 // RegisterAsset records a new energy asset and mints tokens to the owner.
 func (e *EnergyEngine) RegisterAsset(owner Address, assetType string, qty uint64, valid time.Time, location, cert string) (uint64, error) {
-	if owner == (Address{}) || qty == 0 || assetType == "" {
+	if owner == AddressZero || qty == 0 || assetType == "" {
 		return 0, errors.New("invalid asset parameters")
 	}
 	e.mu.Lock()

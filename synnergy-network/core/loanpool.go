@@ -191,7 +191,7 @@ func (h Hash) Hex() string {
 	return hex.EncodeToString(h[:])
 }
 
-var BurnAddress = Address{} // zeroed address [20]byte
+var BurnAddress = AddressZero // zeroed address [20]byte
 
 func (lp *LoanPool) Submit(creator, recipient Address, pType ProposalType, amount uint64, desc string) (Hash, error) {
 	if amount == 0 {

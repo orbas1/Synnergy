@@ -35,7 +35,7 @@ func itInit(cmd *cobra.Command, _ []string) error {
 			return
 		}
 		itLedger = led
-		core.InitTokens(led, nil, core.NewFlatGasCalculator())
+		core.InitTokens(led, nil, core.NewFlatGasCalculator(core.DefaultGasPrice))
 	})
 	return err
 }

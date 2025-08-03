@@ -85,7 +85,7 @@ func (t *TimeLockedNode) ExecuteDue() []string {
 	}
 	t.mu.Unlock()
 
-	tm := NewTokenManager(t.ledger, NewFlatGasCalculator())
+	tm := NewTokenManager(t.ledger, NewFlatGasCalculator(DefaultGasPrice))
 	var executed []string
 	for _, rec := range due {
 		_ = tm.Transfer(rec.TokenID, rec.From, rec.To, rec.Amount)
