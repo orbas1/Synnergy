@@ -271,8 +271,17 @@ func (tp *TxPool) Pick(max int) [][]byte {
 
 // Snapshot returns a copy of all pending transactions for inspection.
 func (tp *TxPool) Snapshot() []*Transaction {
+	if tp == nil {
+		return nil
+	}
+
 	tp.mu.RLock()
 	defer tp.mu.RUnlock()
+
+	if len(tp.queue) == 0 {
+		return nil
+	}
+
 	list := make([]*Transaction, len(tp.queue))
 	copy(list, tp.queue)
 	return list
