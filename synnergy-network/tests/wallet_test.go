@@ -112,7 +112,7 @@ func TestSignTx(t *testing.T) {
 	if len(tx.Sig) != 96 {
 		t.Errorf("signature length want 96 got %d", len(tx.Sig))
 	}
-	if (tx.From == Address{}) {
+	if tx.From == AddressZero {
 		t.Errorf("tx.From not set")
 	}
 }

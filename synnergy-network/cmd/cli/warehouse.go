@@ -44,11 +44,11 @@ func whInit(cmd *cobra.Command, _ []string) error {
 type warehouseController struct{}
 
 func (warehouseController) Add(id, name string, qty uint64) error {
-	ctx := &core.Context{Caller: core.Address{}}
+	ctx := &core.Context{Caller: core.AddressZero}
 	return wh.AddItem(ctx, id, name, qty)
 }
 func (warehouseController) Remove(id string) error {
-	ctx := &core.Context{Caller: core.Address{}}
+	ctx := &core.Context{Caller: core.AddressZero}
 	return wh.RemoveItem(ctx, id)
 }
 func (warehouseController) Move(id, owner string) error {
@@ -56,7 +56,7 @@ func (warehouseController) Move(id, owner string) error {
 	if err != nil {
 		return err
 	}
-	ctx := &core.Context{Caller: core.Address{}}
+	ctx := &core.Context{Caller: core.AddressZero}
 	return wh.MoveItem(ctx, id, addr)
 }
 func (warehouseController) List() error {
