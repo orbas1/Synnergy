@@ -661,9 +661,19 @@ func (tx *Transaction) HashTx() Hash {
 	return sha256.Sum256(b)
 }
 
-// IDHex returns the transaction hash as a hex string.
+// IDHex returns the transaction hash as a hex string. If the hash has not yet
+// been computed, it derives it from the transaction contents to ensure a
+// stable identifier.
 func (tx *Transaction) IDHex() string {
-	return hex.EncodeToString(tx.Hash[:])
+	if tx == nil {
+		return ""
+	}
+
+	h := tx.Hash
+	if h == (Hash{}) {
+		h = tx.HashTx()
+	}
+	return hex.EncodeToString(h[:])
 }
 
 type TxInput struct {
