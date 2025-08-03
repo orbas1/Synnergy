@@ -854,6 +854,32 @@ type Stack struct {
 	data []interface{}
 }
 
+// Push adds a *big.Int value onto the stack. A nil value will panic to avoid
+// ambiguous entries which could mask programming errors during VM execution.
+func (s *Stack) Push(v *big.Int) {
+	if v == nil {
+		panic("nil value pushed to stack")
+	}
+	s.data = append(s.data, v)
+}
+
+// Pop removes and returns the most recently pushed *big.Int. It panics on an
+// empty stack or if the stored value is not a *big.Int, ensuring the VM stack
+// remains type-safe.
+func (s *Stack) Pop() *big.Int {
+	if len(s.data) == 0 {
+		panic("stack underflow")
+	}
+	idx := len(s.data) - 1
+	raw := s.data[idx]
+	s.data = s.data[:idx]
+	val, ok := raw.(*big.Int)
+	if !ok {
+		panic("stack element is not *big.Int")
+	}
+	return val
+}
+
 // Context is an alias used throughout the codebase for TxContext.
 type Context = TxContext
 
