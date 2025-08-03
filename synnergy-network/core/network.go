@@ -1,4 +1,4 @@
-// Package network implements P2P networking for Synnergy nodes.
+// Package core implements P2P networking for Synnergy nodes.
 package core
 
 import (
