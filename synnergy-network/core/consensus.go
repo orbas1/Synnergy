@@ -174,8 +174,15 @@ func (sc *SynnergyConsensus) subBlockLoop(ctx context.Context) {
 	}
 }
 
-// ProposeSubBlock selects txs, computes PoH, signs with validator stake key.
+// ProposeSubBlock selects transactions, computes a PoH commitment and signs the
+// resulting sub‑block header. It returns the fully assembled SubBlock ready for
+// gossiping to peers and appending to the ledger.
 func (sc *SynnergyConsensus) ProposeSubBlock() (*SubBlock, error) {
+	// Ensure the engine has been initialised with required components.
+	if sc == nil || sc.pool == nil || sc.auth == nil || sc.crypto == nil || sc.ledger == nil {
+		return nil, errors.New("consensus not initialised")
+	}
+
 	rawTxs := sc.pool.Pick(MaxTxPerSubBlock)
 	if len(rawTxs) == 0 {
 		return nil, errors.New("no txs")
@@ -186,14 +193,16 @@ func (sc *SynnergyConsensus) ProposeSubBlock() (*SubBlock, error) {
 	for _, b := range rawTxs {
 		var tx Transaction
 		if err := json.Unmarshal(b, &tx); err != nil {
-			sc.logger.Printf("discarding malformed tx: %v", err)
+			if sc.logger != nil {
+				sc.logger.Printf("discarding malformed tx: %v", err)
+			}
 			continue
 		}
-		if sc.pool != nil {
-			if err := sc.pool.ValidateTx(&tx); err != nil {
+		if err := sc.pool.ValidateTx(&tx); err != nil {
+			if sc.logger != nil {
 				sc.logger.Printf("discarding invalid tx: %v", err)
-				continue
 			}
+			continue
 		}
 		validTxs = append(validTxs, b)
 	}
@@ -227,7 +236,9 @@ func (sc *SynnergyConsensus) ProposeSubBlock() (*SubBlock, error) {
 	if err := sc.ledger.AppendSubBlock(sb); err != nil {
 		return nil, err
 	}
-	sc.logger.Printf("sub‑block #%d proposed with %d txs", header.Height, len(validTxs))
+	if sc.logger != nil {
+		sc.logger.Printf("sub-block #%d proposed with %d txs", header.Height, len(validTxs))
+	}
 	return sb, nil
 }
 
