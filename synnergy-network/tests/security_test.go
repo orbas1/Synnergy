@@ -43,7 +43,7 @@ func genSelfSignedCert(t *testing.T) (certPEM, keyPEM []byte) {
 // Sign / Verify (Ed25519)
 //------------------------------------------------------------
 
-func TestSignVerify_Ed25519(t *testing.T) {
+func TestSignVerifyEd25519(t *testing.T) {
 	pub, priv, _ := ed25519.GenerateKey(rand.Reader)
 	msg := []byte("hello")
 	sig, err := Sign(AlgoEd25519, priv, msg)
@@ -63,7 +63,7 @@ func TestSignVerify_Ed25519(t *testing.T) {
 	}
 }
 
-func TestSignVerify_Errors(t *testing.T) {
+func TestSignVerifyErrors(t *testing.T) {
 	_, err := Sign(99, nil, nil)
 	if err == nil {
 		t.Fatalf("expected unknown algo error")

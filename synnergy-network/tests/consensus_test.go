@@ -71,7 +71,7 @@ func (m *mockAuthority) ListAuthorities(activeOnly bool) ([]AuthorityNode, error
 
 // --- Tests ---
 
-func TestProposeSubBlock_Success(t *testing.T) {
+func TestProposeSubBlockSuccess(t *testing.T) {
 	logger := logrus.New()
 	pool := &mockTxPool{picked: [][]byte{[]byte("tx1"), []byte("tx2")}}
 	net := &mockNetwork{}
@@ -94,7 +94,7 @@ func TestProposeSubBlock_Success(t *testing.T) {
 	}
 }
 
-func TestProposeSubBlock_EmptyTxs(t *testing.T) {
+func TestProposeSubBlockEmptyTxs(t *testing.T) {
 	logger := logrus.New()
 	pool := &mockTxPool{picked: [][]byte{}}
 	crypto := &mockCrypto{}
@@ -151,7 +151,7 @@ func TestValidatePoS(t *testing.T) {
 	}
 }
 
-func TestSealMainBlockPOW_Minimal(t *testing.T) {
+func TestSealMainBlockPOWMinimal(t *testing.T) {
 	// lightweight test to exercise success path
 	logger := logrus.New()
 	led := &Ledger{}
@@ -171,7 +171,7 @@ func TestSealMainBlockPOW_Minimal(t *testing.T) {
 	_ = sc.SealMainBlockPOW(headers) // ignore error to keep test fast
 }
 
-func TestDistributeRewards_Halving(t *testing.T) {
+func TestDistributeRewardsHalving(t *testing.T) {
 	sc := &SynnergyConsensus{ledger: &Ledger{}, auth: &mockAuthority{}}
 	blk := &Block{
 		Header: BlockHeader{Height: RewardHalvingPeriod * 2, MinerPk: []byte("miner")},

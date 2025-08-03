@@ -154,7 +154,7 @@ type ReplicationConfig struct {
 // Tests
 //------------------------------------------------------------
 
-func TestReplicateBlock_SendsInvToSampledPeers(t *testing.T) {
+func TestReplicateBlockSendsInvToSampledPeers(t *testing.T) {
 	peers := []string{"peer1", "peer2", "peer3"}
 	pm := newMockPM(peers)
 	led := newRepLedger()
@@ -178,7 +178,7 @@ func TestReplicateBlock_SendsInvToSampledPeers(t *testing.T) {
 	}
 }
 
-func TestRequestMissing_NoPeers(t *testing.T) {
+func TestRequestMissingNoPeers(t *testing.T) {
 	pm := newMockPM(nil)
 	led := newRepLedger()
 	cfg := &ReplicationConfig{Fanout: 2, RequestTimeout: 100 * time.Millisecond}
@@ -189,7 +189,7 @@ func TestRequestMissing_NoPeers(t *testing.T) {
 	}
 }
 
-func TestRequestMissing_Success(t *testing.T) {
+func TestRequestMissingSuccess(t *testing.T) {
 	pm := newMockPM([]string{"peerX"})
 	led := newRepLedger()
 	cfg := &ReplicationConfig{Fanout: 1, RequestTimeout: 500 * time.Millisecond}
@@ -217,7 +217,7 @@ func TestRequestMissing_Success(t *testing.T) {
 	}
 }
 
-func TestRequestMissing_Timeout(t *testing.T) {
+func TestRequestMissingTimeout(t *testing.T) {
 	pm := newMockPM([]string{"p1"})
 	led := newRepLedger()
 	cfg := &ReplicationConfig{Fanout: 1, RequestTimeout: 100 * time.Millisecond}

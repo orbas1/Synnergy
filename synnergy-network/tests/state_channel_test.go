@@ -148,7 +148,7 @@ func TestOpenChannel(t *testing.T) {
 	}
 }
 
-func TestInitiateClose_VerifyFail(t *testing.T) {
+func TestInitiateCloseVerifyFail(t *testing.T) {
 	led := newScMem()
 	InitStateChannels(led)
 	tok := newStubToken(1)
@@ -189,7 +189,7 @@ func TestFinalize(t *testing.T) {
 // ECDSA signature helper test – round‑trip success
 //------------------------------------------------------------
 
-func TestVerifyECDSASignature_Success(t *testing.T) {
+func TestVerifyECDSASignatureSuccess(t *testing.T) {
 	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		t.Fatal(err)

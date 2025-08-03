@@ -87,7 +87,7 @@ func fmtError(msg string) error { return errors.New(msg) }
 // Test Suite
 //-----------------------------------------------------------
 
-func TestAMM_Flows(t *testing.T) {
+func TestAMMFlows(t *testing.T) {
 	// setup mock tokens and registry override
 	tokAID := TokenID(1001)
 	tokBID := TokenID(1002)
