@@ -683,6 +683,10 @@ type HDWallet struct {
 // Address represents a 20‑byte account identifier.
 type Address [20]byte
 
+// AddressZero represents the zero-value address (all bytes zero).
+// It is used as a sentinel in token and ledger operations.
+var AddressZero = Address{}
+
 // Hash represents a 32‑byte cryptographic hash.
 type Hash [32]byte
 
