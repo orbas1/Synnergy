@@ -10,6 +10,7 @@ package core
 import (
 	"context"
 	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math/big"
@@ -649,6 +650,11 @@ type Transaction struct {
 func (tx *Transaction) HashTx() Hash {
 	b, _ := json.Marshal(tx)
 	return sha256.Sum256(b)
+}
+
+// IDHex returns the transaction hash as a hex string.
+func (tx *Transaction) IDHex() string {
+	return hex.EncodeToString(tx.Hash[:])
 }
 
 type TxInput struct {
