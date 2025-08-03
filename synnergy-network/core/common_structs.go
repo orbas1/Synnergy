@@ -76,12 +76,16 @@ type edge struct {
 //---------------------------------------------------------------------
 
 type AuthorityNode struct {
-	Addr        Address       `json:"addr"`
-	Role        AuthorityRole `json:"role"`
-	Active      bool          `json:"active"`
-	PublicVotes uint32        `json:"pv"`
-	AuthVotes   uint32        `json:"av"`
-	CreatedAt   int64         `json:"since"`
+        Addr        Address       `json:"addr"`
+        // Wallet holds the payment address associated with the authority
+        // node. It may differ from the node's network address and is used
+        // when distributing fees or processing on-chain payments.
+        Wallet      Address       `json:"wallet"`
+        Role        AuthorityRole `json:"role"`
+        Active      bool          `json:"active"`
+        PublicVotes uint32        `json:"pv"`
+        AuthVotes   uint32        `json:"av"`
+        CreatedAt   int64         `json:"since"`
 }
 
 type AuthoritySet struct {
