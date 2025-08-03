@@ -1,6 +1,7 @@
 # Synnergy CLI User Manual
 
-The Synnergy command line interface exposes tools for managing ledgers, nodes and smart contracts. This manual covers common workflows and command groups.
+The Synnergy command line interface exposes tools for managing ledgers, nodes
+and smart contracts. This manual covers common workflows and command groups.
 
 ## Installation
 
@@ -59,7 +60,8 @@ The CLI includes many modules such as:
 - `dao` – interact with on-chain governance
 - `crosschain` – bridge assets between networks
 
-Run `./synnergy help` to list all available commands and `./synnergy <group> --help` for detailed usage.
+Run `./synnergy help` to list all available commands and
+`./synnergy <group> --help` for detailed usage.
 
 ## Configuration File
 
@@ -84,4 +86,3 @@ Command-line flags override values in the configuration file.
 - Run `./synnergy --log-level debug` for verbose output.
 - Ensure ledger database paths are writable when initializing.
 - Remove `~/.synnergy` to reset local state if commands misbehave.
-

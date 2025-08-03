@@ -22,12 +22,14 @@ fi
 
 # Configure Go environment
 export GO111MODULE=on
-export GOPATH="$(go env GOPATH)"
+GOPATH="$(go env GOPATH)"
+export GOPATH
 export PATH="$GOPATH/bin:$PATH"
 
 # Load environment variables from project .env file if it exists
 if [ -f synnergy-network/.env ]; then
     set -o allexport
+    # shellcheck source=synnergy-network/.env
     source synnergy-network/.env
     set +o allexport
 fi

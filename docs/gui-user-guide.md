@@ -1,6 +1,7 @@
 # Synnergy GUI User Manual
 
-The graphical interface allows users to manage nodes, wallets and smart contracts without the command line.
+The graphical interface allows users to manage nodes, wallets and smart
+contracts without the command line.
 
 ## Prerequisites
 
@@ -16,11 +17,13 @@ npm install
 npm start
 ```
 
-The development server launches at `http://localhost:3000` and proxies requests to the local node.
+The development server launches at `http://localhost:3000` and proxies requests
+to the local node.
 
 ## Dashboard Overview
 
-The landing page displays node status, peer connections and recent blocks. Use the navigation menu to access other modules.
+The landing page displays node status, peer connections and recent blocks. Use
+the navigation menu to access other modules.
 
 ## Wallet Management
 
@@ -38,7 +41,8 @@ Deploy and interact with contracts through the Contracts section:
 
 ## Settings and Diagnostics
 
-Configure network endpoints, toggle dark mode and view logs from the Settings panel.
+Configure network endpoints, toggle dark mode and view logs from the Settings
+panel.
 
 ## Troubleshooting
 
@@ -60,13 +64,16 @@ The compiled files are emitted to `build/` and can be served by any web server.
 
 ## Configuration
 
-Adjust the default node endpoint in `src/config.ts`. Environment variables prefixed with `REACT_APP_` override configuration at runtime.
+Adjust the default node endpoint in `src/config.ts`. Environment variables
+prefixed with `REACT_APP_` override configuration at runtime.
 
 ## Security
 
-The GUI never uploads private keys. Verify the browser address bar before entering sensitive information and prefer hardware wallets for high-value accounts.
+The GUI never uploads private keys. Verify the browser address bar before
+entering sensitive information and prefer hardware wallets for high-value
+accounts.
 
 ## Support
 
-Report issues via the project issue tracker and include browser version, operating system and reproduction steps.
-
+Report issues via the project issue tracker and include browser version,
+operating system and reproduction steps.

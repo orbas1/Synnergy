@@ -6,12 +6,12 @@ purposes and may change as the project evolves.
 
 ## Package Overview
 
-| Package | Description |
-|---------|-------------|
-| `core` | Ledger, consensus, networking and token logic |
-| `cmd` | Command-line interfaces and helpers |
-| `GUI` | Web and desktop clients |
-| `tests` | Unit and integration tests |
+| Package | Description                                   |
+| ------- | --------------------------------------------- |
+| `core`  | Ledger, consensus, networking and token logic |
+| `cmd`   | Command-line interfaces and helpers           |
+| `GUI`   | Web and desktop clients                       |
+| `tests` | Unit and integration tests                    |
 
 ## Node Lifecycle API
 

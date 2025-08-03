@@ -1,6 +1,7 @@
 # Synnergy Developer Guide
 
-This guide provides developers with the information needed to build, test and extend the Synnergy Network.
+This guide provides developers with the information needed to build, test and
+extend the Synnergy Network.
 
 ## Prerequisites
 
@@ -10,7 +11,8 @@ This guide provides developers with the information needed to build, test and ex
 
 ## Repository Layout
 
-The repository is organized around the `synnergy-network` directory which contains Go sources, GUIs and smart contracts. Key paths include:
+The repository is organized around the `synnergy-network` directory which
+contains Go sources, GUIs and smart contracts. Key paths include:
 
 - `cmd/` – command line applications
 - `core/` – consensus, ledger and networking modules
@@ -73,7 +75,8 @@ When adding new packages or features:
 ## Branching and Release Strategy
 
 - The `main` branch holds the latest stable code.
-- Create feature branches named `feature/<short-description>` and rebase on `main` before opening a pull request.
+- Create feature branches named `feature/<short-description>` and rebase on
+  `main` before opening a pull request.
 - Releases are tagged with semantic versions and built from `main`.
 
 ## Commit Guidelines
@@ -95,4 +98,3 @@ Report bugs or feature requests through GitHub issues and include:
 1. Environment details (`go version`, OS)
 2. Steps to reproduce
 3. Expected vs. actual behavior
-

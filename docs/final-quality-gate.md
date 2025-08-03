@@ -24,6 +24,7 @@ Both commands completed without errors. However, a full project build
 still fails. Running `go build ./...` produced the following output:
 
 <!-- markdownlint-disable MD013 -->
+
 ```text
 # synnergy-network/core
 core/txpool_stub.go:8:19: method TxPool.AddTx already declared at core/txpool_addtx.go:7:19
@@ -38,6 +39,7 @@ core/consensus_specific_node.go:34:16: csn.engine.Start undefined (type *Synnerg
 core/consensus_specific_node.go:42:14: csn.engine.Stop undefined (type *SynnergyConsensus has no field or method Stop)
 core/consensus_specific_node.go:42:14: too many errors
 ```
+
 <!-- markdownlint-enable MD013 -->
 
 These unresolved compilation errors in the `core` package indicate that
