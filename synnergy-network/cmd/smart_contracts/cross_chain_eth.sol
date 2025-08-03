@@ -27,7 +27,7 @@ contract CrossChainBridge {
     // chain address encoded as bytes32.
     function deposit(bytes32 toChainAddr) external payable {
         require(msg.value > 0, "zero value");
-        unchecked { balances[msg.sender] += msg.value; }
+        balances[msg.sender] += msg.value;
         emit Deposit(msg.sender, toChainAddr, msg.value);
     }
 
@@ -37,7 +37,7 @@ contract CrossChainBridge {
     function withdraw(address payable to, uint256 amount, bytes calldata proof) external onlyAdmin {
         require(balances[to] >= amount, "insufficient");
         require(_verifyProof(proof), "bad proof");
-        unchecked { balances[to] -= amount; }
+        balances[to] -= amount;
         emit Withdraw(to, amount);
         (bool ok, ) = to.call{value: amount}("");
         require(ok, "transfer failed");
