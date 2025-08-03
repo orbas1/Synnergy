@@ -1,11 +1,11 @@
-const service = require("../services/contractService");
+import * as service from "../services/contractService.js";
 
-exports.list = async (req, res) => {
+export async function list(req, res) {
   const listings = await service.listContracts();
   res.json(listings);
-};
+}
 
-exports.deploy = async (req, res) => {
+export async function deploy(req, res) {
   try {
     const { name, wasm } = req.body;
     const contract = await service.deployContract(name, wasm);
@@ -13,21 +13,21 @@ exports.deploy = async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-};
+}
 
-exports.get = async (req, res) => {
+export async function get(req, res) {
   const contract = await service.getContract(req.params.id);
   if (!contract) return res.status(404).end();
   res.json(contract);
-};
+}
 
-exports.remove = async (req, res) => {
+export async function remove(req, res) {
   await service.deleteContract(req.params.id);
   res.status(204).end();
-};
+}
 
-exports.wasm = async (req, res) => {
+export async function wasm(req, res) {
   const file = await service.getWasm(req.params.id);
   if (!file) return res.status(404).end();
   res.type("application/wasm").send(file);
-};
+}
