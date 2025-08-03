@@ -84,7 +84,7 @@ type Proposal struct {
 	Recipient   Address      `json:"recipient"`
 	Type        ProposalType `json:"type"`
 	Amount      uint64       `json:"amount_wei"`
-	Description string       `json:"desc"`
+	Description string       `json:"description"`
 
 	// Vote buckets
 	AuthYes uint32 `json:"auth_yes"`
@@ -96,7 +96,7 @@ type Proposal struct {
 	Deadline       int64     `json:"deadline_unix"`
 
 	Status     ProposalStatus `json:"status"`
-	ExecutedAt int64          `json:"exec_unix,omitempty"`
+	ExecutedAt int64          `json:"executed_unix,omitempty"`
 }
 
 func (p *Proposal) Marshal() []byte { b, _ := json.Marshal(p); return b }
