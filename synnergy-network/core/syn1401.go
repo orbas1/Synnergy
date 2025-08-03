@@ -38,7 +38,10 @@ func (m *InvestmentManager) Issue(id string, owner Address, principal uint64, ra
 		return fmt.Errorf("investment %s exists", id)
 	}
 	rec := InvestmentRecord{ID: id, Owner: owner, Principal: principal, InterestRate: rate, StartDate: time.Now().UTC(), MaturityDate: maturity}
-	data, _ := json.Marshal(rec)
+	data, err := json.Marshal(rec)
+	if err != nil {
+		return err
+	}
 	return m.Ledger.SetState(invKey(id), data)
 }
 
@@ -63,7 +66,10 @@ func (m *InvestmentManager) Accrue(id string) error {
 		return nil
 	}
 	rec.Accrued = accrued
-	upd, _ := json.Marshal(&rec)
+	upd, err := json.Marshal(&rec)
+	if err != nil {
+		return err
+	}
 	return m.Ledger.SetState(invKey(id), upd)
 }
 
@@ -90,8 +96,13 @@ func (m *InvestmentManager) Redeem(id string, to Address) (uint64, error) {
 		return 0, err
 	}
 	rec.Redeemed = true
-	upd, _ := json.Marshal(&rec)
-	_ = m.Ledger.SetState(invKey(id), upd)
+	upd, err := json.Marshal(&rec)
+	if err != nil {
+		return 0, err
+	}
+	if err := m.Ledger.SetState(invKey(id), upd); err != nil {
+		return 0, err
+	}
 	return total, nil
 }
 

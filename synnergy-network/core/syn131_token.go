@@ -1,6 +1,9 @@
 package core
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // ValuationRecord captures historical valuations for SYN131 assets.
 type ValuationRecord struct {
@@ -72,15 +75,17 @@ func (t *SYN131Token) IssueLicense(l LicenseRecord) {
 }
 
 // TransferShare moves fractional ownership between parties.
-func (t *SYN131Token) TransferShare(from, to Address, share uint64) {
+// Returns an error if the sender lacks sufficient shares.
+func (t *SYN131Token) TransferShare(from, to Address, share uint64) error {
 	if t.Shares == nil {
 		t.Shares = make(map[Address]uint64)
 	}
 	if t.Shares[from] < share {
-		return
+		return fmt.Errorf("insufficient shares")
 	}
 	t.Shares[from] -= share
 	t.Shares[to] += share
+	return nil
 }
 
 // --- VM opcode wrappers ---
@@ -90,6 +95,8 @@ func SYN131RecordSale(t *SYN131Token, price uint64, buyer, seller Address) {
 }
 func SYN131AddRental(t *SYN131Token, r SYN131RentalAgreement) { t.AddRental(r) }
 func SYN131IssueLicense(t *SYN131Token, l LicenseRecord)      { t.IssueLicense(l) }
-func SYN131TransferShare(t *SYN131Token, from, to Address, share uint64) {
-	t.TransferShare(from, to, share)
+
+// SYN131TransferShare exposes TransferShare to the VM with error propagation.
+func SYN131TransferShare(t *SYN131Token, from, to Address, share uint64) error {
+	return t.TransferShare(from, to, share)
 }
