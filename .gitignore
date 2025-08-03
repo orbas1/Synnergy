@@ -16,3 +16,7 @@ node_modules/
 *.log
 coverage.out
 synnergy-network/internal/testutil/testdata/
+
+# Environment variables
+.env
+

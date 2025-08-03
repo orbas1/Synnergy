@@ -1,7 +1,7 @@
 .RECIPEPREFIX := >
 GO_MODULE_DIR := synnergy-network
 
-.PHONY: go-build go-test node-install node-test build-matrix all
+.PHONY: go-build go-test go-cycle node-install node-test build-matrix all
 
 go-build:
 >cd $(GO_MODULE_DIR) && go build ./...
