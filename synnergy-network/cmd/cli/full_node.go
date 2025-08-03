@@ -76,16 +76,13 @@ func fullStart(cmd *cobra.Command, _ []string) error {
 	if n == nil {
 		return fmt.Errorf("not initialised")
 	}
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	n.Start()
-	go func() {
-		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
-		<-sig
-		_ = n.Stop()
-		os.Exit(0)
-	}()
 	fmt.Fprintln(cmd.OutOrStdout(), "full node started")
-	return nil
+	<-sig
+	signal.Stop(sig)
+	return n.Stop()
 }
 
 func fullStop(cmd *cobra.Command, _ []string) error {
