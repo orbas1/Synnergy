@@ -91,10 +91,22 @@ func geoNodeQuery(cmd *cobra.Command, args []string) error {
 	if n == nil {
 		return fmt.Errorf("not running")
 	}
-	minLat, _ := strconv.ParseFloat(args[0], 64)
-	maxLat, _ := strconv.ParseFloat(args[1], 64)
-	minLon, _ := strconv.ParseFloat(args[2], 64)
-	maxLon, _ := strconv.ParseFloat(args[3], 64)
+	minLat, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return err
+	}
+	maxLat, err := strconv.ParseFloat(args[1], 64)
+	if err != nil {
+		return err
+	}
+	minLon, err := strconv.ParseFloat(args[2], 64)
+	if err != nil {
+		return err
+	}
+	maxLon, err := strconv.ParseFloat(args[3], 64)
+	if err != nil {
+		return err
+	}
 	ids := n.QueryRegion(minLat, maxLat, minLon, maxLon)
 	for _, id := range ids {
 		fmt.Fprintln(cmd.OutOrStdout(), id)

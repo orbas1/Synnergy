@@ -22,14 +22,14 @@ func ensureGovMgmt(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-func addrFromHex(h string) core.Address {
+func addrFromHex(h string) (core.Address, error) {
 	var a core.Address
 	b, err := hex.DecodeString(h)
 	if err != nil || len(b) != len(a) {
-		return a
+		return a, fmt.Errorf("invalid address")
 	}
 	copy(a[:], b)
-	return a
+	return a, nil
 }
 
 var govMgmtCmd = &cobra.Command{Use: "govmgmt", Short: "Manage governance contracts", PersistentPreRunE: ensureGovMgmt}
@@ -39,7 +39,10 @@ var gmAddContractCmd = &cobra.Command{
 	Short: "Register a governance contract",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		addr := addrFromHex(args[0])
+		addr, err := addrFromHex(args[0])
+		if err != nil {
+			return err
+		}
 		return gm.RegisterGovContract(addr, args[1])
 	},
 }
@@ -49,7 +52,10 @@ var gmEnableContractCmd = &cobra.Command{
 	Short: "Enable a governance contract",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		addr := addrFromHex(args[0])
+		addr, err := addrFromHex(args[0])
+		if err != nil {
+			return err
+		}
 		return gm.EnableGovContract(addr, true)
 	},
 }
@@ -59,7 +65,10 @@ var gmDisableContractCmd = &cobra.Command{
 	Short: "Disable a governance contract",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		addr := addrFromHex(args[0])
+		addr, err := addrFromHex(args[0])
+		if err != nil {
+			return err
+		}
 		return gm.EnableGovContract(addr, false)
 	},
 }
@@ -69,7 +78,10 @@ var gmGetContractCmd = &cobra.Command{
 	Short: "Show contract details",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		addr := addrFromHex(args[0])
+		addr, err := addrFromHex(args[0])
+		if err != nil {
+			return err
+		}
 		c, err := gm.GetGovContract(addr)
 		if err != nil {
 			return err
@@ -99,7 +111,10 @@ var gmDelContractCmd = &cobra.Command{
 	Short: "Remove a governance contract",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		addr := addrFromHex(args[0])
+		addr, err := addrFromHex(args[0])
+		if err != nil {
+			return err
+		}
 		return gm.DeleteGovContract(addr)
 	},
 }
