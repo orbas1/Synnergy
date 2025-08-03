@@ -12,7 +12,7 @@ import (
 //
 // The controller is safe for concurrent use.
 type AccessController struct {
-	mu    sync.RWMutex
+	mu    sync.Mutex
 	led   *Ledger
 	cache map[Address]map[string]struct{}
 }
@@ -92,19 +92,10 @@ func (ac *AccessController) RevokeRole(addr Address, role string) error {
 
 // HasRole reports whether the address has the specified role.
 func (ac *AccessController) HasRole(addr Address, role string) bool {
-	ac.mu.RLock()
-	if roles, ok := ac.cache[addr]; ok {
-		if _, ok := roles[role]; ok {
-			ac.mu.RUnlock()
-			return true
-		}
-	}
-	ac.mu.RUnlock()
-
 	ac.mu.Lock()
-	defer ac.mu.Unlock()
 	if roles, ok := ac.cache[addr]; ok {
 		if _, ok := roles[role]; ok {
+			ac.mu.Unlock()
 			return true
 		}
 	}
@@ -115,32 +106,21 @@ func (ac *AccessController) HasRole(addr Address, role string) bool {
 		}
 		ac.cache[addr][role] = struct{}{}
 	}
+	ac.mu.Unlock()
 	return ok
 }
 
 // ListRoles returns all roles granted to the address.
 func (ac *AccessController) ListRoles(addr Address) ([]string, error) {
-	ac.mu.RLock()
-	if cached, ok := ac.cache[addr]; ok {
-		roles := make([]string, 0, len(cached))
-		for r := range cached {
-			roles = append(roles, r)
-		}
-		ac.mu.RUnlock()
-		return roles, nil
-	}
-	ac.mu.RUnlock()
-
 	ac.mu.Lock()
-	defer ac.mu.Unlock()
 	if cached, ok := ac.cache[addr]; ok {
 		roles := make([]string, 0, len(cached))
 		for r := range cached {
 			roles = append(roles, r)
 		}
+		ac.mu.Unlock()
 		return roles, nil
 	}
-
 	prefix := []byte(fmt.Sprintf("access:%s:", addr.Hex()))
 	it := ac.led.PrefixIterator(prefix)
 	rolesMap := make(map[string]struct{})
@@ -151,6 +131,7 @@ func (ac *AccessController) ListRoles(addr Address) ([]string, error) {
 		}
 	}
 	if err := it.Error(); err != nil {
+		ac.mu.Unlock()
 		return nil, err
 	}
 	ac.cache[addr] = rolesMap
@@ -158,5 +139,6 @@ func (ac *AccessController) ListRoles(addr Address) ([]string, error) {
 	for r := range rolesMap {
 		roles = append(roles, r)
 	}
+	ac.mu.Unlock()
 	return roles, nil
 }

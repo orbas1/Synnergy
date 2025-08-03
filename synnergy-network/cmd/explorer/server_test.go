@@ -86,6 +86,23 @@ func TestHandleBalanceError(t *testing.T) {
 	}
 }
 
+func TestHandleBalanceSuccess(t *testing.T) {
+	srv := newTestServer()
+	req := httptest.NewRequest(http.MethodGet, "/api/balance/good", nil)
+	rr := httptest.NewRecorder()
+	srv.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", rr.Code)
+	}
+	var res map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &res); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+	if res["balance"].(float64) != 42 {
+		t.Fatalf("unexpected balance: %v", res)
+	}
+}
+
 func TestHandleBlocksSuccess(t *testing.T) {
 	srv := newTestServer()
 	req := httptest.NewRequest(http.MethodGet, "/api/blocks", nil)

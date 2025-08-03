@@ -1,0 +1,6 @@
+go 1.23.11
+
+use (
+	./synnergy-network
+	./synnergy-network/third_party/go-libp2p-core
+)

@@ -299,6 +299,9 @@ func MaskSensitiveFields(data map[string]string, fields []string) map[string]str
 func FetchLegalDoc(url string) (LegalDoc, error) {
 	resp, err := http.Get(url)
 	if err != nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
 		return LegalDoc{}, err
 	}
 	defer resp.Body.Close()

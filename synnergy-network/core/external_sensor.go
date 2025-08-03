@@ -111,6 +111,9 @@ func PollSensor(id string) ([]byte, error) {
 	}
 	resp, err := http.Get(s.Endpoint)
 	if err != nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -137,6 +140,9 @@ func TriggerWebhook(id string, payload []byte) error {
 	}
 	resp, err := http.Post(s.Endpoint, "application/octet-stream", bytes.NewReader(payload))
 	if err != nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
 		return err
 	}
 	defer resp.Body.Close()
