@@ -28,6 +28,7 @@ type GovProposal struct {
 
 var blockGasLimit = uint64(1000000)
 
+// UpdateParam changes a protocol configuration parameter identified by key.
 func UpdateParam(key, value string) error {
 	switch key {
 	case "block_gas_limit":
@@ -53,6 +54,7 @@ func applyParams(changes map[string]string) error {
 	return nil
 }
 
+// Nodes returns the addresses of all authority members.
 func (a *AuthoritySet) Nodes() []Address {
 	var out []Address
 	for addr := range a.members {
@@ -61,6 +63,7 @@ func (a *AuthoritySet) Nodes() []Address {
 	return out
 }
 
+// IsMember reports whether addr belongs to the authority set.
 func (a *AuthoritySet) IsMember(addr Address) bool {
 	_, ok := a.members[addr]
 	return ok
@@ -72,6 +75,7 @@ var authoritySet = &AuthoritySet{
 	},
 }
 
+// CurrentSet returns the active authority set.
 func CurrentSet() *AuthoritySet {
 	return authoritySet
 }
@@ -96,6 +100,7 @@ func quorumReached(p *GovProposal) bool {
 	return approves*2 > total
 }
 
+// ParseAddress converts a hex-encoded string into an Address.
 func ParseAddress(s string) (Address, error) {
 	b, err := hex.DecodeString(s)
 	if err != nil || len(b) != 20 {
@@ -252,6 +257,7 @@ func SubmitProposal(p *GovProposal) error {
 	return nil
 }
 
+// BalanceOfAsset returns the balance of the specified asset for addr.
 func BalanceOfAsset(asset AssetRef, addr Address) (uint64, error) {
 	switch asset.Kind {
 	case AssetCoin:

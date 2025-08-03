@@ -54,7 +54,7 @@ func (t *Timelock) CancelProposal(id string) error {
 	return nil
 }
 
-// List returns a snapshot of all queued proposals.
+// ListTimelocks returns a snapshot of all queued proposals.
 func (t *Timelock) ListTimelocks() []TimelockEntry {
 	t.mu.Lock()
 	defer t.mu.Unlock()
