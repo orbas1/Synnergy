@@ -84,13 +84,19 @@ func (e *EnergyEngine) RegisterAsset(owner Address, assetType string, qty uint64
 		Location:      location,
 		Certification: cert,
 	}
-	blob, _ := json.Marshal(asset)
+	blob, err := json.Marshal(asset)
+	if err != nil {
+		e.nextID--
+		return 0, err
+	}
 	if err := e.ledger.SetState(e.assetKey(id), blob); err != nil {
 		e.nextID--
 		return 0, err
 	}
-	b, _ := json.Marshal(e.nextID)
-	_ = e.ledger.SetState([]byte("syn4300:nextID"), b)
+	b, err := json.Marshal(e.nextID)
+	if err == nil {
+		_ = e.ledger.SetState([]byte("syn4300:nextID"), b)
+	}
 	tok, ok := GetToken(e.tokenID)
 	if !ok {
 		return 0, fmt.Errorf("energy token not found")
@@ -121,14 +127,20 @@ func (e *EnergyEngine) TransferAsset(id uint64, to Address) error {
 		return err
 	}
 	asset.Owner = to
-	blob, _ := json.Marshal(asset)
+	blob, err := json.Marshal(asset)
+	if err != nil {
+		return err
+	}
 	return e.ledger.SetState(e.assetKey(id), blob)
 }
 
 // RecordSustainability attaches a sustainability note to an asset.
 func (e *EnergyEngine) RecordSustainability(id uint64, info string) error {
 	rec := SustainabilityRecord{AssetID: id, Details: info, Timestamp: time.Now().Unix()}
-	blob, _ := json.Marshal(rec)
+	blob, err := json.Marshal(rec)
+	if err != nil {
+		return err
+	}
 	return e.ledger.SetState(e.sustainKey(id, rec.Timestamp), blob)
 }
 

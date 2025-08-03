@@ -106,6 +106,8 @@ func decodeExperimentalTx(data []byte) (*Transaction, error) {
 // RandomAddress returns a pseudo-random address useful for testing.
 func RandomAddress() Address {
 	var a Address
-	rand.Read(a[:])
+	if _, err := rand.Read(a[:]); err != nil {
+		return Address{}
+	}
 	return a
 }

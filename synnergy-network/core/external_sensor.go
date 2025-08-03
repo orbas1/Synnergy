@@ -117,6 +117,10 @@ func PollSensor(id string) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode >= 300 {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("sensor http %d: %s", resp.StatusCode, string(body))
+	}
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err

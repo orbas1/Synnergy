@@ -112,7 +112,9 @@ func (e *EnvironmentalMonitoringNode) loop() {
 					continue
 				}
 				key := fmt.Sprintf("env:%s:%d", s.ID, time.Now().UnixNano())
-				_ = e.ledger.SetState([]byte(key), data)
+				if err := e.ledger.SetState([]byte(key), data); err != nil {
+					continue
+				}
 				e.handle(s.ID, data)
 			}
 		case <-e.ctx.Done():

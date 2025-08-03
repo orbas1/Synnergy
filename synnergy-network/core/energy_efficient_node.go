@@ -54,7 +54,11 @@ func EnergyNodeRecord(en *EnergyEfficientNode, txs uint64, kwh float64) error {
 	}
 	en.mu.Lock()
 	defer en.mu.Unlock()
-	return EnergyEff().RecordStats(en.validator, txs, kwh)
+	eng := EnergyEff()
+	if eng == nil {
+		return fmt.Errorf("energy engine not initialised")
+	}
+	return eng.RecordStats(en.validator, txs, kwh)
 }
 
 // EnergyNodeEfficiency returns the validator's current transactions-per-kWh.
@@ -64,7 +68,11 @@ func EnergyNodeEfficiency(en *EnergyEfficientNode) (float64, error) {
 	}
 	en.mu.Lock()
 	defer en.mu.Unlock()
-	return EnergyEff().EfficiencyOf(en.validator)
+	eng := EnergyEff()
+	if eng == nil {
+		return 0, fmt.Errorf("energy engine not initialised")
+	}
+	return eng.EfficiencyOf(en.validator)
 }
 
 // EnergyNodeNetworkAvg returns the network-wide transactions-per-kWh score.
@@ -72,7 +80,11 @@ func EnergyNodeNetworkAvg(en *EnergyEfficientNode) (float64, error) {
 	if en == nil {
 		return 0, ErrInvalidNode
 	}
-	return EnergyEff().NetworkAverage()
+	eng := EnergyEff()
+	if eng == nil {
+		return 0, fmt.Errorf("energy engine not initialised")
+	}
+	return eng.NetworkAverage()
 }
 
 var (

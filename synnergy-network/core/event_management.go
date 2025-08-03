@@ -44,7 +44,10 @@ func (m *EventManager) Emit(ctx *Context, typ string, data []byte) (string, erro
 	h := sha256.Sum256(append([]byte(typ), data...))
 	id := hex.EncodeToString(h[:])
 	ev := Event{ID: id, Type: typ, Data: data, Height: ctx.BlockHeight, Timestamp: time.Now().Unix()}
-	blob, _ := json.Marshal(ev)
+	blob, err := json.Marshal(ev)
+	if err != nil {
+		return "", err
+	}
 	key := []byte(fmt.Sprintf("event:%s:%s", typ, id))
 	if err := m.ledger.SetState(key, blob); err != nil {
 		return "", err

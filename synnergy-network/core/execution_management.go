@@ -26,7 +26,11 @@ type ExecutionManager struct {
 }
 
 // NewExecutionManager wires an execution manager with the given ledger and VM.
+// Returns nil if the ledger is not provided.
 func NewExecutionManager(ledger *Ledger, vm VM) *ExecutionManager {
+	if ledger == nil {
+		return nil
+	}
 	return &ExecutionManager{ledger: ledger, vm: vm}
 }
 

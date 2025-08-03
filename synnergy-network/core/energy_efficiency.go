@@ -66,7 +66,10 @@ func (e *EfficiencyEngine) RecordStats(v Address, txs uint64, kwh float64) error
 		return errors.New("invalid stats")
 	}
 	rec := EfficiencyRecord{Validator: v, TxCount: txs, EnergyKWh: kwh, Timestamp: time.Now().Unix()}
-	blob, _ := json.Marshal(rec)
+	blob, err := json.Marshal(rec)
+	if err != nil {
+		return err
+	}
 	h := sha256.Sum256(blob)
 	e.mu.Lock()
 	defer e.mu.Unlock()

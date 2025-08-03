@@ -16,7 +16,11 @@ type ElectedAuthorityNode struct {
 
 // NewElectedAuthorityNode constructs a node using the given network adapter and
 // references to the ledger and consensus engine.
+// Returns nil if required dependencies are not provided.
 func NewElectedAuthorityNode(base Nodes.NodeInterface, led *Ledger, cons *SynnergyConsensus, total int) *ElectedAuthorityNode {
+	if led == nil || cons == nil {
+		return nil
+	}
 	return &ElectedAuthorityNode{
 		ElectedAuthorityNode: Nodes.NewElectedAuthorityNode(base, total),
 		ledger:               led,

@@ -62,7 +62,10 @@ func EscrowCreate(ctx *Context, parties []EscrowParty) (*EscrowContract, error) 
 		return nil, err
 	}
 
-	data, _ := json.Marshal(esc)
+	data, err := json.Marshal(esc)
+	if err != nil {
+		return nil, err
+	}
 	if err := CurrentStore().Set(escrowKey(esc.ID), data); err != nil {
 		return nil, err
 	}
@@ -93,7 +96,10 @@ func EscrowDeposit(ctx *Context, id string, amount uint64) error {
 		return err
 	}
 	esc.Balance += amount
-	data, _ := json.Marshal(&esc)
+	data, err := json.Marshal(&esc)
+	if err != nil {
+		return err
+	}
 	return CurrentStore().Set(escrowKey(id), data)
 }
 
@@ -126,7 +132,10 @@ func EscrowRelease(ctx *Context, id string) error {
 		esc.Parties[i].Paid = true
 	}
 	esc.Released = true
-	data, _ := json.Marshal(&esc)
+	data, err := json.Marshal(&esc)
+	if err != nil {
+		return err
+	}
 	return CurrentStore().Set(escrowKey(id), data)
 }
 
