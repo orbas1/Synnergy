@@ -88,7 +88,7 @@ func TestNewCoin(t *testing.T) {
 	--------------------------------------------------------------------
 */
 
-func TestCoin_Mint(t *testing.T) {
+func TestCoinMint(t *testing.T) {
 	t.Parallel()
 
 	recipient := []byte("recipient-1")
@@ -169,7 +169,7 @@ var _ sync.Mutex
 
 // Quick sanity check: Snapshot must marshal without error; the test suite
 // relies on this behaviour to stay hermetic.
-func TestLedger_SnapshotMarshals(t *testing.T) {
+func TestLedgerSnapshotMarshals(t *testing.T) {
 	ldg := &Ledger{}
 	if _, err := ldg.Snapshot(); err != nil {
 		t.Fatalf("Snapshot() unexpected error: %v", err)
@@ -182,7 +182,7 @@ func TestLedger_SnapshotMarshals(t *testing.T) {
 	--------------------------------------------------------------------
 */
 
-func TestLedger_MintToken_ZeroAmount(t *testing.T) {
+func TestLedgerMintTokenZeroAmount(t *testing.T) {
 	ldg := &Ledger{TokenBalances: map[string]uint64{}}
 	var addr Address
 	err := ldg.MintToken(addr, Code, 0)
@@ -191,7 +191,7 @@ func TestLedger_MintToken_ZeroAmount(t *testing.T) {
 	}
 }
 
-func TestBlockRewardAt_Halving(t *testing.T) {
+func TestBlockRewardAtHalving(t *testing.T) {
 	r1 := BlockRewardAt(0)
 	r2 := BlockRewardAt(RewardHalvingPeriod)
 	expected := new(big.Int).Rsh(r1, 1)

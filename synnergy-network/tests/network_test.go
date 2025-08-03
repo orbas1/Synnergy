@@ -42,7 +42,7 @@ func TestHandleNetworkMessage(t *testing.T) {
 // Dialer tests – success & failure paths (table‑driven)
 //------------------------------------------------------------
 
-func TestDialer_Dial(t *testing.T) {
+func TestDialerDial(t *testing.T) {
 	// start local TCP server for the success case
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {

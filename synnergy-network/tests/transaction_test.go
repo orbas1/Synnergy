@@ -29,7 +29,7 @@ func makeKey(t *testing.T) *ecdsa.PrivateKey {
 
 // ----------------------- tests ------------------------
 
-func TestHashTx_Deterministic(t *testing.T) {
+func TestHashTxDeterministic(t *testing.T) {
 	tx := &Transaction{
 		Type:     TxPayment,
 		Value:    123,
@@ -45,7 +45,7 @@ func TestHashTx_Deterministic(t *testing.T) {
 	}
 }
 
-func TestSignAndVerify_Success(t *testing.T) {
+func TestSignAndVerifySuccess(t *testing.T) {
 	priv := makeKey(t)
 	tx := &Transaction{Type: TxPayment, Value: 1}
 
@@ -57,7 +57,7 @@ func TestSignAndVerify_Success(t *testing.T) {
 	}
 }
 
-func TestVerifySig_Errors(t *testing.T) {
+func TestVerifySigErrors(t *testing.T) {
 	// malformed len
 	tx := &Transaction{Sig: []byte{1, 2, 3}}
 	if err := tx.VerifySig(); err == nil {
@@ -65,7 +65,7 @@ func TestVerifySig_Errors(t *testing.T) {
 	}
 }
 
-func TestTxPoolValidate_Reversal(t *testing.T) {
+func TestTxPoolValidateReversal(t *testing.T) {
 	// create three authority keys
 	keys := []*ecdsa.PrivateKey{makeKey(t), makeKey(t), makeKey(t)}
 	allowed := make(map[Address]bool)

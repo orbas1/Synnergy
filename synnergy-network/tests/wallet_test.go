@@ -11,7 +11,7 @@ import (
 // Test NewRandomWallet & WalletFromMnemonic
 // ------------------------------------------------------------
 
-func TestNewRandomWallet_And_Import(t *testing.T) {
+func TestNewRandomWalletAndImport(t *testing.T) {
 	cases := []struct {
 		name    string
 		entropy int
@@ -53,7 +53,7 @@ func TestNewRandomWallet_And_Import(t *testing.T) {
 // Test PrivateKey & NewAddress deterministic output
 // ------------------------------------------------------------
 
-func TestPrivateKey_Deterministic(t *testing.T) {
+func TestPrivateKeyDeterministic(t *testing.T) {
 	w, _, _ := NewRandomWallet(128)
 	priv1, pub1, err := w.PrivateKey(1, 2)
 	if err != nil {

@@ -98,7 +98,7 @@ var testCP = 100 * time.Millisecond // short challenge period for tests
 
 func init() { ChallengePeriod = testCP } // assume var ChallengePeriod time.Duration declared elsewhere
 
-func TestSubmitBatch_And_Finalize(t *testing.T) {
+func TestSubmitBatchAndFinalize(t *testing.T) {
 	led := newAggLedger()
 	ag := NewAggregator(led)
 	pre := [32]byte{}
@@ -138,7 +138,7 @@ func TestSubmitBatch_And_Finalize(t *testing.T) {
 	}
 }
 
-func TestFinalize_RevertedPath(t *testing.T) {
+func TestFinalizeRevertedPath(t *testing.T) {
 	led := newAggLedger()
 	ag := NewAggregator(led)
 	txs := [][]byte{randHash(0x05)}
