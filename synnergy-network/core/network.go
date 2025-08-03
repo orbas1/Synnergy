@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -19,78 +18,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// NodeID uniquely identifies a network peer.
-type NodeID string
-
-// Peer stores information about a connected peer.
-type Peer struct {
-	ID      NodeID
-	Addr    string
-	Latency time.Duration
-	Conn    net.Conn
-}
-
-// Message represents a pubsub message.
-type Message struct {
-	From  NodeID
-	Topic string
-	Data  []byte
-}
-
-// Config holds basic networking configuration.
-type Config struct {
-	ListenAddr     string
-	BootstrapPeers []string
-	DiscoveryTag   string
-}
-
-// NetworkMessage is used for optional replication hooks.
-type NetworkMessage struct {
-	Topic   string
-	Content []byte
-}
-
-// Block is a minimal placeholder for broadcast tests.
-type Block struct{}
-
-// NATManager manages external port mappings.
-type NATManager struct{}
-
-// NewNATManager returns a no-op NAT manager implementation.
-func NewNATManager() (*NATManager, error) { return &NATManager{}, nil }
-
-// Map reserves the given port; in this stub it is a no-op.
-func (m *NATManager) Map(port int) error { return nil }
-
-// Unmap releases any mapped port; in this stub it is a no-op.
-func (m *NATManager) Unmap() error { return nil }
-
-// parsePort extracts the TCP port from a multiaddress string.
-func parsePort(addr string) (int, error) {
-	parts := strings.Split(addr, "/")
-	for i := 0; i < len(parts)-1; i++ {
-		if parts[i] == "tcp" {
-			return strconv.Atoi(parts[i+1])
-		}
-	}
-	return 0, fmt.Errorf("no tcp port in %s", addr)
-}
-
-// Node represents a Synnergy P2P node.
-type Node struct {
-	host      host.Host
-	pubsub    *pubsub.PubSub
-	topics    map[string]*pubsub.Topic
-	subs      map[string]*pubsub.Subscription
-	topicLock sync.RWMutex
-	subLock   sync.RWMutex
-	peerLock  sync.RWMutex
-	peers     map[NodeID]*Peer
-	nat       *NATManager
-	ctx       context.Context
-	cancel    context.CancelFunc
-	cfg       Config
-}
+// Types related to network operations such as NodeID, Peer, Config,
+// Node, NATManager, NetworkMessage and Block are defined in
+// common_structs.go and nat_traversal.go.  This file focuses on the
+// implementation logic and reuses those shared definitions to avoid
+// duplication.
 
 func NewNode(cfg Config) (*Node, error) {
 	ctx, cancel := context.WithCancel(context.Background())
