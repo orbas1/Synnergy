@@ -76,16 +76,16 @@ type edge struct {
 //---------------------------------------------------------------------
 
 type AuthorityNode struct {
-        Addr        Address       `json:"addr"`
-        // Wallet holds the payment address associated with the authority
-        // node. It may differ from the node's network address and is used
-        // when distributing fees or processing on-chain payments.
-        Wallet      Address       `json:"wallet"`
-        Role        AuthorityRole `json:"role"`
-        Active      bool          `json:"active"`
-        PublicVotes uint32        `json:"pv"`
-        AuthVotes   uint32        `json:"av"`
-        CreatedAt   int64         `json:"since"`
+	Addr Address `json:"addr"`
+	// Wallet holds the payment address associated with the authority
+	// node. It may differ from the node's network address and is used
+	// when distributing fees or processing on-chain payments.
+	Wallet      Address       `json:"wallet"`
+	Role        AuthorityRole `json:"role"`
+	Active      bool          `json:"active"`
+	PublicVotes uint32        `json:"pv"`
+	AuthVotes   uint32        `json:"av"`
+	CreatedAt   int64         `json:"since"`
 }
 
 type AuthoritySet struct {
@@ -637,7 +637,6 @@ const (
 	TxReversal
 )
 
-
 type Transaction struct {
 	// core fields
 	Type             TxType            `json:"type"`
@@ -714,10 +713,6 @@ type HDWallet struct {
 
 // Address represents a 20‑byte account identifier.
 type Address [20]byte
-
-// AddressZero represents the zero-value address (all bytes zero).
-// It is used as a sentinel in token and ledger operations.
-var AddressZero = Address{}
 
 // Hash represents a 32‑byte cryptographic hash.
 type Hash [32]byte
