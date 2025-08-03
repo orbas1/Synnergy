@@ -28,7 +28,7 @@ func parseAddressAddr(h string) (core.Address, error) {
 // Controller wraps the core functions
 type AIContractController struct{}
 
-func (c *AIContractController) Deploy(wasm string, ric string, cid string, royalty uint16, gas uint64) (*core.AIEnhancedContract, error) {
+func (c *AIContractController) Deploy(wasm, ric, cid string, royalty uint16, gas uint64) (*core.AIEnhancedContract, error) {
 	code, err := ioutil.ReadFile(wasm)
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (c *AIContractController) Deploy(wasm string, ric string, cid string, royal
 	return core.DeployAIContract(code, ricData, cid, royalty, creator, gas)
 }
 
-func (c *AIContractController) Invoke(addr core.Address, method string, argHex string, txPath string, threshold float32, gas uint64) ([]byte, error) {
+func (c *AIContractController) Invoke(addr core.Address, method, argHex, txPath string, threshold float32, gas uint64) ([]byte, error) {
 	args, err := hex.DecodeString(strings.TrimPrefix(argHex, "0x"))
 	if err != nil {
 		return nil, fmt.Errorf("invalid args hex: %w", err)
