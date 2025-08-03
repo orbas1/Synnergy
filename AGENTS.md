@@ -10,7 +10,7 @@ To bring the repository to production-grade quality, all files have been divided
 ## Stage 1
 
 - .dockerignore
-- .env
+- .env.example
 - .github/ISSUE_TEMPLATE/ux_feedback.md
 - .github/workflows/ci.yml
 - .gitignore
@@ -1211,3 +1211,4 @@ To bring the repository to production-grade quality, all files have been divided
 - synnergy-network/walletserver/routes/routes.go
 - synnergy-network/walletserver/services/wallet_service.go
 - synnergy-network/walletserver/smartcontracts/wallet_contract.go
+
