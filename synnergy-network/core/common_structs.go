@@ -668,18 +668,19 @@ func (tx *Transaction) HashTx() Hash {
 	return sha256.Sum256(b)
 }
 
-// IDHex returns the transaction hash as a hex string.
-// If the hash is zero (e.g. not yet computed), it will be generated
-// using HashTx and stored on the Transaction before encoding.
-// A nil receiver results in an empty string.
+// IDHex returns the transaction hash as a hex string. If the hash has not yet
+// been computed, it derives it from the transaction contents to ensure a
+// stable identifier.
 func (tx *Transaction) IDHex() string {
 	if tx == nil {
 		return ""
 	}
-	if tx.Hash == (Hash{}) {
-		tx.Hash = tx.HashTx()
+
+	h := tx.Hash
+	if h == (Hash{}) {
+		h = tx.HashTx()
 	}
-	return hex.EncodeToString(tx.Hash[:])
+	return hex.EncodeToString(h[:])
 }
 
 type TxInput struct {
