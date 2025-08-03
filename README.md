@@ -75,6 +75,16 @@ The Dockerfile can build a containerised node which runs the networking, consens
 
 The CLI exposes dozens of commands grouped by module: AI management, token operations, governance tools, cross‑chain utilities and many more. Each file under `cmd/cli` registers a command group. Refer to [`synnergy-network/README.md`](synnergy-network/README.md) and `cmd/cli/cli_guide.md` for the full catalogue and examples.
 
+## Authority Node Policies
+
+Authority nodes participate in governance and sensitive financial operations. Each
+authority node must register with a dedicated wallet address which receives any
+rewards or fee distributions. Candidate nodes are activated only after gathering
+the required public and authority votes. Their signatures are also required for
+transaction reversals and other critical actions. Specific roles such as
+`CentralBankNode` or `GovernmentNode` gate privileged functionality like issuing
+SYN‑10/11/12 tokens or authorising regulated financial instruments.
+
 ## Core Modules
 
 The Go packages in `core/` implement the blockchain runtime. Important modules include consensus, ledger storage, networking layers, data replication, sharding and the virtual machine. Development helpers in `core/helpers.go` allow the CLI to run without a full node. A summary of every file lives in [`core/module_guide.md`](synnergy-network/core/module_guide.md).
