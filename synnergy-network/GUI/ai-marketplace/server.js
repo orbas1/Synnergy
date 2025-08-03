@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const { exec } = require("child_process");
+const { execFile } = require("child_process");
 
 const app = express();
 app.use(express.json());
@@ -42,8 +42,18 @@ app.post("/api/purchase", (req, res) => {
     return res.status(500).json({ error: "contract address not configured" });
   }
 
-  const cmd = `${CLI} contracts invoke ${MARKETPLACE_ADDRESS} --method buyService --args ${id} --gas 200000`;
-  exec(cmd, (err, stdout, stderr) => {
+  const args = [
+    "contracts",
+    "invoke",
+    MARKETPLACE_ADDRESS,
+    "--method",
+    "buyService",
+    "--args",
+    id,
+    "--gas",
+    "200000",
+  ];
+  execFile(CLI, args, (err, stdout, stderr) => {
     if (err) {
       console.error(stderr);
       return res.status(500).json({ error: "purchase failed" });
