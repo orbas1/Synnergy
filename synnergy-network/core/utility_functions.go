@@ -32,6 +32,15 @@ func BytesToAddress(b []byte) Address {
 	return a
 }
 
+// Push adds a *big.Int value onto the top of the stack.
+// It panics if a nil value is provided to prevent ambiguous stack entries.
+func (s *Stack) Push(v *big.Int) {
+	if v == nil {
+		panic("nil value pushed to stack")
+	}
+	s.data = append(s.data, v)
+}
+
 func (s *Stack) Pop() *big.Int {
 	if len(s.data) == 0 {
 		panic("stack underflow")
