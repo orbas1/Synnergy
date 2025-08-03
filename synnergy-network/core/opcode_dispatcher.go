@@ -58,6 +58,38 @@ var (
 	mu          sync.RWMutex
 )
 
+// OpcodeInfo exposes metadata about a registered opcode.  It is returned by
+// Catalogue and allows external tooling to inspect the dispatcher at runtime.
+type OpcodeInfo struct {
+	Name string
+	Op   Opcode
+	Gas  uint64
+}
+
+// Catalogue returns a snapshot of all registered opcodes along with their gas
+// costs.  The result is safe for concurrent use by tooling and plugins.
+func Catalogue() []OpcodeInfo {
+	mu.RLock()
+	defer mu.RUnlock()
+	out := make([]OpcodeInfo, len(catalogue))
+	for i, entry := range catalogue {
+		out[i] = OpcodeInfo{entry.name, entry.op, GasCost(entry.op)}
+	}
+	return out
+}
+
+// Opcodes returns a mapping of opcode values to their human readable names. It
+// provides a simple capability discovery API for off-chain tooling.
+func Opcodes() map[Opcode]string {
+	mu.RLock()
+	defer mu.RUnlock()
+	out := make(map[Opcode]string, len(nameToOp))
+	for name, op := range nameToOp {
+		out[op] = name
+	}
+	return out
+}
+
 // Register binds an opcode to its function handler.
 // It panics on duplicates – this should never happen in CI-tested builds.
 func Register(op Opcode, fn OpcodeFunc) {
