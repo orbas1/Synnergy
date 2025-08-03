@@ -103,6 +103,7 @@ SYN‑10/11/12 tokens or authorising regulated financial instruments.
 - Regulator nodes hold privileged access for security upgrades which still
   require community approval through a decentralised vote.
 
+
 ## Core Modules
 
 The Go packages in `core/` implement the blockchain runtime. Important modules include consensus, ledger storage, networking layers, data replication, sharding and the virtual machine. Development helpers in `core/helpers.go` allow the CLI to run without a full node. A summary of every file lives in [`core/module_guide.md`](synnergy-network/core/module_guide.md).
@@ -142,6 +143,14 @@ Web front‑ends are provided under `GUI/`. Each directory contains a standalone
 ## Smart Contracts
 
 Example contracts demonstrating Synnergy's opcode catalogue are located throughout `smart_contract_guide.md` and under various GUI directories. They illustrate token faucets, storage markets, DAO governance and more. Contracts are compiled to WebAssembly and deployed via the CLI. See [`synnergy-network/smart_contract_guide.md`](synnergy-network/smart_contract_guide.md) for a step‑by‑step tutorial.
+
+## Opcode Tooling and Plugins
+
+Run `go run ./cmd/opcode-lint` to verify that the opcode catalogue remains free of collisions. The linter imports the dispatcher and fails on duplicate names or values.
+
+External teams can extend the opcode set without modifying core files by implementing the `core.OpcodeModule` interface and loading it via `core.RegisterModule`. Modules receive a registrar callback for wiring new handlers, enabling a lightweight plugin model.
+
+Gas prices may be adjusted at runtime using `core.UpdateGasCost`, allowing governance or off-chain configuration to tune fees dynamically. The exported `core.Catalogue` and `core.GasTable` helpers provide capability discovery for tools and dashboards.
 
 ## Tests
 

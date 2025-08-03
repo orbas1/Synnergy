@@ -626,6 +626,22 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
+// TxType categorises transaction kinds. It mirrors the definition in
+// transactions.go but is repeated here to avoid build tag dependencies.
+type TxType uint8
+
+const (
+	// TxPayment transfers value between addresses.
+	TxPayment TxType = iota + 1
+	// TxContractCall executes a smart contract.
+	TxContractCall
+	// TxReversal denotes a reversal of a previous transaction. It requires
+	// multiple authority co‑signatures and refunds the original sender minus
+	// a protocol‑defined fee.
+	TxReversal
+)
+
+
 type Transaction struct {
 	// core fields
 	Type             TxType            `json:"type"`
@@ -701,6 +717,10 @@ type HDWallet struct {
 
 // Address represents a 20‑byte account identifier.
 type Address [20]byte
+
+// AddressZero represents the zero-value address (all bytes zero).
+// It is used as a sentinel in token and ledger operations.
+var AddressZero = Address{}
 
 // Hash represents a 32‑byte cryptographic hash.
 type Hash [32]byte
