@@ -146,6 +146,14 @@ func NewConsensus(
 	}, nil
 }
 
+// ValidateTx delegates transaction validation to the underlying pool.
+func (sc *SynnergyConsensus) ValidateTx(tx *Transaction) error {
+	if sc.pool == nil {
+		return errors.New("tx pool not initialised")
+	}
+	return sc.pool.ValidateTx(tx)
+}
+
 // Sub‑block proposer loop (PoH + immediate PoS self‑sign)
 //---------------------------------------------------------------------
 
