@@ -1,6 +1,8 @@
 # Synnergy API Reference
 
-This reference outlines key Go packages and their primary entry points within the Synnergy Network. The APIs below are stable for development purposes and may change as the project evolves.
+This reference outlines key Go packages and their primary entry points
+within the Synnergy Network. The APIs below are stable for development
+purposes and may change as the project evolves.
 
 ## Package Overview
 
@@ -16,17 +18,19 @@ This reference outlines key Go packages and their primary entry points within th
 The `core` package exposes constructors and methods for running a node.
 
 ```go
-import (
-    "synnergy-network/core"
-)
+import "synnergy-network/core"
 
-func runNode() error {
-    cfg := core.DefaultConfig()
+func runNode() (*core.Node, error) {
+    cfg := core.Config{
+        ListenAddr:   ":9000",
+        DiscoveryTag: "synnergy",
+    }
     n, err := core.NewNode(cfg)
     if err != nil {
-        return err
+        return nil, err
     }
-    return n.Start()
+    go n.ListenAndServe()
+    return n, nil
 }
 ```
 
@@ -35,17 +39,16 @@ func runNode() error {
 Ledger utilities allow creation of databases and submission of transactions.
 
 ```go
-import (
-    "synnergy-network/core/ledger"
-)
+import "synnergy-network/core"
 
-func submit(tx ledger.Transaction) error {
-    l, err := ledger.Open("./ledger.db")
+func submit(tx core.Transaction) error {
+    l, err := core.OpenLedger("./ledger")
     if err != nil {
         return err
     }
     defer l.Close()
-    return l.Add(tx)
+    l.AddToPool(&tx)
+    return nil
 }
 ```
 
@@ -54,12 +57,11 @@ func submit(tx ledger.Transaction) error {
 Token helpers provide minting and transfer operations for SYN assets.
 
 ```go
-import (
-    "synnergy-network/core/tokens"
-)
+import "synnergy-network/core"
 
-func issue(addr string, amount uint64) error {
-    return tokens.Mint(addr, amount)
+func issue(id core.TokenID, addr core.Address, amount uint64) error {
+    tm := core.NewTokenManager(nil, nil)
+    return tm.Mint(id, addr, amount)
 }
 ```
 
@@ -69,15 +71,17 @@ Contract deployment requires compiled Wasm artifacts.
 
 ```go
 import (
-    "synnergy-network/core/contract"
+    "os"
+    "synnergy-network/core"
 )
 
 func deploy(path string) error {
-    c, err := contract.LoadWasm(path)
+    code, err := os.ReadFile(path)
     if err != nil {
         return err
     }
-    return contract.Deploy(c)
+    reg := core.GetContractRegistry()
+    return reg.Deploy(core.Address{}, code, nil, 1_000_000)
 }
 ```
 
@@ -124,4 +128,5 @@ func dial(addr string) error {
 }
 ```
 
-Each package contains additional types and methods; run `go doc <package>` for complete documentation.
+Each package contains additional types and methods; run
+`go doc <package>` for complete documentation.
