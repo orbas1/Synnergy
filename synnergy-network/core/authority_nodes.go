@@ -143,11 +143,7 @@ func (as *AuthoritySet) RegisterCandidate(addr Address, role AuthorityRole, wall
 	if wallet == AddressZero {
 		return errors.New("wallet required")
 	}
-	key := make([]byte, 32)
-	if _, err := crand.Read(key); err != nil {
-		return err
-	}
-	n := AuthorityNode{Addr: addr, Wallet: wallet, JobKey: key, Role: role, CreatedAt: time.Now().Unix()}
+	n := AuthorityNode{Addr: addr, Wallet: wallet, Role: role, CreatedAt: time.Now().Unix()}
 	as.led.SetState(nodeKey(addr), mustJSON(n))
 	if as.logger != nil {
 		as.logger.Printf("authority candidate %s registered for role %s", addr.Short(), role)

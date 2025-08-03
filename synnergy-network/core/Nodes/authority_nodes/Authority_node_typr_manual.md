@@ -27,6 +27,7 @@ from at least five authority nodes plus a broader set of normal nodes. All
 authority nodes except the elected authority may validate ID tokens; identities
 remain invalid until verification to prevent double voting.
 
+
 Reversal transactions require signatures from at least three active authority
 nodes. Their wallets receive proportional fees where applicable. Authority
 approval is also mandatory for LoanPool proposals and other governance actions
