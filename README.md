@@ -85,6 +85,25 @@ transaction reversals and other critical actions. Specific roles such as
 `CentralBankNode` or `GovernmentNode` gate privileged functionality like issuing
 SYN‑10/11/12 tokens or authorising regulated financial instruments.
 
+- Upon activation, each authority receives a unique job key used to decrypt
+  randomly assigned governance tasks from its local keystore.
+- Reversal transactions and other high‑risk operations demand multisignature
+  approval from active authorities.
+- LoanPool grants distribute 5% of the awarded amount to five randomly selected
+  authority wallets as compensation for their votes.
+- ID tokens remain invalid until verified by an authority node to prevent double
+  voting within governance systems.
+- Only **CentralBankNode** members may deploy the SYN‑10/11/12 token standards
+  and only **Government**, **Regulator**, **Creditor Bank** or **Central Bank**
+  nodes can issue regulated instruments such as ETFs, bonds or real‑estate
+  tokens. Creditors alone may originate bill tokens while benefit tokens are
+  limited to government nodes.
+- Monetary and fiscal controls on SYN‑10/11/12 tokens are exclusively available
+  to government nodes and cannot be applied to other token types.
+- Regulator nodes hold privileged access for security upgrades which still
+  require community approval through a decentralised vote.
+
+
 ## Core Modules
 
 The Go packages in `core/` implement the blockchain runtime. Important modules include consensus, ledger storage, networking layers, data replication, sharding and the virtual machine. Development helpers in `core/helpers.go` allow the CLI to run without a full node. A summary of every file lives in [`core/module_guide.md`](synnergy-network/core/module_guide.md).

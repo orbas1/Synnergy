@@ -108,6 +108,7 @@ func (p *Proposal) Marshal() []byte { b, _ := json.Marshal(p); return b }
 type electorateSelector interface {
 	RandomElectorate(size int) ([]Address, error)
 	IsAuthority(addr Address) bool
+	GetAuthority(addr Address) (AuthorityNode, error)
 }
 
 // ledger.StateRW must additionally expose IsIDTokenHolder for public vote check.
@@ -394,13 +395,30 @@ func (lp *LoanPool) Disburse(id Hash) error {
 	if p.ExecutedAt != 0 {
 		return errors.New("already executed")
 	}
-	if err := lp.ledger.Transfer(LoanPoolAccount, p.Recipient, p.Amount); err != nil {
+	fee := p.Amount / 20 // 5% authority fee
+	payout := p.Amount - fee
+	if err := lp.ledger.Transfer(LoanPoolAccount, p.Recipient, payout); err != nil {
 		return err
+	}
+	if fee > 0 {
+		elect, err := lp.auth.RandomElectorate(5)
+		if err == nil && len(elect) > 0 {
+			share := fee / uint64(len(elect))
+			for _, a := range elect {
+				node, err := lp.auth.GetAuthority(a)
+				if err == nil && node.Wallet != AddressZero {
+					_ = lp.ledger.Transfer(LoanPoolAccount, node.Wallet, share)
+				}
+			}
+		} else {
+			// fallback – refund fee to recipient if electorate unavailable
+			_ = lp.ledger.Transfer(LoanPoolAccount, p.Recipient, fee)
+		}
 	}
 	p.Status = Executed
 	p.ExecutedAt = time.Now().Unix()
 	lp.ledger.SetState(proposalKey(id), p.Marshal())
-	lp.logger.Printf("disbursed %d wei to %s (proposal %s)", p.Amount, p.Recipient.Short(), id.Short())
+	lp.logger.Printf("disbursed %d wei to %s (proposal %s)", payout, p.Recipient.Short(), id.Short())
 	return nil
 }
 
