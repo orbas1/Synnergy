@@ -71,6 +71,7 @@ func (d *DataMarketplaceToken) GrantAccess(a Address, rights string) {
 		d.AccessRights = make(map[Address]string)
 	}
 	d.AccessRights[a] = rights
+	d.UpdatedAt = time.Now().UTC()
 }
 
 // RevokeAccess removes access for an address.
@@ -78,6 +79,7 @@ func (d *DataMarketplaceToken) RevokeAccess(a Address) {
 	d.lock.Lock()
 	defer d.lock.Unlock()
 	delete(d.AccessRights, a)
+	d.UpdatedAt = time.Now().UTC()
 }
 
 // HasAccess checks whether an address has rights.
