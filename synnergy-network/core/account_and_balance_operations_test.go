@@ -2,7 +2,7 @@ package core
 
 import "testing"
 
-func TestAccountManager_CreateAndBalance(t *testing.T) {
+func TestAccountManagerCreateAndBalance(t *testing.T) {
 	ledger := &Ledger{TokenBalances: make(map[string]uint64)}
 	am := NewAccountManager(ledger)
 	var addr Address
@@ -25,7 +25,7 @@ func TestAccountManager_CreateAndBalance(t *testing.T) {
 	}
 }
 
-func TestAccountManager_TransferAndDelete(t *testing.T) {
+func TestAccountManagerTransferAndDelete(t *testing.T) {
 	ledger := &Ledger{TokenBalances: make(map[string]uint64)}
 	am := NewAccountManager(ledger)
 

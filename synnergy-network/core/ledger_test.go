@@ -31,7 +31,7 @@ func tmpLedgerConfig(t *testing.T, genesis *Block) (LedgerConfig, func()) {
 // Test NewLedger with and without genesis
 //-------------------------------------------------------------
 
-func TestNewLedger_Init(t *testing.T) {
+func TestNewLedgerInit(t *testing.T) {
 	tests := []struct {
 		name       string
 		genesis    *Block
@@ -58,7 +58,7 @@ func TestNewLedger_Init(t *testing.T) {
 // Test AddBlock height validation
 //-------------------------------------------------------------
 
-func TestAddBlock_HeightMismatch(t *testing.T) {
+func TestAddBlockHeightMismatch(t *testing.T) {
 	genesis := &Block{Header: BlockHeader{Height: 0}}
 	cfg, _ := tmpLedgerConfig(t, genesis)
 	led, _ := NewLedger(cfg)
@@ -74,7 +74,7 @@ func TestAddBlock_HeightMismatch(t *testing.T) {
 // Test MintToken and BalanceOf
 //-------------------------------------------------------------
 
-func TestMintToken_Balance(t *testing.T) {
+func TestMintTokenBalance(t *testing.T) {
 	cfg, _ := tmpLedgerConfig(t, nil)
 	led, _ := NewLedger(cfg)
 	addr := Address{0xAA}
@@ -117,7 +117,7 @@ func TestSnapshotRoundTrip(t *testing.T) {
 // Test AppendSubBlock continuity rule
 //-------------------------------------------------------------
 
-func TestAppendSubBlock_HeightCheck(t *testing.T) {
+func TestAppendSubBlockHeightCheck(t *testing.T) {
 	// bootstrap ledger with one block that has no subheaders yet
 	blk := &Block{Header: BlockHeader{Height: 0}, Body: BlockBody{SubHeaders: []SubBlockHeader{}}}
 	cfg, _ := tmpLedgerConfig(t, blk)
