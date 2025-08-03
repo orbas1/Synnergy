@@ -90,11 +90,13 @@ func molStop(cmd *cobra.Command, _ []string) error {
 }
 
 var molCmd = &cobra.Command{Use: "molecular", Short: "Run molecular node", PersistentPreRunE: molInit}
-var molStartCmd = &cobra.Command{Use: "start", Short: "Start molecular node", RunE: molStart}
-var molStopCmd = &cobra.Command{Use: "stop", Short: "Stop molecular node", RunE: molStop}
+var molStartCmd = &cobra.Command{Use: "start", Short: "Start molecular node", Args: cobra.NoArgs, RunE: molStart}
+var molStopCmd = &cobra.Command{Use: "stop", Short: "Stop molecular node", Args: cobra.NoArgs, RunE: molStop}
 
 func init() { molCmd.AddCommand(molStartCmd, molStopCmd) }
 
+// MolecularCmd exposes molecular node CLI commands.
 var MolecularCmd = molCmd
 
+// RegisterMolecular adds molecular node commands to the root CLI.
 func RegisterMolecular(root *cobra.Command) { root.AddCommand(MolecularCmd) }

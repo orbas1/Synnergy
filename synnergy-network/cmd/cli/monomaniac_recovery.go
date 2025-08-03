@@ -25,6 +25,7 @@ type recoveryFlags struct {
 var registerRecCmd = &cobra.Command{
 	Use:   "register",
 	Short: "Register recovery credentials",
+	Args:  cobra.NoArgs,
 	PreRunE: func(cmd *cobra.Command, _ []string) error {
 		ownerStr, _ := cmd.Flags().GetString("owner")
 		recStr, _ := cmd.Flags().GetString("recovery")
@@ -60,6 +61,7 @@ var registerRecCmd = &cobra.Command{
 var recoverCmd = &cobra.Command{
 	Use:   "recover",
 	Short: "Recover an account using credentials",
+	Args:  cobra.NoArgs,
 	PreRunE: func(cmd *cobra.Command, _ []string) error {
 		ownerStr, _ := cmd.Flags().GetString("owner")
 		recStr, _ := cmd.Flags().GetString("recovery")
@@ -114,6 +116,8 @@ func init() {
 	recoveryCmd.AddCommand(registerRecCmd, recoverCmd)
 }
 
+// RecoveryCmd exposes account recovery operations.
 var RecoveryCmd = recoveryCmd
 
+// RegisterRecovery adds recovery commands to the root CLI.
 func RegisterRecovery(root *cobra.Command) { root.AddCommand(RecoveryCmd) }

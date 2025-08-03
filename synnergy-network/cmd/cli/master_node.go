@@ -27,6 +27,7 @@ var masterCmd = &cobra.Command{
 var masterStartCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start master node services",
+	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		master.Start()
 		fmt.Println("master node started")
@@ -37,6 +38,7 @@ var masterStartCmd = &cobra.Command{
 var masterStopCmd = &cobra.Command{
 	Use:   "stop",
 	Short: "Stop master node services",
+	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := master.Stop(); err != nil {
 			return err
@@ -51,4 +53,8 @@ func init() {
 	masterCmd.AddCommand(masterStopCmd)
 }
 
+// MasterCmd exposes master node CLI operations.
 var MasterCmd = masterCmd
+
+// RegisterMaster adds master node commands to the root CLI.
+func RegisterMaster(root *cobra.Command) { root.AddCommand(MasterCmd) }

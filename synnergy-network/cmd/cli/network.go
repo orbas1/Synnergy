@@ -195,6 +195,8 @@ func init() { netRootCmd.AddCommand(netStartCmd, netStopCmd, netPeersCmd, netBro
 // Export
 // -----------------------------------------------------------------------------
 
+// NetworkCmd exposes P2P networking commands.
 var NetworkCmd = netRootCmd
 
+// RegisterNetwork adds the networking commands to the root CLI.
 func RegisterNetwork(root *cobra.Command) { root.AddCommand(NetworkCmd) }

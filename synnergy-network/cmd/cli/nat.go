@@ -57,6 +57,8 @@ var natIPCmd = &cobra.Command{Use: "ip", Short: "Show external IP", Args: cobra.
 
 func init() { natRootCmd.AddCommand(natMapCmd, natUnmapCmd, natIPCmd) }
 
+// NatCmd exposes the NAT traversal commands.
 var NatCmd = natRootCmd
 
+// RegisterNAT adds NAT traversal commands to the root CLI.
 func RegisterNAT(root *cobra.Command) { root.AddCommand(NatCmd) }
