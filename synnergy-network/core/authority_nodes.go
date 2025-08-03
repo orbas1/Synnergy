@@ -12,12 +12,10 @@ package core
 // Compile‑time dependencies: common, ledger, security (sig verify).
 
 import (
-	crand "crypto/rand"
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"github.com/sirupsen/logrus"
-	"math/big"
 	"time"
 )
 
