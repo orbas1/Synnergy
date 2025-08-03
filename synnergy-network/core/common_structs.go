@@ -662,7 +662,16 @@ func (tx *Transaction) HashTx() Hash {
 }
 
 // IDHex returns the transaction hash as a hex string.
+// If the hash is zero (e.g. not yet computed), it will be generated
+// using HashTx and stored on the Transaction before encoding.
+// A nil receiver results in an empty string.
 func (tx *Transaction) IDHex() string {
+	if tx == nil {
+		return ""
+	}
+	if tx.Hash == (Hash{}) {
+		tx.Hash = tx.HashTx()
+	}
 	return hex.EncodeToString(tx.Hash[:])
 }
 
