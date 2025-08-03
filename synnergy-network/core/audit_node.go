@@ -68,7 +68,6 @@ func (a *AuditNode) Close() error { return a.Stop() }
 // Peers returns the current peer list.
 func (a *AuditNode) Peers() []string { return a.node.Peers() }
 
-
 // LogAudit records an audit event via the manager.
 func (a *AuditNode) LogAudit(addr Address, event string, meta map[string]string) error {
 	if a.mgr == nil {
