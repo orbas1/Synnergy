@@ -1,15 +1,46 @@
 export default function renderProposalDetail(proposal) {
   const container = document.getElementById("proposal-detail");
-  container.innerHTML = proposal
-    ? `
-    <h2 class="text-xl font-bold mb-2">${proposal.title}</h2>
-    <p class="mb-2">${proposal.description}</p>
-    <p>For: ${proposal.votesFor} | Against: ${proposal.votesAgainst}</p>
-    <form id="vote-form" class="mt-2">
-      <input type="hidden" name="id" value="${proposal.id}">
-      <button name="approve" value="true" class="bg-green-500 text-white px-2 py-1 mr-2 rounded">Approve</button>
-      <button name="approve" value="false" class="bg-red-500 text-white px-2 py-1 rounded">Reject</button>
-    </form>
-  `
-    : "<p>Select a proposal</p>";
+  container.innerHTML = "";
+
+  if (!proposal) {
+    const placeholder = document.createElement("p");
+    placeholder.textContent = "Select a proposal";
+    container.appendChild(placeholder);
+    return;
+  }
+
+  const title = document.createElement("h2");
+  title.className = "text-xl font-bold mb-2";
+  title.textContent = proposal.title;
+
+  const description = document.createElement("p");
+  description.className = "mb-2";
+  description.textContent = proposal.description;
+
+  const votes = document.createElement("p");
+  votes.textContent = `For: ${proposal.votesFor} | Against: ${proposal.votesAgainst}`;
+
+  const form = document.createElement("form");
+  form.id = "vote-form";
+  form.className = "mt-2";
+
+  const hiddenId = document.createElement("input");
+  hiddenId.type = "hidden";
+  hiddenId.name = "id";
+  hiddenId.value = proposal.id;
+
+  const approveBtn = document.createElement("button");
+  approveBtn.name = "approve";
+  approveBtn.value = "true";
+  approveBtn.className = "bg-green-500 text-white px-2 py-1 mr-2 rounded";
+  approveBtn.textContent = "Approve";
+
+  const rejectBtn = document.createElement("button");
+  rejectBtn.name = "approve";
+  rejectBtn.value = "false";
+  rejectBtn.className = "bg-red-500 text-white px-2 py-1 rounded";
+  rejectBtn.textContent = "Reject";
+
+  form.append(hiddenId, approveBtn, rejectBtn);
+  container.append(title, description, votes, form);
 }

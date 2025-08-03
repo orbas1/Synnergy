@@ -4,9 +4,20 @@ export default function renderProposalList(proposals) {
   proposals.forEach((p) => {
     const item = document.createElement("div");
     item.className = "border p-4 rounded mb-2 bg-white";
-    item.innerHTML = `<h3 class="text-lg font-semibold">${p.title}</h3>
-      <p>${p.description}</p>
-      <button class="text-blue-600 underline" data-id="${p.id}">View</button>`;
+
+    const title = document.createElement("h3");
+    title.className = "text-lg font-semibold";
+    title.textContent = p.title;
+
+    const description = document.createElement("p");
+    description.textContent = p.description;
+
+    const button = document.createElement("button");
+    button.className = "text-blue-600 underline";
+    button.dataset.id = p.id;
+    button.textContent = "View";
+
+    item.append(title, description, button);
     container.appendChild(item);
   });
 }
