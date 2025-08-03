@@ -210,10 +210,6 @@ func NewTxPool(
 	}
 }
 
-func (tx *Transaction) IDHex() string {
-	return hex.EncodeToString(tx.Hash[:])
-}
-
 // -----------------------------------------------------------------------------
 // TxPool operations
 // -----------------------------------------------------------------------------
