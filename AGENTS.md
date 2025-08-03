@@ -1,968 +1,1063 @@
-# Repository Files (excluding README)
+# Error Fix Stages
 
-.dockerignore
-.env
-.github/ISSUE_TEMPLATE/ux_feedback.md
-.github/workflows/ci.yml
-.gitignore
-.nvmrc
-.tool-versions
-AGENTS.md
-Dockerfile
-Makefile
-SECURITY.md
-Synnergy.env.sh
-__MACOSX/synnergy-network/._.DS_Store
-__MACOSX/synnergy-network/cmd/._.DS_Store
-docker-entrypoint.sh
-docs/api-reference.md
-docs/architecture-decisions.md
-docs/cli-user-guide.md
-docs/developer-guide.md
-docs/final-quality-gate.md
-docs/gui-user-guide.md
-go.work
-go.work.sum
-scripts/build_matrix.sh
-scripts/check_circular_imports.sh
-scripts/devnet_start.sh
-scripts/run_tests.sh
-scripts/security_scan.sh
-scripts/staging_validate.sh
-scripts/testnet_start.sh
-setup_synn.sh
-synnergy-network/.DS_Store
-synnergy-network/.env
-synnergy-network/GUI/ai-marketplace/app.js
-synnergy-network/GUI/ai-marketplace/index.html
-synnergy-network/GUI/ai-marketplace/server.js
-synnergy-network/GUI/authority-node-index/app.js
-synnergy-network/GUI/authority-node-index/index.html
-synnergy-network/GUI/cross-chain-management/app.js
-synnergy-network/GUI/cross-chain-management/assets/logo.svg
-synnergy-network/GUI/cross-chain-management/components/BridgeForm.js
-synnergy-network/GUI/cross-chain-management/components/BridgeList.js
-synnergy-network/GUI/cross-chain-management/components/BurnReleaseForm.js
-synnergy-network/GUI/cross-chain-management/components/LockMintForm.js
-synnergy-network/GUI/cross-chain-management/components/RelayerForm.js
-synnergy-network/GUI/cross-chain-management/index.html
-synnergy-network/GUI/cross-chain-management/services/api.js
-synnergy-network/GUI/cross-chain-management/styles.css
-synnergy-network/GUI/dao-explorer/app.js
-synnergy-network/GUI/dao-explorer/assets/logo.svg
-synnergy-network/GUI/dao-explorer/assets/logo.txt
-synnergy-network/GUI/dao-explorer/backend/.env
-synnergy-network/GUI/dao-explorer/backend/config/config.js
-synnergy-network/GUI/dao-explorer/backend/controllers/proposalController.js
-synnergy-network/GUI/dao-explorer/backend/middleware/errorHandler.js
-synnergy-network/GUI/dao-explorer/backend/package-lock.json
-synnergy-network/GUI/dao-explorer/backend/package.json
-synnergy-network/GUI/dao-explorer/backend/routes/proposalRoutes.js
-synnergy-network/GUI/dao-explorer/backend/server.js
-synnergy-network/GUI/dao-explorer/backend/services/contractService.js
-synnergy-network/GUI/dao-explorer/backend/services/proposalService.js
-synnergy-network/GUI/dao-explorer/components/NewProposalForm.js
-synnergy-network/GUI/dao-explorer/components/ProposalDetail.js
-synnergy-network/GUI/dao-explorer/components/ProposalList.js
-synnergy-network/GUI/dao-explorer/components/VoteForm.js
-synnergy-network/GUI/dao-explorer/styles/main.css
-synnergy-network/GUI/dao-explorer/views/index.html
-synnergy-network/GUI/dex-screener/app.js
-synnergy-network/GUI/dex-screener/components/poolTable.js
-synnergy-network/GUI/dex-screener/index.html
-synnergy-network/GUI/dex-screener/styles/main.css
-synnergy-network/GUI/explorer/app.js
-synnergy-network/GUI/explorer/assets/logo.svg
-synnergy-network/GUI/explorer/components/balance.js
-synnergy-network/GUI/explorer/components/blocks.js
-synnergy-network/GUI/explorer/components/tx.js
-synnergy-network/GUI/explorer/index.html
-synnergy-network/GUI/explorer/styles.css
-synnergy-network/GUI/nft_marketplace/app.js
-synnergy-network/GUI/nft_marketplace/assets/logo.png
-synnergy-network/GUI/nft_marketplace/backend/.env
-synnergy-network/GUI/nft_marketplace/backend/config/index.js
-synnergy-network/GUI/nft_marketplace/backend/controllers/nftController.js
-synnergy-network/GUI/nft_marketplace/backend/middleware/logger.js
-synnergy-network/GUI/nft_marketplace/backend/package-lock.json
-synnergy-network/GUI/nft_marketplace/backend/package.json
-synnergy-network/GUI/nft_marketplace/backend/routes/nftRoutes.js
-synnergy-network/GUI/nft_marketplace/backend/server.js
-synnergy-network/GUI/nft_marketplace/backend/services/marketplaceService.js
-synnergy-network/GUI/nft_marketplace/index.html
-synnergy-network/GUI/nft_marketplace/style.css
-synnergy-network/GUI/smart-contract-marketplace/.env
-synnergy-network/GUI/smart-contract-marketplace/app.js
-synnergy-network/GUI/smart-contract-marketplace/assets/logo.png
-synnergy-network/GUI/smart-contract-marketplace/components/footer.html
-synnergy-network/GUI/smart-contract-marketplace/components/navbar.html
-synnergy-network/GUI/smart-contract-marketplace/config/default.js
-synnergy-network/GUI/smart-contract-marketplace/eslint.config.js
-synnergy-network/GUI/smart-contract-marketplace/index.html
-synnergy-network/GUI/smart-contract-marketplace/package-lock.json
-synnergy-network/GUI/smart-contract-marketplace/package.json
-synnergy-network/GUI/smart-contract-marketplace/script.js
-synnergy-network/GUI/smart-contract-marketplace/server/controllers/contractController.js
-synnergy-network/GUI/smart-contract-marketplace/server/data/contracts.json
-synnergy-network/GUI/smart-contract-marketplace/server/middleware/logger.js
-synnergy-network/GUI/smart-contract-marketplace/server/routes/contracts.js
-synnergy-network/GUI/smart-contract-marketplace/server/server.js
-synnergy-network/GUI/smart-contract-marketplace/server/services/contractService.js
-synnergy-network/GUI/smart-contract-marketplace/styles.css
-synnergy-network/GUI/smart-contract-marketplace/views/deploy.html
-synnergy-network/GUI/smart-contract-marketplace/views/detail.html
-synnergy-network/GUI/smart-contract-marketplace/views/listings.html
-synnergy-network/GUI/storage-marketplace/app.js
-synnergy-network/GUI/storage-marketplace/assets/logo.txt
-synnergy-network/GUI/storage-marketplace/backend/.env
-synnergy-network/GUI/storage-marketplace/backend/config/index.js
-synnergy-network/GUI/storage-marketplace/backend/controllers/dealsController.js
-synnergy-network/GUI/storage-marketplace/backend/controllers/listingsController.js
-synnergy-network/GUI/storage-marketplace/backend/controllers/storageController.js
-synnergy-network/GUI/storage-marketplace/backend/middleware/errorHandler.js
-synnergy-network/GUI/storage-marketplace/backend/package-lock.json
-synnergy-network/GUI/storage-marketplace/backend/package.json
-synnergy-network/GUI/storage-marketplace/backend/routes/deals.js
-synnergy-network/GUI/storage-marketplace/backend/routes/listings.js
-synnergy-network/GUI/storage-marketplace/backend/routes/storage.js
-synnergy-network/GUI/storage-marketplace/backend/server.js
-synnergy-network/GUI/storage-marketplace/backend/services/data.json
-synnergy-network/GUI/storage-marketplace/backend/services/storageService.js
-synnergy-network/GUI/storage-marketplace/components/deals.js
-synnergy-network/GUI/storage-marketplace/components/listings.js
-synnergy-network/GUI/storage-marketplace/components/storage.js
-synnergy-network/GUI/storage-marketplace/index.html
-synnergy-network/GUI/storage-marketplace/styles/style.css
-synnergy-network/GUI/token-creation-tool/app.js
-synnergy-network/GUI/token-creation-tool/assets/banner.svg
-synnergy-network/GUI/token-creation-tool/assets/logo.svg
-synnergy-network/GUI/token-creation-tool/components/TokenForm.js
-synnergy-network/GUI/token-creation-tool/components/TokenList.js
-synnergy-network/GUI/token-creation-tool/eslint.config.js
-synnergy-network/GUI/token-creation-tool/index.html
-synnergy-network/GUI/token-creation-tool/server/.env
-synnergy-network/GUI/token-creation-tool/server/config/default.json
-synnergy-network/GUI/token-creation-tool/server/controllers/tokenController.js
-synnergy-network/GUI/token-creation-tool/server/middleware/errorHandler.js
-synnergy-network/GUI/token-creation-tool/server/middleware/logger.js
-synnergy-network/GUI/token-creation-tool/server/package-lock.json
-synnergy-network/GUI/token-creation-tool/server/package.json
-synnergy-network/GUI/token-creation-tool/server/routes/tokenRoutes.js
-synnergy-network/GUI/token-creation-tool/server/server.js
-synnergy-network/GUI/token-creation-tool/server/services/tokenService.js
-synnergy-network/GUI/token-creation-tool/server/tokens.json
-synnergy-network/GUI/token-creation-tool/styles/style.css
-synnergy-network/GUI/token-creation-tool/views/create.html
-synnergy-network/GUI/wallet/app.js
-synnergy-network/GUI/wallet/assets/.gitkeep
-synnergy-network/GUI/wallet/components/wallet.js
-synnergy-network/GUI/wallet/index.html
-synnergy-network/GUI/wallet/styles/style.css
-synnergy-network/GUI/wallet/views/index.html
-synnergy-network/UX_FEEDBACK_GUIDE.md
-synnergy-network/WHITEPAPER.md
-synnergy-network/ai.proto
-synnergy-network/cmd/.DS_Store
-synnergy-network/cmd/cli/access_control.go
-synnergy-network/cmd/cli/account_and_balance_operations.go
-synnergy-network/cmd/cli/agriculture.go
-synnergy-network/cmd/cli/ai.go
-synnergy-network/cmd/cli/ai_contract.go
-synnergy-network/cmd/cli/ai_enhanced_node.go
-synnergy-network/cmd/cli/ai_inference.go
-synnergy-network/cmd/cli/ai_model_management.go
-synnergy-network/cmd/cli/ai_trainining.go
-synnergy-network/cmd/cli/amm.go
-synnergy-network/cmd/cli/anomaly_detection.go
-synnergy-network/cmd/cli/api_node.go
-synnergy-network/cmd/cli/archival_witness_node.go
-synnergy-network/cmd/cli/audit_management.go
-synnergy-network/cmd/cli/audit_node.go
-synnergy-network/cmd/cli/authority_apply.go
-synnergy-network/cmd/cli/authority_node.go
-synnergy-network/cmd/cli/autonomous_agent_node.go
-synnergy-network/cmd/cli/bank_institutional_node.go
-synnergy-network/cmd/cli/binary_tree_operations.go
-synnergy-network/cmd/cli/biometric_security_node.go
-synnergy-network/cmd/cli/biometrics.go
-synnergy-network/cmd/cli/blockchain_compression.go
-synnergy-network/cmd/cli/blockchain_synchronization.go
-synnergy-network/cmd/cli/bootstrap_node.go
-synnergy-network/cmd/cli/carbon_credit_system.go
-synnergy-network/cmd/cli/central_banking_node.go
-synnergy-network/cmd/cli/chain_fork_manager.go
-synnergy-network/cmd/cli/charity_mgmt.go
-synnergy-network/cmd/cli/charity_pool.go
-synnergy-network/cmd/cli/charity_token.go
-synnergy-network/cmd/cli/cli_guide.md
-synnergy-network/cmd/cli/coin.go
-synnergy-network/cmd/cli/compliance.go
-synnergy-network/cmd/cli/compliance_management.go
-synnergy-network/cmd/cli/connection_pool.go
-synnergy-network/cmd/cli/consensus.go
-synnergy-network/cmd/cli/consensus_adaptive_management.go
-synnergy-network/cmd/cli/consensus_specific_node.go
-synnergy-network/cmd/cli/content_node.go
-synnergy-network/cmd/cli/contract_management.go
-synnergy-network/cmd/cli/contracts.go
-synnergy-network/cmd/cli/cross_chain.go
-synnergy-network/cmd/cli/cross_chain_agnostic_protocols.go
-synnergy-network/cmd/cli/cross_chain_bridge.go
-synnergy-network/cmd/cli/cross_chain_connection.go
-synnergy-network/cmd/cli/cross_chain_contracts.go
-synnergy-network/cmd/cli/cross_chain_transactions.go
-synnergy-network/cmd/cli/cross_consensus_scaling_networks.go
-synnergy-network/cmd/cli/custodial_node.go
-synnergy-network/cmd/cli/dao.go
-synnergy-network/cmd/cli/dao_access_control.go
-synnergy-network/cmd/cli/dao_proposal.go
-synnergy-network/cmd/cli/dao_staking.go
-synnergy-network/cmd/cli/dao_token.go
-synnergy-network/cmd/cli/data.go
-synnergy-network/cmd/cli/data_distribution.go
-synnergy-network/cmd/cli/data_operations.go
-synnergy-network/cmd/cli/data_resource_management.go
-synnergy-network/cmd/cli/defi.go
-synnergy-network/cmd/cli/devnet.go
-synnergy-network/cmd/cli/disaster_recovery_node.go
-synnergy-network/cmd/cli/distributed_network_coordination.go
-synnergy-network/cmd/cli/distribution.go
-synnergy-network/cmd/cli/dynamic_consensus_hopping.go
-synnergy-network/cmd/cli/ecommerce.go
-synnergy-network/cmd/cli/elected_authority_node.go
-synnergy-network/cmd/cli/employment.go
-synnergy-network/cmd/cli/employment_token.go
-synnergy-network/cmd/cli/energy_efficiency.go
-synnergy-network/cmd/cli/energy_efficient_node.go
-synnergy-network/cmd/cli/energy_tokens.go
-synnergy-network/cmd/cli/environmental_monitoring_node.go
-synnergy-network/cmd/cli/escrow.go
-synnergy-network/cmd/cli/event_management.go
-synnergy-network/cmd/cli/event_ticket.go
-synnergy-network/cmd/cli/execution_management.go
-synnergy-network/cmd/cli/experimental_node.go
-synnergy-network/cmd/cli/failover_recovery.go
-synnergy-network/cmd/cli/faucet.go
-synnergy-network/cmd/cli/fault_tolerance.go
-synnergy-network/cmd/cli/finalization_management.go
-synnergy-network/cmd/cli/firewall.go
-synnergy-network/cmd/cli/forensic_node.go
-synnergy-network/cmd/cli/forex_token.go
-synnergy-network/cmd/cli/full_node.go
-synnergy-network/cmd/cli/gaming.go
-synnergy-network/cmd/cli/gateway_node.go
-synnergy-network/cmd/cli/geolocation_network.go
-synnergy-network/cmd/cli/geospatial_node.go
-synnergy-network/cmd/cli/governance.go
-synnergy-network/cmd/cli/governance_management.go
-synnergy-network/cmd/cli/governance_reputation_voting.go
-synnergy-network/cmd/cli/grant_disbursement.go
-synnergy-network/cmd/cli/grant_tokens.go
-synnergy-network/cmd/cli/green_technology.go
-synnergy-network/cmd/cli/healthcare.go
-synnergy-network/cmd/cli/high_availability.go
-synnergy-network/cmd/cli/historical_node.go
-synnergy-network/cmd/cli/holographic_node.go
-synnergy-network/cmd/cli/identity_token.go
-synnergy-network/cmd/cli/identity_verification.go
-synnergy-network/cmd/cli/idwallet.go
-synnergy-network/cmd/cli/immutability_enforcement.go
-synnergy-network/cmd/cli/index.go
-synnergy-network/cmd/cli/indexing_node.go
-synnergy-network/cmd/cli/initrep.go
-synnergy-network/cmd/cli/insurance_token.go
-synnergy-network/cmd/cli/integration_node.go
-synnergy-network/cmd/cli/ipfs.go
-synnergy-network/cmd/cli/iptoken.go
-synnergy-network/cmd/cli/kademlia.go
-synnergy-network/cmd/cli/ledger.go
-synnergy-network/cmd/cli/legal_token.go
-synnergy-network/cmd/cli/life_insurance.go
-synnergy-network/cmd/cli/lightning_node.go
-synnergy-network/cmd/cli/liquidity_pools.go
-synnergy-network/cmd/cli/loanpool.go
-synnergy-network/cmd/cli/loanpool_apply.go
-synnergy-network/cmd/cli/loanpool_management.go
-synnergy-network/cmd/cli/marketplace.go
-synnergy-network/cmd/cli/master_node.go
-synnergy-network/cmd/cli/messages.go
-synnergy-network/cmd/cli/military_node.go
-synnergy-network/cmd/cli/mining_node.go
-synnergy-network/cmd/cli/mobile_mining_node.go
-synnergy-network/cmd/cli/mobile_node.go
-synnergy-network/cmd/cli/molecular_node.go
-synnergy-network/cmd/cli/monomaniac_recovery.go
-synnergy-network/cmd/cli/nat.go
-synnergy-network/cmd/cli/network.go
-synnergy-network/cmd/cli/offchain_wallet.go
-synnergy-network/cmd/cli/optimization.go
-synnergy-network/cmd/cli/oracle_management.go
-synnergy-network/cmd/cli/orphan_node.go
-synnergy-network/cmd/cli/partitioning_and_compression.go
-synnergy-network/cmd/cli/peer_management.go
-synnergy-network/cmd/cli/pension_tokens.go
-synnergy-network/cmd/cli/plasma.go
-synnergy-network/cmd/cli/plasma_management.go
-synnergy-network/cmd/cli/plasma_operations.go
-synnergy-network/cmd/cli/polls_management.go
-synnergy-network/cmd/cli/private_transactions.go
-synnergy-network/cmd/cli/quadratic_voting.go
-synnergy-network/cmd/cli/quantum_resistant_node.go
-synnergy-network/cmd/cli/quorum_tracker.go
-synnergy-network/cmd/cli/real_estate.go
-synnergy-network/cmd/cli/regulatory_management.go
-synnergy-network/cmd/cli/regulatory_node.go
-synnergy-network/cmd/cli/rental_token.go
-synnergy-network/cmd/cli/replication.go
-synnergy-network/cmd/cli/reputation_tokens.go
-synnergy-network/cmd/cli/resource_allocation.go
-synnergy-network/cmd/cli/resource_management.go
-synnergy-network/cmd/cli/resource_marketplace.go
-synnergy-network/cmd/cli/rollups.go
-synnergy-network/cmd/cli/security.go
-synnergy-network/cmd/cli/sensor.go
-synnergy-network/cmd/cli/sharding.go
-synnergy-network/cmd/cli/sidechain.go
-synnergy-network/cmd/cli/smart_legal_contracts.go
-synnergy-network/cmd/cli/stake_penalty.go
-synnergy-network/cmd/cli/staking_node.go
-synnergy-network/cmd/cli/state_channel.go
-synnergy-network/cmd/cli/state_channel_management.go
-synnergy-network/cmd/cli/storage.go
-synnergy-network/cmd/cli/super_node.go
-synnergy-network/cmd/cli/supply_chain.go
-synnergy-network/cmd/cli/swarm.go
-synnergy-network/cmd/cli/syn10.go
-synnergy-network/cmd/cli/syn1000.go
-synnergy-network/cmd/cli/syn11.go
-synnergy-network/cmd/cli/syn1100.go
-synnergy-network/cmd/cli/syn1155.go
-synnergy-network/cmd/cli/syn1200.go
-synnergy-network/cmd/cli/syn130.go
-synnergy-network/cmd/cli/syn1300_token.go
-synnergy-network/cmd/cli/syn131.go
-synnergy-network/cmd/cli/syn1401.go
-synnergy-network/cmd/cli/syn1600.go
-synnergy-network/cmd/cli/syn1800.go
-synnergy-network/cmd/cli/syn1900.go
-synnergy-network/cmd/cli/syn1967.go
-synnergy-network/cmd/cli/syn200.go
-synnergy-network/cmd/cli/syn2100.go
-synnergy-network/cmd/cli/syn2200.go
-synnergy-network/cmd/cli/syn223.go
-synnergy-network/cmd/cli/syn2400.go
-synnergy-network/cmd/cli/syn300.go
-synnergy-network/cmd/cli/syn3200.go
-synnergy-network/cmd/cli/syn3300.go
-synnergy-network/cmd/cli/syn3500.go
-synnergy-network/cmd/cli/syn500.go
-synnergy-network/cmd/cli/syn5000.go
-synnergy-network/cmd/cli/syn600.go
-synnergy-network/cmd/cli/syn70.go
-synnergy-network/cmd/cli/syn721.go
-synnergy-network/cmd/cli/syn800.go
-synnergy-network/cmd/cli/syn845.go
-synnergy-network/cmd/cli/system_health.go
-synnergy-network/cmd/cli/tangible_assets.go
-synnergy-network/cmd/cli/time_locked_node.go
-synnergy-network/cmd/cli/timelock.go
-synnergy-network/cmd/cli/token_management.go
-synnergy-network/cmd/cli/token_vote.go
-synnergy-network/cmd/cli/tokens.go
-synnergy-network/cmd/cli/transaction_distribution.go
-synnergy-network/cmd/cli/transactionreversal.go
-synnergy-network/cmd/cli/transactions.go
-synnergy-network/cmd/cli/user_feedback_system.go
-synnergy-network/cmd/cli/utility_functions.go
-synnergy-network/cmd/cli/validator_node.go
-synnergy-network/cmd/cli/virtual_machine.go
-synnergy-network/cmd/cli/vm_sandbox_management.go
-synnergy-network/cmd/cli/wallet.go
-synnergy-network/cmd/cli/wallet_management.go
-synnergy-network/cmd/cli/warehouse.go
-synnergy-network/cmd/cli/watchtower_node.go
-synnergy-network/cmd/cli/workflow_integrations.go
-synnergy-network/cmd/cli/zero_trust_data_channels.go
-synnergy-network/cmd/cli/zkp_node.go
-synnergy-network/cmd/config/bootstrap.yaml
-synnergy-network/cmd/config/config_guide.md
-synnergy-network/cmd/config/config_test.go
-synnergy-network/cmd/config/crosschain.yaml
-synnergy-network/cmd/config/default.yaml
-synnergy-network/cmd/config/explorer.yaml
-synnergy-network/cmd/config/genesis.json
-synnergy-network/cmd/config/prod.yaml
-synnergy-network/cmd/config/staging.yaml
-synnergy-network/cmd/dexserver/main.go
-synnergy-network/cmd/explorer/logger.go
-synnergy-network/cmd/explorer/main.go
-synnergy-network/cmd/explorer/middleware.go
-synnergy-network/cmd/explorer/server.go
-synnergy-network/cmd/explorer/server_test.go
-synnergy-network/cmd/explorer/service.go
-synnergy-network/cmd/opcode-lint/main.go
-synnergy-network/cmd/scripts/authority_apply.sh
-synnergy-network/cmd/scripts/build_cli.sh
-synnergy-network/cmd/scripts/coin_mint.sh
-synnergy-network/cmd/scripts/consensus_start.sh
-synnergy-network/cmd/scripts/contracts_deploy.sh
-synnergy-network/cmd/scripts/cross_chain_register.sh
-synnergy-network/cmd/scripts/dao_vote.sh
-synnergy-network/cmd/scripts/faucet_fund.sh
-synnergy-network/cmd/scripts/fault_check.sh
-synnergy-network/cmd/scripts/governance_propose.sh
-synnergy-network/cmd/scripts/loanpool_apply.sh
-synnergy-network/cmd/scripts/marketplace_list.sh
-synnergy-network/cmd/scripts/network_peers.sh
-synnergy-network/cmd/scripts/network_start.sh
-synnergy-network/cmd/scripts/replication_status.sh
-synnergy-network/cmd/scripts/rollup_submit_batch.sh
-synnergy-network/cmd/scripts/script_guide.md
-synnergy-network/cmd/scripts/security_merkle.sh
-synnergy-network/cmd/scripts/sharding_leader.sh
-synnergy-network/cmd/scripts/sidechain_sync.sh
-synnergy-network/cmd/scripts/start_synnergy_network.sh
-synnergy-network/cmd/scripts/state_channel_open.sh
-synnergy-network/cmd/scripts/storage_marketplace_pin.sh
-synnergy-network/cmd/scripts/storage_pin.sh
-synnergy-network/cmd/scripts/token_transfer.sh
-synnergy-network/cmd/scripts/transactions_submit.sh
-synnergy-network/cmd/scripts/vm_start.sh
-synnergy-network/cmd/scripts/wallet_create.sh
-synnergy-network/cmd/smart_contracts/.solhint.json
-synnergy-network/cmd/smart_contracts/ai_marketplace.sol
-synnergy-network/cmd/smart_contracts/ai_model_registry.sol
-synnergy-network/cmd/smart_contracts/ai_optimizer.sol
-synnergy-network/cmd/smart_contracts/ai_predictor.sol
-synnergy-network/cmd/smart_contracts/amm_pool_manager.sol
-synnergy-network/cmd/smart_contracts/authority_applier.sol
-synnergy-network/cmd/smart_contracts/bank_node_bridge.sol
-synnergy-network/cmd/smart_contracts/carbon_credit.sol
-synnergy-network/cmd/smart_contracts/compliance_auditor.sol
-synnergy-network/cmd/smart_contracts/consensus_tester.sol
-synnergy-network/cmd/smart_contracts/cross_chain_bridge.sol
-synnergy-network/cmd/smart_contracts/cross_chain_eth.sol
-synnergy-network/cmd/smart_contracts/cross_chain_manager.sol
-synnergy-network/cmd/smart_contracts/cross_chain_protocol.sol
-synnergy-network/cmd/smart_contracts/dao_explorer.json
-synnergy-network/cmd/smart_contracts/dao_explorer.sol
-synnergy-network/cmd/smart_contracts/data_feed_oracle.sol
-synnergy-network/cmd/smart_contracts/data_marketplace.sol
-synnergy-network/cmd/smart_contracts/dex_pool_reader.sol
-synnergy-network/cmd/smart_contracts/examples/log.wat
-synnergy-network/cmd/smart_contracts/examples/noop.wat
-synnergy-network/cmd/smart_contracts/explorer_utils.sol
-synnergy-network/cmd/smart_contracts/faucet.sol
-synnergy-network/cmd/smart_contracts/fault_tolerance_checker.sol
-synnergy-network/cmd/smart_contracts/gov_quorum.sol
-synnergy-network/cmd/smart_contracts/green_certifier.sol
-synnergy-network/cmd/smart_contracts/health_monitor.sol
-synnergy-network/cmd/smart_contracts/identity_token.sol
-synnergy-network/cmd/smart_contracts/ledger_inspector.sol
-synnergy-network/cmd/smart_contracts/ledger_snapshotter.sol
-synnergy-network/cmd/smart_contracts/liquidity_adder.sol
-synnergy-network/cmd/smart_contracts/loan_application.sol
-synnergy-network/cmd/smart_contracts/marketplace.sol
-synnergy-network/cmd/smart_contracts/message_queue.sol
-synnergy-network/cmd/smart_contracts/mobile_miner.sol
-synnergy-network/cmd/smart_contracts/multi_sig_wallet.sol
-synnergy-network/cmd/smart_contracts/network_bootstrap.sol
-synnergy-network/cmd/smart_contracts/nft_marketplace.sol
-synnergy-network/cmd/smart_contracts/node_firewall.sol
-synnergy-network/cmd/smart_contracts/oracle_reader.sol
-synnergy-network/cmd/smart_contracts/oracle_updater.sol
-synnergy-network/cmd/smart_contracts/pension_plan.sol
-synnergy-network/cmd/smart_contracts/replication_service.sol
-synnergy-network/cmd/smart_contracts/rust/ai_model_registry.rs
-synnergy-network/cmd/smart_contracts/rust/ai_optimizer.rs
-synnergy-network/cmd/smart_contracts/rust/ai_predictor.rs
-synnergy-network/cmd/smart_contracts/rust/amm_pool_manager.rs
-synnergy-network/cmd/smart_contracts/rust/authority_applier.rs
-synnergy-network/cmd/smart_contracts/rust/bank_node_bridge.rs
-synnergy-network/cmd/smart_contracts/rust/carbon_credit.rs
-synnergy-network/cmd/smart_contracts/rust/compliance_auditor.rs
-synnergy-network/cmd/smart_contracts/rust/consensus_tester.rs
-synnergy-network/cmd/smart_contracts/rust/cross_chain_bridge.rs
-synnergy-network/cmd/smart_contracts/rust/cross_chain_protocol.rs
-synnergy-network/cmd/smart_contracts/rust/data_feed_oracle.rs
-synnergy-network/cmd/smart_contracts/rust/data_marketplace.rs
-synnergy-network/cmd/smart_contracts/rust/fault_tolerance_checker.rs
-synnergy-network/cmd/smart_contracts/rust/gov_quorum.rs
-synnergy-network/cmd/smart_contracts/rust/green_certifier.rs
-synnergy-network/cmd/smart_contracts/rust/health_monitor.rs
-synnergy-network/cmd/smart_contracts/rust/identity_token.rs
-synnergy-network/cmd/smart_contracts/rust/ledger_snapshotter.rs
-synnergy-network/cmd/smart_contracts/rust/loan_application.rs
-synnergy-network/cmd/smart_contracts/rust/message_queue.rs
-synnergy-network/cmd/smart_contracts/rust/mobile_miner.rs
-synnergy-network/cmd/smart_contracts/rust/network_bootstrap.rs
-synnergy-network/cmd/smart_contracts/rust/node_firewall.rs
-synnergy-network/cmd/smart_contracts/rust/oracle_updater.rs
-synnergy-network/cmd/smart_contracts/rust/pension_plan.rs
-synnergy-network/cmd/smart_contracts/rust/replication_service.rs
-synnergy-network/cmd/smart_contracts/rust/security_auditor.rs
-synnergy-network/cmd/smart_contracts/rust/sharding_coordinator.rs
-synnergy-network/cmd/smart_contracts/rust/time_locked_wallet.rs
-synnergy-network/cmd/smart_contracts/security_auditor.sol
-synnergy-network/cmd/smart_contracts/sharding_coordinator.sol
-synnergy-network/cmd/smart_contracts/storage_marketplace.sol
-synnergy-network/cmd/smart_contracts/time_locked_wallet.sol
-synnergy-network/cmd/smart_contracts/token_creator.sol
-synnergy-network/cmd/smart_contracts/token_factory.sol
-synnergy-network/cmd/smart_contracts/token_minter.sol
-synnergy-network/cmd/synnergy/main.go
-synnergy-network/cmd/synnergy/synnergy_set_up.md
-synnergy-network/cmd/xchainserver/main.go
-synnergy-network/cmd/xchainserver/server/handlers.go
-synnergy-network/cmd/xchainserver/server/middleware.go
-synnergy-network/cmd/xchainserver/server/routes.go
-synnergy-network/core/Nodes/Nodes_Type_manual.md
-synnergy-network/core/Nodes/authority_nodes/Authority_node_typr_manual.md
-synnergy-network/core/Nodes/authority_nodes/index.go
-synnergy-network/core/Nodes/bank_nodes/index.go
-synnergy-network/core/Nodes/consensus_specific.go
-synnergy-network/core/Nodes/elected_authority_node.go
-synnergy-network/core/Nodes/experimental_node.go
-synnergy-network/core/Nodes/forensic_node.go
-synnergy-network/core/Nodes/geospatial.go
-synnergy-network/core/Nodes/historical_node.go
-synnergy-network/core/Nodes/holographic_node.go
-synnergy-network/core/Nodes/index.go
-synnergy-network/core/Nodes/light_node.go
-synnergy-network/core/Nodes/military_nodes/index.go
-synnergy-network/core/Nodes/molecular_node.go
-synnergy-network/core/Nodes/optimization_nodes/index.go
-synnergy-network/core/Nodes/optimization_nodes/optimization.go
-synnergy-network/core/Nodes/staking_node_interface.go
-synnergy-network/core/Nodes/super_node.go
-synnergy-network/core/Nodes/syn845_node.go
-synnergy-network/core/Nodes/types.go
-synnergy-network/core/Nodes/watchtower/index.go
-synnergy-network/core/Nodes/witness/archival_witness_node.go
-synnergy-network/core/SYN1967.go
-synnergy-network/core/SYN2369.go
-synnergy-network/core/Tokens/SYN1000.go
-synnergy-network/core/Tokens/SYN3000.go
-synnergy-network/core/Tokens/Tokens_manual.md
-synnergy-network/core/Tokens/balance_table_test.go
-synnergy-network/core/Tokens/base.go
-synnergy-network/core/Tokens/base_test.go
-synnergy-network/core/Tokens/index.go
-synnergy-network/core/Tokens/syn10.go
-synnergy-network/core/Tokens/syn1000_index.go
-synnergy-network/core/Tokens/syn1100.go
-synnergy-network/core/Tokens/syn12.go
-synnergy-network/core/Tokens/syn200.go
-synnergy-network/core/Tokens/syn2200.go
-synnergy-network/core/Tokens/syn2600.go
-synnergy-network/core/Tokens/syn2800.go
-synnergy-network/core/Tokens/syn2900.go
-synnergy-network/core/Tokens/syn3400.go
-synnergy-network/core/Tokens/syn70.go
-synnergy-network/core/Tokens/syn845.go
-synnergy-network/core/access_control.go
-synnergy-network/core/access_control_test.go
-synnergy-network/core/account_and_balance_operations.go
-synnergy-network/core/account_and_balance_operations_test.go
-synnergy-network/core/address_from_common.go
-synnergy-network/core/address_zero.go
-synnergy-network/core/ai.go
-synnergy-network/core/ai_drift_monitor.go
-synnergy-network/core/ai_enhanced_contract.go
-synnergy-network/core/ai_enhanced_node.go
-synnergy-network/core/ai_inference_analysis.go
-synnergy-network/core/ai_model_management.go
-synnergy-network/core/ai_secure_storage.go
-synnergy-network/core/ai_training.go
-synnergy-network/core/amm.go
-synnergy-network/core/anomaly_detection.go
-synnergy-network/core/api_node.go
-synnergy-network/core/audit_management.go
-synnergy-network/core/audit_node.go
-synnergy-network/core/audit_trail_test.go
-synnergy-network/core/authority_apply.go
-synnergy-network/core/authority_nodes.go
-synnergy-network/core/authority_penalty_test.go
-synnergy-network/core/autonomous_agent_node.go
-synnergy-network/core/bank_institutional_node.go
-synnergy-network/core/base_node.go
-synnergy-network/core/bft_simulation.go
-synnergy-network/core/bft_simulation_test.go
-synnergy-network/core/binary_tree_operations.go
-synnergy-network/core/biometric_security_node.go
-synnergy-network/core/biometrics_auth.go
-synnergy-network/core/blockchain_compression.go
-synnergy-network/core/blockchain_synchronization.go
-synnergy-network/core/bootstrap_node.go
-synnergy-network/core/carbon_credit_system.go
-synnergy-network/core/central_banking_node.go
-synnergy-network/core/chain_fork_manager.go
-synnergy-network/core/charity_pool.go
-synnergy-network/core/coin.go
-synnergy-network/core/coin_test.go
-synnergy-network/core/common_structs.go
-synnergy-network/core/compliance.go
-synnergy-network/core/compliance_management.go
-synnergy-network/core/connection_pool.go
-synnergy-network/core/connection_pool_test.go
-synnergy-network/core/consensus.go
-synnergy-network/core/consensus_adaptive_management.go
-synnergy-network/core/consensus_constructor.go
-synnergy-network/core/consensus_difficulty.go
-synnergy-network/core/consensus_network_adapter.go
-synnergy-network/core/consensus_specific_node.go
-synnergy-network/core/consensus_start.go
-synnergy-network/core/consensus_validator_management.go
-synnergy-network/core/content_node.go
-synnergy-network/core/content_node_impl.go
-synnergy-network/core/content_types.go
-synnergy-network/core/contract_management.go
-synnergy-network/core/contract_vm_test.go
-synnergy-network/core/contracts.go
-synnergy-network/core/contracts_opcodes.go
-synnergy-network/core/cross_chain.go
-synnergy-network/core/cross_chain_agnostic_protocols.go
-synnergy-network/core/cross_chain_bridge.go
-synnergy-network/core/cross_chain_connection.go
-synnergy-network/core/cross_chain_contracts.go
-synnergy-network/core/cross_chain_transactions.go
-synnergy-network/core/cross_consensus_scaling_networks.go
-synnergy-network/core/custodial_node.go
-synnergy-network/core/dao.go
-synnergy-network/core/dao_access_control.go
-synnergy-network/core/dao_proposal.go
-synnergy-network/core/dao_quadratic_voting.go
-synnergy-network/core/dao_staking.go
-synnergy-network/core/dao_token.go
-synnergy-network/core/data.go
-synnergy-network/core/data_distribution.go
-synnergy-network/core/data_operations.go
-synnergy-network/core/data_resource_management.go
-synnergy-network/core/defi.go
-synnergy-network/core/devnet.go
-synnergy-network/core/disaster_recovery_node.go
-synnergy-network/core/distributed_network_coordination.go
-synnergy-network/core/distribution.go
-synnergy-network/core/dynamic_consensus_hopping.go
-synnergy-network/core/ecommerce.go
-synnergy-network/core/education_token.go
-synnergy-network/core/elected_authority_node.go
-synnergy-network/core/employment.go
-synnergy-network/core/energy_efficiency.go
-synnergy-network/core/energy_efficient_node.go
-synnergy-network/core/energy_tokens.go
-synnergy-network/core/environmental_monitoring_node.go
-synnergy-network/core/escrow.go
-synnergy-network/core/event_management.go
-synnergy-network/core/execution_management.go
-synnergy-network/core/experimental_node.go
-synnergy-network/core/external_sensor.go
-synnergy-network/core/failover_recovery.go
-synnergy-network/core/faucet.go
-synnergy-network/core/fault_tolerance.go
-synnergy-network/core/finalization_management.go
-synnergy-network/core/firewall.go
-synnergy-network/core/forum.go
-synnergy-network/core/full_node.go
-synnergy-network/core/gaming.go
-synnergy-network/core/gas_table.go
-synnergy-network/core/gateway_node.go
-synnergy-network/core/geolocation_network.go
-synnergy-network/core/geospatial_node.go
-synnergy-network/core/governance.go
-synnergy-network/core/governance_execution.go
-synnergy-network/core/governance_management.go
-synnergy-network/core/governance_reputation_voting.go
-synnergy-network/core/governance_timelock.go
-synnergy-network/core/governance_token_voting.go
-synnergy-network/core/government_authority_node.go
-synnergy-network/core/green_technology.go
-synnergy-network/core/healthcare.go
-synnergy-network/core/helpers.go
-synnergy-network/core/high_availability.go
-synnergy-network/core/historical_node.go
-synnergy-network/core/holographic.go
-synnergy-network/core/identity_verification.go
-synnergy-network/core/idwallet_registration.go
-synnergy-network/core/immutability_enforcement.go
-synnergy-network/core/indexing_node.go
-synnergy-network/core/initialization_replication.go
-synnergy-network/core/intangible_assets.go
-synnergy-network/core/integration_node.go
-synnergy-network/core/integration_registry.go
-synnergy-network/core/ip_management.go
-synnergy-network/core/ipfs.go
-synnergy-network/core/kademlia.go
-synnergy-network/core/ledger.go
-synnergy-network/core/ledger_test.go
-synnergy-network/core/lightning_node.go
-synnergy-network/core/liquidity_pools.go
-synnergy-network/core/liquidity_views.go
-synnergy-network/core/loanpool.go
-synnergy-network/core/loanpool_apply.go
-synnergy-network/core/loanpool_approval_process.go
-synnergy-network/core/loanpool_config.go
-synnergy-network/core/loanpool_grant_disbursement.go
-synnergy-network/core/loanpool_management.go
-synnergy-network/core/loanpool_proposal.go
-synnergy-network/core/marketplace.go
-synnergy-network/core/master_node.go
-synnergy-network/core/merkle_tree_operations.go
-synnergy-network/core/messages.go
-synnergy-network/core/mining_node.go
-synnergy-network/core/mobile_mining_node.go
-synnergy-network/core/mobile_node.go
-synnergy-network/core/module_guide.md
-synnergy-network/core/module_plugin.go
-synnergy-network/core/molecular_node.go
-synnergy-network/core/monomaniac_recovery.go
-synnergy-network/core/music_royalty_token.go
-synnergy-network/core/nat_traversal.go
-synnergy-network/core/network.go
-synnergy-network/core/network_test.go
-synnergy-network/core/node.go
-synnergy-network/core/offchain_wallet.go
-synnergy-network/core/opcode_and_gas_guide.md
-synnergy-network/core/opcode_dispatcher.go
-synnergy-network/core/oracle_management.go
-synnergy-network/core/orphan/orphan_node.go
-synnergy-network/core/partitioning_and_compression.go
-synnergy-network/core/peer_management.go
-synnergy-network/core/plasma.go
-synnergy-network/core/plasma_management.go
-synnergy-network/core/plasma_operations.go
-synnergy-network/core/polls_management.go
-synnergy-network/core/private_transactions.go
-synnergy-network/core/quantum_resistant_node.go
-synnergy-network/core/quorum_tracker.go
-synnergy-network/core/real_estate.go
-synnergy-network/core/regulatory_management.go
-synnergy-network/core/regulatory_node.go
-synnergy-network/core/rental_management.go
-synnergy-network/core/replication.go
-synnergy-network/core/resource_allocation_management.go
-synnergy-network/core/resource_allocator.go
-synnergy-network/core/resource_management.go
-synnergy-network/core/resource_marketplace.go
-synnergy-network/core/rollup_management.go
-synnergy-network/core/rollups.go
-synnergy-network/core/rpc_webrtc.go
-synnergy-network/core/security.go
-synnergy-network/core/sharding.go
-synnergy-network/core/sidechain_ops.go
-synnergy-network/core/sidechains.go
-synnergy-network/core/smart_legal_contracts.go
-synnergy-network/core/stake_penalty.go
-synnergy-network/core/staking_node.go
-synnergy-network/core/state_channel.go
-synnergy-network/core/state_channel_management.go
-synnergy-network/core/storage.go
-synnergy-network/core/super_node.go
-synnergy-network/core/supply_chain.go
-synnergy-network/core/swarm.go
-synnergy-network/core/syn10.go
-synnergy-network/core/syn1155.go
-synnergy-network/core/syn11_token.go
-synnergy-network/core/syn1300.go
-synnergy-network/core/syn131_token.go
-synnergy-network/core/syn1401.go
-synnergy-network/core/syn1500.go
-synnergy-network/core/syn1700_token.go
-synnergy-network/core/syn1800.go
-synnergy-network/core/syn20.go
-synnergy-network/core/syn2100.go
-synnergy-network/core/syn223_token.go
-synnergy-network/core/syn2400.go
-synnergy-network/core/syn2500_token.go
-synnergy-network/core/syn2700.go
-synnergy-network/core/syn2900.go
-synnergy-network/core/syn3000_token.go
-synnergy-network/core/syn300_token.go
-synnergy-network/core/syn3100.go
-synnergy-network/core/syn3200.go
-synnergy-network/core/syn3300_token.go
-synnergy-network/core/syn3500_token.go
-synnergy-network/core/syn3600.go
-synnergy-network/core/syn3700_token.go
-synnergy-network/core/syn3800.go
-synnergy-network/core/syn3900.go
-synnergy-network/core/syn4200_token.go
-synnergy-network/core/syn4700.go
-synnergy-network/core/syn500.go
-synnergy-network/core/syn5000.go
-synnergy-network/core/syn5000_index.go
-synnergy-network/core/syn700.go
-synnergy-network/core/syn721_token.go
-synnergy-network/core/syn800_token.go
-synnergy-network/core/system_health_logging.go
-synnergy-network/core/tangible_assets.go
-synnergy-network/core/time_locked_node.go
-synnergy-network/core/token_management.go
-synnergy-network/core/token_management_syn1000.go
-synnergy-network/core/token_syn130.go
-synnergy-network/core/token_syn4900.go
-synnergy-network/core/token_syn600.go
-synnergy-network/core/tokens.go
-synnergy-network/core/tokens_syn1000.go
-synnergy-network/core/tokens_syn1000_helpers.go
-synnergy-network/core/tokens_syn1000_opcodes.go
-synnergy-network/core/tokens_syn1200.go
-synnergy-network/core/tokens_syn900.go
-synnergy-network/core/tokens_syn900_index.go
-synnergy-network/core/transaction_distribution.go
-synnergy-network/core/transactionreversal.go
-synnergy-network/core/transactions.go
-synnergy-network/core/tx_types.go
-synnergy-network/core/tx_types_nontokens.go
-synnergy-network/core/txpool_addtx.go
-synnergy-network/core/txpool_snapshot.go
-synnergy-network/core/txpool_stub.go
-synnergy-network/core/user_feedback_system.go
-synnergy-network/core/utility_functions.go
-synnergy-network/core/validator_node.go
-synnergy-network/core/virtual_machine.go
-synnergy-network/core/vm_sandbox_management.go
-synnergy-network/core/wallet.go
-synnergy-network/core/wallet_management.go
-synnergy-network/core/warehouse.go
-synnergy-network/core/warfare_node.go
-synnergy-network/core/watchtower_node.go
-synnergy-network/core/workflow_integrations.go
-synnergy-network/core/zero_trust_data_channels.go
-synnergy-network/core/zkp_node.go
-synnergy-network/go.mod
-synnergy-network/go.sum
-synnergy-network/internal/charity_pool_management.go
-synnergy-network/internal/testutil/reverse.go
-synnergy-network/internal/testutil/reverse_fuzz_test.go
-synnergy-network/internal/testutil/reverse_test.go
-synnergy-network/internal/testutil/sandbox.go
-synnergy-network/internal/testutil/sandbox_fuzz_test.go
-synnergy-network/internal/testutil/sandbox_test.go
-synnergy-network/monitoring/grafana/dashboard-cli.json
-synnergy-network/monitoring/grafana/dashboard-gui.json
-synnergy-network/monitoring/grafana/dashboard-node.json
-synnergy-network/monitoring/incident_response_runbook.md
-synnergy-network/pkg/config/config.go
-synnergy-network/pkg/utils/env.go
-synnergy-network/pkg/utils/env_benchmark_test.go
-synnergy-network/pkg/utils/env_test.go
-synnergy-network/pkg/utils/errors.go
-synnergy-network/pkg/utils/version.go
-synnergy-network/smart_contract_guide.md
-synnergy-network/tests/ai_test.go
-synnergy-network/tests/amm_test.go
-synnergy-network/tests/authority_nodes_test.go
-synnergy-network/tests/charity_pool_test.go
-synnergy-network/tests/coin_test.go
-synnergy-network/tests/consensus_test.go
-synnergy-network/tests/cross_chain_test.go
-synnergy-network/tests/dao_proposal_test.go
-synnergy-network/tests/dao_test.go
-synnergy-network/tests/fault_tolerance_test.go
-synnergy-network/tests/governance_test.go
-synnergy-network/tests/green_technology_test.go
-synnergy-network/tests/identity_verification_test.go
-synnergy-network/tests/liquidity_pools_test.go
-synnergy-network/tests/loanpool_test.go
-synnergy-network/tests/network_test.go
-synnergy-network/tests/replication_test.go
-synnergy-network/tests/rollups_test.go
-synnergy-network/tests/security_test.go
-synnergy-network/tests/sharding_test.go
-synnergy-network/tests/sidechain_test.go
-synnergy-network/tests/state_channel_test.go
-synnergy-network/tests/storage_test.go
-synnergy-network/tests/token_test.go
-synnergy-network/tests/transaction_test.go
-synnergy-network/tests/wallet_test.go
-synnergy-network/third_party/go-libp2p-core/.github/workflows/automerge.yml
-synnergy-network/third_party/go-libp2p-core/.github/workflows/go-check.yml
-synnergy-network/third_party/go-libp2p-core/.github/workflows/go-compat.yml
-synnergy-network/third_party/go-libp2p-core/.github/workflows/go-test.yml
-synnergy-network/third_party/go-libp2p-core/.github/workflows/release-check.yml
-synnergy-network/third_party/go-libp2p-core/.github/workflows/releaser.yml
-synnergy-network/third_party/go-libp2p-core/.github/workflows/tagpush.yml
-synnergy-network/third_party/go-libp2p-core/.gitignore
-synnergy-network/third_party/go-libp2p-core/LICENSE
-synnergy-network/third_party/go-libp2p-core/LICENSE-APACHE
-synnergy-network/third_party/go-libp2p-core/LICENSE-MIT
-synnergy-network/third_party/go-libp2p-core/alias.go
-synnergy-network/third_party/go-libp2p-core/canonicallog/canonicallog.go
-synnergy-network/third_party/go-libp2p-core/connmgr/decay.go
-synnergy-network/third_party/go-libp2p-core/connmgr/gater.go
-synnergy-network/third_party/go-libp2p-core/connmgr/manager.go
-synnergy-network/third_party/go-libp2p-core/connmgr/null.go
-synnergy-network/third_party/go-libp2p-core/connmgr/presets.go
-synnergy-network/third_party/go-libp2p-core/control/disconnect.go
-synnergy-network/third_party/go-libp2p-core/crypto/ecdsa.go
-synnergy-network/third_party/go-libp2p-core/crypto/ed25519.go
-synnergy-network/third_party/go-libp2p-core/crypto/key.go
-synnergy-network/third_party/go-libp2p-core/crypto/key_not_openssl.go
-synnergy-network/third_party/go-libp2p-core/crypto/key_openssl.go
-synnergy-network/third_party/go-libp2p-core/crypto/pb/forward.go
-synnergy-network/third_party/go-libp2p-core/crypto/rsa_common.go
-synnergy-network/third_party/go-libp2p-core/crypto/rsa_go.go
-synnergy-network/third_party/go-libp2p-core/crypto/rsa_openssl.go
-synnergy-network/third_party/go-libp2p-core/crypto/secp256k1.go
-synnergy-network/third_party/go-libp2p-core/discovery/discovery.go
-synnergy-network/third_party/go-libp2p-core/discovery/options.go
-synnergy-network/third_party/go-libp2p-core/event/addrs.go
-synnergy-network/third_party/go-libp2p-core/event/bus.go
-synnergy-network/third_party/go-libp2p-core/event/dht.go
-synnergy-network/third_party/go-libp2p-core/event/doc.go
-synnergy-network/third_party/go-libp2p-core/event/identify.go
-synnergy-network/third_party/go-libp2p-core/event/nattype.go
-synnergy-network/third_party/go-libp2p-core/event/network.go
-synnergy-network/third_party/go-libp2p-core/event/protocol.go
-synnergy-network/third_party/go-libp2p-core/event/reachability.go
-synnergy-network/third_party/go-libp2p-core/go.mod
-synnergy-network/third_party/go-libp2p-core/go.sum
-synnergy-network/third_party/go-libp2p-core/host/helpers.go
-synnergy-network/third_party/go-libp2p-core/host/host.go
-synnergy-network/third_party/go-libp2p-core/introspection/doc.go
-synnergy-network/third_party/go-libp2p-core/introspection/endpoint.go
-synnergy-network/third_party/go-libp2p-core/introspection/introspector.go
-synnergy-network/third_party/go-libp2p-core/metrics/bandwidth.go
-synnergy-network/third_party/go-libp2p-core/metrics/reporter.go
-synnergy-network/third_party/go-libp2p-core/network/conn.go
-synnergy-network/third_party/go-libp2p-core/network/context.go
-synnergy-network/third_party/go-libp2p-core/network/errors.go
-synnergy-network/third_party/go-libp2p-core/network/mux.go
-synnergy-network/third_party/go-libp2p-core/network/nattype.go
-synnergy-network/third_party/go-libp2p-core/network/network.go
-synnergy-network/third_party/go-libp2p-core/network/notifee.go
-synnergy-network/third_party/go-libp2p-core/network/rcmgr.go
-synnergy-network/third_party/go-libp2p-core/network/stream.go
-synnergy-network/third_party/go-libp2p-core/peer/addrinfo.go
-synnergy-network/third_party/go-libp2p-core/peer/peer.go
-synnergy-network/third_party/go-libp2p-core/peer/record.go
-synnergy-network/third_party/go-libp2p-core/peerstore/helpers.go
-synnergy-network/third_party/go-libp2p-core/peerstore/peerstore.go
-synnergy-network/third_party/go-libp2p-core/pnet/codec.go
-synnergy-network/third_party/go-libp2p-core/pnet/env.go
-synnergy-network/third_party/go-libp2p-core/pnet/error.go
-synnergy-network/third_party/go-libp2p-core/pnet/protector.go
-synnergy-network/third_party/go-libp2p-core/protocol/id.go
-synnergy-network/third_party/go-libp2p-core/protocol/switch.go
-synnergy-network/third_party/go-libp2p-core/record/envelope.go
-synnergy-network/third_party/go-libp2p-core/record/record.go
-synnergy-network/third_party/go-libp2p-core/routing/options.go
-synnergy-network/third_party/go-libp2p-core/routing/query.go
-synnergy-network/third_party/go-libp2p-core/routing/routing.go
-synnergy-network/third_party/go-libp2p-core/sec/insecure/insecure.go
-synnergy-network/third_party/go-libp2p-core/sec/security.go
-synnergy-network/third_party/go-libp2p-core/test/addrs.go
-synnergy-network/third_party/go-libp2p-core/test/crypto.go
-synnergy-network/third_party/go-libp2p-core/test/errors.go
-synnergy-network/third_party/go-libp2p-core/test/peer.go
-synnergy-network/third_party/go-libp2p-core/transport/transport.go
-synnergy-network/third_party/go-libp2p-core/version.json
-synnergy-network/walletserver/.env
-synnergy-network/walletserver/config/config.go
-synnergy-network/walletserver/controllers/wallet_controller.go
-synnergy-network/walletserver/main.go
-synnergy-network/walletserver/middleware/logger.go
-synnergy-network/walletserver/routes/routes.go
-synnergy-network/walletserver/services/wallet_service.go
-synnergy-network/walletserver/smartcontracts/wallet_contract.go
+To bring the repository to production-grade quality, all files have been divided into 30 stages. For each file in a stage:
+
+- Fix syntax, logic, runtime, configuration, dependency, and documentation errors.
+- If a problem originates outside the file but causes an error within it, fix the external source as part of the stage.
+
+
+## Stage 1
+
+- .dockerignore
+- .env
+- .github/ISSUE_TEMPLATE/ux_feedback.md
+- .github/workflows/ci.yml
+- .gitignore
+- .nvmrc
+- .tool-versions
+- AGENTS.md
+- Dockerfile
+- Makefile
+- SECURITY.md
+- Synnergy.env.sh
+- __MACOSX/synnergy-network/._.DS_Store
+- __MACOSX/synnergy-network/cmd/._.DS_Store
+- docker-entrypoint.sh
+- docs/api-reference.md
+- docs/architecture-decisions.md
+- docs/cli-user-guide.md
+- docs/developer-guide.md
+- docs/final-quality-gate.md
+- docs/gui-user-guide.md
+- go.work
+- go.work.sum
+- scripts/build_matrix.sh
+- scripts/check_circular_imports.sh
+- scripts/devnet_start.sh
+- scripts/run_tests.sh
+- scripts/security_scan.sh
+- scripts/staging_validate.sh
+- scripts/testnet_start.sh
+- setup_synn.sh
+- synnergy-network/.DS_Store
+- synnergy-network/.env
+
+## Stage 2
+
+- synnergy-network/GUI/ai-marketplace/app.js
+- synnergy-network/GUI/ai-marketplace/index.html
+- synnergy-network/GUI/ai-marketplace/server.js
+- synnergy-network/GUI/authority-node-index/app.js
+- synnergy-network/GUI/authority-node-index/index.html
+- synnergy-network/GUI/cross-chain-management/app.js
+- synnergy-network/GUI/cross-chain-management/assets/logo.svg
+- synnergy-network/GUI/cross-chain-management/components/BridgeForm.js
+- synnergy-network/GUI/cross-chain-management/components/BridgeList.js
+- synnergy-network/GUI/cross-chain-management/components/BurnReleaseForm.js
+- synnergy-network/GUI/cross-chain-management/components/LockMintForm.js
+- synnergy-network/GUI/cross-chain-management/components/RelayerForm.js
+- synnergy-network/GUI/cross-chain-management/index.html
+- synnergy-network/GUI/cross-chain-management/services/api.js
+- synnergy-network/GUI/cross-chain-management/styles.css
+- synnergy-network/GUI/dao-explorer/app.js
+- synnergy-network/GUI/dao-explorer/assets/logo.svg
+- synnergy-network/GUI/dao-explorer/assets/logo.txt
+- synnergy-network/GUI/dao-explorer/backend/.env
+- synnergy-network/GUI/dao-explorer/backend/config/config.js
+- synnergy-network/GUI/dao-explorer/backend/controllers/proposalController.js
+- synnergy-network/GUI/dao-explorer/backend/middleware/errorHandler.js
+- synnergy-network/GUI/dao-explorer/backend/package-lock.json
+- synnergy-network/GUI/dao-explorer/backend/package.json
+- synnergy-network/GUI/dao-explorer/backend/routes/proposalRoutes.js
+- synnergy-network/GUI/dao-explorer/backend/server.js
+- synnergy-network/GUI/dao-explorer/backend/services/contractService.js
+- synnergy-network/GUI/dao-explorer/backend/services/proposalService.js
+- synnergy-network/GUI/dao-explorer/components/NewProposalForm.js
+- synnergy-network/GUI/dao-explorer/components/ProposalDetail.js
+- synnergy-network/GUI/dao-explorer/components/ProposalList.js
+- synnergy-network/GUI/dao-explorer/components/VoteForm.js
+- synnergy-network/GUI/dao-explorer/styles/main.css
+
+## Stage 3
+
+- synnergy-network/GUI/dao-explorer/views/index.html
+- synnergy-network/GUI/dex-screener/app.js
+- synnergy-network/GUI/dex-screener/components/poolTable.js
+- synnergy-network/GUI/dex-screener/index.html
+- synnergy-network/GUI/dex-screener/styles/main.css
+- synnergy-network/GUI/explorer/app.js
+- synnergy-network/GUI/explorer/assets/logo.svg
+- synnergy-network/GUI/explorer/components/balance.js
+- synnergy-network/GUI/explorer/components/blocks.js
+- synnergy-network/GUI/explorer/components/tx.js
+- synnergy-network/GUI/explorer/index.html
+- synnergy-network/GUI/explorer/styles.css
+- synnergy-network/GUI/nft_marketplace/app.js
+- synnergy-network/GUI/nft_marketplace/assets/logo.png
+- synnergy-network/GUI/nft_marketplace/backend/.env
+- synnergy-network/GUI/nft_marketplace/backend/config/index.js
+- synnergy-network/GUI/nft_marketplace/backend/controllers/nftController.js
+- synnergy-network/GUI/nft_marketplace/backend/middleware/logger.js
+- synnergy-network/GUI/nft_marketplace/backend/package-lock.json
+- synnergy-network/GUI/nft_marketplace/backend/package.json
+- synnergy-network/GUI/nft_marketplace/backend/routes/nftRoutes.js
+- synnergy-network/GUI/nft_marketplace/backend/server.js
+- synnergy-network/GUI/nft_marketplace/backend/services/marketplaceService.js
+- synnergy-network/GUI/nft_marketplace/index.html
+- synnergy-network/GUI/nft_marketplace/style.css
+- synnergy-network/GUI/smart-contract-marketplace/.env
+- synnergy-network/GUI/smart-contract-marketplace/app.js
+- synnergy-network/GUI/smart-contract-marketplace/assets/logo.png
+- synnergy-network/GUI/smart-contract-marketplace/components/footer.html
+- synnergy-network/GUI/smart-contract-marketplace/components/navbar.html
+- synnergy-network/GUI/smart-contract-marketplace/config/default.js
+- synnergy-network/GUI/smart-contract-marketplace/eslint.config.js
+- synnergy-network/GUI/smart-contract-marketplace/index.html
+
+## Stage 4
+
+- synnergy-network/GUI/smart-contract-marketplace/package-lock.json
+- synnergy-network/GUI/smart-contract-marketplace/package.json
+- synnergy-network/GUI/smart-contract-marketplace/script.js
+- synnergy-network/GUI/smart-contract-marketplace/server/controllers/contractController.js
+- synnergy-network/GUI/smart-contract-marketplace/server/data/contracts.json
+- synnergy-network/GUI/smart-contract-marketplace/server/middleware/logger.js
+- synnergy-network/GUI/smart-contract-marketplace/server/routes/contracts.js
+- synnergy-network/GUI/smart-contract-marketplace/server/server.js
+- synnergy-network/GUI/smart-contract-marketplace/server/services/contractService.js
+- synnergy-network/GUI/smart-contract-marketplace/styles.css
+- synnergy-network/GUI/smart-contract-marketplace/views/deploy.html
+- synnergy-network/GUI/smart-contract-marketplace/views/detail.html
+- synnergy-network/GUI/smart-contract-marketplace/views/listings.html
+- synnergy-network/GUI/storage-marketplace/app.js
+- synnergy-network/GUI/storage-marketplace/assets/logo.txt
+- synnergy-network/GUI/storage-marketplace/backend/.env
+- synnergy-network/GUI/storage-marketplace/backend/config/index.js
+- synnergy-network/GUI/storage-marketplace/backend/controllers/dealsController.js
+- synnergy-network/GUI/storage-marketplace/backend/controllers/listingsController.js
+- synnergy-network/GUI/storage-marketplace/backend/controllers/storageController.js
+- synnergy-network/GUI/storage-marketplace/backend/middleware/errorHandler.js
+- synnergy-network/GUI/storage-marketplace/backend/package-lock.json
+- synnergy-network/GUI/storage-marketplace/backend/package.json
+- synnergy-network/GUI/storage-marketplace/backend/routes/deals.js
+- synnergy-network/GUI/storage-marketplace/backend/routes/listings.js
+- synnergy-network/GUI/storage-marketplace/backend/routes/storage.js
+- synnergy-network/GUI/storage-marketplace/backend/server.js
+- synnergy-network/GUI/storage-marketplace/backend/services/data.json
+- synnergy-network/GUI/storage-marketplace/backend/services/storageService.js
+- synnergy-network/GUI/storage-marketplace/components/deals.js
+- synnergy-network/GUI/storage-marketplace/components/listings.js
+- synnergy-network/GUI/storage-marketplace/components/storage.js
+- synnergy-network/GUI/storage-marketplace/index.html
+
+## Stage 5
+
+- synnergy-network/GUI/storage-marketplace/styles/style.css
+- synnergy-network/GUI/token-creation-tool/app.js
+- synnergy-network/GUI/token-creation-tool/assets/banner.svg
+- synnergy-network/GUI/token-creation-tool/assets/logo.svg
+- synnergy-network/GUI/token-creation-tool/components/TokenForm.js
+- synnergy-network/GUI/token-creation-tool/components/TokenList.js
+- synnergy-network/GUI/token-creation-tool/eslint.config.js
+- synnergy-network/GUI/token-creation-tool/index.html
+- synnergy-network/GUI/token-creation-tool/server/.env
+- synnergy-network/GUI/token-creation-tool/server/config/default.json
+- synnergy-network/GUI/token-creation-tool/server/controllers/tokenController.js
+- synnergy-network/GUI/token-creation-tool/server/middleware/errorHandler.js
+- synnergy-network/GUI/token-creation-tool/server/middleware/logger.js
+- synnergy-network/GUI/token-creation-tool/server/package-lock.json
+- synnergy-network/GUI/token-creation-tool/server/package.json
+- synnergy-network/GUI/token-creation-tool/server/routes/tokenRoutes.js
+- synnergy-network/GUI/token-creation-tool/server/server.js
+- synnergy-network/GUI/token-creation-tool/server/services/tokenService.js
+- synnergy-network/GUI/token-creation-tool/server/tokens.json
+- synnergy-network/GUI/token-creation-tool/styles/style.css
+- synnergy-network/GUI/token-creation-tool/views/create.html
+- synnergy-network/GUI/wallet/app.js
+- synnergy-network/GUI/wallet/assets/.gitkeep
+- synnergy-network/GUI/wallet/components/wallet.js
+- synnergy-network/GUI/wallet/index.html
+- synnergy-network/GUI/wallet/styles/style.css
+- synnergy-network/GUI/wallet/views/index.html
+- synnergy-network/UX_FEEDBACK_GUIDE.md
+- synnergy-network/WHITEPAPER.md
+- synnergy-network/ai.proto
+- synnergy-network/cmd/.DS_Store
+- synnergy-network/cmd/cli/access_control.go
+- synnergy-network/cmd/cli/account_and_balance_operations.go
+
+## Stage 6
+
+- synnergy-network/cmd/cli/agriculture.go
+- synnergy-network/cmd/cli/ai.go
+- synnergy-network/cmd/cli/ai_contract.go
+- synnergy-network/cmd/cli/ai_enhanced_node.go
+- synnergy-network/cmd/cli/ai_inference.go
+- synnergy-network/cmd/cli/ai_model_management.go
+- synnergy-network/cmd/cli/ai_trainining.go
+- synnergy-network/cmd/cli/amm.go
+- synnergy-network/cmd/cli/anomaly_detection.go
+- synnergy-network/cmd/cli/api_node.go
+- synnergy-network/cmd/cli/archival_witness_node.go
+- synnergy-network/cmd/cli/audit_management.go
+- synnergy-network/cmd/cli/audit_node.go
+- synnergy-network/cmd/cli/authority_apply.go
+- synnergy-network/cmd/cli/authority_node.go
+- synnergy-network/cmd/cli/autonomous_agent_node.go
+- synnergy-network/cmd/cli/bank_institutional_node.go
+- synnergy-network/cmd/cli/binary_tree_operations.go
+- synnergy-network/cmd/cli/biometric_security_node.go
+- synnergy-network/cmd/cli/biometrics.go
+- synnergy-network/cmd/cli/blockchain_compression.go
+- synnergy-network/cmd/cli/blockchain_synchronization.go
+- synnergy-network/cmd/cli/bootstrap_node.go
+- synnergy-network/cmd/cli/carbon_credit_system.go
+- synnergy-network/cmd/cli/central_banking_node.go
+- synnergy-network/cmd/cli/chain_fork_manager.go
+- synnergy-network/cmd/cli/charity_mgmt.go
+- synnergy-network/cmd/cli/charity_pool.go
+- synnergy-network/cmd/cli/charity_token.go
+- synnergy-network/cmd/cli/cli_guide.md
+- synnergy-network/cmd/cli/coin.go
+- synnergy-network/cmd/cli/compliance.go
+- synnergy-network/cmd/cli/compliance_management.go
+
+## Stage 7
+
+- synnergy-network/cmd/cli/connection_pool.go
+- synnergy-network/cmd/cli/consensus.go
+- synnergy-network/cmd/cli/consensus_adaptive_management.go
+- synnergy-network/cmd/cli/consensus_specific_node.go
+- synnergy-network/cmd/cli/content_node.go
+- synnergy-network/cmd/cli/contract_management.go
+- synnergy-network/cmd/cli/contracts.go
+- synnergy-network/cmd/cli/cross_chain.go
+- synnergy-network/cmd/cli/cross_chain_agnostic_protocols.go
+- synnergy-network/cmd/cli/cross_chain_bridge.go
+- synnergy-network/cmd/cli/cross_chain_connection.go
+- synnergy-network/cmd/cli/cross_chain_contracts.go
+- synnergy-network/cmd/cli/cross_chain_transactions.go
+- synnergy-network/cmd/cli/cross_consensus_scaling_networks.go
+- synnergy-network/cmd/cli/custodial_node.go
+- synnergy-network/cmd/cli/dao.go
+- synnergy-network/cmd/cli/dao_access_control.go
+- synnergy-network/cmd/cli/dao_proposal.go
+- synnergy-network/cmd/cli/dao_staking.go
+- synnergy-network/cmd/cli/dao_token.go
+- synnergy-network/cmd/cli/data.go
+- synnergy-network/cmd/cli/data_distribution.go
+- synnergy-network/cmd/cli/data_operations.go
+- synnergy-network/cmd/cli/data_resource_management.go
+- synnergy-network/cmd/cli/defi.go
+- synnergy-network/cmd/cli/devnet.go
+- synnergy-network/cmd/cli/disaster_recovery_node.go
+- synnergy-network/cmd/cli/distributed_network_coordination.go
+- synnergy-network/cmd/cli/distribution.go
+- synnergy-network/cmd/cli/dynamic_consensus_hopping.go
+- synnergy-network/cmd/cli/ecommerce.go
+- synnergy-network/cmd/cli/elected_authority_node.go
+
+## Stage 8
+
+- synnergy-network/cmd/cli/employment.go
+- synnergy-network/cmd/cli/employment_token.go
+- synnergy-network/cmd/cli/energy_efficiency.go
+- synnergy-network/cmd/cli/energy_efficient_node.go
+- synnergy-network/cmd/cli/energy_tokens.go
+- synnergy-network/cmd/cli/environmental_monitoring_node.go
+- synnergy-network/cmd/cli/escrow.go
+- synnergy-network/cmd/cli/event_management.go
+- synnergy-network/cmd/cli/event_ticket.go
+- synnergy-network/cmd/cli/execution_management.go
+- synnergy-network/cmd/cli/experimental_node.go
+- synnergy-network/cmd/cli/failover_recovery.go
+- synnergy-network/cmd/cli/faucet.go
+- synnergy-network/cmd/cli/fault_tolerance.go
+- synnergy-network/cmd/cli/finalization_management.go
+- synnergy-network/cmd/cli/firewall.go
+- synnergy-network/cmd/cli/forensic_node.go
+- synnergy-network/cmd/cli/forex_token.go
+- synnergy-network/cmd/cli/full_node.go
+- synnergy-network/cmd/cli/gaming.go
+- synnergy-network/cmd/cli/gateway_node.go
+- synnergy-network/cmd/cli/geolocation_network.go
+- synnergy-network/cmd/cli/geospatial_node.go
+- synnergy-network/cmd/cli/governance.go
+- synnergy-network/cmd/cli/governance_management.go
+- synnergy-network/cmd/cli/governance_reputation_voting.go
+- synnergy-network/cmd/cli/grant_disbursement.go
+- synnergy-network/cmd/cli/grant_tokens.go
+- synnergy-network/cmd/cli/green_technology.go
+- synnergy-network/cmd/cli/healthcare.go
+- synnergy-network/cmd/cli/high_availability.go
+- synnergy-network/cmd/cli/historical_node.go
+
+## Stage 9
+
+- synnergy-network/cmd/cli/holographic_node.go
+- synnergy-network/cmd/cli/identity_token.go
+- synnergy-network/cmd/cli/identity_verification.go
+- synnergy-network/cmd/cli/idwallet.go
+- synnergy-network/cmd/cli/immutability_enforcement.go
+- synnergy-network/cmd/cli/index.go
+- synnergy-network/cmd/cli/indexing_node.go
+- synnergy-network/cmd/cli/initrep.go
+- synnergy-network/cmd/cli/insurance_token.go
+- synnergy-network/cmd/cli/integration_node.go
+- synnergy-network/cmd/cli/ipfs.go
+- synnergy-network/cmd/cli/iptoken.go
+- synnergy-network/cmd/cli/kademlia.go
+- synnergy-network/cmd/cli/ledger.go
+- synnergy-network/cmd/cli/legal_token.go
+- synnergy-network/cmd/cli/life_insurance.go
+- synnergy-network/cmd/cli/lightning_node.go
+- synnergy-network/cmd/cli/liquidity_pools.go
+- synnergy-network/cmd/cli/loanpool.go
+- synnergy-network/cmd/cli/loanpool_apply.go
+- synnergy-network/cmd/cli/loanpool_management.go
+- synnergy-network/cmd/cli/marketplace.go
+- synnergy-network/cmd/cli/master_node.go
+- synnergy-network/cmd/cli/messages.go
+- synnergy-network/cmd/cli/military_node.go
+- synnergy-network/cmd/cli/mining_node.go
+- synnergy-network/cmd/cli/mobile_mining_node.go
+- synnergy-network/cmd/cli/mobile_node.go
+- synnergy-network/cmd/cli/molecular_node.go
+- synnergy-network/cmd/cli/monomaniac_recovery.go
+- synnergy-network/cmd/cli/nat.go
+- synnergy-network/cmd/cli/network.go
+
+## Stage 10
+
+- synnergy-network/cmd/cli/offchain_wallet.go
+- synnergy-network/cmd/cli/optimization.go
+- synnergy-network/cmd/cli/oracle_management.go
+- synnergy-network/cmd/cli/orphan_node.go
+- synnergy-network/cmd/cli/partitioning_and_compression.go
+- synnergy-network/cmd/cli/peer_management.go
+- synnergy-network/cmd/cli/pension_tokens.go
+- synnergy-network/cmd/cli/plasma.go
+- synnergy-network/cmd/cli/plasma_management.go
+- synnergy-network/cmd/cli/plasma_operations.go
+- synnergy-network/cmd/cli/polls_management.go
+- synnergy-network/cmd/cli/private_transactions.go
+- synnergy-network/cmd/cli/quadratic_voting.go
+- synnergy-network/cmd/cli/quantum_resistant_node.go
+- synnergy-network/cmd/cli/quorum_tracker.go
+- synnergy-network/cmd/cli/real_estate.go
+- synnergy-network/cmd/cli/regulatory_management.go
+- synnergy-network/cmd/cli/regulatory_node.go
+- synnergy-network/cmd/cli/rental_token.go
+- synnergy-network/cmd/cli/replication.go
+- synnergy-network/cmd/cli/reputation_tokens.go
+- synnergy-network/cmd/cli/resource_allocation.go
+- synnergy-network/cmd/cli/resource_management.go
+- synnergy-network/cmd/cli/resource_marketplace.go
+- synnergy-network/cmd/cli/rollups.go
+- synnergy-network/cmd/cli/security.go
+- synnergy-network/cmd/cli/sensor.go
+- synnergy-network/cmd/cli/sharding.go
+- synnergy-network/cmd/cli/sidechain.go
+- synnergy-network/cmd/cli/smart_legal_contracts.go
+- synnergy-network/cmd/cli/stake_penalty.go
+- synnergy-network/cmd/cli/staking_node.go
+
+## Stage 11
+
+- synnergy-network/cmd/cli/state_channel.go
+- synnergy-network/cmd/cli/state_channel_management.go
+- synnergy-network/cmd/cli/storage.go
+- synnergy-network/cmd/cli/super_node.go
+- synnergy-network/cmd/cli/supply_chain.go
+- synnergy-network/cmd/cli/swarm.go
+- synnergy-network/cmd/cli/syn10.go
+- synnergy-network/cmd/cli/syn1000.go
+- synnergy-network/cmd/cli/syn11.go
+- synnergy-network/cmd/cli/syn1100.go
+- synnergy-network/cmd/cli/syn1155.go
+- synnergy-network/cmd/cli/syn1200.go
+- synnergy-network/cmd/cli/syn130.go
+- synnergy-network/cmd/cli/syn1300_token.go
+- synnergy-network/cmd/cli/syn131.go
+- synnergy-network/cmd/cli/syn1401.go
+- synnergy-network/cmd/cli/syn1600.go
+- synnergy-network/cmd/cli/syn1800.go
+- synnergy-network/cmd/cli/syn1900.go
+- synnergy-network/cmd/cli/syn1967.go
+- synnergy-network/cmd/cli/syn200.go
+- synnergy-network/cmd/cli/syn2100.go
+- synnergy-network/cmd/cli/syn2200.go
+- synnergy-network/cmd/cli/syn223.go
+- synnergy-network/cmd/cli/syn2400.go
+- synnergy-network/cmd/cli/syn300.go
+- synnergy-network/cmd/cli/syn3200.go
+- synnergy-network/cmd/cli/syn3300.go
+- synnergy-network/cmd/cli/syn3500.go
+- synnergy-network/cmd/cli/syn500.go
+- synnergy-network/cmd/cli/syn5000.go
+- synnergy-network/cmd/cli/syn600.go
+
+## Stage 12
+
+- synnergy-network/cmd/cli/syn70.go
+- synnergy-network/cmd/cli/syn721.go
+- synnergy-network/cmd/cli/syn800.go
+- synnergy-network/cmd/cli/syn845.go
+- synnergy-network/cmd/cli/system_health.go
+- synnergy-network/cmd/cli/tangible_assets.go
+- synnergy-network/cmd/cli/time_locked_node.go
+- synnergy-network/cmd/cli/timelock.go
+- synnergy-network/cmd/cli/token_management.go
+- synnergy-network/cmd/cli/token_vote.go
+- synnergy-network/cmd/cli/tokens.go
+- synnergy-network/cmd/cli/transaction_distribution.go
+- synnergy-network/cmd/cli/transactionreversal.go
+- synnergy-network/cmd/cli/transactions.go
+- synnergy-network/cmd/cli/user_feedback_system.go
+- synnergy-network/cmd/cli/utility_functions.go
+- synnergy-network/cmd/cli/validator_node.go
+- synnergy-network/cmd/cli/virtual_machine.go
+- synnergy-network/cmd/cli/vm_sandbox_management.go
+- synnergy-network/cmd/cli/wallet.go
+- synnergy-network/cmd/cli/wallet_management.go
+- synnergy-network/cmd/cli/warehouse.go
+- synnergy-network/cmd/cli/watchtower_node.go
+- synnergy-network/cmd/cli/workflow_integrations.go
+- synnergy-network/cmd/cli/zero_trust_data_channels.go
+- synnergy-network/cmd/cli/zkp_node.go
+- synnergy-network/cmd/config/bootstrap.yaml
+- synnergy-network/cmd/config/config_guide.md
+- synnergy-network/cmd/config/config_test.go
+- synnergy-network/cmd/config/crosschain.yaml
+- synnergy-network/cmd/config/default.yaml
+- synnergy-network/cmd/config/explorer.yaml
+
+## Stage 13
+
+- synnergy-network/cmd/config/genesis.json
+- synnergy-network/cmd/config/prod.yaml
+- synnergy-network/cmd/config/staging.yaml
+- synnergy-network/cmd/dexserver/main.go
+- synnergy-network/cmd/explorer/logger.go
+- synnergy-network/cmd/explorer/main.go
+- synnergy-network/cmd/explorer/middleware.go
+- synnergy-network/cmd/explorer/server.go
+- synnergy-network/cmd/explorer/server_test.go
+- synnergy-network/cmd/explorer/service.go
+- synnergy-network/cmd/opcode-lint/main.go
+- synnergy-network/cmd/scripts/authority_apply.sh
+- synnergy-network/cmd/scripts/build_cli.sh
+- synnergy-network/cmd/scripts/coin_mint.sh
+- synnergy-network/cmd/scripts/consensus_start.sh
+- synnergy-network/cmd/scripts/contracts_deploy.sh
+- synnergy-network/cmd/scripts/cross_chain_register.sh
+- synnergy-network/cmd/scripts/dao_vote.sh
+- synnergy-network/cmd/scripts/faucet_fund.sh
+- synnergy-network/cmd/scripts/fault_check.sh
+- synnergy-network/cmd/scripts/governance_propose.sh
+- synnergy-network/cmd/scripts/loanpool_apply.sh
+- synnergy-network/cmd/scripts/marketplace_list.sh
+- synnergy-network/cmd/scripts/network_peers.sh
+- synnergy-network/cmd/scripts/network_start.sh
+- synnergy-network/cmd/scripts/replication_status.sh
+- synnergy-network/cmd/scripts/rollup_submit_batch.sh
+- synnergy-network/cmd/scripts/script_guide.md
+- synnergy-network/cmd/scripts/security_merkle.sh
+- synnergy-network/cmd/scripts/sharding_leader.sh
+- synnergy-network/cmd/scripts/sidechain_sync.sh
+- synnergy-network/cmd/scripts/start_synnergy_network.sh
+
+## Stage 14
+
+- synnergy-network/cmd/scripts/state_channel_open.sh
+- synnergy-network/cmd/scripts/storage_marketplace_pin.sh
+- synnergy-network/cmd/scripts/storage_pin.sh
+- synnergy-network/cmd/scripts/token_transfer.sh
+- synnergy-network/cmd/scripts/transactions_submit.sh
+- synnergy-network/cmd/scripts/vm_start.sh
+- synnergy-network/cmd/scripts/wallet_create.sh
+- synnergy-network/cmd/smart_contracts/.solhint.json
+- synnergy-network/cmd/smart_contracts/ai_marketplace.sol
+- synnergy-network/cmd/smart_contracts/ai_model_registry.sol
+- synnergy-network/cmd/smart_contracts/ai_optimizer.sol
+- synnergy-network/cmd/smart_contracts/ai_predictor.sol
+- synnergy-network/cmd/smart_contracts/amm_pool_manager.sol
+- synnergy-network/cmd/smart_contracts/authority_applier.sol
+- synnergy-network/cmd/smart_contracts/bank_node_bridge.sol
+- synnergy-network/cmd/smart_contracts/carbon_credit.sol
+- synnergy-network/cmd/smart_contracts/compliance_auditor.sol
+- synnergy-network/cmd/smart_contracts/consensus_tester.sol
+- synnergy-network/cmd/smart_contracts/cross_chain_bridge.sol
+- synnergy-network/cmd/smart_contracts/cross_chain_eth.sol
+- synnergy-network/cmd/smart_contracts/cross_chain_manager.sol
+- synnergy-network/cmd/smart_contracts/cross_chain_protocol.sol
+- synnergy-network/cmd/smart_contracts/dao_explorer.json
+- synnergy-network/cmd/smart_contracts/dao_explorer.sol
+- synnergy-network/cmd/smart_contracts/data_feed_oracle.sol
+- synnergy-network/cmd/smart_contracts/data_marketplace.sol
+- synnergy-network/cmd/smart_contracts/dex_pool_reader.sol
+- synnergy-network/cmd/smart_contracts/examples/log.wat
+- synnergy-network/cmd/smart_contracts/examples/noop.wat
+- synnergy-network/cmd/smart_contracts/explorer_utils.sol
+- synnergy-network/cmd/smart_contracts/faucet.sol
+- synnergy-network/cmd/smart_contracts/fault_tolerance_checker.sol
+
+## Stage 15
+
+- synnergy-network/cmd/smart_contracts/gov_quorum.sol
+- synnergy-network/cmd/smart_contracts/green_certifier.sol
+- synnergy-network/cmd/smart_contracts/health_monitor.sol
+- synnergy-network/cmd/smart_contracts/identity_token.sol
+- synnergy-network/cmd/smart_contracts/ledger_inspector.sol
+- synnergy-network/cmd/smart_contracts/ledger_snapshotter.sol
+- synnergy-network/cmd/smart_contracts/liquidity_adder.sol
+- synnergy-network/cmd/smart_contracts/loan_application.sol
+- synnergy-network/cmd/smart_contracts/marketplace.sol
+- synnergy-network/cmd/smart_contracts/message_queue.sol
+- synnergy-network/cmd/smart_contracts/mobile_miner.sol
+- synnergy-network/cmd/smart_contracts/multi_sig_wallet.sol
+- synnergy-network/cmd/smart_contracts/network_bootstrap.sol
+- synnergy-network/cmd/smart_contracts/nft_marketplace.sol
+- synnergy-network/cmd/smart_contracts/node_firewall.sol
+- synnergy-network/cmd/smart_contracts/oracle_reader.sol
+- synnergy-network/cmd/smart_contracts/oracle_updater.sol
+- synnergy-network/cmd/smart_contracts/pension_plan.sol
+- synnergy-network/cmd/smart_contracts/replication_service.sol
+- synnergy-network/cmd/smart_contracts/rust/ai_model_registry.rs
+- synnergy-network/cmd/smart_contracts/rust/ai_optimizer.rs
+- synnergy-network/cmd/smart_contracts/rust/ai_predictor.rs
+- synnergy-network/cmd/smart_contracts/rust/amm_pool_manager.rs
+- synnergy-network/cmd/smart_contracts/rust/authority_applier.rs
+- synnergy-network/cmd/smart_contracts/rust/bank_node_bridge.rs
+- synnergy-network/cmd/smart_contracts/rust/carbon_credit.rs
+- synnergy-network/cmd/smart_contracts/rust/compliance_auditor.rs
+- synnergy-network/cmd/smart_contracts/rust/consensus_tester.rs
+- synnergy-network/cmd/smart_contracts/rust/cross_chain_bridge.rs
+- synnergy-network/cmd/smart_contracts/rust/cross_chain_protocol.rs
+- synnergy-network/cmd/smart_contracts/rust/data_feed_oracle.rs
+- synnergy-network/cmd/smart_contracts/rust/data_marketplace.rs
+
+## Stage 16
+
+- synnergy-network/cmd/smart_contracts/rust/fault_tolerance_checker.rs
+- synnergy-network/cmd/smart_contracts/rust/gov_quorum.rs
+- synnergy-network/cmd/smart_contracts/rust/green_certifier.rs
+- synnergy-network/cmd/smart_contracts/rust/health_monitor.rs
+- synnergy-network/cmd/smart_contracts/rust/identity_token.rs
+- synnergy-network/cmd/smart_contracts/rust/ledger_snapshotter.rs
+- synnergy-network/cmd/smart_contracts/rust/loan_application.rs
+- synnergy-network/cmd/smart_contracts/rust/message_queue.rs
+- synnergy-network/cmd/smart_contracts/rust/mobile_miner.rs
+- synnergy-network/cmd/smart_contracts/rust/network_bootstrap.rs
+- synnergy-network/cmd/smart_contracts/rust/node_firewall.rs
+- synnergy-network/cmd/smart_contracts/rust/oracle_updater.rs
+- synnergy-network/cmd/smart_contracts/rust/pension_plan.rs
+- synnergy-network/cmd/smart_contracts/rust/replication_service.rs
+- synnergy-network/cmd/smart_contracts/rust/security_auditor.rs
+- synnergy-network/cmd/smart_contracts/rust/sharding_coordinator.rs
+- synnergy-network/cmd/smart_contracts/rust/time_locked_wallet.rs
+- synnergy-network/cmd/smart_contracts/security_auditor.sol
+- synnergy-network/cmd/smart_contracts/sharding_coordinator.sol
+- synnergy-network/cmd/smart_contracts/storage_marketplace.sol
+- synnergy-network/cmd/smart_contracts/time_locked_wallet.sol
+- synnergy-network/cmd/smart_contracts/token_creator.sol
+- synnergy-network/cmd/smart_contracts/token_factory.sol
+- synnergy-network/cmd/smart_contracts/token_minter.sol
+- synnergy-network/cmd/synnergy/main.go
+- synnergy-network/cmd/synnergy/synnergy_set_up.md
+- synnergy-network/cmd/xchainserver/main.go
+- synnergy-network/cmd/xchainserver/server/handlers.go
+- synnergy-network/cmd/xchainserver/server/middleware.go
+- synnergy-network/cmd/xchainserver/server/routes.go
+- synnergy-network/core/Nodes/Nodes_Type_manual.md
+- synnergy-network/core/Nodes/authority_nodes/Authority_node_typr_manual.md
+
+## Stage 17
+
+- synnergy-network/core/Nodes/authority_nodes/index.go
+- synnergy-network/core/Nodes/bank_nodes/index.go
+- synnergy-network/core/Nodes/consensus_specific.go
+- synnergy-network/core/Nodes/elected_authority_node.go
+- synnergy-network/core/Nodes/experimental_node.go
+- synnergy-network/core/Nodes/forensic_node.go
+- synnergy-network/core/Nodes/geospatial.go
+- synnergy-network/core/Nodes/historical_node.go
+- synnergy-network/core/Nodes/holographic_node.go
+- synnergy-network/core/Nodes/index.go
+- synnergy-network/core/Nodes/light_node.go
+- synnergy-network/core/Nodes/military_nodes/index.go
+- synnergy-network/core/Nodes/molecular_node.go
+- synnergy-network/core/Nodes/optimization_nodes/index.go
+- synnergy-network/core/Nodes/optimization_nodes/optimization.go
+- synnergy-network/core/Nodes/staking_node_interface.go
+- synnergy-network/core/Nodes/super_node.go
+- synnergy-network/core/Nodes/syn845_node.go
+- synnergy-network/core/Nodes/types.go
+- synnergy-network/core/Nodes/watchtower/index.go
+- synnergy-network/core/Nodes/witness/archival_witness_node.go
+- synnergy-network/core/SYN1967.go
+- synnergy-network/core/SYN2369.go
+- synnergy-network/core/Tokens/SYN1000.go
+- synnergy-network/core/Tokens/SYN3000.go
+- synnergy-network/core/Tokens/Tokens_manual.md
+- synnergy-network/core/Tokens/balance_table_test.go
+- synnergy-network/core/Tokens/base.go
+- synnergy-network/core/Tokens/base_test.go
+- synnergy-network/core/Tokens/index.go
+- synnergy-network/core/Tokens/syn10.go
+- synnergy-network/core/Tokens/syn1000_index.go
+
+## Stage 18
+
+- synnergy-network/core/Tokens/syn1100.go
+- synnergy-network/core/Tokens/syn12.go
+- synnergy-network/core/Tokens/syn200.go
+- synnergy-network/core/Tokens/syn2200.go
+- synnergy-network/core/Tokens/syn2600.go
+- synnergy-network/core/Tokens/syn2800.go
+- synnergy-network/core/Tokens/syn2900.go
+- synnergy-network/core/Tokens/syn3400.go
+- synnergy-network/core/Tokens/syn70.go
+- synnergy-network/core/Tokens/syn845.go
+- synnergy-network/core/access_control.go
+- synnergy-network/core/access_control_test.go
+- synnergy-network/core/account_and_balance_operations.go
+- synnergy-network/core/account_and_balance_operations_test.go
+- synnergy-network/core/address_from_common.go
+- synnergy-network/core/address_zero.go
+- synnergy-network/core/ai.go
+- synnergy-network/core/ai_drift_monitor.go
+- synnergy-network/core/ai_enhanced_contract.go
+- synnergy-network/core/ai_enhanced_node.go
+- synnergy-network/core/ai_inference_analysis.go
+- synnergy-network/core/ai_model_management.go
+- synnergy-network/core/ai_secure_storage.go
+- synnergy-network/core/ai_training.go
+- synnergy-network/core/amm.go
+- synnergy-network/core/anomaly_detection.go
+- synnergy-network/core/api_node.go
+- synnergy-network/core/audit_management.go
+- synnergy-network/core/audit_node.go
+- synnergy-network/core/audit_trail_test.go
+- synnergy-network/core/authority_apply.go
+- synnergy-network/core/authority_nodes.go
+
+## Stage 19
+
+- synnergy-network/core/authority_penalty_test.go
+- synnergy-network/core/autonomous_agent_node.go
+- synnergy-network/core/bank_institutional_node.go
+- synnergy-network/core/base_node.go
+- synnergy-network/core/bft_simulation.go
+- synnergy-network/core/bft_simulation_test.go
+- synnergy-network/core/binary_tree_operations.go
+- synnergy-network/core/biometric_security_node.go
+- synnergy-network/core/biometrics_auth.go
+- synnergy-network/core/blockchain_compression.go
+- synnergy-network/core/blockchain_synchronization.go
+- synnergy-network/core/bootstrap_node.go
+- synnergy-network/core/carbon_credit_system.go
+- synnergy-network/core/central_banking_node.go
+- synnergy-network/core/chain_fork_manager.go
+- synnergy-network/core/charity_pool.go
+- synnergy-network/core/coin.go
+- synnergy-network/core/coin_test.go
+- synnergy-network/core/common_structs.go
+- synnergy-network/core/compliance.go
+- synnergy-network/core/compliance_management.go
+- synnergy-network/core/connection_pool.go
+- synnergy-network/core/connection_pool_test.go
+- synnergy-network/core/consensus.go
+- synnergy-network/core/consensus_adaptive_management.go
+- synnergy-network/core/consensus_constructor.go
+- synnergy-network/core/consensus_difficulty.go
+- synnergy-network/core/consensus_network_adapter.go
+- synnergy-network/core/consensus_specific_node.go
+- synnergy-network/core/consensus_start.go
+- synnergy-network/core/consensus_validator_management.go
+- synnergy-network/core/content_node.go
+
+## Stage 20
+
+- synnergy-network/core/content_node_impl.go
+- synnergy-network/core/content_types.go
+- synnergy-network/core/contract_management.go
+- synnergy-network/core/contract_vm_test.go
+- synnergy-network/core/contracts.go
+- synnergy-network/core/contracts_opcodes.go
+- synnergy-network/core/cross_chain.go
+- synnergy-network/core/cross_chain_agnostic_protocols.go
+- synnergy-network/core/cross_chain_bridge.go
+- synnergy-network/core/cross_chain_connection.go
+- synnergy-network/core/cross_chain_contracts.go
+- synnergy-network/core/cross_chain_transactions.go
+- synnergy-network/core/cross_consensus_scaling_networks.go
+- synnergy-network/core/custodial_node.go
+- synnergy-network/core/dao.go
+- synnergy-network/core/dao_access_control.go
+- synnergy-network/core/dao_proposal.go
+- synnergy-network/core/dao_quadratic_voting.go
+- synnergy-network/core/dao_staking.go
+- synnergy-network/core/dao_token.go
+- synnergy-network/core/data.go
+- synnergy-network/core/data_distribution.go
+- synnergy-network/core/data_operations.go
+- synnergy-network/core/data_resource_management.go
+- synnergy-network/core/defi.go
+- synnergy-network/core/devnet.go
+- synnergy-network/core/disaster_recovery_node.go
+- synnergy-network/core/distributed_network_coordination.go
+- synnergy-network/core/distribution.go
+- synnergy-network/core/dynamic_consensus_hopping.go
+- synnergy-network/core/ecommerce.go
+- synnergy-network/core/education_token.go
+
+## Stage 21
+
+- synnergy-network/core/elected_authority_node.go
+- synnergy-network/core/employment.go
+- synnergy-network/core/energy_efficiency.go
+- synnergy-network/core/energy_efficient_node.go
+- synnergy-network/core/energy_tokens.go
+- synnergy-network/core/environmental_monitoring_node.go
+- synnergy-network/core/escrow.go
+- synnergy-network/core/event_management.go
+- synnergy-network/core/execution_management.go
+- synnergy-network/core/experimental_node.go
+- synnergy-network/core/external_sensor.go
+- synnergy-network/core/failover_recovery.go
+- synnergy-network/core/faucet.go
+- synnergy-network/core/fault_tolerance.go
+- synnergy-network/core/finalization_management.go
+- synnergy-network/core/firewall.go
+- synnergy-network/core/forum.go
+- synnergy-network/core/full_node.go
+- synnergy-network/core/gaming.go
+- synnergy-network/core/gas_table.go
+- synnergy-network/core/gateway_node.go
+- synnergy-network/core/geolocation_network.go
+- synnergy-network/core/geospatial_node.go
+- synnergy-network/core/governance.go
+- synnergy-network/core/governance_execution.go
+- synnergy-network/core/governance_management.go
+- synnergy-network/core/governance_reputation_voting.go
+- synnergy-network/core/governance_timelock.go
+- synnergy-network/core/governance_token_voting.go
+- synnergy-network/core/government_authority_node.go
+- synnergy-network/core/green_technology.go
+- synnergy-network/core/healthcare.go
+
+## Stage 22
+
+- synnergy-network/core/helpers.go
+- synnergy-network/core/high_availability.go
+- synnergy-network/core/historical_node.go
+- synnergy-network/core/holographic.go
+- synnergy-network/core/identity_verification.go
+- synnergy-network/core/idwallet_registration.go
+- synnergy-network/core/immutability_enforcement.go
+- synnergy-network/core/indexing_node.go
+- synnergy-network/core/initialization_replication.go
+- synnergy-network/core/intangible_assets.go
+- synnergy-network/core/integration_node.go
+- synnergy-network/core/integration_registry.go
+- synnergy-network/core/ip_management.go
+- synnergy-network/core/ipfs.go
+- synnergy-network/core/kademlia.go
+- synnergy-network/core/ledger.go
+- synnergy-network/core/ledger_test.go
+- synnergy-network/core/lightning_node.go
+- synnergy-network/core/liquidity_pools.go
+- synnergy-network/core/liquidity_views.go
+- synnergy-network/core/loanpool.go
+- synnergy-network/core/loanpool_apply.go
+- synnergy-network/core/loanpool_approval_process.go
+- synnergy-network/core/loanpool_config.go
+- synnergy-network/core/loanpool_grant_disbursement.go
+- synnergy-network/core/loanpool_management.go
+- synnergy-network/core/loanpool_proposal.go
+- synnergy-network/core/marketplace.go
+- synnergy-network/core/master_node.go
+- synnergy-network/core/merkle_tree_operations.go
+- synnergy-network/core/messages.go
+- synnergy-network/core/mining_node.go
+
+## Stage 23
+
+- synnergy-network/core/mobile_mining_node.go
+- synnergy-network/core/mobile_node.go
+- synnergy-network/core/module_guide.md
+- synnergy-network/core/module_plugin.go
+- synnergy-network/core/molecular_node.go
+- synnergy-network/core/monomaniac_recovery.go
+- synnergy-network/core/music_royalty_token.go
+- synnergy-network/core/nat_traversal.go
+- synnergy-network/core/network.go
+- synnergy-network/core/network_test.go
+- synnergy-network/core/node.go
+- synnergy-network/core/offchain_wallet.go
+- synnergy-network/core/opcode_and_gas_guide.md
+- synnergy-network/core/opcode_dispatcher.go
+- synnergy-network/core/oracle_management.go
+- synnergy-network/core/orphan/orphan_node.go
+- synnergy-network/core/partitioning_and_compression.go
+- synnergy-network/core/peer_management.go
+- synnergy-network/core/plasma.go
+- synnergy-network/core/plasma_management.go
+- synnergy-network/core/plasma_operations.go
+- synnergy-network/core/polls_management.go
+- synnergy-network/core/private_transactions.go
+- synnergy-network/core/quantum_resistant_node.go
+- synnergy-network/core/quorum_tracker.go
+- synnergy-network/core/real_estate.go
+- synnergy-network/core/regulatory_management.go
+- synnergy-network/core/regulatory_node.go
+- synnergy-network/core/rental_management.go
+- synnergy-network/core/replication.go
+- synnergy-network/core/resource_allocation_management.go
+- synnergy-network/core/resource_allocator.go
+
+## Stage 24
+
+- synnergy-network/core/resource_management.go
+- synnergy-network/core/resource_marketplace.go
+- synnergy-network/core/rollup_management.go
+- synnergy-network/core/rollups.go
+- synnergy-network/core/rpc_webrtc.go
+- synnergy-network/core/security.go
+- synnergy-network/core/sharding.go
+- synnergy-network/core/sidechain_ops.go
+- synnergy-network/core/sidechains.go
+- synnergy-network/core/smart_legal_contracts.go
+- synnergy-network/core/stake_penalty.go
+- synnergy-network/core/staking_node.go
+- synnergy-network/core/state_channel.go
+- synnergy-network/core/state_channel_management.go
+- synnergy-network/core/storage.go
+- synnergy-network/core/super_node.go
+- synnergy-network/core/supply_chain.go
+- synnergy-network/core/swarm.go
+- synnergy-network/core/syn10.go
+- synnergy-network/core/syn1155.go
+- synnergy-network/core/syn11_token.go
+- synnergy-network/core/syn1300.go
+- synnergy-network/core/syn131_token.go
+- synnergy-network/core/syn1401.go
+- synnergy-network/core/syn1500.go
+- synnergy-network/core/syn1700_token.go
+- synnergy-network/core/syn1800.go
+- synnergy-network/core/syn20.go
+- synnergy-network/core/syn2100.go
+- synnergy-network/core/syn223_token.go
+- synnergy-network/core/syn2400.go
+- synnergy-network/core/syn2500_token.go
+
+## Stage 25
+
+- synnergy-network/core/syn2700.go
+- synnergy-network/core/syn2900.go
+- synnergy-network/core/syn3000_token.go
+- synnergy-network/core/syn300_token.go
+- synnergy-network/core/syn3100.go
+- synnergy-network/core/syn3200.go
+- synnergy-network/core/syn3300_token.go
+- synnergy-network/core/syn3500_token.go
+- synnergy-network/core/syn3600.go
+- synnergy-network/core/syn3700_token.go
+- synnergy-network/core/syn3800.go
+- synnergy-network/core/syn3900.go
+- synnergy-network/core/syn4200_token.go
+- synnergy-network/core/syn4700.go
+- synnergy-network/core/syn500.go
+- synnergy-network/core/syn5000.go
+- synnergy-network/core/syn5000_index.go
+- synnergy-network/core/syn700.go
+- synnergy-network/core/syn721_token.go
+- synnergy-network/core/syn800_token.go
+- synnergy-network/core/system_health_logging.go
+- synnergy-network/core/tangible_assets.go
+- synnergy-network/core/time_locked_node.go
+- synnergy-network/core/token_management.go
+- synnergy-network/core/token_management_syn1000.go
+- synnergy-network/core/token_syn130.go
+- synnergy-network/core/token_syn4900.go
+- synnergy-network/core/token_syn600.go
+- synnergy-network/core/tokens.go
+- synnergy-network/core/tokens_syn1000.go
+- synnergy-network/core/tokens_syn1000_helpers.go
+- synnergy-network/core/tokens_syn1000_opcodes.go
+
+## Stage 26
+
+- synnergy-network/core/tokens_syn1200.go
+- synnergy-network/core/tokens_syn900.go
+- synnergy-network/core/tokens_syn900_index.go
+- synnergy-network/core/transaction_distribution.go
+- synnergy-network/core/transactionreversal.go
+- synnergy-network/core/transactions.go
+- synnergy-network/core/tx_types.go
+- synnergy-network/core/tx_types_nontokens.go
+- synnergy-network/core/txpool_addtx.go
+- synnergy-network/core/txpool_snapshot.go
+- synnergy-network/core/txpool_stub.go
+- synnergy-network/core/user_feedback_system.go
+- synnergy-network/core/utility_functions.go
+- synnergy-network/core/validator_node.go
+- synnergy-network/core/virtual_machine.go
+- synnergy-network/core/vm_sandbox_management.go
+- synnergy-network/core/wallet.go
+- synnergy-network/core/wallet_management.go
+- synnergy-network/core/warehouse.go
+- synnergy-network/core/warfare_node.go
+- synnergy-network/core/watchtower_node.go
+- synnergy-network/core/workflow_integrations.go
+- synnergy-network/core/zero_trust_data_channels.go
+- synnergy-network/core/zkp_node.go
+- synnergy-network/go.mod
+- synnergy-network/go.sum
+- synnergy-network/internal/charity_pool_management.go
+- synnergy-network/internal/testutil/reverse.go
+- synnergy-network/internal/testutil/reverse_fuzz_test.go
+- synnergy-network/internal/testutil/reverse_test.go
+- synnergy-network/internal/testutil/sandbox.go
+- synnergy-network/internal/testutil/sandbox_fuzz_test.go
+
+## Stage 27
+
+- synnergy-network/internal/testutil/sandbox_test.go
+- synnergy-network/monitoring/grafana/dashboard-cli.json
+- synnergy-network/monitoring/grafana/dashboard-gui.json
+- synnergy-network/monitoring/grafana/dashboard-node.json
+- synnergy-network/monitoring/incident_response_runbook.md
+- synnergy-network/pkg/config/config.go
+- synnergy-network/pkg/utils/env.go
+- synnergy-network/pkg/utils/env_benchmark_test.go
+- synnergy-network/pkg/utils/env_test.go
+- synnergy-network/pkg/utils/errors.go
+- synnergy-network/pkg/utils/version.go
+- synnergy-network/smart_contract_guide.md
+- synnergy-network/tests/ai_test.go
+- synnergy-network/tests/amm_test.go
+- synnergy-network/tests/authority_nodes_test.go
+- synnergy-network/tests/charity_pool_test.go
+- synnergy-network/tests/coin_test.go
+- synnergy-network/tests/consensus_test.go
+- synnergy-network/tests/cross_chain_test.go
+- synnergy-network/tests/dao_proposal_test.go
+- synnergy-network/tests/dao_test.go
+- synnergy-network/tests/fault_tolerance_test.go
+- synnergy-network/tests/governance_test.go
+- synnergy-network/tests/green_technology_test.go
+- synnergy-network/tests/identity_verification_test.go
+- synnergy-network/tests/liquidity_pools_test.go
+- synnergy-network/tests/loanpool_test.go
+- synnergy-network/tests/network_test.go
+- synnergy-network/tests/replication_test.go
+- synnergy-network/tests/rollups_test.go
+- synnergy-network/tests/security_test.go
+- synnergy-network/tests/sharding_test.go
+
+## Stage 28
+
+- synnergy-network/tests/sidechain_test.go
+- synnergy-network/tests/state_channel_test.go
+- synnergy-network/tests/storage_test.go
+- synnergy-network/tests/token_test.go
+- synnergy-network/tests/transaction_test.go
+- synnergy-network/tests/wallet_test.go
+- synnergy-network/third_party/go-libp2p-core/.github/workflows/automerge.yml
+- synnergy-network/third_party/go-libp2p-core/.github/workflows/go-check.yml
+- synnergy-network/third_party/go-libp2p-core/.github/workflows/go-compat.yml
+- synnergy-network/third_party/go-libp2p-core/.github/workflows/go-test.yml
+- synnergy-network/third_party/go-libp2p-core/.github/workflows/release-check.yml
+- synnergy-network/third_party/go-libp2p-core/.github/workflows/releaser.yml
+- synnergy-network/third_party/go-libp2p-core/.github/workflows/tagpush.yml
+- synnergy-network/third_party/go-libp2p-core/.gitignore
+- synnergy-network/third_party/go-libp2p-core/LICENSE
+- synnergy-network/third_party/go-libp2p-core/LICENSE-APACHE
+- synnergy-network/third_party/go-libp2p-core/LICENSE-MIT
+- synnergy-network/third_party/go-libp2p-core/alias.go
+- synnergy-network/third_party/go-libp2p-core/canonicallog/canonicallog.go
+- synnergy-network/third_party/go-libp2p-core/connmgr/decay.go
+- synnergy-network/third_party/go-libp2p-core/connmgr/gater.go
+- synnergy-network/third_party/go-libp2p-core/connmgr/manager.go
+- synnergy-network/third_party/go-libp2p-core/connmgr/null.go
+- synnergy-network/third_party/go-libp2p-core/connmgr/presets.go
+- synnergy-network/third_party/go-libp2p-core/control/disconnect.go
+- synnergy-network/third_party/go-libp2p-core/crypto/ecdsa.go
+- synnergy-network/third_party/go-libp2p-core/crypto/ed25519.go
+- synnergy-network/third_party/go-libp2p-core/crypto/key.go
+- synnergy-network/third_party/go-libp2p-core/crypto/key_not_openssl.go
+- synnergy-network/third_party/go-libp2p-core/crypto/key_openssl.go
+- synnergy-network/third_party/go-libp2p-core/crypto/pb/forward.go
+- synnergy-network/third_party/go-libp2p-core/crypto/rsa_common.go
+
+## Stage 29
+
+- synnergy-network/third_party/go-libp2p-core/crypto/rsa_go.go
+- synnergy-network/third_party/go-libp2p-core/crypto/rsa_openssl.go
+- synnergy-network/third_party/go-libp2p-core/crypto/secp256k1.go
+- synnergy-network/third_party/go-libp2p-core/discovery/discovery.go
+- synnergy-network/third_party/go-libp2p-core/discovery/options.go
+- synnergy-network/third_party/go-libp2p-core/event/addrs.go
+- synnergy-network/third_party/go-libp2p-core/event/bus.go
+- synnergy-network/third_party/go-libp2p-core/event/dht.go
+- synnergy-network/third_party/go-libp2p-core/event/doc.go
+- synnergy-network/third_party/go-libp2p-core/event/identify.go
+- synnergy-network/third_party/go-libp2p-core/event/nattype.go
+- synnergy-network/third_party/go-libp2p-core/event/network.go
+- synnergy-network/third_party/go-libp2p-core/event/protocol.go
+- synnergy-network/third_party/go-libp2p-core/event/reachability.go
+- synnergy-network/third_party/go-libp2p-core/go.mod
+- synnergy-network/third_party/go-libp2p-core/go.sum
+- synnergy-network/third_party/go-libp2p-core/host/helpers.go
+- synnergy-network/third_party/go-libp2p-core/host/host.go
+- synnergy-network/third_party/go-libp2p-core/introspection/doc.go
+- synnergy-network/third_party/go-libp2p-core/introspection/endpoint.go
+- synnergy-network/third_party/go-libp2p-core/introspection/introspector.go
+- synnergy-network/third_party/go-libp2p-core/metrics/bandwidth.go
+- synnergy-network/third_party/go-libp2p-core/metrics/reporter.go
+- synnergy-network/third_party/go-libp2p-core/network/conn.go
+- synnergy-network/third_party/go-libp2p-core/network/context.go
+- synnergy-network/third_party/go-libp2p-core/network/errors.go
+- synnergy-network/third_party/go-libp2p-core/network/mux.go
+- synnergy-network/third_party/go-libp2p-core/network/nattype.go
+- synnergy-network/third_party/go-libp2p-core/network/network.go
+- synnergy-network/third_party/go-libp2p-core/network/notifee.go
+- synnergy-network/third_party/go-libp2p-core/network/rcmgr.go
+- synnergy-network/third_party/go-libp2p-core/network/stream.go
+
+## Stage 30
+
+- synnergy-network/third_party/go-libp2p-core/peer/addrinfo.go
+- synnergy-network/third_party/go-libp2p-core/peer/peer.go
+- synnergy-network/third_party/go-libp2p-core/peer/record.go
+- synnergy-network/third_party/go-libp2p-core/peerstore/helpers.go
+- synnergy-network/third_party/go-libp2p-core/peerstore/peerstore.go
+- synnergy-network/third_party/go-libp2p-core/pnet/codec.go
+- synnergy-network/third_party/go-libp2p-core/pnet/env.go
+- synnergy-network/third_party/go-libp2p-core/pnet/error.go
+- synnergy-network/third_party/go-libp2p-core/pnet/protector.go
+- synnergy-network/third_party/go-libp2p-core/protocol/id.go
+- synnergy-network/third_party/go-libp2p-core/protocol/switch.go
+- synnergy-network/third_party/go-libp2p-core/record/envelope.go
+- synnergy-network/third_party/go-libp2p-core/record/record.go
+- synnergy-network/third_party/go-libp2p-core/routing/options.go
+- synnergy-network/third_party/go-libp2p-core/routing/query.go
+- synnergy-network/third_party/go-libp2p-core/routing/routing.go
+- synnergy-network/third_party/go-libp2p-core/sec/insecure/insecure.go
+- synnergy-network/third_party/go-libp2p-core/sec/security.go
+- synnergy-network/third_party/go-libp2p-core/test/addrs.go
+- synnergy-network/third_party/go-libp2p-core/test/crypto.go
+- synnergy-network/third_party/go-libp2p-core/test/errors.go
+- synnergy-network/third_party/go-libp2p-core/test/peer.go
+- synnergy-network/third_party/go-libp2p-core/transport/transport.go
+- synnergy-network/third_party/go-libp2p-core/version.json
+- synnergy-network/walletserver/.env
+- synnergy-network/walletserver/config/config.go
+- synnergy-network/walletserver/controllers/wallet_controller.go
+- synnergy-network/walletserver/main.go
+- synnergy-network/walletserver/middleware/logger.go
+- synnergy-network/walletserver/routes/routes.go
+- synnergy-network/walletserver/services/wallet_service.go
+- synnergy-network/walletserver/smartcontracts/wallet_contract.go
