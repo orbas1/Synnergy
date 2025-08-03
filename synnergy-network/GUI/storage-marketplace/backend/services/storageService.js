@@ -6,7 +6,11 @@ function load() {
   try {
     return JSON.parse(fs.readFileSync(dataPath, "utf8"));
   } catch {
-    return { listings: [], deals: [], files: [], storages: [] };
+    // Ensure the data file exists with sensible defaults on first run or if
+    // it becomes corrupted. This avoids runtime errors in subsequent writes.
+    const defaultDb = { listings: [], deals: [], files: [], storages: [] };
+    fs.writeFileSync(dataPath, JSON.stringify(defaultDb, null, 2));
+    return defaultDb;
   }
 }
 
@@ -21,11 +25,16 @@ exports.listListings = async () => {
 
 exports.createListing = async (input) => {
   const db = load();
+  const pricePerGB = Number(input.pricePerGB);
+  const capacityGB = Number(input.capacityGB);
+  if (Number.isNaN(pricePerGB) || Number.isNaN(capacityGB)) {
+    throw new Error("pricePerGB and capacityGB must be numeric values");
+  }
   const listing = {
     id: Date.now().toString(),
     provider: input.provider,
-    pricePerGB: Number(input.pricePerGB),
-    capacityGB: Number(input.capacityGB),
+    pricePerGB,
+    capacityGB,
     createdAt: new Date().toISOString(),
   };
   db.listings.push(listing);
@@ -87,10 +96,14 @@ exports.exists = async (cid) => {
 
 exports.createStorage = async (input) => {
   const db = load();
+  const capacityGB = Number(input.capacityGB);
+  if (Number.isNaN(capacityGB)) {
+    throw new Error("capacityGB must be a numeric value");
+  }
   const storage = {
     id: Date.now().toString(),
     owner: input.owner,
-    capacityGB: Number(input.capacityGB),
+    capacityGB,
     createdAt: new Date().toISOString(),
   };
   db.storages.push(storage);
