@@ -86,6 +86,9 @@ func UnpinFile(ctx context.Context, cid string) error {
 	}
 	resp, err := ipfsSvc.client.Do(req)
 	if err != nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
 		return err
 	}
 	defer resp.Body.Close()
