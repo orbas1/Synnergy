@@ -323,6 +323,22 @@ func authorityVoteKey(id Hash, voter Address) []byte {
 	return append(append([]byte("authority:vote:"), id[:]...), voter.Bytes()...)
 }
 
+// shuffleAddresses shuffles the provided slice of addresses in place using
+// cryptographically secure randomness. It returns an error if the random
+// source fails.
+func shuffleAddresses(addrs []Address) error {
+	n := len(addrs)
+	for i := n - 1; i > 0; i-- {
+		jBig, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(jBig.Int64())
+		addrs[i], addrs[j] = addrs[j], addrs[i]
+	}
+	return nil
+}
+
 func unique(in []Address) []Address {
 	seen := make(map[Address]struct{})
 	var out []Address

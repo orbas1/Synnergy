@@ -683,6 +683,9 @@ type HDWallet struct {
 // Address represents a 20‑byte account identifier.
 type Address [20]byte
 
+// AddressZero represents the zero address used for burn and escrow operations.
+var AddressZero Address
+
 // Hash represents a 32‑byte cryptographic hash.
 type Hash [32]byte
 
