@@ -1,8 +1,8 @@
 module synnergy-network
 
-go 1.24.2
+go 1.23.8
 
-toolchain go1.24.3
+toolchain go1.23.11
 
 require (
 	github.com/cloudflare/circl v1.6.1
@@ -14,7 +14,7 @@ require (
 	github.com/herumi/bls-eth-go-binary v1.36.4
 	github.com/huin/goupnp v1.3.0
 	github.com/ipfs/go-cid v0.5.0
-	github.com/jackpal/gateway v1.1.1
+	github.com/jackpal/gateway v1.0.15
 	github.com/jackpal/go-nat-pmp v1.0.2
 	github.com/joho/godotenv v1.5.1
 	github.com/libp2p/go-libp2p v0.42.0
