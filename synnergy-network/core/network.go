@@ -4,9 +4,10 @@ package core
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
+	"net"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/libp2p/go-libp2p"
@@ -14,8 +15,6 @@ import (
 	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/libp2p/go-libp2p/p2p/discovery/mdns"
 	"github.com/sirupsen/logrus"
-	"net"
-	"sync"
 )
 
 func NewNode(cfg Config) (*Node, error) {
