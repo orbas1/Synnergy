@@ -29,4 +29,5 @@ func TokensStableReserveValue(id TokenID) (float64, error) {
 	return tm.StableReserveValue(id)
 }
 
-var _ Tokens.Stablecoin
+// Ensure the SYN1000 token implements the Stablecoin interface at compile time.
+var _ Tokens.Stablecoin = (*Tokens.SYN1000Token)(nil)

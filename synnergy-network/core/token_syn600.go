@@ -94,9 +94,9 @@ func (t *SYN600Token) EngagementOf(addr Address) uint64 {
 // DistributeStakingRewards mints a percentage of the staked amount as reward.
 // rate is interpreted as parts-per-hundred (e.g. 5 = 5%).
 func (t *SYN600Token) DistributeStakingRewards(rate uint64) error {
-	it := t.ledger.PrefixIterator([]byte(stakePrefix))
+	it := t.ledger.PrefixIterator([]byte(syn600StakePrefix))
 	for it.Next() {
-		key := it.Key()[len(stakePrefix):]
+		key := it.Key()[len(syn600StakePrefix):]
 		b, err := hex.DecodeString(string(key))
 		if err != nil || len(b) != 20 {
 			continue
