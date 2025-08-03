@@ -50,9 +50,11 @@ func (d *TxDistributor) DistributeFees(from Address, minerPk []byte, fee uint64)
 		return fmt.Errorf("decode miner: %w", err)
 	}
 
-	minerShare := fee / 2
-	loanShare := fee * 30 / 100
-	charityShare := fee - minerShare - loanShare
+	// Avoid potential overflow when computing percentages by dividing before
+	// multiplying. This keeps the calculation safe even for very large fees.
+	minerShare := fee / 2                        // 50%
+	loanShare := (fee / 10) * 3                  // 30%
+	charityShare := fee - minerShare - loanShare // remainder (20%)
 
 	d.mu.Lock()
 	defer d.mu.Unlock()
