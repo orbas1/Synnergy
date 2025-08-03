@@ -1,6 +1,6 @@
 # User Feedback and UX Guide
 
-Stage 23 focuses on collecting feedback from the community and translating it into user experience improvements for both the GUI projects and the CLI tools.
+This guide outlines how to collect feedback from the community and translate it into user‑experience improvements for both the GUI projects and the CLI tools.
 
 ## Feedback Channels
 - **GitHub Issues** – use the [UX Feedback template](../.github/ISSUE_TEMPLATE/ux_feedback.md) for bug reports or enhancement requests.

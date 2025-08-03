@@ -2,13 +2,15 @@ syntax = "proto3";
 
 package ai;
 
+option go_package = "synnergy-network/ai";
+
 service TFService {
   rpc Predict(PredictRequest) returns (PredictResponse);
   rpc Anomaly(PredictRequest) returns (PredictResponse);
   rpc FeeOpt(PredictRequest) returns (PredictResponse);
   rpc Volume(PredictRequest) returns (PredictResponse);
   rpc Inference(PredictRequest) returns (PredictResponse);
-  rpc Analyse(PredictRequest) returns (PredictResponse);
+  rpc Analyze(PredictRequest) returns (PredictResponse);
   rpc UploadModel(ModelUploadRequest) returns (ModelUploadResponse);
   rpc StartTraining(TrainingRequest) returns (TrainingResponse);
   rpc TrainingStatus(TrainingStatusRequest) returns (TrainingStatusResponse);
