@@ -139,29 +139,6 @@ func NewConsensus(
 	}, nil
 }
 
-//---------------------------------------------------------------------
-// Public service API – Start/Stop
-//---------------------------------------------------------------------
-
-func (sc *SynnergyConsensus) Start(ctx context.Context) {
-	go sc.subBlockLoop(ctx)
-	go sc.blockLoop(ctx)
-	sub, unsub := sc.p2p.Subscribe("posvote")
-	go func() {
-		defer unsub()
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case m := <-sub:
-				sc.handlePoSVote(m)
-			}
-		}
-	}()
-	sc.logger.Println("consensus started")
-}
-
-//---------------------------------------------------------------------
 // Sub‑block proposer loop (PoH + immediate PoS self‑sign)
 //---------------------------------------------------------------------
 
