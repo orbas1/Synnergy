@@ -10,7 +10,7 @@ contract TokenMinter {
     /// @param recipient Destination address that receives the minted amount
     /// @param amount Number of tokens to mint
     function mint(uint32 tokenId, address recipient, uint64 amount) external {
-        bytes4 opcode = 0x1C001A; // MintToken_VM
+        bytes4 opcode = bytes4(0x001C001A); // MintToken_VM
         assembly {
             // Layout: [tokenId(32)][recipient(32)][amount(32)]
             mstore(0x0, tokenId)
