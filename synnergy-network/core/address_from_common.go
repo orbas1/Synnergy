@@ -1,3 +1,6 @@
+//go:build !tokens
+// +build !tokens
+
 package core
 
 import "github.com/ethereum/go-ethereum/common"

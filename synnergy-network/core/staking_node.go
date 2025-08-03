@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	nodes "synnergy-network/core/Nodes"
+	Nodes "synnergy-network/core/Nodes"
 )
 
 // StakingNode combines networking with staking management for PoS consensus.
@@ -52,12 +52,12 @@ func (s *StakingNode) Stop() error {
 }
 
 // Stake locks tokens via the staking manager.
-func (s *StakingNode) Stake(addr nodes.Address, amount uint64) error {
+func (s *StakingNode) Stake(addr Nodes.Address, amount uint64) error {
 	return s.stake.Stake(Address(addr), amount)
 }
 
 // Unstake releases previously locked tokens.
-func (s *StakingNode) Unstake(addr nodes.Address, amount uint64) error {
+func (s *StakingNode) Unstake(addr Nodes.Address, amount uint64) error {
 	return s.stake.Unstake(Address(addr), amount)
 }
 

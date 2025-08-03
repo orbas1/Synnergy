@@ -149,6 +149,7 @@ func (as *AuthoritySet) RegisterCandidate(addr Address, role AuthorityRole, wall
 		as.logger.Printf("authority candidate %s registered for role %s", addr.Short(), role)
 	}
 	return nil
+
 }
 
 //---------------------------------------------------------------------
