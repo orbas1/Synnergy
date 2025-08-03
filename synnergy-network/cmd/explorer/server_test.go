@@ -56,6 +56,16 @@ func TestHandleBlocksInvalidCount(t *testing.T) {
 	}
 }
 
+func TestHandleBlocksCountTooLarge(t *testing.T) {
+	srv := newTestServer()
+	req := httptest.NewRequest(http.MethodGet, "/api/blocks?count=200", nil)
+	rr := httptest.NewRecorder()
+	srv.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", rr.Code)
+	}
+}
+
 func TestHandleBlockInvalidHeight(t *testing.T) {
 	srv := newTestServer()
 	req := httptest.NewRequest(http.MethodGet, "/api/blocks/18446744073709551616", nil)
@@ -137,6 +147,16 @@ func TestHandleTxSuccess(t *testing.T) {
 	srv.router.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected 200, got %d", rr.Code)
+	}
+}
+
+func TestHandleTxInvalidHex(t *testing.T) {
+	srv := newTestServer()
+	req := httptest.NewRequest(http.MethodGet, "/api/tx/zz", nil)
+	rr := httptest.NewRecorder()
+	srv.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusBadRequest {
+		t.Fatalf("expected 400, got %d", rr.Code)
 	}
 }
 
