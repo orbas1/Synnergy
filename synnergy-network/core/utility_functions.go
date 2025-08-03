@@ -56,6 +56,16 @@ func (s *Stack) Pop() *big.Int {
 	return val
 }
 
+// Push appends a value onto the stack. The stack stores only *big.Int values.
+// A nil value is considered a programming error and will panic to surface
+// bugs during development and testing.
+func (s *Stack) Push(v *big.Int) {
+	if v == nil {
+		panic("nil stack push")
+	}
+	s.data = append(s.data, v)
+}
+
 // Constants for 256-bit modular arithmetic.
 var (
 	two256  = new(big.Int).Lsh(big.NewInt(1), 256)
