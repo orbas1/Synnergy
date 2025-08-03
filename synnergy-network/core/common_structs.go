@@ -76,7 +76,15 @@ type edge struct {
 //---------------------------------------------------------------------
 
 type AuthorityNode struct {
-	Addr        Address       `json:"addr"`
+	Addr Address `json:"addr"`
+	// Wallet holds the payment address associated with the authority
+	// node. It may differ from the node's network address and is used
+	// when distributing fees or processing on-chain payments.
+	Wallet Address `json:"wallet"`
+	// JobKey is a randomly generated 32-byte secret released to the
+	// authority once their candidacy is accepted. It unlocks encrypted
+	// job assignments pushed to the node for governance actions.
+	JobKey      []byte        `json:"job_key"`
 	Role        AuthorityRole `json:"role"`
 	Active      bool          `json:"active"`
 	PublicVotes uint32        `json:"pv"`

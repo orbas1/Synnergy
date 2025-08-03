@@ -130,16 +130,28 @@ func hashFromAddress(addr Address) Hash {
 // RegisterCandidate – owner submits node for role.
 //---------------------------------------------------------------------
 
-func (as *AuthoritySet) RegisterCandidate(addr Address, role AuthorityRole) error {
+// RegisterCandidate registers a new authority node and attaches a wallet
+// address used for rewards or fee distribution. All authority nodes must
+// provide a non-zero wallet so payouts can be directed appropriately.
+func (as *AuthoritySet) RegisterCandidate(addr Address, role AuthorityRole, wallet Address) error {
 	if role < GovernmentNode || role > LargeCommerceNode {
 		return errors.New("invalid role")
 	}
 	if exists, _ := as.led.HasState(nodeKey(addr)); exists {
 		return errors.New("already registered")
 	}
-	n := AuthorityNode{Addr: addr, Role: role, CreatedAt: time.Now().Unix()}
+	if wallet == AddressZero {
+		return errors.New("wallet required")
+	}
+	key := make([]byte, 32)
+	if _, err := crand.Read(key); err != nil {
+		return err
+	}
+	n := AuthorityNode{Addr: addr, Wallet: wallet, JobKey: key, Role: role, CreatedAt: time.Now().Unix()}
 	as.led.SetState(nodeKey(addr), mustJSON(n))
-	as.logger.Printf("authority candidate %s registered for role %s", addr.Short(), role)
+	if as.logger != nil {
+		as.logger.Printf("authority candidate %s registered for role %s", addr.Short(), role)
+	}
 	return nil
 }
 

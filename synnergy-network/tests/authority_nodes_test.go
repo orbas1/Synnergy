@@ -66,17 +66,17 @@ func TestRegisterCandidate(t *testing.T) {
 	as := NewAuthoritySet(nil, led)
 	addr := Address{0x01}
 
-	err := as.RegisterCandidate(addr, GovernmentNode)
+	err := as.RegisterCandidate(addr, GovernmentNode, addr)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	err = as.RegisterCandidate(addr, GovernmentNode)
+	err = as.RegisterCandidate(addr, GovernmentNode, addr)
 	if err == nil {
 		t.Fatal("expected error on duplicate registration")
 	}
 
-	err = as.RegisterCandidate(Address{0x02}, AuthorityRole(99))
+	err = as.RegisterCandidate(Address{0x02}, AuthorityRole(99), Address{0x02})
 	if err == nil {
 		t.Fatal("expected error on invalid role")
 	}
