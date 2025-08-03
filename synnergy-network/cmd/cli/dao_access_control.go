@@ -29,7 +29,10 @@ func initDAOMiddleware(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-var daoCmd = &cobra.Command{
+// daoAccessCmd groups subcommands for DAO access control operations. A unique
+// variable name is used to avoid colliding with the "daoCmd" defined in
+// dao.go, which represents a different command in the CLI package.
+var daoAccessCmd = &cobra.Command{
 	Use:               "dao_access",
 	Short:             "Manage DAO access control",
 	PersistentPreRunE: initDAOMiddleware,
@@ -89,7 +92,8 @@ var daoRoleCmd = &cobra.Command{
 	},
 }
 
-var daoListCmd = &cobra.Command{
+// daoAccessListCmd lists current DAO members and their roles.
+var daoAccessListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List DAO members",
 	Args:  cobra.NoArgs,
@@ -106,8 +110,8 @@ var daoListCmd = &cobra.Command{
 }
 
 func init() {
-	daoCmd.AddCommand(daoAddCmd, daoRemoveCmd, daoRoleCmd, daoListCmd)
+	daoAccessCmd.AddCommand(daoAddCmd, daoRemoveCmd, daoRoleCmd, daoAccessListCmd)
 }
 
 // DAOAccessCmd is the exported command for index.go
-var DAOAccessCmd = daoCmd
+var DAOAccessCmd = daoAccessCmd
