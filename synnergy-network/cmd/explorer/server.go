@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -19,7 +22,13 @@ type Server struct {
 func NewServer(addr string, svc ExplorerService) *Server {
 	s := &Server{router: mux.NewRouter(), service: svc}
 	s.routes()
-	s.httpServer = &http.Server{Addr: addr, Handler: s.router}
+	s.httpServer = &http.Server{
+		Addr:         addr,
+		Handler:      s.router,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
 	return s
 }
 
@@ -45,6 +54,10 @@ func (s *Server) handleBlocks(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "invalid count", http.StatusBadRequest)
 			return
 		}
+		if n > 100 {
+			http.Error(w, "count too large", http.StatusBadRequest)
+			return
+		}
 		count = n
 	}
 	writeJSON(w, s.service.LatestBlocks(count))
@@ -68,6 +81,10 @@ func (s *Server) handleBlock(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) handleTx(w http.ResponseWriter, r *http.Request) {
 	idHex := mux.Vars(r)["id"]
+	if _, err := hex.DecodeString(idHex); err != nil {
+		http.Error(w, "invalid tx id", http.StatusBadRequest)
+		return
+	}
 	tx, err := s.service.TxByID(idHex)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
@@ -78,6 +95,11 @@ func (s *Server) handleTx(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) handleBalance(w http.ResponseWriter, r *http.Request) {
 	addr := mux.Vars(r)["addr"]
+	addr = strings.TrimPrefix(addr, "0x")
+	if _, err := hex.DecodeString(addr); err != nil {
+		http.Error(w, "invalid address", http.StatusBadRequest)
+		return
+	}
 	bal, err := s.service.Balance(addr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
