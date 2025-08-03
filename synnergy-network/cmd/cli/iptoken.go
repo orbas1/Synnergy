@@ -13,9 +13,8 @@ import (
 )
 
 var (
-	iptokOnce   sync.Once
-	iptokLedger *core.Ledger
-	iptokErr    error
+	iptokOnce sync.Once
+	iptokErr  error
 )
 
 func iptokInit(cmd *cobra.Command, _ []string) error {
@@ -26,7 +25,7 @@ func iptokInit(cmd *cobra.Command, _ []string) error {
 			iptokErr = fmt.Errorf("LEDGER_PATH not set")
 			return
 		}
-		iptokLedger, iptokErr = core.OpenLedger(path)
+		iptokErr = core.InitLedger(path)
 	})
 	return iptokErr
 }
