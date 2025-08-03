@@ -3,7 +3,7 @@ package utils
 import (
 	"os"
 	"strconv"
-
+	"sync"
 )
 
 // envCache stores previously fetched non-empty environment variable values so
