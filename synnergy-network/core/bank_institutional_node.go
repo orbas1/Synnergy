@@ -91,7 +91,7 @@ func (n *BankInstitutionalNode) ComplianceReport() ([]byte, error) {
 
 // ConnectFinancialNetwork simulates establishing secure connections to legacy systems.
 func (n *BankInstitutionalNode) ConnectFinancialNetwork(endpoint string) error {
-	log.Printf("connecting to financial endpoint %s", endpoint)
+	log.Printf("[BANK NODE] connecting to financial endpoint %s", endpoint)
 	return nil
 }
 
