@@ -466,3 +466,66 @@ synnergy-network/core/zkp_node.go:56:71: cannot use z.node.Subscribe(t) (value o
 synnergy-network/core/zkp_node.go:109:18: tx.IDHex undefined (type *Transaction has no field or method IDHex)
 synnergy-network/core/network.go:7:2: "errors" imported and not used
 ```
+
+## 20-Stage Fix Plan
+
+1. **Ledger missing `Call` method**
+   Implement `Call` on `Ledger` so it satisfies the `StateRW` interface used in `staking_node.go` and `validator_node.go`.
+
+2. **Undefined `Nodes` identifier**
+   Declare or import the missing `Nodes` symbol referenced in `staking_node.go`.
+
+3. **Create `AddressZero` constant**
+   Define a global `AddressZero` constant for token modules.
+
+4. **Replace hard-coded zero addresses with `AddressZero`**
+   Update all token files (`syn1155.go`, `syn2100.go`, `syn3500_token.go`, `syn5000.go`, `token_syn600.go`, `tokens_syn900.go`) to use the new constant.
+
+5. **`DataMarketplaceToken` lacks `lock` field**
+   Add the missing `lock` (e.g., a mutex) to `DataMarketplaceToken` and adjust all `d.lock` usages in `syn2400.go`.
+
+6. **`TxPool` missing `Snapshot` method**
+   Implement `Snapshot` on `TxPool` to satisfy `system_health_logging.go`.
+
+7. **Missing argument for `NewFlatGasCalculator`**
+   Pass the required `uint64` parameter in `time_locked_node.go`.
+
+8. **Undefined `TxPayment`**
+   Declare or import the `TxPayment` type used in `wallet_management.go`.
+
+9. **Missing `FromCommon` in `transaction_distribution.go`**
+   Implement or import `FromCommon` for the distribution logic.
+
+10. **Missing `FromCommon` in `transactionreversal.go`**
+    Implement or import `FromCommon` for the reversal logic.
+
+11. **Missing `TxReversal` type**
+    Define `TxReversal` for use in `transactionreversal.go`.
+
+12. **`Stack` type lacks `Push` method**
+    Add a `Push` method to the `Stack` structure.
+
+13. **Update `utility_functions.go` to use `Stack.Push`**
+    Replace all failing `ctx.Stack.Push` calls with the new method.
+
+14. **Undefined `NewConsensus` function**
+    Provide the consensus constructor referenced in `validator_node.go`.
+
+15. **`SynnergyConsensus` lacks `Start` method**
+    Implement `Start` on `SynnergyConsensus`.
+
+16. **Consensus pool missing `ValidateTx`**
+    Add `ValidateTx` to the pool interface/implementation used by `validator_node.go`.
+
+17. **`SynnergyConsensus` lacks `ProposeSubBlock`**
+    Implement `ProposeSubBlock` method.
+
+18. **Channel type mismatch in `zkp_node.go`**
+    Adjust `z.node.Subscribe` so its return type matches `<-chan []byte`.
+
+19. **Missing `Transaction.IDHex`**
+    Implement `IDHex` on the `Transaction` type referenced in `zkp_node.go`.
+
+20. **Unused import in `network.go`**
+    Remove the unused `"errors"` import to satisfy Go’s compiler.
+
