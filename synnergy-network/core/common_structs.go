@@ -618,8 +618,8 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
-// TxType categorises transaction kinds. It mirrors the definition in
-// transactions.go but is repeated here to avoid build tag dependencies.
+// TxType categorises the different kinds of transactions supported by the
+// network.
 type TxType uint8
 
 const (

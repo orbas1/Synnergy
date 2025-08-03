@@ -300,14 +300,6 @@ func (tp *TxPool) Run(ctx context.Context) {
 // interfaces & stubs just to make the file compile
 // -----------------------------------------------------------------------------
 
-type TxType uint8
-
-const (
-	TxPayment TxType = iota + 1
-	TxContractCall
-	TxReversal
-)
-
 func (a *AuthoritySet) ActiveAddresses() []Address { return nil }
 
 // -----------------------------------------------------------------------------
