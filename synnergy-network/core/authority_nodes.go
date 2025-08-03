@@ -21,6 +21,19 @@ import (
 	"time"
 )
 
+// shuffleAddresses randomly permutes addresses using cryptographic randomness.
+func shuffleAddresses(addrs []Address) error {
+	for i := len(addrs) - 1; i > 0; i-- {
+		jBig, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(jBig.Int64())
+		addrs[i], addrs[j] = addrs[j], addrs[i]
+	}
+	return nil
+}
+
 //---------------------------------------------------------------------
 // Role enum & admission rules
 //---------------------------------------------------------------------
