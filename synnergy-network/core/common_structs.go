@@ -622,9 +622,22 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
-// TxType enumerates high‑level transaction categories.  Its concrete
-// definition and associated constants (e.g. TxPayment, TxReversal) reside in
-// tx_types.go to keep this file's scope limited to structural declarations.
+
+// TxType categorises transaction kinds. It mirrors the definition in
+// transactions.go but is repeated here to avoid build tag dependencies.
+type TxType uint8
+
+const (
+	// TxPayment transfers value between addresses.
+	TxPayment TxType = iota + 1
+	// TxContractCall executes a smart contract.
+	TxContractCall
+	// TxReversal denotes a reversal of a previous transaction. It requires
+	// multiple authority co‑signatures and refunds the original sender minus
+	// a protocol‑defined fee.
+	TxReversal
+)
+
 
 type Transaction struct {
 	// core fields
@@ -858,8 +871,9 @@ type Stack struct {
 	data []*big.Int
 }
 
-// Push adds a *big.Int value onto the stack. A nil value will panic to avoid
-// ambiguous entries which could mask programming errors during VM execution.
+// Push appends a 256-bit word onto the stack. Pushing a nil value would
+// introduce ambiguity into VM execution, so it intentionally panics to surface
+// programmer errors early.
 func (s *Stack) Push(v *big.Int) {
 	if v == nil {
 		panic("nil value pushed to stack")
@@ -867,20 +881,15 @@ func (s *Stack) Push(v *big.Int) {
 	s.data = append(s.data, v)
 }
 
-// Pop removes and returns the most recently pushed *big.Int. It panics on an
-// empty stack or if the stored value is not a *big.Int, ensuring the VM stack
-// remains type-safe.
+// Pop removes and returns the most recently pushed 256-bit word. It panics if
+// the stack is empty, mirroring EVM-style stack semantics.
 func (s *Stack) Pop() *big.Int {
 	if len(s.data) == 0 {
 		panic("stack underflow")
 	}
 	idx := len(s.data) - 1
-	raw := s.data[idx]
+	val := s.data[idx]
 	s.data = s.data[:idx]
-	val, ok := raw.(*big.Int)
-	if !ok {
-		panic("stack element is not *big.Int")
-	}
 	return val
 }
 
