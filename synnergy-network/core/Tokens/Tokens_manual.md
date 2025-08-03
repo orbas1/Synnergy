@@ -58,7 +58,7 @@ only rely on the shared types and interfaces defined within this
 package.  This consolidation simplifies maintenance and ensures that new
 tokens automatically integrate with existing network tooling.
 
-## CLI Integra<<<<<<< codex/focus-on-stage-8-in-agents.mdtion
+## CLI Integration
 
 The `tokens` command in the CLI provides a uniform interface to inspect
 and administer any registered token.  It supports listing tokens,
