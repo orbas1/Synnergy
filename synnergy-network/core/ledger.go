@@ -836,6 +836,9 @@ func (l *Ledger) Call(from, to Address, input []byte, value *big.Int, gas uint64
 	if l == nil {
 		return nil, fmt.Errorf("ledger is nil")
 	}
+	if value == nil {
+		value = big.NewInt(0)
+	}
 
 	l.mu.RLock()
 	c, ok := l.Contracts[to.String()]

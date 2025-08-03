@@ -622,6 +622,22 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
+// TxType categorises transaction kinds. It mirrors the definition in
+// transactions.go but is repeated here to avoid build tag dependencies.
+type TxType uint8
+
+const (
+	// TxPayment transfers value between addresses.
+	TxPayment TxType = iota + 1
+	// TxContractCall executes a smart contract.
+	TxContractCall
+	// TxReversal denotes a reversal of a previous transaction. It requires
+	// multiple authority co‑signatures and refunds the original sender minus
+	// a protocol‑defined fee.
+	TxReversal
+)
+
+
 type Transaction struct {
 	// core fields
 	Type             TxType            `json:"type"`
@@ -652,18 +668,19 @@ func (tx *Transaction) HashTx() Hash {
 	return sha256.Sum256(b)
 }
 
-// IDHex returns the transaction hash as a hex string.
-// If the hash is zero (e.g. not yet computed), it will be generated
-// using HashTx and stored on the Transaction before encoding.
-// A nil receiver results in an empty string.
+// IDHex returns the transaction hash as a hex string. If the hash has not yet
+// been computed, it derives it from the transaction contents to ensure a
+// stable identifier.
 func (tx *Transaction) IDHex() string {
 	if tx == nil {
 		return ""
 	}
-	if tx.Hash == (Hash{}) {
-		tx.Hash = tx.HashTx()
+
+	h := tx.Hash
+	if h == (Hash{}) {
+		h = tx.HashTx()
 	}
-	return hex.EncodeToString(tx.Hash[:])
+	return hex.EncodeToString(h[:])
 }
 
 type TxInput struct {
@@ -697,6 +714,10 @@ type HDWallet struct {
 
 // Address represents a 20‑byte account identifier.
 type Address [20]byte
+
+// AddressZero represents the zero-value address (all bytes zero).
+// It is used as a sentinel in token and ledger operations.
+var AddressZero = Address{}
 
 // Hash represents a 32‑byte cryptographic hash.
 type Hash [32]byte
@@ -851,6 +872,32 @@ type TxContext struct {
 // throughout VM execution.
 type Stack struct {
 	data []*big.Int
+}
+
+// Push adds a *big.Int value onto the stack. A nil value will panic to avoid
+// ambiguous entries which could mask programming errors during VM execution.
+func (s *Stack) Push(v *big.Int) {
+	if v == nil {
+		panic("nil value pushed to stack")
+	}
+	s.data = append(s.data, v)
+}
+
+// Pop removes and returns the most recently pushed *big.Int. It panics on an
+// empty stack or if the stored value is not a *big.Int, ensuring the VM stack
+// remains type-safe.
+func (s *Stack) Pop() *big.Int {
+	if len(s.data) == 0 {
+		panic("stack underflow")
+	}
+	idx := len(s.data) - 1
+	raw := s.data[idx]
+	s.data = s.data[:idx]
+	val, ok := raw.(*big.Int)
+	if !ok {
+		panic("stack element is not *big.Int")
+	}
+	return val
 }
 
 // Context is an alias used throughout the codebase for TxContext.

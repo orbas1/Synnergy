@@ -32,6 +32,7 @@ func BytesToAddress(b []byte) Address {
 	return a
 }
 
+
 // Push adds a *big.Int value onto the top of the stack.
 // It panics if a nil value is provided to prevent ambiguous stack entries.
 func (s *Stack) Push(v *big.Int) {

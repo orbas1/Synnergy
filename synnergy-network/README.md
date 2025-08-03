@@ -25,6 +25,25 @@ implemented incrementally.
 - **Extensive GUI suite** – wallet, explorers and marketplaces provide rich web
   interfaces backed by REST services.
 
+## Role-based Financial Controls
+
+- Authority nodes register with dedicated wallets and receive unique job keys
+  for decrypting randomly assigned governance tasks.
+- LoanPool grants distribute 5% of each payout to five selected authority
+  wallets. Proposals require concurrent approval from authority and public
+  voters to pass.
+- ID tokens remain inactive until validated by an authority node, preventing
+  double voting across governance systems.
+- Only **Central Bank** nodes may deploy the SYN‑10/11/12 token standards.
+- Regulated instruments such as ETFs, bonds and real‑estate tokens may only be
+  issued by Government, Regulator, Creditor Bank or Central Bank nodes. Bill
+  tokens are limited to creditor nodes while benefit tokens are exclusive to the
+  government.
+- Monetary and fiscal controls on SYN‑10/11/12 tokens are reserved for the
+  government role and cannot be applied elsewhere.
+- Regulator nodes can initiate security upgrades but final activation requires a
+  community vote for decentralised acceptance.
+
 ## Directory Layout
 
 The repository is organised as follows:

@@ -170,7 +170,7 @@ func (ap *AuthorityApplier) FinalizeApplication(id Hash) error {
 	}
 	total := int(app.VotesFor + app.VotesAgainst)
 	if total >= rule.Quorum && int(app.VotesFor)*100/total >= rule.Majority {
-		if err := ap.auth.RegisterCandidate(app.Candidate, app.Role); err != nil {
+		if err := ap.auth.RegisterCandidate(app.Candidate, app.Role, app.Candidate); err != nil {
 			return err
 		}
 		app.Status = AuthApproved

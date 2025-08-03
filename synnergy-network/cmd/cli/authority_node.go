@@ -56,13 +56,14 @@ func ensureAuthInitialised(cmd *cobra.Command, _ []string) error {
 
 type AuthController struct{}
 
-// RegisterCandidate wraps AuthoritySet.RegisterCandidate
+// RegisterCandidate wraps AuthoritySet.RegisterCandidate. The wallet defaults to
+// the node's address when invoked via the CLI.
 func (c *AuthController) RegisterCandidate(addr core.Address, roleStr string) error {
 	role, err := parseRole(roleStr)
 	if err != nil {
 		return err
 	}
-	return authSet.RegisterCandidate(addr, role)
+	return authSet.RegisterCandidate(addr, role, addr)
 }
 
 // RecordVote wraps AuthoritySet.RecordVote

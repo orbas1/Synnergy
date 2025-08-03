@@ -130,31 +130,26 @@ func hashFromAddress(addr Address) Hash {
 // RegisterCandidate – owner submits node for role.
 //---------------------------------------------------------------------
 
-// RegisterCandidate registers a new authority node using the same address for
-// both node identity and wallet. It is kept for backwards compatibility. New
-// code should call RegisterCandidateWithWallet to explicitly set the wallet.
-func (as *AuthoritySet) RegisterCandidate(addr Address, role AuthorityRole) error {
-        return as.RegisterCandidateWithWallet(addr, role, addr)
-}
+// RegisterCandidate registers a new authority node and attaches a wallet
+// address used for rewards or fee distribution. All authority nodes must
+// provide a non-zero wallet so payouts can be directed appropriately.
+func (as *AuthoritySet) RegisterCandidate(addr Address, role AuthorityRole, wallet Address) error {
+	if role < GovernmentNode || role > LargeCommerceNode {
+		return errors.New("invalid role")
+	}
+	if exists, _ := as.led.HasState(nodeKey(addr)); exists {
+		return errors.New("already registered")
+	}
+	if wallet == AddressZero {
+		return errors.New("wallet required")
+	}
+	n := AuthorityNode{Addr: addr, Wallet: wallet, Role: role, CreatedAt: time.Now().Unix()}
+	as.led.SetState(nodeKey(addr), mustJSON(n))
+	if as.logger != nil {
+		as.logger.Printf("authority candidate %s registered for role %s", addr.Short(), role)
+	}
+	return nil
 
-// RegisterCandidateWithWallet registers a new authority node and attaches a
-// wallet address used for rewards or fee distribution.
-func (as *AuthoritySet) RegisterCandidateWithWallet(addr Address, role AuthorityRole, wallet Address) error {
-        if role < GovernmentNode || role > LargeCommerceNode {
-                return errors.New("invalid role")
-        }
-        if exists, _ := as.led.HasState(nodeKey(addr)); exists {
-                return errors.New("already registered")
-        }
-        if wallet == AddressZero {
-                return errors.New("wallet required")
-        }
-        n := AuthorityNode{Addr: addr, Wallet: wallet, Role: role, CreatedAt: time.Now().Unix()}
-        as.led.SetState(nodeKey(addr), mustJSON(n))
-        if as.logger != nil {
-                as.logger.Printf("authority candidate %s registered for role %s", addr.Short(), role)
-        }
-        return nil
 }
 
 //---------------------------------------------------------------------

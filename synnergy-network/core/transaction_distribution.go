@@ -88,6 +88,7 @@ func (d *TxDistributor) DistributeFees(from Address, minerPk []byte, fee uint64)
 		return fmt.Errorf("decode miner: %w", err)
 	}
 
+
 	// Compute fixed percentage shares first to minimise rounding loss and
 	// avoid overflow by dividing before multiplying.
 	onePercent := fee / 100
@@ -108,6 +109,7 @@ func (d *TxDistributor) DistributeFees(from Address, minerPk []byte, fee uint64)
 	minerShare := remaining * 50 / totalWeight
 	posShare := remaining * 39 / totalWeight
 	pohShare := remaining - minerShare - posShare
+
 
 	d.mu.Lock()
 	defer d.mu.Unlock()
