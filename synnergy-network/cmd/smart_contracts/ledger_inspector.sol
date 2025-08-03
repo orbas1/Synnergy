@@ -4,24 +4,26 @@ pragma solidity ^0.8.20;
 /// @title LedgerInspector showcases additional Synnergy opcodes
 ///        allowing contracts to query ledger state.
 contract LedgerInspector {
-    bytes3 private constant LAST_HASH = hex"0E0003";  // LastBlockHash
-    bytes3 private constant BALANCE   = hex"0E0012";  // Ledger_BalanceOf
+    // Addresses of custom Synnergy VM opcodes
+    uint256 private constant LAST_HASH = 0x0E0003;  // LastBlockHash
+    uint256 private constant BALANCE   = 0x0E0012;  // Ledger_BalanceOf
 
-    /// Returns the hash of the latest block recorded by the ledger
-    function lastBlockHash() public returns (bytes32 hash) {
+    /// @notice Returns the hash of the latest block recorded by the ledger
+    /// @return hash Latest block hash
+    function lastBlockHash() external view returns (bytes32 hash) {
         assembly {
-            let success := call(gas(), 0, LAST_HASH, 0, 0, 0, 32)
-            if iszero(success) { revert(0, 0) }
+            if iszero(staticcall(gas(), LAST_HASH, 0, 0, 0, 32)) { revert(0, 0) }
             hash := mload(0)
         }
     }
 
-    /// Returns the SYNN token balance of an address
-    function balanceOf(bytes20 addr) public returns (uint64 bal) {
+    /// @notice Returns the SYNN token balance of an address
+    /// @param addr Address to query
+    /// @return bal Token balance
+    function balanceOf(address addr) external view returns (uint64 bal) {
         assembly {
             mstore(0, addr)
-            let success := call(gas(), 0, BALANCE, 0, 20, 0, 32)
-            if iszero(success) { revert(0, 0) }
+            if iszero(staticcall(gas(), BALANCE, 0, 20, 0, 32)) { revert(0, 0) }
             bal := mload(0)
         }
     }
