@@ -21,7 +21,7 @@ type SYN3500Token struct {
 
 // NewSYN3500Token creates and registers a new currency token instance.
 func NewSYN3500Token(meta Metadata, code, issuer string, rate float64, ledger *Ledger, gas GasCalculator) *SYN3500Token {
-	tok, _ := (Factory{}).Create(meta, map[Address]uint64{})
+	tok, _ := (Factory{}).Create(meta, map[Address]uint64{AddressZero: 0})
 	bt := tok.(*BaseToken)
 	bt.ledger = ledger
 	bt.gas = gas
