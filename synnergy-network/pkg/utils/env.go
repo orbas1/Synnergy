@@ -3,7 +3,7 @@ package utils
 import (
 	"os"
 	"strconv"
-
+	"sync"
 )
 
 // envCache stores previously fetched non-empty environment variable values so
@@ -32,7 +32,7 @@ func clearEnvCache(key string) {
 // EnvOrDefault returns the value of the environment variable identified by key
 // or the provided fallback if the variable is unset or empty.
 func EnvOrDefault(key, fallback string) string {
-	if v, ok := os.LookupEnv(key); ok && v != "" {
+	if v, ok := getEnv(key); ok {
 		return v
 	}
 	return fallback
@@ -42,7 +42,7 @@ func EnvOrDefault(key, fallback string) string {
 // identified by key or the provided fallback if the variable is unset,
 // empty, or cannot be parsed as an integer.
 func EnvOrDefaultInt(key string, fallback int) int {
-	if v, ok := os.LookupEnv(key); ok && v != "" {
+	if v, ok := getEnv(key); ok {
 		if n, err := strconv.Atoi(v); err == nil {
 			return n
 		}
@@ -54,7 +54,7 @@ func EnvOrDefaultInt(key string, fallback int) int {
 // identified by key or the provided fallback if the variable is unset,
 // empty, or cannot be parsed as a uint64.
 func EnvOrDefaultUint64(key string, fallback uint64) uint64 {
-	if v, ok := os.LookupEnv(key); ok && v != "" {
+	if v, ok := getEnv(key); ok {
 		if n, err := strconv.ParseUint(v, 10, 64); err == nil {
 			return n
 		}
