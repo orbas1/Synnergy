@@ -72,7 +72,7 @@ func newHC(interval time.Duration, p Pinger, c ViewChanger, peers []Address) *He
 // tests
 //------------------------------------------------------------
 
-func TestHealthChecker_TickScenarios(t *testing.T) {
+func TestHealthCheckerTickScenarios(t *testing.T) {
 	peer := Address{0xAA}
 
 	cases := []struct {
@@ -133,7 +133,7 @@ func TestHealthChecker_TickScenarios(t *testing.T) {
 	}
 }
 
-func TestHealthChecker_Snapshot_Reconfigure(t *testing.T) {
+func TestHealthCheckerSnapshotReconfigure(t *testing.T) {
 	p1 := Address{0x01}
 	p2 := Address{0x02}
 

@@ -41,7 +41,7 @@ func (d *dummyVM) RegisterSyscall(op byte, fn interface{}) {
 }
 
 // Test newDiskLRU put/get and eviction behavior
-func TestDiskLRU_PutGetEvict(t *testing.T) {
+func TestDiskLRUPutGetEvict(t *testing.T) {
 	dir := t.TempDir()
 	lru, err := newDiskLRU(dir, 2)
 	if err != nil {
@@ -75,7 +75,7 @@ func TestDiskLRU_PutGetEvict(t *testing.T) {
 }
 
 // Test NewStorage validation and endpoints
-func TestNewStorage_InvalidConfig(t *testing.T) {
+func TestNewStorageInvalidConfig(t *testing.T) {
 	_, err := NewStorage(nil, logrus.New(), nil)
 	if err == nil {
 		t.Fatalf("expected error for nil config")
@@ -83,7 +83,7 @@ func TestNewStorage_InvalidConfig(t *testing.T) {
 }
 
 // Test Pin success, gateway error, cid mismatch, cache hit
-func TestStorage_Pin_Retrieve(t *testing.T) {
+func TestStoragePinRetrieve(t *testing.T) {
 	// sample data
 	data := []byte("hello world")
 	// start test server
@@ -178,7 +178,7 @@ func TestRegisterVMOpcode(t *testing.T) {
 }
 
 // Test listing create and retrieval helpers
-func TestStorage_Listings(t *testing.T) {
+func TestStorageListings(t *testing.T) {
 	appStore = &InMemoryStore{data: make(map[string][]byte)}
 	prov := addrWithByte(0x01)
 	_ = appStore.Set([]byte(fmt.Sprintf("identity:provider:%x", prov)), []byte{1})

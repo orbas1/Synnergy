@@ -135,7 +135,7 @@ func addrWithByte(b byte) Address {
 // Tests
 //------------------------------------------------------------
 
-func TestShardOfAddr_Deterministic(t *testing.T) {
+func TestShardOfAddrDeterministic(t *testing.T) {
 	a := addrWithByte(0xAA)
 	id1 := shardOfAddr(a)
 	id2 := shardOfAddr(a)
@@ -144,7 +144,7 @@ func TestShardOfAddr_Deterministic(t *testing.T) {
 	}
 }
 
-func TestSubmitCrossShard_And_Pull(t *testing.T) {
+func TestSubmitCrossShardAndPull(t *testing.T) {
 	led := newShardMem()
 	bc := shardStubBC{}
 	sc := NewShardCoordinator(led, Broadcaster{}) // use empty broadcaster – we will call stub manually
