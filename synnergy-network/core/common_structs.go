@@ -832,9 +832,12 @@ type TxContext struct {
 	State       StateRW
 }
 
-// Stack is a minimal placeholder for the VM stack structure.
+// Stack is a minimal placeholder for the VM stack structure. It stores
+// 256-bit words as *big.Int values in a simple slice-backed stack.
+// Using a concrete type avoids interface overhead and ensures type safety
+// throughout VM execution.
 type Stack struct {
-	data []interface{}
+	data []*big.Int
 }
 
 // Context is an alias used throughout the codebase for TxContext.
