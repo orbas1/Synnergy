@@ -38,7 +38,9 @@ func poolsHandler(w http.ResponseWriter, _ *http.Request) {
 		out = append(out, pv)
 	}
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(out)
+	if err := json.NewEncoder(w).Encode(out); err != nil {
+		http.Error(w, "failed to encode response", http.StatusInternalServerError)
+	}
 }
 
 func main() {
