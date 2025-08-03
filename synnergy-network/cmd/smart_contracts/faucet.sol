@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 /// @title Faucet Contract
@@ -7,6 +8,9 @@ contract Faucet {
     uint256 public cooldown;
     mapping(address => uint256) public nextRequestTime;
 
+    // Precompile for token transfers
+    uint256 constant TOKENS_TRANSFER = 0x190004;
+
     constructor(uint64 _dripAmount, uint256 _cooldown) {
         dripAmount = _dripAmount;
         cooldown = _cooldown;
@@ -14,14 +18,14 @@ contract Faucet {
 
     /// Deposit tokens into the faucet for distribution.
     function deposit(uint32 tokenId, uint64 amount) external {
-        bytes4 op = 0x190004; // Tokens_Transfer
         address fa = address(this);
         assembly {
-            mstore(0x0, tokenId)
-            mstore(0x20, caller())
-            mstore(0x40, fa)
-            mstore(0x60, amount)
-            if iszero(call(gas(), 0, op, 0x0, 0x80, 0, 0)) { revert(0,0) }
+            let ptr := mload(0x40)
+            mstore(ptr, tokenId)
+            mstore(add(ptr, 0x20), caller())
+            mstore(add(ptr, 0x40), fa)
+            mstore(add(ptr, 0x60), amount)
+            if iszero(call(gas(), TOKENS_TRANSFER, 0, ptr, 0x80, 0, 0)) { revert(0,0) }
         }
     }
 
@@ -30,15 +34,15 @@ contract Faucet {
         require(block.timestamp >= nextRequestTime[msg.sender], "cooldown");
         nextRequestTime[msg.sender] = block.timestamp + cooldown;
 
-        bytes4 op = 0x190004; // Tokens_Transfer
         address fa = address(this);
         uint64 amount = dripAmount;
         assembly {
-            mstore(0x0, tokenId)
-            mstore(0x20, fa)
-            mstore(0x40, caller())
-            mstore(0x60, amount)
-            if iszero(call(gas(), 0, op, 0x0, 0x80, 0, 0)) { revert(0,0) }
+            let ptr := mload(0x40)
+            mstore(ptr, tokenId)
+            mstore(add(ptr, 0x20), fa)
+            mstore(add(ptr, 0x40), caller())
+            mstore(add(ptr, 0x60), amount)
+            if iszero(call(gas(), TOKENS_TRANSFER, 0, ptr, 0x80, 0, 0)) { revert(0,0) }
         }
     }
 }
