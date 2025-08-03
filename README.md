@@ -125,6 +125,14 @@ Web front‑ends are provided under `GUI/`. Each directory contains a standalone
 
 Example contracts demonstrating Synnergy's opcode catalogue are located throughout `smart_contract_guide.md` and under various GUI directories. They illustrate token faucets, storage markets, DAO governance and more. Contracts are compiled to WebAssembly and deployed via the CLI. See [`synnergy-network/smart_contract_guide.md`](synnergy-network/smart_contract_guide.md) for a step‑by‑step tutorial.
 
+## Opcode Tooling and Plugins
+
+Run `go run ./cmd/opcode-lint` to verify that the opcode catalogue remains free of collisions. The linter imports the dispatcher and fails on duplicate names or values.
+
+External teams can extend the opcode set without modifying core files by implementing the `core.OpcodeModule` interface and loading it via `core.RegisterModule`. Modules receive a registrar callback for wiring new handlers, enabling a lightweight plugin model.
+
+Gas prices may be adjusted at runtime using `core.UpdateGasCost`, allowing governance or off-chain configuration to tune fees dynamically. The exported `core.Catalogue` and `core.GasTable` helpers provide capability discovery for tools and dashboards.
+
 ## Tests
 
 Unit tests reside in `synnergy-network/tests`. Execute them with:
