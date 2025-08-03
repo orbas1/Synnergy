@@ -10,16 +10,25 @@ import (
 	Tokens "synnergy-network/core/Tokens"
 )
 
-func parseTokAddr(h string) (Tokens.Address, error) {
+// tokParseAddr converts a hex string into a Tokens.Address. It accepts an
+// optional 0x prefix, ignores surrounding whitespace and validates the length.
+func tokParseAddr(h string) (Tokens.Address, error) {
 	var a Tokens.Address
-	b, err := hex.DecodeString(strings.TrimPrefix(h, "0x"))
-	if err != nil || len(b) != len(a) {
-		return a, fmt.Errorf("bad address")
+	h = strings.TrimSpace(h)
+	h = strings.TrimPrefix(strings.ToLower(h), "0x")
+	if len(h) != len(a)*2 {
+		return a, fmt.Errorf("bad address length")
+	}
+	b, err := hex.DecodeString(h)
+	if err != nil {
+		return a, fmt.Errorf("invalid hex")
 	}
 	copy(a[:], b)
 	return a, nil
 }
 
+// resolveTok locates a token by numeric ID or symbol and returns the token and
+// its metadata.
 func resolveTok(idOrSym string) (Tokens.Token, Tokens.Metadata, error) {
 	for _, t := range Tokens.GetRegistryTokens() {
 		if m, ok := t.Meta().(Tokens.Metadata); ok {
@@ -43,6 +52,13 @@ func resolveTok(idOrSym string) (Tokens.Token, Tokens.Metadata, error) {
 	}
 	m, _ := tok.Meta().(Tokens.Metadata)
 	return tok, m, nil
+}
+
+// tokResolveToken exposes token resolution to other CLI modules without the
+// metadata return value.
+func tokResolveToken(idOrSym string) (Tokens.Token, error) {
+	tok, _, err := resolveTok(idOrSym)
+	return tok, err
 }
 
 var tokensCmd = &cobra.Command{
@@ -86,7 +102,7 @@ var tokBalanceCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		addr, err := parseTokAddr(args[1])
+		addr, err := tokParseAddr(args[1])
 		if err != nil {
 			return err
 		}
@@ -107,11 +123,11 @@ var tokTransferCmd = &cobra.Command{
 		fromStr, _ := cmd.Flags().GetString("from")
 		toStr, _ := cmd.Flags().GetString("to")
 		amt, _ := cmd.Flags().GetUint64("amt")
-		from, err := parseTokAddr(fromStr)
+		from, err := tokParseAddr(fromStr)
 		if err != nil {
 			return err
 		}
-		to, err := parseTokAddr(toStr)
+		to, err := tokParseAddr(toStr)
 		if err != nil {
 			return err
 		}
@@ -130,7 +146,7 @@ var tokMintCmd = &cobra.Command{
 		}
 		toStr, _ := cmd.Flags().GetString("to")
 		amt, _ := cmd.Flags().GetUint64("amt")
-		to, err := parseTokAddr(toStr)
+		to, err := tokParseAddr(toStr)
 		if err != nil {
 			return err
 		}
@@ -149,7 +165,7 @@ var tokBurnCmd = &cobra.Command{
 		}
 		fromStr, _ := cmd.Flags().GetString("from")
 		amt, _ := cmd.Flags().GetUint64("amt")
-		from, err := parseTokAddr(fromStr)
+		from, err := tokParseAddr(fromStr)
 		if err != nil {
 			return err
 		}
@@ -169,11 +185,11 @@ var tokApproveCmd = &cobra.Command{
 		ownerStr, _ := cmd.Flags().GetString("owner")
 		spenderStr, _ := cmd.Flags().GetString("spender")
 		amt, _ := cmd.Flags().GetUint64("amt")
-		owner, err := parseTokAddr(ownerStr)
+		owner, err := tokParseAddr(ownerStr)
 		if err != nil {
 			return err
 		}
-		spender, err := parseTokAddr(spenderStr)
+		spender, err := tokParseAddr(spenderStr)
 		if err != nil {
 			return err
 		}
@@ -190,11 +206,11 @@ var tokAllowanceCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		owner, err := parseTokAddr(args[1])
+		owner, err := tokParseAddr(args[1])
 		if err != nil {
 			return err
 		}
-		spender, err := parseTokAddr(args[2])
+		spender, err := tokParseAddr(args[2])
 		if err != nil {
 			return err
 		}
