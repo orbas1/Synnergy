@@ -622,21 +622,9 @@ type Storage struct {
 // TxPool & transaction structs (aggregated from transactions.go)
 //---------------------------------------------------------------------
 
-// TxType categorises transaction kinds. It mirrors the definition in
-// transactions.go but is repeated here to avoid build tag dependencies.
-type TxType uint8
-
-const (
-	// TxPayment transfers value between addresses.
-	TxPayment TxType = iota + 1
-	// TxContractCall executes a smart contract.
-	TxContractCall
-	// TxReversal denotes a reversal of a previous transaction. It requires
-	// multiple authority co‑signatures and refunds the original sender minus
-	// a protocol‑defined fee.
-	TxReversal
-)
-
+// TxType enumerates high‑level transaction categories.  Its concrete
+// definition and associated constants (e.g. TxPayment, TxReversal) reside in
+// tx_types.go to keep this file's scope limited to structural declarations.
 
 type Transaction struct {
 	// core fields
