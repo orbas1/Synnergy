@@ -37,11 +37,11 @@ func channelMiddleware(cmd *cobra.Command, args []string) {
 		ledgerPath = env
 	} else {
 		exe, _ := os.Executable()
-		ledgerPath = filepath.Join(filepath.Dir(exe), "state.db")
+		ledgerPath = filepath.Join(filepath.Dir(exe), "ledger")
 	}
 
 	// init ledger + engine singleton (idempotent)
-	led, err := ledger.NewBadgerLedger(ledgerPath)
+	led, err := core.OpenLedger(ledgerPath)
 	if err != nil {
 		log.Fatalf("failed to open ledger at %s: %v", ledgerPath, err)
 	}
