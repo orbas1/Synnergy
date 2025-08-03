@@ -1,11 +1,11 @@
 package bank_nodes
 
-import "synnergy-network/core/Nodes"
+import nodes "synnergy-network/core/Nodes"
 
 // BankInstitutionalNodeInterface extends NodeInterface with
 // bank/institution specific operations.
 type BankInstitutionalNodeInterface interface {
-	Nodes.NodeInterface
+	nodes.NodeInterface
 	// MonitorTransaction processes raw transaction bytes for compliance checks.
 	MonitorTransaction(data []byte) error
 	// ComplianceReport generates an aggregated compliance report.

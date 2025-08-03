@@ -78,3 +78,6 @@ func (n *ElectedAuthorityNode) ViewPrivateTransaction(hash Hash) ([]byte, error)
 
 // ApproveLoanProposal records approval for a loan or grant request.
 func (n *ElectedAuthorityNode) ApproveLoanProposal(id string) error { return nil }
+
+// Ensure ElectedAuthorityNode implements NodeInterface.
+var _ NodeInterface = (*ElectedAuthorityNode)(nil)

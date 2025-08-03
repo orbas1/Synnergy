@@ -83,3 +83,6 @@ func (h *HolographicNode) ProcessTx(tx interface{}) error {
 func (h *HolographicNode) ExecuteContract(ctx interface{}, vm VMExecutor, code []byte) error {
 	return vm.Execute(ctx, code)
 }
+
+// Ensure HolographicNode implements NodeInterface.
+var _ NodeInterface = (*HolographicNode)(nil)

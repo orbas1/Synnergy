@@ -1,9 +1,9 @@
 package authority_nodes
 
-import "synnergy-network/core/Nodes"
+import nodes "synnergy-network/core/Nodes"
 
 // AuthorityNodeInterface extends NodeInterface with authority-specific actions.
 type AuthorityNodeInterface interface {
-	Nodes.NodeInterface
+	nodes.NodeInterface
 	PromoteAuthority(addr string) error
 }
