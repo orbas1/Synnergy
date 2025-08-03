@@ -40,13 +40,13 @@ func (p *PlasmaController) Finalize(n uint64) error { return core.Plasma().Final
 // CLI commands
 //---------------------------------------------------------------------
 
-var plasmaCmd = &cobra.Command{
-	Use:               "plasma",
+var plasmaOpsCmd = &cobra.Command{
+	Use:               "plasmaops",
 	Short:             "Interact with the plasma bridge",
 	PersistentPreRunE: ensurePlasma,
 }
 
-var plasmaDepositCmd = &cobra.Command{
+var plasmaOpsDepositCmd = &cobra.Command{
 	Use:   "deposit <from> <token> <amount>",
 	Short: "Deposit tokens into the plasma bridge",
 	Args:  cobra.ExactArgs(3),
@@ -68,7 +68,7 @@ var plasmaDepositCmd = &cobra.Command{
 	},
 }
 
-var plasmaExitCmd = &cobra.Command{
+var plasmaOpsExitCmd = &cobra.Command{
 	Use:   "exit <owner> <token> <amount>",
 	Short: "Start an exit from the plasma bridge",
 	Args:  cobra.ExactArgs(3),
@@ -90,7 +90,7 @@ var plasmaExitCmd = &cobra.Command{
 	},
 }
 
-var plasmaFinalizeCmd = &cobra.Command{
+var plasmaOpsFinalizeCmd = &cobra.Command{
 	Use:   "finalize <nonce>",
 	Short: "Finalize a pending exit",
 	Args:  cobra.ExactArgs(1),
@@ -104,7 +104,7 @@ var plasmaFinalizeCmd = &cobra.Command{
 	},
 }
 
-var plasmaGetCmd = &cobra.Command{
+var plasmaOpsGetCmd = &cobra.Command{
 	Use:   "get <nonce>",
 	Short: "Retrieve a plasma exit",
 	Args:  cobra.ExactArgs(1),
@@ -123,7 +123,7 @@ var plasmaGetCmd = &cobra.Command{
 	},
 }
 
-var plasmaListCmd = &cobra.Command{
+var plasmaOpsListCmd = &cobra.Command{
 	Use:   "list <owner>",
 	Short: "List exits for an address",
 	Args:  cobra.ExactArgs(1),
@@ -143,12 +143,12 @@ var plasmaListCmd = &cobra.Command{
 }
 
 func init() {
-	plasmaCmd.AddCommand(plasmaDepositCmd)
-	plasmaCmd.AddCommand(plasmaExitCmd)
-	plasmaCmd.AddCommand(plasmaFinalizeCmd)
-	plasmaCmd.AddCommand(plasmaGetCmd)
-	plasmaCmd.AddCommand(plasmaListCmd)
+	plasmaOpsCmd.AddCommand(plasmaOpsDepositCmd)
+	plasmaOpsCmd.AddCommand(plasmaOpsExitCmd)
+	plasmaOpsCmd.AddCommand(plasmaOpsFinalizeCmd)
+	plasmaOpsCmd.AddCommand(plasmaOpsGetCmd)
+	plasmaOpsCmd.AddCommand(plasmaOpsListCmd)
 }
 
 // PlasmaRoute exports the root command for registration in index.go
-var PlasmaRoute = plasmaCmd
+var PlasmaRoute = plasmaOpsCmd

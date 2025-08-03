@@ -13,12 +13,12 @@ import (
 // plasma_management.go - CLI wrappers for the Plasma manager
 // -----------------------------------------------------------------------------
 
-var plasmaCmd = &cobra.Command{
-	Use:   "plasma",
-	Short: "Interact with the plasma chain",
+var plasmamgmtCmd = &cobra.Command{
+	Use:   "plasmamgmt",
+	Short: "Manage the plasma chain",
 }
 
-var plasmaDepositCmd = &cobra.Command{
+var plasmamgmtDepositCmd = &cobra.Command{
 	Use:   "deposit [from] [tokenID] [amount]",
 	Short: "Deposit tokens into the plasma chain",
 	Args:  cobra.ExactArgs(3),
@@ -46,7 +46,7 @@ var plasmaDepositCmd = &cobra.Command{
 	},
 }
 
-var plasmaWithdrawCmd = &cobra.Command{
+var plasmamgmtWithdrawCmd = &cobra.Command{
 	Use:   "withdraw [depositID] [to]",
 	Short: "Withdraw a plasma deposit",
 	Args:  cobra.ExactArgs(2),
@@ -65,7 +65,7 @@ var plasmaWithdrawCmd = &cobra.Command{
 	},
 }
 
-var plasmaSubmitCmd = &cobra.Command{
+var plasmamgmtSubmitCmd = &cobra.Command{
 	Use:   "submit [root]",
 	Short: "Submit a plasma block commitment",
 	Args:  cobra.ExactArgs(1),
@@ -84,10 +84,10 @@ var plasmaSubmitCmd = &cobra.Command{
 }
 
 func init() {
-	plasmaCmd.AddCommand(plasmaDepositCmd)
-	plasmaCmd.AddCommand(plasmaWithdrawCmd)
-	plasmaCmd.AddCommand(plasmaSubmitCmd)
+	plasmamgmtCmd.AddCommand(plasmamgmtDepositCmd)
+	plasmamgmtCmd.AddCommand(plasmamgmtWithdrawCmd)
+	plasmamgmtCmd.AddCommand(plasmamgmtSubmitCmd)
 }
 
-// PlasmaCmd is the exported command to mount on the root CLI.
-var PlasmaCmd = plasmaCmd
+// PlasmaMgmtCmd is the exported command to mount on the root CLI.
+var PlasmaMgmtCmd = plasmamgmtCmd
