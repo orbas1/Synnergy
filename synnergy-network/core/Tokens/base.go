@@ -99,28 +99,38 @@ type BaseToken struct {
 func (b *BaseToken) ID() TokenID { return b.id }
 
 // Meta returns immutable token metadata.
-func (b *BaseToken) Meta() any { return b.meta }
+func (b *BaseToken) Meta() any {
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	return b.meta
+}
 
 // BalanceOf retrieves the balance for an address.
 func (b *BaseToken) BalanceOf(a Address) uint64 {
-	if b.balances == nil {
+	b.mu.RLock()
+	bt := b.balances
+	b.mu.RUnlock()
+	if bt == nil {
 		return 0
 	}
-	return b.balances.Get(b.id, a)
+	return bt.Get(b.id, a)
 }
 
 // Transfer moves funds between accounts.
 func (b *BaseToken) Transfer(from, to Address, amount uint64) error {
-	if b.balances == nil {
+	b.mu.RLock()
+	bt := b.balances
+	b.mu.RUnlock()
+	if bt == nil {
 		return fmt.Errorf("balances not initialised")
 	}
 	if from == (Address{}) || to == (Address{}) {
 		return fmt.Errorf("zero address")
 	}
-	if err := b.balances.Sub(b.id, from, amount); err != nil {
+	if err := bt.Sub(b.id, from, amount); err != nil {
 		return err
 	}
-	b.balances.Add(b.id, to, amount)
+	bt.Add(b.id, to, amount)
 	return nil
 }
 
@@ -175,6 +185,8 @@ func (b *BaseToken) Approve(owner, spender Address, amount uint64) error {
 
 // Mint adds new supply to the given address.
 func (b *BaseToken) Mint(to Address, amount uint64) error {
+	b.mu.Lock()
+	defer b.mu.Unlock()
 	if b.meta.FixedSupply {
 		return fmt.Errorf("fixed supply token")
 	}
@@ -191,6 +203,8 @@ func (b *BaseToken) Mint(to Address, amount uint64) error {
 
 // Burn removes supply from the address.
 func (b *BaseToken) Burn(from Address, amount uint64) error {
+	b.mu.Lock()
+	defer b.mu.Unlock()
 	if b.balances == nil {
 		return fmt.Errorf("balances not initialised")
 	}
