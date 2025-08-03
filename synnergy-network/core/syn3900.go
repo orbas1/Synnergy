@@ -55,8 +55,8 @@ func (bt *BenefitToken) Issue(recipient Address, amount uint64, validFrom, valid
 		Conditions: conditions,
 	}
 	bt.mu.Lock()
+	defer bt.mu.Unlock()
 	bt.records[id] = rec
-	bt.mu.Unlock()
 	if err := bt.Mint(recipient, amount); err != nil {
 		return Hash{}, err
 	}
@@ -68,23 +68,20 @@ func (bt *BenefitToken) Issue(recipient Address, amount uint64, validFrom, valid
 // Claim marks a benefit as claimed if conditions are met.
 func (bt *BenefitToken) Claim(id Hash, claimer Address) error {
 	bt.mu.Lock()
+	defer bt.mu.Unlock()
 	rec, ok := bt.records[id]
 	if !ok {
-		bt.mu.Unlock()
 		return errors.New("unknown benefit")
 	}
 	if rec.Claimed || claimer != rec.Recipient {
-		bt.mu.Unlock()
 		return errors.New("invalid claim")
 	}
 	now := time.Now().Unix()
 	if now < rec.ValidFrom || (rec.ValidUntil > 0 && now > rec.ValidUntil) {
-		bt.mu.Unlock()
 		return errors.New("benefit not valid")
 	}
 	rec.Claimed = true
 	bt.records[id] = rec
-	bt.mu.Unlock()
 	raw, _ := json.Marshal(rec)
 	_ = bt.ledger.SetState(bt.key(id), raw)
 	return nil
@@ -93,8 +90,8 @@ func (bt *BenefitToken) Claim(id Hash, claimer Address) error {
 // Record fetches a stored benefit record from memory.
 func (bt *BenefitToken) Record(id Hash) (BenefitRecord, bool) {
 	bt.mu.RLock()
+	defer bt.mu.RUnlock()
 	rec, ok := bt.records[id]
-	bt.mu.RUnlock()
 	return rec, ok
 }
 
