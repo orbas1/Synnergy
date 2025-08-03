@@ -130,13 +130,13 @@ type KYCDocument struct {
 //---------------------------------------------------------------------
 
 type SynnergyConsensus struct {
-	logger *log.Logger // or *log.Logger—whichever you use
+	logger *log.Logger
 
 	ledger *Ledger // ← pointer, not value
-	p2p    interface{}
-	crypto interface{}
-	pool   interface{}
-	auth   interface{}
+	p2p    networkAdapter
+	crypto securityAdapter
+	pool   txPool
+	auth   authorityAdapter
 
 	mu            sync.Mutex
 	nextSubHeight uint64

@@ -1,6 +1,3 @@
-//go:build tokens
-// +build tokens
-
 package core
 
 // SynnergyConsensus – hybrid PoH + PoS sub‑blocks, aggregated under PoW main block.
@@ -166,6 +163,11 @@ func (sc *SynnergyConsensus) Start(ctx context.Context) {
 		}
 	}()
 	sc.logger.Println("consensus started")
+}
+
+// Stop halts the consensus engine. No-op placeholder for future cleanup.
+func (sc *SynnergyConsensus) Stop() {
+	sc.logger.Println("consensus stopped")
 }
 
 //---------------------------------------------------------------------

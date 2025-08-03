@@ -199,6 +199,18 @@ func (as *AuthoritySet) RandomElectorate(size int) ([]Address, error) {
 	return sel[:size], nil
 }
 
+func shuffleAddresses(addrs []Address) error {
+	for i := len(addrs) - 1; i > 0; i-- {
+		jBig, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(jBig.Int64())
+		addrs[i], addrs[j] = addrs[j], addrs[i]
+	}
+	return nil
+}
+
 // GetAuthority returns the AuthorityNode information for the given address.
 // An error is returned if the address is not registered.
 func (as *AuthoritySet) GetAuthority(addr Address) (AuthorityNode, error) {
