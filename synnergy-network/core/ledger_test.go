@@ -75,8 +75,8 @@ func TestAddBlockHeightMismatch(t *testing.T) {
 //-------------------------------------------------------------
 
 func TestMintTokenBalance(t *testing.T) {
-	config, _ := tmpLedgerConfig(t, nil)
-	ledger, _ := NewLedger(config)
+	cfg, _ := tmpLedgerConfig(t, nil)
+	led, _ := NewLedger(cfg)
 	addr := Address{0xAA}
 
 	if err := ledger.MintToken(addr, "SYNN", 0); err == nil {
