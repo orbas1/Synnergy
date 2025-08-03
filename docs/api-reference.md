@@ -81,7 +81,7 @@ func deploy(path string) error {
         return err
     }
     reg := core.GetContractRegistry()
-    return reg.Deploy(core.Address{}, code, nil, 1_000_000)
+    return reg.Deploy(core.AddressZero, code, nil, 1_000_000)
 }
 ```
 

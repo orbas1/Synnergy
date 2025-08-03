@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// defaultGasPrice defines the flat gas cost used for queued transfers.
-const defaultGasPrice uint64 = 1
+// timeLockGasPrice is the flat gas cost used for queued transfers.
+const timeLockGasPrice uint64 = 1
 
 // TimeLockRecord represents a pending transfer with a release time.
 type TimeLockRecord struct {
@@ -88,7 +88,7 @@ func (t *TimeLockedNode) ExecuteDue() []string {
 	}
 	t.mu.Unlock()
 
-	tm := NewTokenManager(t.ledger, NewFlatGasCalculator(defaultGasPrice))
+	tm := NewTokenManager(t.ledger, NewFlatGasCalculator(timeLockGasPrice))
 	var executed []string
 	for _, rec := range due {
 		_ = tm.Transfer(rec.TokenID, rec.From, rec.To, rec.Amount)

@@ -33,7 +33,7 @@ func etInit(cmd *cobra.Command, _ []string) error {
 			err = e
 			return
 		}
-		gas := core.NewFlatGasCalculator()
+		gas := core.NewFlatGasCalculator(core.DefaultGasPrice)
 		meta := core.Metadata{Name: "Event Ticket", Symbol: "SYNTIX", Decimals: 0, Standard: core.StdSYN1700}
 		etToken, err = Tokens.NewEventTicketToken(meta, led, gas, nil)
 		if err != nil {

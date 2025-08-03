@@ -52,21 +52,25 @@ func (z *ZKPNode) DialSeed(peers []string) error { return z.node.DialSeed(peers)
 // Broadcast sends data to peers.
 func (z *ZKPNode) Broadcast(t string, d []byte) error { return z.node.Broadcast(t, d) }
 
-// Subscribe returns a byte channel for messages on topic t.
-// It adapts the underlying Node's Message channel into a plain
-// []byte stream so callers only handle raw payloads.
-func (z *ZKPNode) Subscribe(t string) (<-chan []byte, error) {
-	ch, err := z.node.Subscribe(t)
+// Subscribe returns a channel of raw message bytes for the provided topic.
+// It adapts the underlying Node's Message channel into a plain []byte stream
+// so callers only handle immutable payloads.
+func (z *ZKPNode) Subscribe(topic string) (<-chan []byte, error) {
+	ch, err := z.node.Subscribe(topic)
 	if err != nil {
 		return nil, err
 	}
-	out := make(chan []byte)
+
+	out := make(chan []byte, 1)
 	go func() {
 		for msg := range ch {
-			out <- msg.Data
+			data := make([]byte, len(msg.Data))
+			copy(data, msg.Data)
+			out <- data
 		}
 		close(out)
 	}()
+
 	return out, nil
 }
 

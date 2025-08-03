@@ -84,7 +84,7 @@ func ListProperties(addr Address) ([]Property, error) {
 		if err := json.Unmarshal(it.Value(), &p); err != nil {
 			return nil, err
 		}
-		if addr == (Address{}) || p.Owner == addr {
+		if addr == AddressZero || p.Owner == addr {
 			res = append(res, p)
 		}
 	}

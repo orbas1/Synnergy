@@ -71,10 +71,10 @@ func (ar *AccountRecovery) Recover(owner Address, provided RecoveryInfo) error {
 	}
 
 	matches := 0
-	if stored.IDTokenWallet == provided.IDTokenWallet && stored.IDTokenWallet != (Address{}) {
+	if stored.IDTokenWallet == provided.IDTokenWallet && stored.IDTokenWallet != AddressZero {
 		matches++
 	}
-	if stored.RecoveryWallet == provided.RecoveryWallet && stored.RecoveryWallet != (Address{}) {
+	if stored.RecoveryWallet == provided.RecoveryWallet && stored.RecoveryWallet != AddressZero {
 		matches++
 	}
 	if stored.PhoneNumber != "" && stored.PhoneNumber == provided.PhoneNumber {

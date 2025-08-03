@@ -1,3 +1,4 @@
+// Package Nodes provides shared node interfaces across the network.
 package Nodes
 
 // StakingNodeInterface defines behaviour for nodes participating in

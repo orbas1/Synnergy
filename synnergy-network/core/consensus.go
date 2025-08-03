@@ -60,6 +60,9 @@ const (
 // Wire‑up interfaces (keeps core independent of concrete impls)
 //---------------------------------------------------------------------
 
+// txPool defines the minimal transaction pool capabilities required by the
+// consensus engine. In addition to selecting transactions for new sub-blocks,
+// the pool must be able to validate incoming transactions.
 type txPool interface {
 	Pick(max int) [][]byte
 	ValidateTx(tx *Transaction) error
@@ -139,29 +142,6 @@ func NewConsensus(
 	}, nil
 }
 
-//---------------------------------------------------------------------
-// Public service API – Start/Stop
-//---------------------------------------------------------------------
-
-func (sc *SynnergyConsensus) Start(ctx context.Context) {
-	go sc.subBlockLoop(ctx)
-	go sc.blockLoop(ctx)
-	sub, unsub := sc.p2p.Subscribe("posvote")
-	go func() {
-		defer unsub()
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case m := <-sub:
-				sc.handlePoSVote(m)
-			}
-		}
-	}()
-	sc.logger.Println("consensus started")
-}
-
-//---------------------------------------------------------------------
 // Sub‑block proposer loop (PoH + immediate PoS self‑sign)
 //---------------------------------------------------------------------
 
@@ -184,9 +164,29 @@ func (sc *SynnergyConsensus) subBlockLoop(ctx context.Context) {
 
 // ProposeSubBlock selects txs, computes PoH, signs with validator stake key.
 func (sc *SynnergyConsensus) ProposeSubBlock() (*SubBlock, error) {
-	txs := sc.pool.Pick(MaxTxPerSubBlock)
-	if len(txs) == 0 {
+	rawTxs := sc.pool.Pick(MaxTxPerSubBlock)
+	if len(rawTxs) == 0 {
 		return nil, errors.New("no txs")
+	}
+
+	// Filter and validate picked transactions.
+	validTxs := make([][]byte, 0, len(rawTxs))
+	for _, b := range rawTxs {
+		var tx Transaction
+		if err := json.Unmarshal(b, &tx); err != nil {
+			sc.logger.Printf("discarding malformed tx: %v", err)
+			continue
+		}
+		if sc.pool != nil {
+			if err := sc.pool.ValidateTx(&tx); err != nil {
+				sc.logger.Printf("discarding invalid tx: %v", err)
+				continue
+			}
+		}
+		validTxs = append(validTxs, b)
+	}
+	if len(validTxs) == 0 {
+		return nil, errors.New("no valid txs")
 	}
 
 	header := SubBlockHeader{
@@ -195,9 +195,9 @@ func (sc *SynnergyConsensus) ProposeSubBlock() (*SubBlock, error) {
 		Validator: sc.auth.ValidatorPubKey("pos"),
 	}
 
-	// PoH hash
+	// Build PoH hash over the valid transaction set and timestamp.
 	h := sha256.New()
-	for _, tx := range txs {
+	for _, tx := range validTxs {
 		h.Write(tx)
 	}
 	ts := make([]byte, 8)
@@ -211,11 +211,11 @@ func (sc *SynnergyConsensus) ProposeSubBlock() (*SubBlock, error) {
 	}
 	header.Sig = sig
 
-	sb := &SubBlock{Header: header, Body: SubBlockBody{Transactions: txs}}
+	sb := &SubBlock{Header: header, Body: SubBlockBody{Transactions: validTxs}}
 	if err := sc.ledger.AppendSubBlock(sb); err != nil {
 		return nil, err
 	}
-	sc.logger.Printf("sub‑block #%d proposed with %d txs", header.Height, len(txs))
+	sc.logger.Printf("sub‑block #%d proposed with %d txs", header.Height, len(validTxs))
 	return sb, nil
 }
 

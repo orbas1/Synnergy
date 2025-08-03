@@ -208,7 +208,7 @@ func pubKeyToAddress(pub ed25519.PublicKey) Address {
 func (w *HDWallet) NewAddress(account, index uint32) (Address, error) {
 	_, pub, err := w.PrivateKey(account, index)
 	if err != nil {
-		return Address{}, err
+		return AddressZero, err
 	}
 	return pubKeyToAddress(pub), nil
 }

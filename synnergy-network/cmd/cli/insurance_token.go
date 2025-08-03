@@ -15,7 +15,7 @@ var (
 func itParseAddr(s string) (core.Address, error) {
 	b, err := hex.DecodeString(s)
 	if err != nil || len(b) != 20 {
-		return core.Address{}, fmt.Errorf("bad address")
+		return core.AddressZero, fmt.Errorf("bad address")
 	}
 	var a core.Address
 	copy(a[:], b)

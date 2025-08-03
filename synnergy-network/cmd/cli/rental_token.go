@@ -55,12 +55,12 @@ func (r rentalCtrl) register(tokenID uint32, propertyID, tenantStr, landlordStr 
 }
 
 func (r rentalCtrl) pay(id string, amount uint64) error {
-	ctx := core.NewContext(core.Address{})
+	ctx := core.NewContext(core.AddressZero)
 	return core.PayRent(ctx, id, amount)
 }
 
 func (r rentalCtrl) terminate(id string) error {
-	ctx := core.NewContext(core.Address{})
+	ctx := core.NewContext(core.AddressZero)
 	return core.TerminateRentalAgreement(ctx, id)
 }
 
