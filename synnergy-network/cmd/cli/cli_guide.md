@@ -21,7 +21,7 @@ The following command groups expose the same functionality available in the core
 - **charity_mgmt** – Donate to and withdraw from the charity pool.
 - **identity** – Register and verify user identities.
 - **coin** – Mint the base coin, transfer balances and inspect supply metrics.
- - **compliance_management** – Manage suspensions and whitelists for addresses.
+- **compliance_management** – Manage suspensions and whitelists for addresses.
 - **compliance** – Run KYC/AML checks on addresses and export audit reports.
 - **audit** – Manage on-chain audit logs.
 - **consensus_hop** – Switch between consensus modes based on network metrics.
@@ -68,13 +68,13 @@ The following command groups expose the same functionality available in the core
 - **connpool** – Manage reusable outbound connections.
 - **nat** – Manage router port mappings for inbound connectivity.
 - **peer** – Discover peers, connect to them and advertise this node.
- - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
- - **high_availability** – Manage standby nodes and promote backups.
- - **rollups** – Create rollup batches or inspect existing ones.
+- **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
+- **high_availability** – Manage standby nodes and promote backups.
+- **rollups** – Create rollup batches or inspect existing ones.
 - **plasma** – Deposit into and withdraw from the Plasma chain.
 - **replication** – Trigger snapshot creation and replicate the ledger to new nodes.
 - **coordination** – Coordinate distributed nodes and broadcast ledger state.
- - **rollups** – Create rollup batches, inspect existing ones and control the aggregator state.
+- **rollups** – Create rollup batches, inspect existing ones and control the aggregator state.
 - **initrep** – Bootstrap a ledger via peer replication.
 - **synchronization** – Coordinate block download and verification.
 - **rollups** – Create rollup batches or inspect existing ones.
@@ -83,7 +83,7 @@ The following command groups expose the same functionality available in the core
 - **firewall** – Manage address, token and IP block lists.
 - **biometrics** – Manage biometric authentication templates.
 - **sharding** – Migrate data between shards and check shard status.
- - **sidechain** – Launch, manage and interact with remote side‑chain nodes.
+- **sidechain** – Launch, manage and interact with remote side‑chain nodes.
 - **state_channel** – Open, close and settle payment channels.
 - **loanpool** – Submit loan proposals and manage disbursements.
 - **grant** – Create and release grants from the loan pool.
@@ -131,7 +131,7 @@ The following command groups expose the same functionality available in the core
 - **testnet** – Start an ephemeral test network from a YAML config.
 - **faucet** – Dispense test funds with rate limiting.
 
-# Newly Added Command Groups
+## Newly Added Command Groups
 
 The CLI has grown considerably. The modules below expose functionality found in
 recently added Go files under `cmd/cli`.
