@@ -13,17 +13,28 @@ import { attachLockMintForm } from "./components/LockMintForm.js";
 import { attachBurnReleaseForm } from "./components/BurnReleaseForm.js";
 
 async function refresh() {
-  const bridges = await listBridges();
-  renderBridgeList(document.getElementById("bridgeListContainer"), bridges);
+  try {
+    const bridges = await listBridges();
+    renderBridgeList(
+      document.getElementById("bridgeListContainer"),
+      bridges
+    );
+  } catch (err) {
+    console.error("Failed to load bridges", err);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   attachBridgeForm(
     document.getElementById("bridgeFormContainer"),
     async (data) => {
-      await createBridge(data);
-      await refresh();
-    },
+      try {
+        await createBridge(data);
+        await refresh();
+      } catch (err) {
+        console.error("Bridge creation failed", err);
+      }
+    }
   );
 
   attachRelayerForm(document.getElementById("relayerFormContainer"), {
@@ -31,10 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
     onRevoke: revokeRelayer,
   });
 
-  attachLockMintForm(document.getElementById("lockMintContainer"), lockAndMint);
+  attachLockMintForm(
+    document.getElementById("lockMintContainer"),
+    lockAndMint
+  );
   attachBurnReleaseForm(
     document.getElementById("burnReleaseContainer"),
-    burnAndRelease,
+    burnAndRelease
   );
 
   refresh();
