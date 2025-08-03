@@ -69,7 +69,10 @@ func (c *ContentNode) StoreContent(data, key []byte) (string, error) {
 	}
 	c.store[cid] = enc
 	meta := ContentMeta{CID: cid, Size: uint64(len(enc)), Uploaded: time.Now().UTC()}
-	raw, _ := json.Marshal(meta)
+	raw, err := json.Marshal(meta)
+	if err != nil {
+		return cid, err
+	}
 	if err := CurrentStore().Set([]byte("content:meta:"+cid), raw); err != nil {
 		return cid, err
 	}
@@ -87,7 +90,6 @@ func (c *ContentNode) RetrieveContent(cid string, key []byte) ([]byte, error) {
 		}
 	}
 	return decryptContent(data, key)
-
 }
 
 // ListContent enumerates pinned content metadata.
