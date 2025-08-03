@@ -621,6 +621,15 @@ type Storage struct {
 // transactions.go but is repeated here to avoid build tag dependencies.
 type TxType uint8
 
+const (
+	// TxPayment transfers value between addresses.
+	TxPayment TxType = iota + 1
+	// TxContractCall executes a smart contract.
+	TxContractCall
+	// TxReversal denotes a reversal of a previous transaction.
+	TxReversal
+)
+
 type Transaction struct {
 	// core fields
 	Type             TxType            `json:"type"`
