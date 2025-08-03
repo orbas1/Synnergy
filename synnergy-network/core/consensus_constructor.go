@@ -17,7 +17,7 @@ func NewConsensus(
 	led *Ledger,
 	p2p interface{},
 	crypt interface{},
-	pool interface{},
+	pool txPool,
 	auth interface{},
 ) (*SynnergyConsensus, error) {
 	if lg == nil {
