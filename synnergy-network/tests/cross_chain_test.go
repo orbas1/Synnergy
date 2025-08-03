@@ -109,3 +109,29 @@ func (l *simpleLedger) StaticCall(Address, Address, []byte, uint64) ([]byte, boo
 	return nil, false, nil
 }
 func (l *simpleLedger) SelfDestruct(Address, Address) {}
+
+func TestLockAndMintAndBurnAndRelease(t *testing.T) {
+	st := NewInMemoryStore()
+	SetStore(st)
+	SetBroadcaster(func(string, []byte) error { return nil })
+
+	led := &simpleLedger{}
+	ctx := &testCtx{Caller: Address{0xAA}, State: led}
+	asset := AssetRef{Kind: AssetCoin}
+	proof := Proof{TxHash: []byte{0x01}, MerkleRoot: []byte{0x01}, TxIndex: 0}
+
+	if err := LockAndMint(ctx.toCoreCtx(), asset, proof, 10); err != nil {
+		t.Fatalf("lock and mint failed: %v", err)
+	}
+	if len(led.transfers) != 1 || len(led.mints) != 1 {
+		t.Fatalf("unexpected ledger state after lock/mint: %v %v", led.transfers, led.mints)
+	}
+
+	target := Address{0xBB}
+	if err := BurnAndRelease(ctx.toCoreCtx(), asset, target, 10); err != nil {
+		t.Fatalf("burn and release failed: %v", err)
+	}
+	if len(led.burns) != 1 || len(led.transfers) != 2 {
+		t.Fatalf("unexpected ledger state after burn/release: %v %v", led.burns, led.transfers)
+	}
+}
