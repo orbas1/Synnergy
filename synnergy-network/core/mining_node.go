@@ -42,7 +42,8 @@ func NewMiningNode(cfg *MiningNodeConfig) (*MiningNode, error) {
 
 	pool := NewTxPool(nil, led, nil, nil, 0)
 
-	cons, err := NewConsensus(logrus.New(), led, n, nil, pool, nil)
+	netAdapter := newNetworkAdapter(n)
+	cons, err := NewConsensus(logrus.New(), led, netAdapter, nil, pool, nil)
 	if err != nil {
 		cancel()
 		_ = n.Close()

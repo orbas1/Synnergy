@@ -50,11 +50,11 @@ func (cm *ContractManager) TransferOwnership(addr, newOwner Address) error {
 // owner has been recorded an empty Address is returned.
 func (cm *ContractManager) OwnerOf(addr Address) (Address, error) {
 	if cm.ledger == nil {
-		return Address{}, errors.New("ledger not available")
+		return AddressZero, errors.New("ledger not available")
 	}
 	b, err := cm.ledger.GetState(ownerKey(addr))
 	if err != nil {
-		return Address{}, err
+		return AddressZero, err
 	}
 	var out Address
 	copy(out[:], b)

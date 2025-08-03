@@ -22,7 +22,7 @@ func newDRController() *DataResourceController {
 func drmParseAddr(a string) (core.Address, error) {
 	b, err := hex.DecodeString(strings.TrimPrefix(a, "0x"))
 	if err != nil || len(b) != 20 {
-		return core.Address{}, fmt.Errorf("invalid address")
+		return core.AddressZero, fmt.Errorf("invalid address")
 	}
 	var out core.Address
 	copy(out[:], b)

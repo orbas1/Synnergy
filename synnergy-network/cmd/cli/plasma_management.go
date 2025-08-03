@@ -24,7 +24,7 @@ var plasmaDepositCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		from, err := hex.DecodeString(args[0])
-		if err != nil || len(from) != len(core.Address{}) {
+		if err != nil || len(from) != len(core.AddressZero) {
 			return fmt.Errorf("invalid from address")
 		}
 		var addr core.Address
@@ -56,7 +56,7 @@ var plasmaWithdrawCmd = &cobra.Command{
 			return err
 		}
 		toBytes, err := hex.DecodeString(args[1])
-		if err != nil || len(toBytes) != len(core.Address{}) {
+		if err != nil || len(toBytes) != len(core.AddressZero) {
 			return fmt.Errorf("invalid address")
 		}
 		var to core.Address

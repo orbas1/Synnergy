@@ -18,7 +18,7 @@ func ensureSYN3500(cmd *cobra.Command, _ []string) error {
 		return nil
 	}
 	meta := core.Metadata{Name: "Currency Token", Symbol: "SYNCUR", Decimals: 2, Standard: core.StdSYN3500}
-	tok := core.NewSYN3500Token(meta, "USD", "Issuer", 1.0, led, core.NewFlatGasCalculator())
+	tok := core.NewSYN3500Token(meta, "USD", "Issuer", 1.0, led, core.NewFlatGasCalculator(core.DefaultGasPrice))
 	if tok == nil {
 		return fmt.Errorf("init failed")
 	}
