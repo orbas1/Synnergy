@@ -1,16 +1,25 @@
 # Synnergy Script Guide
 
-This guide documents the utility scripts located in `cmd/scripts`. Each script wraps common `synnergy` CLI commands to showcase typical workflows and to help automate repetitive tasks during development. The collection now includes helpers for the faucet service, DAO voting, marketplace listings and storage deals. A working Go toolchain and the compiled `synnergy` binary are required.
+This guide documents the utility scripts located in `cmd/scripts`. Each
+script wraps common `synnergy` CLI commands to showcase typical workflows
+and to help automate repetitive tasks during development. The collection
+now includes helpers for the faucet service, DAO voting, marketplace
+listings and storage deals. A working Go toolchain and the compiled
+`synnergy` binary are required.
 
 ## Prerequisites
 
 1. Run `./setup_synn.sh` to install Go and fetch project dependencies.
-2. Optionally execute `./Synnergy.env.sh` to configure additional environment variables and tools.
-3. Build the CLI with `./build_cli.sh` or by invoking `go build -o synnergy ./cmd/synnergy` from the `synnergy-network` directory.
+2. Optionally execute `./Synnergy.env.sh` to configure additional
+   environment variables and tools.
+3. Build the CLI with `./build_cli.sh` or by invoking
+   `go build -o synnergy ./cmd/synnergy` from the `synnergy-network`
+   directory.
 
 ## Running the Demo Network
 
-The `start_synnergy_network.sh` script launches a small local network and demonstrates basic commands:
+The `start_synnergy_network.sh` script launches a small local network and
+demonstrates basic commands:
 
 ```bash
 ./start_synnergy_network.sh
@@ -20,16 +29,21 @@ This script performs the following steps:
 
 1. Compiles the CLI from `cmd/synnergy/main.go`.
 2. Starts the networking, consensus, replication and VM services in the background.
-3. Executes a sample `~sec merkle` command against demo data to show the security module.
+3. Executes a sample `~sec merkle` command against demo data to show the
+   security module.
 4. Waits until you press `Ctrl+C`, then terminates all services.
 
-Ensure the `synnergy` binary is present in the working directory and that `go` is on your `PATH` before running the demo.
+Ensure the `synnergy` binary is present in the working directory and that
+`go` is on your `PATH` before running the demo.
 
 ## Script Reference
 
-The files below illustrate how to invoke individual command groups. Arguments in square brackets are optional and default values are taken from each script.
+The files below illustrate how to invoke individual command groups.
+Arguments in square brackets are optional and default values are taken from
+each script.
 
 ### build_cli.sh
+
 Compile the `synnergy` CLI with trimmed debug paths.
 
 ```bash
@@ -37,6 +51,7 @@ Compile the `synnergy` CLI with trimmed debug paths.
 ```
 
 ### network_start.sh
+
 Start the networking daemon.
 
 ```bash
@@ -44,6 +59,7 @@ Start the networking daemon.
 ```
 
 ### network_peers.sh
+
 List currently connected peers.
 
 ```bash
@@ -51,6 +67,7 @@ List currently connected peers.
 ```
 
 ### consensus_start.sh
+
 Launch the consensus service.
 
 ```bash
@@ -58,6 +75,7 @@ Launch the consensus service.
 ```
 
 ### replication_status.sh
+
 Query replication daemon status.
 
 ```bash
@@ -65,6 +83,7 @@ Query replication daemon status.
 ```
 
 ### vm_start.sh
+
 Run the WebAssembly virtual machine daemon.
 
 ```bash
@@ -72,6 +91,7 @@ Run the WebAssembly virtual machine daemon.
 ```
 
 ### coin_mint.sh
+
 Mint SYNN coins to a target address. Usage:
 
 ```bash
@@ -79,6 +99,7 @@ Mint SYNN coins to a target address. Usage:
 ```
 
 ### token_transfer.sh
+
 Transfer tokens between two addresses. Usage:
 
 ```bash
@@ -86,6 +107,7 @@ Transfer tokens between two addresses. Usage:
 ```
 
 ### contracts_deploy.sh
+
 Deploy a smart contract from a WASM file.
 
 ```bash
@@ -93,6 +115,7 @@ Deploy a smart contract from a WASM file.
 ```
 
 ### wallet_create.sh
+
 Create a new HD wallet file. Usage:
 
 ```bash
@@ -100,6 +123,7 @@ Create a new HD wallet file. Usage:
 ```
 
 ### transactions_submit.sh
+
 Submit a signed transaction JSON blob.
 
 ```bash
@@ -107,6 +131,7 @@ Submit a signed transaction JSON blob.
 ```
 
 ### security_merkle.sh
+
 Compute a Merkle root for auditing. Example:
 
 ```bash
@@ -114,6 +139,7 @@ Compute a Merkle root for auditing. Example:
 ```
 
 ### governance_propose.sh
+
 Create a governance proposal.
 
 ```bash
@@ -121,6 +147,7 @@ Create a governance proposal.
 ```
 
 ### cross_chain_register.sh
+
 Register a cross-chain bridge relayer.
 
 ```bash
@@ -128,6 +155,7 @@ Register a cross-chain bridge relayer.
 ```
 
 ### rollup_submit_batch.sh
+
 Submit an optimistic roll-up batch.
 
 ```bash
@@ -135,6 +163,7 @@ Submit an optimistic roll-up batch.
 ```
 
 ### sharding_leader.sh
+
 Query the current shard leader.
 
 ```bash
@@ -142,6 +171,7 @@ Query the current shard leader.
 ```
 
 ### sidechain_sync.sh
+
 List registered side-chains.
 
 ```bash
@@ -149,6 +179,7 @@ List registered side-chains.
 ```
 
 ### fault_check.sh
+
 Capture a fault-tolerance snapshot.
 
 ```bash
@@ -156,6 +187,7 @@ Capture a fault-tolerance snapshot.
 ```
 
 ### state_channel_open.sh
+
 Open a payment channel. Usage:
 
 ```bash
@@ -163,6 +195,7 @@ Open a payment channel. Usage:
 ```
 
 ### storage_pin.sh
+
 Pin a file in the storage subsystem.
 
 ```bash
@@ -170,6 +203,7 @@ Pin a file in the storage subsystem.
 ```
 
 ### ../../scripts/devnet_start.sh
+
 Spin up a multi-node developer network. Example:
 
 ```bash
@@ -177,11 +211,15 @@ Spin up a multi-node developer network. Example:
 ```
 
 ### ../../scripts/testnet_start.sh
+
 Launch a testnet from a YAML config:
 
 ```bash
 ../../scripts/testnet_start.sh path/to/testnet.yaml
+```
+
 ### faucet_fund.sh
+
 Request coins from the local faucet service.
 
 ```bash
@@ -189,6 +227,7 @@ Request coins from the local faucet service.
 ```
 
 ### dao_vote.sh
+
 Cast a vote on a governance proposal.
 
 ```bash
@@ -196,6 +235,7 @@ Cast a vote on a governance proposal.
 ```
 
 ### marketplace_list.sh
+
 Create an AI marketplace listing for a model.
 
 ```bash
@@ -203,6 +243,7 @@ Create an AI marketplace listing for a model.
 ```
 
 ### storage_marketplace_pin.sh
+
 Pin data and publish a storage listing.
 
 ```bash
@@ -210,6 +251,7 @@ Pin data and publish a storage listing.
 ```
 
 ### loanpool_apply.sh
+
 Submit a loan proposal transaction.
 
 ```bash
@@ -217,10 +259,13 @@ Submit a loan proposal transaction.
 ```
 
 ### authority_apply.sh
+
 Register an authority-node candidate.
 
 ```bash
 ./authority_apply.sh <address> [role]
 ```
 
-These scripts are intentionally minimal to keep the focus on demonstrating CLI usage. Feel free to modify them or combine commands to suit your workflow.
+These scripts are intentionally minimal to keep the focus on demonstrating
+CLI usage. Feel free to modify them or combine commands to suit your
+workflow.

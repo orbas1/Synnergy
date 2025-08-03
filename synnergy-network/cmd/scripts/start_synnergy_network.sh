@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Start essential Synnergy daemons using the CLI.
-# Requires Go toolchain installed.
-
+# Start essential Synnergy daemons using the CLI. Requires Go.
 set -euo pipefail
+
+# Run relative to this script's directory.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+cd "$SCRIPT_DIR"
 
 # Build the CLI binary
 GOFLAGS="-trimpath" go build -o synnergy ../synnergy
@@ -21,7 +23,7 @@ REPL_PID=$!
 VM_PID=$!
 
 # Example security action: compute Merkle root for demo data
-MERKLE=$(./synnergy ~sec merkle 68656c6c6f,776f726c64)
+MERKLE=$(./synnergy '~sec' merkle 68656c6c6f,776f726c64)
 echo "Merkle root: $MERKLE"
 
 echo "Synnergy network running. Press Ctrl+C to stop."
