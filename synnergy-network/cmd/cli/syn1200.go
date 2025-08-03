@@ -28,7 +28,7 @@ func syn1200HandleAddBridge(cmd *cobra.Command, args []string) error {
 	}
 	chain := args[1]
 	addrBytes, err := hex.DecodeString(args[2])
-	if err != nil || len(addrBytes) != len(core.Address{}) {
+	if err != nil || len(addrBytes) != len(core.AddressZero) {
 		return fmt.Errorf("bad address")
 	}
 	var addr core.Address
