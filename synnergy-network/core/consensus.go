@@ -70,6 +70,7 @@ const (
 
 type txPool interface {
 	Pick(max int) [][]byte
+	ValidateTx(tx *Transaction) error
 }
 
 type networkAdapter interface {
