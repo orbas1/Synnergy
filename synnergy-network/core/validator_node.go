@@ -105,7 +105,7 @@ func (vn *ValidatorNode) ValidateTx(txBytes []byte) error {
 	if err != nil {
 		return err
 	}
-	return vn.cons.pool.ValidateTx(tx)
+	return vn.cons.ValidateTx(tx)
 }
 
 // ProposeBlock triggers block proposal according to the enabled mechanisms.
