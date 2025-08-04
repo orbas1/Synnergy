@@ -70,7 +70,10 @@ func (r *EmploymentRegistry) CreateJob(employer, employee Address, salary uint64
 	id := fmt.Sprintf("emp:%d", r.nextID)
 	r.nextID++
 	c := EmploymentContract{ID: id, Employer: employer, Employee: employee, SalaryPerHour: salary, Start: start, End: end}
-	b, _ := json.Marshal(c)
+	b, err := json.Marshal(c)
+	if err != nil {
+		return "", err
+	}
 	if err := r.led.SetState([]byte(id), b); err != nil {
 		return "", err
 	}
@@ -117,7 +120,10 @@ func (r *EmploymentRegistry) SignJob(id string, signer Address) error {
 	} else {
 		return errors.New("not a participant")
 	}
-	b, _ := json.Marshal(c)
+	b, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
 	return r.led.SetState([]byte(id), b)
 }
 
@@ -137,7 +143,10 @@ func (r *EmploymentRegistry) RecordWork(id string, hours uint32) error {
 		return errors.New("contract closed")
 	}
 	c.HoursWorked += hours
-	b, _ := json.Marshal(c)
+	b, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
 	return r.led.SetState([]byte(id), b)
 }
 
@@ -161,9 +170,14 @@ func (r *EmploymentRegistry) PaySalary(id string) error {
 		return err
 	}
 	if et := employmentToken(); et != nil {
-		_ = et.PaySalary(id)
+		if err := et.PaySalary(id); err != nil {
+			return err
+		}
 	}
 	c.Paid = true
-	b, _ := json.Marshal(c)
+	b, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
 	return r.led.SetState([]byte(id), b)
 }
