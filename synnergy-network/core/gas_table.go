@@ -38,6 +38,11 @@ var categoryGas = map[byte]uint64{
 	// Remaining categories fall back to DefaultGasCost.
 }
 
+// init ensures the gas table is populated during package initialization.
+func init() {
+	initGasTable()
+}
+
 // initGasTable builds the runtime gas table using the (deduplicated) opcode
 // catalogue assembled in opcode_dispatcher.go.
 func initGasTable() {
