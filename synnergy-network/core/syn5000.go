@@ -25,7 +25,7 @@ type SYN5000Token struct {
 	ledger *Ledger
 	gas    GasCalculator
 
-	mu     sync.Mutex
+	mu     sync.RWMutex
 	bets   map[uint64]*BetRecord
 	nextID uint64
 }
@@ -51,10 +51,10 @@ func (t *SYN5000Token) PlaceBet(addr Address, game string, amount uint64, odds f
 		return 0, err
 	}
 	t.mu.Lock()
+	defer t.mu.Unlock()
 	id := t.nextID
 	t.nextID++
 	t.bets[id] = &BetRecord{ID: id, GameType: game, Bettor: addr, Amount: amount, Odds: odds, Placed: time.Now().UTC()}
-	t.mu.Unlock()
 	return id, nil
 }
 
@@ -81,8 +81,8 @@ func (t *SYN5000Token) ResolveBet(id uint64, won bool) (uint64, error) {
 
 // BetInfo returns information about a specific bet.
 func (t *SYN5000Token) BetInfo(id uint64) (BetRecord, bool) {
-	t.mu.Lock()
-	defer t.mu.Unlock()
+	t.mu.RLock()
+	defer t.mu.RUnlock()
 	b, ok := t.bets[id]
 	if !ok {
 		return BetRecord{}, false
