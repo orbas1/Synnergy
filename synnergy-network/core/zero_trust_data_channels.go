@@ -66,10 +66,15 @@ func (e *ZeroTrustEngine) OpenChannel(a, b Address, token TokenID, amountA, amou
 	}
 
 	ch := ZeroTrustChannel{ID: id, PartyA: a, PartyB: b, Token: token, DepositA: amountA, DepositB: amountB, Nonce: nonce, OpenedAt: time.Now().UTC()}
-	raw, _ := json.Marshal(ch)
+	raw, err := json.Marshal(ch)
+	if err != nil {
+		return id, err
+	}
 	e.mu.Lock()
 	defer e.mu.Unlock()
-	e.led.SetState(ztKey(id), raw)
+	if err := e.led.SetState(ztKey(id), raw); err != nil {
+		return id, err
+	}
 	return id, nil
 }
 
@@ -86,7 +91,7 @@ func (e *ZeroTrustEngine) Send(id ZeroTrustChannelID, from Address, data []byte)
 		return errors.New("channel not found")
 	}
 	var ch ZeroTrustChannel
-	if json.Unmarshal(raw, &ch) != nil {
+	if err := json.Unmarshal(raw, &ch); err != nil {
 		return errors.New("corrupt channel")
 	}
 	if from != ch.PartyA && from != ch.PartyB {
@@ -95,7 +100,9 @@ func (e *ZeroTrustEngine) Send(id ZeroTrustChannelID, from Address, data []byte)
 	// append message to state
 	key := ztMsgKey(id, ch.Nonce)
 	ch.Nonce++
-	e.led.SetState(ztKey(id), mustJSON(ch))
+	if err := e.led.SetState(ztKey(id), mustJSON(ch)); err != nil {
+		return err
+	}
 	return e.led.SetState(key, data)
 }
 
@@ -111,7 +118,7 @@ func (e *ZeroTrustEngine) Close(id ZeroTrustChannelID) error {
 		return errors.New("channel not found")
 	}
 	var ch ZeroTrustChannel
-	if json.Unmarshal(raw, &ch) != nil {
+	if err := json.Unmarshal(raw, &ch); err != nil {
 		return errors.New("corrupt channel")
 	}
 	tok, ok := GetToken(ch.Token)
@@ -129,7 +136,9 @@ func (e *ZeroTrustEngine) Close(id ZeroTrustChannelID) error {
 			return err
 		}
 	}
-	e.led.DeleteState(ztKey(id))
+	if err := e.led.DeleteState(ztKey(id)); err != nil {
+		return err
+	}
 	return nil
 }
 
