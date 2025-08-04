@@ -17,7 +17,7 @@ type mockLedgerAI struct {
 	states    map[string][]byte
 }
 
-func (m *mockLedgerAI) Transfer(from, to Address, amount uint64) error {
+func (m *mockLedgerAI) Transfer(from, to core.Address, amount uint64) error {
 	m.transfers = append(m.transfers, from.String()+"->"+to.String())
 	return nil
 }
@@ -60,8 +60,8 @@ func (m *mockClient) Volume(ctx context.Context, req *core.TFRequest) (*core.TFR
 
 // TestPredictAnomaly covers normal case, nil engine, and error case
 func TestPredictAnomaly(t *testing.T) {
-	from := Address{0x01}
-	creator := Address{0xAB}
+	from := core.Address{0x01}
+	creator := core.Address{0xAB}
 	modelCID := "model123"
 	modelHash := sha256.Sum256([]byte(modelCID))
 
@@ -69,11 +69,11 @@ func TestPredictAnomaly(t *testing.T) {
 	client := &mockClient{
 		anomalyResp: &core.TFResponse{Score: 0.87, Result: []byte(modelCID)},
 	}
-	ei := &AIEngine{led: led, client: client, models: map[[32]byte]ModelMeta{
+	ei := &core.AIEngine{led: led, client: client, models: map[[32]byte]core.ModelMeta{
 		modelHash: {CID: modelCID, Creator: creator, RoyaltyBp: 100},
 	}}
 
-	tx := &Transaction{From: from, GasPrice: 10_000}
+	tx := &core.Transaction{From: from, GasPrice: 10_000}
 	score, err := ei.PredictAnomaly(tx)
 	if err != nil || score != 0.87 {
 		t.Fatalf("unexpected result: %v, %v", score, err)
@@ -84,8 +84,8 @@ func TestPredictAnomaly(t *testing.T) {
 	}
 
 	// case: engine not initialized
-	engine = nil
-	score, err = AI().PredictAnomaly(tx)
+	core.ShutdownAI()
+	score, err = core.AI().PredictAnomaly(tx)
 	if err == nil {
 		t.Fatal("expected error when AI engine is nil")
 	}
@@ -98,9 +98,9 @@ func TestOptimizeFees(t *testing.T) {
 	client := &mockClient{
 		feeResp: &core.TFResponse{Result: b},
 	}
-	ei := &AIEngine{client: client}
+	ei := &core.AIEngine{client: client}
 
-	stats := []BlockStats{{GasUsed: 1000, GasLimit: 2000, Interval: time.Second}}
+	stats := []core.BlockStats{{GasUsed: 1000, GasLimit: 2000, Interval: time.Second}}
 	val, err := ei.OptimizeFees(stats)
 	if err != nil || val != expected {
 		t.Fatalf("unexpected OptimizeFees result: %v %v", val, err)
@@ -117,7 +117,7 @@ func TestPublishModel(t *testing.T) {
 	cid := "abc"
 	creator := Address{0xFE}
 	led := &mockLedgerAI{}
-	ai := &AIEngine{led: led, models: make(map[[32]byte]ModelMeta)}
+	ai := &core.AIEngine{led: led, models: make(map[[32]byte]core.ModelMeta)}
 
 	hash, err := ai.PublishModel(cid, creator, 99)
 	if err != nil {
@@ -145,7 +145,7 @@ func TestPredictVolume(t *testing.T) {
 	b, _ := json.Marshal(expected)
 	client := &mockClient{volumeResp: &core.TFResponse{Result: b}}
 	ai := &AIEngine{client: client}
-	vols := []TxVolume{{Timestamp: time.Now(), Count: 10}}
+	vols := []core.TxVolume{{Timestamp: time.Now(), Count: 10}}
 	val, err := ai.PredictVolume(vols)
 	if err != nil || val != expected {
 		t.Fatalf("unexpected PredictVolume result: %v %v", val, err)

@@ -1,20 +1,19 @@
-package core_test
+package core
 
 import (
 	"math"
-	core "synnergy-network/core"
 	"testing"
 )
 
-// MockPoolManager allows us to control pool behavior during testing
+// MockPoolManager allows us to control pool behavior during testing.
 func init() {
-	defaultManager = &mockPoolManager{
-		pools: make(map[PoolID]*Pool),
+	ammMgr = &mockPoolManager{
+		AMM: AMM{pools: make(map[PoolID]*Pool)},
 	}
 }
 
 type mockPoolManager struct {
-	pools       map[PoolID]*Pool
+	AMM
 	swapFn      func(PoolID, Address, TokenID, uint64, uint8) (uint64, error)
 	liqAddFn    func(PoolID, Address, uint64, uint64) (uint64, error)
 	liqRemoveFn func(PoolID, Address, uint64) (uint64, uint64, error)
@@ -71,7 +70,7 @@ func TestSwapExactIn(t *testing.T) {
 	graph = make(map[TokenID][]edge)
 	p := &Pool{ID: 1, tokenA: 1, tokenB: 2, resA: 100, resB: 200}
 	addEdge(p)
-	defaultManager.(*mockPoolManager).pools[1] = p
+	ammMgr.(*mockPoolManager).pools[1] = p
 
 	out, err := SwapExactIn(Address{0xAA}, 1, 100, 2, 50, 1)
 	if err != nil || out == 0 {
@@ -88,7 +87,7 @@ func TestQuote(t *testing.T) {
 	graph = make(map[TokenID][]edge)
 	p := &Pool{ID: 2, tokenA: 3, tokenB: 4, resA: 100, resB: 100, feeBps: 30}
 	addEdge(p)
-	defaultManager.(*mockPoolManager).pools[2] = p
+	ammMgr.(*mockPoolManager).pools[2] = p
 
 	q, err := Quote(3, 1000, 4, 1)
 	if err != nil {

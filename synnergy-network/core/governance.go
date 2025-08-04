@@ -212,7 +212,7 @@ func EnactChange(proposalID string) error {
 
 // Vote represents a vote on a proposal
 type Vote struct {
-	ProposalID Address `json:"proposal_id"`
+	ProposalID string  `json:"proposal_id"`
 	Voter      Address `json:"voter"`
 	Approve    bool    `json:"approve"`
 }
