@@ -44,13 +44,17 @@ const (
 var green *GreenTechEngine
 var once sync.Once
 
+// InitGreenTech initialises the singleton GreenTechEngine with the provided ledger.
 func InitGreenTech(led StateRW) { once.Do(func() { green = &GreenTechEngine{led: led} }) }
-func Green() *GreenTechEngine   { return green }
+
+// Green returns the global GreenTechEngine instance.
+func Green() *GreenTechEngine { return green }
 
 //---------------------------------------------------------------------
 // Recorders
 //---------------------------------------------------------------------
 
+// RecordUsage logs energy and carbon metrics for validator v.
 func (g *GreenTechEngine) RecordUsage(v Address, energyKWh, carbonKg float64) error {
 	if energyKWh <= 0 || carbonKg <= 0 {
 		return errors.New("usage >0")
@@ -62,6 +66,7 @@ func (g *GreenTechEngine) RecordUsage(v Address, energyKWh, carbonKg float64) er
 	return nil
 }
 
+// RecordOffset logs a carbon offset credit purchase for validator v.
 func (g *GreenTechEngine) RecordOffset(v Address, offsetKg float64) error {
 	if offsetKg <= 0 {
 		return errors.New("offset>0")
@@ -77,6 +82,7 @@ func (g *GreenTechEngine) RecordOffset(v Address, offsetKg float64) error {
 // Aggregate + certify
 //---------------------------------------------------------------------
 
+// Certify recomputes sustainability certificates for all validators.
 func (g *GreenTechEngine) Certify() {
 	sums := make(map[Address]*nodeSummary)
 	iter := g.led.PrefixIterator([]byte("usage:"))
@@ -128,6 +134,7 @@ func (g *GreenTechEngine) Certify() {
 // Public getters
 //---------------------------------------------------------------------
 
+// CertificateOf returns the sustainability certificate assigned to addr.
 func (g *GreenTechEngine) CertificateOf(addr Address) Certificate {
 	key := append([]byte("cert:"), addr.Bytes()...)
 	blob, _ := g.led.GetState(key)
@@ -141,6 +148,7 @@ func (g *GreenTechEngine) CertificateOf(addr Address) Certificate {
 	return tmp.Cert
 }
 
+// ShouldThrottle reports whether addr's emission score warrants throttling.
 func (g *GreenTechEngine) ShouldThrottle(addr Address) bool {
 	key := append([]byte("cert:"), addr.Bytes()...)
 	blob, _ := g.led.GetState(key)
