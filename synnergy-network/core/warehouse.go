@@ -35,11 +35,18 @@ func (w *Warehouse) AddItem(ctx *Context, id, name string, qty uint64) error {
 	}
 	w.mu.Lock()
 	defer w.mu.Unlock()
-	if ok, _ := w.led.HasState(warehouseKey(id)); ok {
+	exists, err := w.led.HasState(warehouseKey(id))
+	if err != nil {
+		return err
+	}
+	if exists {
 		return errors.New("item already exists")
 	}
 	item := WarehouseItem{ID: id, Name: name, Owner: ctx.Caller, Quantity: qty}
-	b, _ := json.Marshal(item)
+	b, err := json.Marshal(item)
+	if err != nil {
+		return err
+	}
 	return w.led.SetState(warehouseKey(id), b)
 }
 
@@ -83,7 +90,10 @@ func (w *Warehouse) MoveItem(ctx *Context, id string, newOwner Address) error {
 		return errors.New("not item owner")
 	}
 	it.Owner = newOwner
-	b, _ := json.Marshal(it)
+	b, err := json.Marshal(it)
+	if err != nil {
+		return err
+	}
 	return w.led.SetState(warehouseKey(id), b)
 }
 

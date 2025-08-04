@@ -55,7 +55,10 @@ func StartSandbox(addr Address, memLimit, cpuLimit uint64) error {
 	}
 	sandboxes[addr] = info
 
-	b, _ := json.Marshal(info)
+	b, err := json.Marshal(info)
+	if err != nil {
+		return err
+	}
 	if err := ledger.SetState(sandboxKey(addr), b); err != nil {
 		return err
 	}
@@ -77,7 +80,10 @@ func StopSandbox(addr Address) error {
 	}
 	sb.Active = false
 
-	b, _ := json.Marshal(sb)
+	b, err := json.Marshal(sb)
+	if err != nil {
+		return err
+	}
 	if err := ledger.SetState(sandboxKey(addr), b); err != nil {
 		return err
 	}
@@ -100,7 +106,10 @@ func ResetSandbox(addr Address) error {
 	sb.Started = time.Now()
 	sb.Active = true
 
-	b, _ := json.Marshal(sb)
+	b, err := json.Marshal(sb)
+	if err != nil {
+		return err
+	}
 	if err := ledger.SetState(sandboxKey(addr), b); err != nil {
 		return err
 	}
