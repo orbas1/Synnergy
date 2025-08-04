@@ -7,6 +7,27 @@ import (
 	"time"
 )
 
+// Dialer provides a minimal network dialer used by connection pool tests.
+// It mirrors the production dialer's API without pulling in the full network
+// stack, keeping unit tests fast and self‑contained.
+type Dialer struct {
+	timeout   time.Duration
+	keepAlive time.Duration
+}
+
+// NewDialer constructs a Dialer with the given timeout and keepalive
+// durations.
+func NewDialer(timeout, keepAlive time.Duration) *Dialer {
+	return &Dialer{timeout: timeout, keepAlive: keepAlive}
+}
+
+// Dial establishes a TCP connection to the provided address using the
+// configured settings.
+func (d *Dialer) Dial(ctx context.Context, address string) (net.Conn, error) {
+	nd := &net.Dialer{Timeout: d.timeout, KeepAlive: d.keepAlive}
+	return nd.DialContext(ctx, "tcp", address)
+}
+
 // startTestServer starts a TCP server that accepts connections and returns listener and slice of accepted conns.
 func startTestServer(t *testing.T) (net.Listener, *[]net.Conn) {
 	ln, err := net.Listen("tcp", "127.0.0.1:0")

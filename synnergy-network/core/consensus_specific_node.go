@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"encoding/hex"
+
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,7 +15,8 @@ type ConsensusSpecificNode struct {
 	logger *logrus.Logger
 }
 
-// NewConsensusSpecificNode constructs a consensus node with the provided engine and ledger.
+// NewConsensusSpecificNode constructs a consensus node with the provided
+// engine and ledger.
 func NewConsensusSpecificNode(cfg Config, led *Ledger, engine *SynnergyConsensus, lg *logrus.Logger) (*ConsensusSpecificNode, error) {
 	n, err := NewNode(cfg)
 	if err != nil {
@@ -32,7 +34,9 @@ func (csn *ConsensusSpecificNode) StartConsensus() error {
 		return nil
 	}
 	go csn.engine.Start(context.Background())
-	csn.logger.Info("consensus engine started")
+	if csn.logger != nil {
+		csn.logger.Info("consensus engine started")
+	}
 	return nil
 }
 
