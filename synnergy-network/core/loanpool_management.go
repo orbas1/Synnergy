@@ -41,6 +41,7 @@ func (m *LoanPoolManager) Stats() LoanPoolStats {
 	defer m.pool.mu.Unlock()
 
 	iter := m.pool.ledger.PrefixIterator([]byte("loanpool:proposal:"))
+	defer iter.Close()
 	var s LoanPoolStats
 	s.Treasury = m.pool.ledger.BalanceOf(LoanPoolAccount)
 	for iter.Next() {
