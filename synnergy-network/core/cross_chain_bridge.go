@@ -42,7 +42,11 @@ func StartBridgeTransfer(ctx *Context, bridgeID string, asset AssetRef, to Addre
 		Amount:   amount,
 		Time:     time.Now().UTC(),
 	}
-	raw, _ := json.Marshal(bt)
+	raw, err := json.Marshal(bt)
+	if err != nil {
+		_ = Transfer(ctx, asset, escrow, ctx.Caller, amount)
+		return BridgeTransfer{}, err
+	}
 	if err := CurrentStore().Set([]byte("crosschain:transfer:"+bt.ID), raw); err != nil {
 		_ = Transfer(ctx, asset, escrow, ctx.Caller, amount)
 		return BridgeTransfer{}, err
@@ -68,7 +72,10 @@ func CompleteBridgeTransfer(ctx *Context, id string, proof Proof) error {
 		return err
 	}
 	bt.Completed = true
-	raw, _ := json.Marshal(bt)
+	raw, err := json.Marshal(bt)
+	if err != nil {
+		return err
+	}
 	if err := CurrentStore().Set([]byte("crosschain:transfer:"+bt.ID), raw); err != nil {
 		return err
 	}

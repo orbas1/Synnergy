@@ -72,7 +72,10 @@ func CompileWASM(srcPath string, outDir string) ([]byte, [32]byte, error) {
 		if err := cmd.Run(); err != nil {
 			return nil, [32]byte{}, err
 		}
-		b, _ := os.ReadFile(out)
+		b, err := os.ReadFile(out)
+		if err != nil {
+			return nil, [32]byte{}, err
+		}
 		wasm = b
 	}
 	hash := sha256.Sum256(wasm)
