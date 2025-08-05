@@ -75,7 +75,12 @@ func aiPredictLoad(cmd *cobra.Command, args []string) error {
 var aiNodeCmd = &cobra.Command{Use: "ainode", Short: "AI enhanced node", PersistentPreRunE: aiNodeInit}
 var aiNodeStartCmd = &cobra.Command{Use: "start", Short: "Start AI node", RunE: aiNodeStart}
 var aiNodeStopCmd = &cobra.Command{Use: "stop", Short: "Stop AI node", RunE: aiNodeStop}
-var aiNodePredictCmd = &cobra.Command{Use: "predict <file>", Short: "Predict tx volume", Args: cobra.ExactArgs(1), RunE: aiPredictLoad}
+var aiNodePredictCmd = &cobra.Command{
+	Use:   "predict <file>",
+	Short: "Predict tx volume",
+	Args:  cobra.ExactArgs(1),
+	RunE:  aiPredictLoad,
+}
 
 func init() {
 	aiNodeCmd.AddCommand(aiNodeStartCmd, aiNodeStopCmd, aiNodePredictCmd)
