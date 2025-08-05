@@ -29,7 +29,7 @@ func rmParseAddr(h string) (core.Address, error) {
 	var a core.Address
 	b, err := hex.DecodeString(strings.TrimPrefix(h, "0x"))
 	if err != nil || len(b) != len(a) {
-		return a, fmt.Errorf("bad address")
+		return a, fmt.Errorf("invalid address %q", h)
 	}
 	copy(a[:], b)
 	return a, nil
