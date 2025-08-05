@@ -117,13 +117,17 @@ func mobileIntensity(cmd *cobra.Command, args []string) error {
 }
 
 var mobileRootCmd = &cobra.Command{Use: "mobileminer", Short: "Mobile mining node", PersistentPreRunE: mobileInit}
-var mobileStartCmd = &cobra.Command{Use: "start", Short: "Start miner", RunE: mobileStart}
-var mobileStopCmd = &cobra.Command{Use: "stop", Short: "Stop miner", RunE: mobileStop}
-var mobileStatusCmd = &cobra.Command{Use: "status", Short: "Show stats", RunE: mobileStatus}
+var mobileStartCmd = &cobra.Command{Use: "start", Short: "Start miner", Args: cobra.NoArgs, RunE: mobileStart}
+var mobileStopCmd = &cobra.Command{Use: "stop", Short: "Stop miner", Args: cobra.NoArgs, RunE: mobileStop}
+var mobileStatusCmd = &cobra.Command{Use: "status", Short: "Show stats", Args: cobra.NoArgs, RunE: mobileStatus}
 var mobileIntensityCmd = &cobra.Command{Use: "intensity <1-100>", Short: "Set intensity", Args: cobra.ExactArgs(1), RunE: mobileIntensity}
 
 func init() {
 	mobileRootCmd.AddCommand(mobileStartCmd, mobileStopCmd, mobileStatusCmd, mobileIntensityCmd)
 }
 
+// MobileMinerCmd exposes the mobile mining node CLI commands.
 var MobileMinerCmd = mobileRootCmd
+
+// RegisterMobileMiner adds the mobile mining commands to the root CLI.
+func RegisterMobileMiner(root *cobra.Command) { root.AddCommand(MobileMinerCmd) }

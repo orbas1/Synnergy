@@ -11,9 +11,6 @@ import (
 var msgQueue = core.NewMessageQueue()
 
 func msgEnqueue(cmd *cobra.Command, args []string) error {
-	if len(args) != 5 {
-		return fmt.Errorf("usage: enqueue <src> <dst> <topic> <type> <payload>")
-	}
 	src, err := core.ParseAddress(args[0])
 	if err != nil {
 		return err
@@ -52,13 +49,14 @@ func msgBroadcast(cmd *cobra.Command, _ []string) error {
 }
 
 var msgRootCmd = &cobra.Command{Use: "messages", Short: "Message queue"}
-var msgEnqCmd = &cobra.Command{Use: "enqueue <src> <dst> <topic> <type> <payload>", Short: "Queue a message", RunE: msgEnqueue}
-var msgProcCmd = &cobra.Command{Use: "process", Short: "Process next", RunE: msgProcess}
-var msgBroadCmd = &cobra.Command{Use: "broadcast", Short: "Broadcast next", RunE: msgBroadcast}
+var msgEnqCmd = &cobra.Command{Use: "enqueue <src> <dst> <topic> <type> <payload>", Short: "Queue a message", Args: cobra.ExactArgs(5), RunE: msgEnqueue}
+var msgProcCmd = &cobra.Command{Use: "process", Short: "Process next", Args: cobra.NoArgs, RunE: msgProcess}
+var msgBroadCmd = &cobra.Command{Use: "broadcast", Short: "Broadcast next", Args: cobra.NoArgs, RunE: msgBroadcast}
 
 func init() { msgRootCmd.AddCommand(msgEnqCmd, msgProcCmd, msgBroadCmd) }
 
 // MessagesCmd exposes the command tree for registration in the root CLI.
 var MessagesCmd = msgRootCmd
 
+// RegisterMessages adds the message queue commands to the root CLI.
 func RegisterMessages(root *cobra.Command) { root.AddCommand(MessagesCmd) }

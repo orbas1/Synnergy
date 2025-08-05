@@ -85,13 +85,15 @@ func warLog(cmd *cobra.Command, args []string) error {
 }
 
 var warCmd = &cobra.Command{Use: "warfare", Short: "Warfare node", PersistentPreRunE: warInit}
-var warStartCmd = &cobra.Command{Use: "start", Short: "Start node", RunE: warStart}
-var warStopCmd = &cobra.Command{Use: "stop", Short: "Stop node", RunE: warStop}
+var warStartCmd = &cobra.Command{Use: "start", Short: "Start node", Args: cobra.NoArgs, RunE: warStart}
+var warStopCmd = &cobra.Command{Use: "stop", Short: "Stop node", Args: cobra.NoArgs, RunE: warStop}
 var warSecureCmd = &cobra.Command{Use: "command <payload>", Short: "Send secure command", Args: cobra.ExactArgs(1), RunE: warCommand}
 var warLogCmd = &cobra.Command{Use: "logistic <item> <status>", Short: "Record logistics", Args: cobra.ExactArgs(2), RunE: warLog}
 
 func init() { warCmd.AddCommand(warStartCmd, warStopCmd, warSecureCmd, warLogCmd) }
 
+// WarfareCmd exposes warfare node CLI commands.
 var WarfareCmd = warCmd
 
+// RegisterWarfare adds warfare node commands to the root CLI.
 func RegisterWarfare(root *cobra.Command) { root.AddCommand(WarfareCmd) }

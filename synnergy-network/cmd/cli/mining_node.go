@@ -84,9 +84,13 @@ func minerStop(cmd *cobra.Command, _ []string) error {
 }
 
 var minerCmd = &cobra.Command{Use: "mining", Short: "Mining node operations", PersistentPreRunE: minerInit}
-var minerStartCmd = &cobra.Command{Use: "start", Short: "Start mining", RunE: minerStart}
-var minerStopCmd = &cobra.Command{Use: "stop", Short: "Stop mining", RunE: minerStop}
+var minerStartCmd = &cobra.Command{Use: "start", Short: "Start mining", Args: cobra.NoArgs, RunE: minerStart}
+var minerStopCmd = &cobra.Command{Use: "stop", Short: "Stop mining", Args: cobra.NoArgs, RunE: minerStop}
 
 func init() { minerCmd.AddCommand(minerStartCmd, minerStopCmd) }
 
+// MiningNodeCmd exposes mining node operations.
 var MiningNodeCmd = minerCmd
+
+// RegisterMiningNode adds the mining node commands to the root CLI.
+func RegisterMiningNode(root *cobra.Command) { root.AddCommand(MiningNodeCmd) }

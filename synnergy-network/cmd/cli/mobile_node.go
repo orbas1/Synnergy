@@ -89,12 +89,14 @@ func mobileFlush(cmd *cobra.Command, _ []string) error {
 }
 
 var mobileRootCmd = &cobra.Command{Use: "mobile", Short: "Mobile node", PersistentPreRunE: mobileInit}
-var mobileStartCmd = &cobra.Command{Use: "start", Short: "Start", RunE: mobileStart}
-var mobileStopCmd = &cobra.Command{Use: "stop", Short: "Stop", RunE: mobileStop}
-var mobileFlushCmd = &cobra.Command{Use: "flush", Short: "Flush queued tx", RunE: mobileFlush}
+var mobileStartCmd = &cobra.Command{Use: "start", Short: "Start", Args: cobra.NoArgs, RunE: mobileStart}
+var mobileStopCmd = &cobra.Command{Use: "stop", Short: "Stop", Args: cobra.NoArgs, RunE: mobileStop}
+var mobileFlushCmd = &cobra.Command{Use: "flush", Short: "Flush queued tx", Args: cobra.NoArgs, RunE: mobileFlush}
 
 func init() { mobileRootCmd.AddCommand(mobileStartCmd, mobileStopCmd, mobileFlushCmd) }
 
+// MobileCmd exposes mobile node CLI commands.
 var MobileCmd = mobileRootCmd
 
+// RegisterMobile adds mobile node commands to the root CLI.
 func RegisterMobile(root *cobra.Command) { root.AddCommand(MobileCmd) }
