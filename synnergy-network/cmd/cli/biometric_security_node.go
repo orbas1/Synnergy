@@ -2,7 +2,7 @@ package cli
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"sync"
 
 	"github.com/spf13/cobra"
@@ -60,7 +60,7 @@ func bioNodeStop(cmd *cobra.Command, _ []string) error {
 func bioEnrollNode(cmd *cobra.Command, args []string) error {
 	addr, _ := cmd.Flags().GetString("address")
 	file, _ := cmd.Flags().GetString("file")
-	data, err := ioutil.ReadFile(file)
+	data, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
