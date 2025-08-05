@@ -65,6 +65,7 @@ var AppConfig Config
 func Load(env string) (*Config, error) {
 	viper.SetConfigName("default")
 	viper.AddConfigPath("cmd/config")
+	viper.AddConfigPath("config")
 	viper.SetConfigType("yaml")
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, utils.Wrap(err, "load config")
