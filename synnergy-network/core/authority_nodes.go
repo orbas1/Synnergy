@@ -343,3 +343,18 @@ func unique(in []Address) []Address {
 	}
 	return out
 }
+
+// shuffleAddresses performs an in-place Fisher-Yates shuffle using
+// cryptographic randomness. It returns an error if the randomness source
+// fails.
+func shuffleAddresses(in []Address) error {
+	for i := len(in) - 1; i > 0; i-- {
+		n, err := crand.Int(crand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(n.Int64())
+		in[i], in[j] = in[j], in[i]
+	}
+	return nil
+}
