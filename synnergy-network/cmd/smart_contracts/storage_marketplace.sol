@@ -4,19 +4,22 @@ pragma solidity ^0.8.20;
 /// @title StorageMarketplace interacts with Synnergy's storage module
 ///        via custom VM opcodes defined in `opcode_dispatcher.go`.
 contract StorageMarketplace {
-    bytes4 private constant NEW_STORAGE    = 0x180001;
-    bytes4 private constant STORAGE_PIN    = 0x180002;
-    bytes4 private constant STORAGE_RETRV  = 0x180003;
-    bytes4 private constant CREATE_LISTING = 0x180004;
-    bytes4 private constant EXISTS         = 0x180005;
-    bytes4 private constant OPEN_DEAL      = 0x180006;
-    bytes4 private constant STORAGE_CREATE = 0x180007;
-    bytes4 private constant CLOSE_DEAL     = 0x180008;
-    bytes4 private constant RELEASE_ESCROW = 0x180009;
-    bytes4 private constant GET_LISTING    = 0x18000A;
-    bytes4 private constant LIST_LISTINGS  = 0x18000B;
-    bytes4 private constant GET_DEAL       = 0x18000C;
-    bytes4 private constant LIST_DEALS     = 0x18000D;
+    // Opcodes are expressed as 4-byte values. The original placeholders used
+    // shorter hex literals which failed to compile. Each opcode is now padded
+    // to 4 bytes to satisfy the Solidity type system.
+    bytes4 private constant NEW_STORAGE    = 0x00180001;
+    bytes4 private constant STORAGE_PIN    = 0x00180002;
+    bytes4 private constant STORAGE_RETRV  = 0x00180003;
+    bytes4 private constant CREATE_LISTING = 0x00180004;
+    bytes4 private constant EXISTS         = 0x00180005;
+    bytes4 private constant OPEN_DEAL      = 0x00180006;
+    bytes4 private constant STORAGE_CREATE = 0x00180007;
+    bytes4 private constant CLOSE_DEAL     = 0x00180008;
+    bytes4 private constant RELEASE_ESCROW = 0x00180009;
+    bytes4 private constant GET_LISTING    = 0x0018000A;
+    bytes4 private constant LIST_LISTINGS  = 0x0018000B;
+    bytes4 private constant GET_DEAL       = 0x0018000C;
+    bytes4 private constant LIST_DEALS     = 0x0018000D;
 
 
     /// @notice Create a new storage listing on-chain.

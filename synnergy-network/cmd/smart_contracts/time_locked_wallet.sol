@@ -1,3 +1,26 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
-// Placeholder for time_locked_wallet contract. Uses opcodes from opcode_dispatcher.go with gas costs defined in gas_table.go.
+
+/// @title TimeLockedWallet
+/// @notice Ether deposited into this contract can only be withdrawn after the
+///         configured `releaseTime`.
+contract TimeLockedWallet {
+    address public owner;
+    uint256 public releaseTime;
+
+    constructor(uint256 _releaseTime) {
+        require(_releaseTime > block.timestamp, "release time in past");
+        owner = msg.sender;
+        releaseTime = _releaseTime;
+    }
+
+    /// @notice Accept ether deposits.
+    receive() external payable {}
+
+    /// @notice Withdraw all ether after `releaseTime` has passed.
+    function withdraw() external {
+        require(msg.sender == owner, "not owner");
+        require(block.timestamp >= releaseTime, "locked");
+        payable(owner).transfer(address(this).balance);
+    }
+}
