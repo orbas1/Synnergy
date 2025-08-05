@@ -40,7 +40,11 @@ func NewSYN1000Token(meta Metadata, init map[Address]uint64) *SYN1000Token {
 }
 
 // AddReserve adds collateral to the stablecoin reserve.
-func (t *SYN1000Token) AddReserve(asset string, amt uint64) {
+// It returns an error if the asset is empty or the amount is zero.
+func (t *SYN1000Token) AddReserve(asset string, amt uint64) error {
+	if asset == "" || amt == 0 {
+		return fmt.Errorf("invalid reserve input")
+	}
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	r := t.reserves[asset]
@@ -50,10 +54,14 @@ func (t *SYN1000Token) AddReserve(asset string, amt uint64) {
 	r.Amount += amt
 	r.Updated = time.Now().UTC()
 	t.reserves[asset] = r
+	return nil
 }
 
 // RemoveReserve removes collateral from the reserve if available.
 func (t *SYN1000Token) RemoveReserve(asset string, amt uint64) error {
+	if asset == "" || amt == 0 {
+		return fmt.Errorf("invalid reserve input")
+	}
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	r, ok := t.reserves[asset]
@@ -67,7 +75,11 @@ func (t *SYN1000Token) RemoveReserve(asset string, amt uint64) error {
 }
 
 // SetPrice sets the oracle price for a reserve asset.
-func (t *SYN1000Token) SetPrice(asset string, price float64) {
+// It returns an error if the asset is empty or the price is negative.
+func (t *SYN1000Token) SetPrice(asset string, price float64) error {
+	if asset == "" || price < 0 {
+		return fmt.Errorf("invalid price input")
+	}
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	r := t.reserves[asset]
@@ -77,6 +89,7 @@ func (t *SYN1000Token) SetPrice(asset string, price float64) {
 	r.Price = price
 	r.Updated = time.Now().UTC()
 	t.reserves[asset] = r
+	return nil
 }
 
 // ReserveValue calculates the total value of reserves based on oracle prices.
@@ -89,3 +102,6 @@ func (t *SYN1000Token) ReserveValue() float64 {
 	}
 	return total
 }
+
+// ensure SYN1000Token implements the Stablecoin interface
+var _ Stablecoin = (*SYN1000Token)(nil)
