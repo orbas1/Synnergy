@@ -1,6 +1,9 @@
 package Tokens
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // HealthcareRecord represents encrypted healthcare data tied to an owner.
 type HealthcareRecord struct {
@@ -25,9 +28,20 @@ func NewSYN1100Token(meta string) *SYN1100Token {
 	return &SYN1100Token{Metadata: meta, Records: make(map[string]*HealthcareRecord)}
 }
 
-// AddRecord stores encrypted healthcare data for the owner.
-func (t *SYN1100Token) AddRecord(id string, owner Address, data []byte) {
-	t.Records[id] = &HealthcareRecord{ID: id, Owner: owner, Data: data, CreatedAt: time.Now(), Access: make(map[Address]bool)}
+// AddRecord stores encrypted healthcare data for the owner. It returns an error
+// if a record with the same ID already exists.
+func (t *SYN1100Token) AddRecord(id string, owner Address, data []byte) error {
+	if _, exists := t.Records[id]; exists {
+		return fmt.Errorf("record exists")
+	}
+	t.Records[id] = &HealthcareRecord{
+		ID:        id,
+		Owner:     owner,
+		Data:      data,
+		CreatedAt: time.Now().UTC(),
+		Access:    make(map[Address]bool),
+	}
+	return nil
 }
 
 // GrantAccess allows the grantee to read the specified record.
