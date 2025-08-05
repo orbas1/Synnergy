@@ -27,6 +27,10 @@ func (a Address) Short() string {
 
 type Hash [32]byte
 
+var AddressZero Address
+
+func shuffleAddresses(addrs []Address) error { return nil }
+
 type StateIterator interface {
 	Next() bool
 	Key() []byte
@@ -104,6 +108,7 @@ func (m *memState) PrefixIterator(prefix []byte) StateIterator {
 
 type AuthorityNode struct {
 	Addr        Address
+	Wallet      Address
 	Role        AuthorityRole
 	Active      bool
 	PublicVotes uint32

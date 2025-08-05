@@ -63,7 +63,7 @@ func (a *AutonomousAgentNode) Start() {
 	a.wg.Add(1)
 	go func() {
 		defer a.wg.Done()
-		a.ListenAndServe()
+		a.BaseNode.ListenAndServe()
 	}()
 	a.wg.Add(1)
 	go a.loop()
@@ -72,10 +72,10 @@ func (a *AutonomousAgentNode) Start() {
 // Stop gracefully terminates operations.
 func (a *AutonomousAgentNode) Stop() error {
 	close(a.stop)
-	a.wg.Wait()
 	if err := a.Close(); err != nil {
 		return err
 	}
+	a.wg.Wait()
 	return nil
 }
 
@@ -109,6 +109,9 @@ func (a *AutonomousAgentNode) executeRules() {
 }
 
 // ListenAndServe is exposed for the opcode dispatcher.
-func (a *AutonomousAgentNode) ListenAndServe() { a.Start() }
+func (a *AutonomousAgentNode) ListenAndServe() {
+	a.Start()
+	a.wg.Wait()
+}
 
 var _ Nodes.NodeInterface = (*AutonomousAgentNode)(nil)
