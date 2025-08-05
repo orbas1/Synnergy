@@ -68,7 +68,9 @@ func (sc *SidechainCoordinator) Register(id SidechainID, name string, threshold 
 	if exists, _ := sc.Ledger.HasState(metaKey(id)); exists {
 		return errors.New("duplicate id")
 	}
-	sc.Ledger.SetState(metaKey(id), mustJSON(meta))
+	if err := sc.Ledger.SetState(metaKey(id), mustJSON(meta)); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -96,10 +98,14 @@ func (sc *SidechainCoordinator) SubmitHeader(h SidechainHeader) error {
 		return errors.New("bad aggregate sig")
 	}
 
-	sc.Ledger.SetState(headerKey(h.ChainID, h.Height), mustJSON(h))
+	if err := sc.Ledger.SetState(headerKey(h.ChainID, h.Height), mustJSON(h)); err != nil {
+		return err
+	}
 	meta.LastHeight = h.Height
 	meta.LastRoot = h.StateRoot
-	sc.Ledger.SetState(metaKey(h.ChainID), mustJSON(meta))
+	if err := sc.Ledger.SetState(metaKey(h.ChainID), mustJSON(meta)); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -128,8 +134,12 @@ func (sc *SidechainCoordinator) Deposit(chain SidechainID, from Address, to []by
 	sc.mu.Unlock()
 	rec := DepositReceipt{Nonce: nonce, ChainID: chain, From: from, To: to, Amount: amount, Token: token, Timestamp: time.Now().Unix()}
 	rec.Hash = hashDeposit(rec)
-	sc.Ledger.SetState(depositKey(chain, nonce), mustJSON(rec))
-	sc.Net.Broadcast("bridge_deposit", mustJSON(rec))
+	if err := sc.Ledger.SetState(depositKey(chain, nonce), mustJSON(rec)); err != nil {
+		return DepositReceipt{}, err
+	}
+	if err := sc.Net.Broadcast("bridge_deposit", mustJSON(rec)); err != nil {
+		return DepositReceipt{}, err
+	}
 	return rec, nil
 }
 
@@ -145,6 +155,7 @@ func (sc *SidechainCoordinator) GetMeta(id SidechainID) (Sidechain, error) {
 // ListSidechains returns metadata for all registered sidechains.
 func (sc *SidechainCoordinator) ListSidechains() ([]Sidechain, error) {
 	it := sc.Ledger.PrefixIterator([]byte("sc:meta:"))
+	defer it.Close()
 	var out []Sidechain
 	for it.Next() {
 		var m Sidechain
@@ -153,12 +164,15 @@ func (sc *SidechainCoordinator) ListSidechains() ([]Sidechain, error) {
 		}
 		out = append(out, m)
 	}
-	return out, nil
+	return out, it.Error()
 }
 
 // GetHeader fetches a previously submitted sidechain header.
 func (sc *SidechainCoordinator) GetHeader(id SidechainID, height uint64) (SidechainHeader, error) {
-	raw, _ := sc.Ledger.GetState(headerKey(id, height))
+	raw, err := sc.Ledger.GetState(headerKey(id, height))
+	if err != nil {
+		return SidechainHeader{}, err
+	}
 	if len(raw) == 0 {
 		return SidechainHeader{}, errors.New("header not found")
 	}
@@ -220,7 +234,9 @@ func (sc *SidechainCoordinator) VerifyWithdraw(p WithdrawProof) error {
 		return err
 	}
 
-	sc.Ledger.SetState(withdrawnKey(hashBytes(p.TxData)), []byte{1})
+	if err := sc.Ledger.SetState(withdrawnKey(hashBytes(p.TxData)), []byte{1}); err != nil {
+		return err
+	}
 	return nil
 }
 

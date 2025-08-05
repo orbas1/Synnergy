@@ -48,17 +48,23 @@ func (r *RPCWebRTC) RPC_Serve(addr string) error {
 // RPC_Close gracefully shuts down the RPC server and all peer connections.
 func (r *RPCWebRTC) RPC_Close() error {
 	if r.srv != nil {
-		_ = r.srv.Shutdown(context.Background())
+		if err := r.srv.Shutdown(context.Background()); err != nil {
+			return err
+		}
 	}
 	r.mu.Lock()
+	defer r.mu.Unlock()
 	for id, p := range r.peers {
 		for _, dc := range p.channels {
-			_ = dc.Close()
+			if err := dc.Close(); err != nil {
+				return err
+			}
 		}
-		_ = p.conn.Close()
+		if err := p.conn.Close(); err != nil {
+			return err
+		}
 		delete(r.peers, id)
 	}
-	r.mu.Unlock()
 	return nil
 }
 

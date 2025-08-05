@@ -75,7 +75,10 @@ func (m *ResourceManager) ChargeResources(addr Address, cpu, mem, store uint64) 
 	q.UsedCPU += cpu
 	q.UsedMem += mem
 	q.UsedSto += store
-	b, _ := json.Marshal(q)
+	b, err := json.Marshal(q)
+	if err != nil {
+		return fmt.Errorf("marshal quota: %w", err)
+	}
 	return m.led.SetState(quotaKey(addr), b)
 }
 
@@ -93,7 +96,10 @@ func (m *ResourceManager) ReleaseResources(addr Address, cpu, mem, store uint64)
 	q.UsedCPU -= cpu
 	q.UsedMem -= mem
 	q.UsedSto -= store
-	b, _ := json.Marshal(q)
+	b, err := json.Marshal(q)
+	if err != nil {
+		return fmt.Errorf("marshal quota: %w", err)
+	}
 	return m.led.SetState(quotaKey(addr), b)
 }
 

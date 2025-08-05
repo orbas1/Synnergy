@@ -48,7 +48,10 @@ func RegisterAgreement(rc RicardianContract) error {
 	}
 	smartLegalReg.contracts[rc.Address] = &rc
 	if smartLegalReg.ledger != nil {
-		raw, _ := json.Marshal(rc)
+		raw, err := json.Marshal(rc)
+		if err != nil {
+			return err
+		}
 		if err := smartLegalReg.ledger.SetState(legalAgreementKey(rc.Address), raw); err != nil {
 			return err
 		}

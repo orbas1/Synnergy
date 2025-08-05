@@ -478,7 +478,10 @@ func (a *AuditTrail) Log(event string, meta map[string]string) error {
 	}
 	h := sha256.Sum256(raw)
 	ev.Hash = h[:]
-	blob, _ := json.Marshal(ev)
+	blob, err := json.Marshal(ev)
+	if err != nil {
+		return err
+	}
 	a.mu.Lock()
 	defer a.mu.Unlock()
 	if _, err := a.file.Write(append(blob, '\n')); err != nil {

@@ -197,9 +197,14 @@ func (sc *ShardCoordinator) SubmitCrossShard(tx CrossShardTx) error {
 	if tx.FromShard == tx.ToShard {
 		return errors.New("same shard")
 	}
-	blob, _ := json.Marshal(tx)
+	blob, err := json.Marshal(tx)
+	if err != nil {
+		return err
+	}
 	key := xsPendingKey(tx.ToShard, tx.Hash)
-	sc.led.SetState(key, blob)
+	if err := sc.led.SetState(key, blob); err != nil {
+		return err
+	}
 	// gossip header to destination leader
 	return sc.net.Broadcast("xs_receipt", blob)
 }
@@ -234,14 +239,17 @@ func (p *Peer) Send(topic string, msg interface{}) error {
 
 func (sc *ShardCoordinator) PullReceipts(self ShardID, limit int) ([]CrossShardTx, error) {
 	iter := sc.led.PrefixIterator([]byte(fmt.Sprintf("xs:pending:%d:", self)))
+	defer iter.Close()
 	var out []CrossShardTx
 	for iter.Next() && (limit == 0 || len(out) < limit) {
 		var tx CrossShardTx
 		_ = json.Unmarshal(iter.Value(), &tx)
 		out = append(out, tx)
-		sc.led.DeleteState(iter.Key())
+		if err := sc.led.DeleteState(iter.Key()); err != nil {
+			return nil, err
+		}
 	}
-	return out, nil
+	return out, iter.Error()
 }
 
 //---------------------------------------------------------------------
@@ -254,15 +262,18 @@ func (sc *ShardCoordinator) Reshard(newBits uint8) error {
 	}
 	// iterate over all accounts and copy to new shard‑prefixed bucket
 	it := sc.led.PrefixIterator([]byte("acct:"))
+	defer it.Close()
 	for it.Next() {
 		addrBytes := it.Key()[5:25] // skip prefix
 		var addr Address
 		copy(addr[:], addrBytes)
 		newShard := shardOfAddrNewBits(addr, newBits)
 		newKey := append([]byte(fmt.Sprintf("%d:", newShard)), addrBytes...)
-		sc.led.SetState(append([]byte("acct2:"), newKey...), it.Value())
+		if err := sc.led.SetState(append([]byte("acct2:"), newKey...), it.Value()); err != nil {
+			return err
+		}
 	}
-	return nil
+	return it.Error()
 }
 
 func shardOfAddrNewBits(addr Address, bits uint8) ShardID {

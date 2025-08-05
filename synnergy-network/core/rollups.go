@@ -86,9 +86,16 @@ func (ag *Aggregator) SubmitBatch(submitter Address, txs [][]byte, preStateRoot 
 	// execute transactions in roll‑up VM (simplified – assume deterministic)
 	stateRoot := executeRollupState(preStateRoot, txs)
 	hdr := BatchHeader{BatchID: id, ParentID: id - 1, TxRoot: txRoot, StateRoot: stateRoot, Submitter: submitter, Timestamp: time.Now().Unix()}
-	blob, _ := json.Marshal(hdr)
-	ag.led.SetState(batchKey(id), blob)
-	ag.led.SetState(batchStateKey(id), []byte{byte(Pending)})
+	blob, err := json.Marshal(hdr)
+	if err != nil {
+		return 0, err
+	}
+	if err := ag.led.SetState(batchKey(id), blob); err != nil {
+		return 0, err
+	}
+	if err := ag.led.SetState(batchStateKey(id), []byte{byte(Pending)}); err != nil {
+		return 0, err
+	}
 	// Persist each transaction for later fraud‑proof verification
 	for i, tx := range txs {
 		if err := ag.led.SetState(txKey(id, uint32(i)), tx); err != nil {
@@ -125,8 +132,12 @@ func (ag *Aggregator) SubmitFraudProof(fp FraudProof) error {
 	}
 
 	// For demo, accept any proof with valid path; real implementation would re‑execute state.
-	ag.led.SetState(batchStateKey(fp.BatchID), []byte{byte(Challenged)})
-	ag.led.SetState(proofKey(fp.BatchID), mustJSON(fp))
+	if err := ag.led.SetState(batchStateKey(fp.BatchID), []byte{byte(Challenged)}); err != nil {
+		return err
+	}
+	if err := ag.led.SetState(proofKey(fp.BatchID), mustJSON(fp)); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -145,11 +156,17 @@ func (ag *Aggregator) FinalizeBatch(id uint64) error {
 	state := ag.BatchState(id)
 	switch state {
 	case Pending:
-		ag.led.SetState(batchStateKey(id), []byte{byte(Finalised)})
+		if err := ag.led.SetState(batchStateKey(id), []byte{byte(Finalised)}); err != nil {
+			return err
+		}
 		// write canonical state root under ledger key
-		ag.led.SetState(canonicalRootKey(id), hdr.StateRoot[:])
+		if err := ag.led.SetState(canonicalRootKey(id), hdr.StateRoot[:]); err != nil {
+			return err
+		}
 	case Challenged:
-		ag.led.SetState(batchStateKey(id), []byte{byte(Reverted)})
+		if err := ag.led.SetState(batchStateKey(id), []byte{byte(Reverted)}); err != nil {
+			return err
+		}
 	default:
 		return errors.New("already finalised")
 	}
