@@ -16,13 +16,13 @@ import (
 )
 
 var (
-	synOnce sync.Once
-	synMgr  *core.InvestmentManager
+	syn1401Once sync.Once
+	syn1401Mgr  *core.InvestmentManager
 )
 
-func synInit(cmd *cobra.Command, _ []string) error {
+func syn1401Init(cmd *cobra.Command, _ []string) error {
 	var err error
-	synOnce.Do(func() {
+	syn1401Once.Do(func() {
 		_ = godotenv.Load()
 		path := os.Getenv("LEDGER_PATH")
 		if path == "" {
@@ -34,12 +34,12 @@ func synInit(cmd *cobra.Command, _ []string) error {
 			err = e
 			return
 		}
-		synMgr = core.NewInvestmentManager(led)
+		syn1401Mgr = core.NewInvestmentManager(led)
 	})
 	return err
 }
 
-func parseSynAddr(s string) (core.Address, error) {
+func syn1401ParseAddr(s string) (core.Address, error) {
 	var a core.Address
 	b, err := hex.DecodeString(strings.TrimPrefix(s, "0x"))
 	if err != nil || len(b) != len(a) {
@@ -55,30 +55,30 @@ func synHandleIssue(cmd *cobra.Command, _ []string) error {
 	principal, _ := cmd.Flags().GetUint64("principal")
 	rate, _ := cmd.Flags().GetFloat64("rate")
 	matDays, _ := cmd.Flags().GetInt("maturity")
-	owner, err := parseSynAddr(ownerStr)
+	owner, err := syn1401ParseAddr(ownerStr)
 	if err != nil {
 		return err
 	}
 	mat := time.Now().Add(time.Duration(matDays) * 24 * time.Hour)
-	return synMgr.Issue(id, owner, principal, rate, mat)
+	return syn1401Mgr.Issue(id, owner, principal, rate, mat)
 }
 
 func synHandleAccrue(cmd *cobra.Command, args []string) error {
-	return synMgr.Accrue(args[0])
+	return syn1401Mgr.Accrue(args[0])
 }
 
 func synHandleRedeem(cmd *cobra.Command, args []string) error {
 	toStr, _ := cmd.Flags().GetString("to")
-	to, err := parseSynAddr(toStr)
+	to, err := syn1401ParseAddr(toStr)
 	if err != nil {
 		return err
 	}
-	_, err = synMgr.Redeem(args[0], to)
+	_, err = syn1401Mgr.Redeem(args[0], to)
 	return err
 }
 
 func synHandleInfo(cmd *cobra.Command, args []string) error {
-	rec, ok, err := synMgr.Get(args[0])
+	rec, ok, err := syn1401Mgr.Get(args[0])
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func synHandleInfo(cmd *cobra.Command, args []string) error {
 var syn1401Cmd = &cobra.Command{
 	Use:               "syn1401",
 	Short:             "Manage SYN1401 investment tokens",
-	PersistentPreRunE: synInit,
+	PersistentPreRunE: syn1401Init,
 }
 
 var synIssueCmd = &cobra.Command{Use: "issue", RunE: synHandleIssue}
