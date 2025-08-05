@@ -32,7 +32,10 @@ var gtCreateCmd = &cobra.Command{
 	Short: "Create a new grant",
 	Args:  cobra.ExactArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		addr := mustHex(args[0])
+		addr, err := core.StringToAddress(args[0])
+		if err != nil {
+			return err
+		}
 		name := args[1]
 		amt, err := strconv.ParseUint(args[2], 10, 64)
 		if err != nil {
