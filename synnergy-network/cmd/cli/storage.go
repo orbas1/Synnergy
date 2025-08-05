@@ -10,6 +10,7 @@ package cli
 // ----------------------------------------------------------------------------
 
 import (
+	"bytes"
 	"context"
 	"encoding/hex"
 	"encoding/json"
@@ -60,7 +61,11 @@ func initStorageMiddleware(cmd *cobra.Command, args []string) {
 	}
 
 	// 2) ledger setup (optional, but recommended)
-	led, err := ledger.NewBadgerLedger(storageFlags.ledgerPath)
+	if storageFlags.ledgerPath == "" {
+		exe, _ := os.Executable()
+		storageFlags.ledgerPath = filepath.Join(filepath.Dir(exe), "ledger")
+	}
+	led, err := core.OpenLedger(storageFlags.ledgerPath)
 	if err != nil {
 		log.Fatalf("ledger open: %v", err)
 	}
