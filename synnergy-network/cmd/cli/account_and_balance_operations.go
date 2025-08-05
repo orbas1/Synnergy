@@ -54,9 +54,18 @@ func acctHandleBalance(cmd *cobra.Command, args []string) error {
 }
 
 func acctHandleTransfer(cmd *cobra.Command, args []string) error {
-	fromStr, _ := cmd.Flags().GetString("from")
-	toStr, _ := cmd.Flags().GetString("to")
-	amt, _ := cmd.Flags().GetUint64("amt")
+	fromStr, err := cmd.Flags().GetString("from")
+	if err != nil {
+		return err
+	}
+	toStr, err := cmd.Flags().GetString("to")
+	if err != nil {
+		return err
+	}
+	amt, err := cmd.Flags().GetUint64("amt")
+	if err != nil {
+		return err
+	}
 	from, err := core.StringToAddress(fromStr)
 	if err != nil {
 		return err
@@ -89,4 +98,5 @@ func init() {
 	accountCmd.AddCommand(acctCreateCmd, acctDeleteCmd, acctBalanceCmd, acctTransferCmd)
 }
 
+// AccountCmd exposes account management subcommands.
 var AccountCmd = accountCmd

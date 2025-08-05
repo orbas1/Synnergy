@@ -49,30 +49,19 @@ All services are optional and run as independent modules that plug into the core
 
 ## Synnergy Network Architecture
 At a high level the network consists of:
-1. **Peer-to-Peer Network** – Validators communicate using libp2p with gossip-based transaction propagation.
-2.   Dedicated bootstrap nodes can be run using the CLI to help new peers discover the network.
-2. **Consensus Engine** – A hybrid approach combines Proof of History (PoH), Proof of Stake (PoS) and Proof of Work (PoW) with pluggable modules for alternative algorithms.
-2. **Connection Pools** – Reusable outbound connections reduce handshake overhead and speed up cross-module communication.
-2. **NAT Traversal** – Nodes automatically open ports via UPnP or NAT-PMP so peers can reach them behind firewalls.
-3. **Consensus Engine** – A hybrid approach combines Proof of History (PoH), Proof of Stake (PoS) and Proof of Work (PoW) with pluggable modules for alternative algorithms.
-4. **Ledger** – Blocks contain sub-blocks that optimize for data availability. Smart contracts and token transfers are recorded here.
-5. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
-6. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
+1. **Peer-to-Peer Network** – Validators communicate using libp2p with gossip-based transaction propagation. Dedicated bootstrap nodes help new peers discover the network.
+2. **Consensus Engine** – A hybrid approach combines Proof of History (PoH), Proof of Stake (PoS) and Proof of Work (PoW) with pluggable modules for alternative algorithms. Connection pools and NAT traversal optimise peer connectivity.
+3. **Ledger** – Blocks contain sub-blocks that optimise for data availability. Smart contracts and token transfers are recorded here.
+4. **Virtual Machine** – The dispatcher assigns a 24‑bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
+5. **Storage Nodes** – Off-chain storage is coordinated through specialised nodes for cheap archiving and retrieval.
+6. **Messaging Queues** – Pending messages are ordered before being processed by consensus and the VM.
 7. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
-2. **Consensus Engine** – A hybrid approach combines Proof of History (PoH), POW and Proof of Stake (PoS) with pluggable modules for alternative algorithms.
-3. **Ledger** – Blocks contain sub-blocks that optimize for data availability. Smart contracts and token transfers are recorded here.
-4. **Virtual Machine** – The dispatcher assigns a 24-bit opcode to every protocol function. Gas is charged before execution using a deterministic cost table.
-5. **Storage Nodes** – Off-chain storage is coordinated through specialized nodes for cheap archiving and retrieval.
-6. **Messaging Queues** – Pending messages are ordered in queues before being processed by consensus and the VM.
-7. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
-6. **Rollups and Sharding** – Sidechains and rollup batches scale the system horizontally while maintaining security guarantees.
-7. **Geolocation Network** – Optional service mapping node IDs to geographic coordinates for compliance and routing.
-7. **Plasma Bridge** – A lightweight bridge allows fast token transfers to and from child chains with an exit window for security.
-7. **Plasma Layer** – Optional plasma child chains handle high throughput transfers with periodic block roots posted to the ledger.
-7. **Binary Trees** – Ledger-backed search trees provide efficient on-chain indexing for smart contracts and services.
-7. **Blockchain Compression** – Snapshots can be gzipped and restored on demand to reduce storage costs.
-7. **Zero Trust Data Channels** – End-to-end encrypted channels leverage the token ledger for escrowed access control.
-7. **Swarm Manager** – Coordinates multiple nodes as a high-availability cluster.
+8. **Geolocation Network** – Optional service mapping node IDs to geographic coordinates for compliance and routing.
+9. **Plasma Bridge** – Allows fast token transfers to and from child chains with an exit window for security.
+10. **Binary Trees** – Ledger-backed search trees provide efficient on-chain indexing for smart contracts and services.
+11. **Blockchain Compression** – Snapshots can be gzipped and restored on demand to reduce storage costs.
+12. **Zero Trust Data Channels** – End-to-end encrypted channels leverage the token ledger for escrowed access control.
+13. **Swarm Manager** – Coordinates multiple nodes as a high-availability cluster.
 Each layer is intentionally separated so enterprises can replace components as needed (e.g., swap the consensus engine or choose a different storage back end).
 
 ## Synthron Coin
@@ -80,8 +69,7 @@ The native asset powering the network is `SYNTHRON` (ticker: SYNN). It has three
 - **Payment and Transaction Fees** – Every on-chain action consumes gas priced in SYNN.
 - **Staking** – Validators must lock tokens to participate in consensus and receive block rewards.
 - **Governance** – Token holders vote on protocol parameters, feature releases, and treasury expenditures.
-- **DAO Staking** – Users may stake THRON to earn voting power in the on-chain DAO.
-- **DAO Staking** – Users may stake SYTHRON to earn voting power in the on-chain DAO.
+- **DAO Staking** – Users may stake SYNTHRON to earn voting power in the on-chain DAO.
 - **Reputation Voting** – SYN-REP tokens weight votes for advanced governance scenarios.
 - **DAO Module** – Users can create independent DAOs and manage membership directly on-chain.
 
@@ -98,103 +86,15 @@ The supply inflates annually by 2% to maintain incentives and fund new initiativ
 The repository includes many sample token contracts and node variants beyond the basic coin and validator roles. Token examples cover gaming assets, stablecoins, debt instruments and fractional real estate among others. Node types range from energy-efficient and quantum-resistant nodes to watchtowers, historical archives and holographic nodes used for research. An integration registry keeps track of these specialised roles so operators can discover compatible services.
 
 ## Full CLI Guide and Index
-Synnergy comes with a powerful CLI built using the Cobra framework. Commands are grouped into modules mirroring the codebase. Below is a concise index; see `cmd/cli/cli_guide.md` for the detailed usage of each command group:
+Synnergy comes with a powerful CLI built using the Cobra framework. Commands are grouped into modules mirroring the codebase. The following examples highlight common areas; see `cmd/cli/cli_guide.md` for a complete list:
 - `ai` – Publish machine learning models and run inference jobs.
-- `ai_contract` – Deploy and interact with AI-enhanced contracts.
-- `ai_mgmt` – Manage listings in the AI model marketplace.
-- `ai_infer` – Advanced inference and batch analysis utilities.
 - `amm` – Swap tokens and manage liquidity pools.
-- `authority_node` – Register validators and manage the authority set.
-- `access` – Manage role based access permissions.
-- `authority_apply` – Submit and vote on authority node applications.
-- `charity_pool` – Contribute to or distribute from community charity funds.
-- `charity_mgmt` – Manage donations and internal fund payouts.
-- `coin` – Mint, transfer, and burn the base asset.
-- `compliance` – Perform KYC/AML verification and auditing.
-- `audit` – Manage ledger-backed audit logs for transparency.
-- `compliance_management` – Suspend or whitelist addresses on-chain.
+- `access` – Manage role-based permissions.
 - `consensus` – Start or inspect the consensus node.
 - `contracts` – Deploy and invoke smart contracts.
-- `contractops` – Pause, upgrade and transfer ownership of contracts.
 - `cross_chain` – Bridge assets to and from external chains.
-- `ccsn` – Coordinate cross-consensus scaling networks.
-- `cross_tx` – Execute cross-chain lock/mint and burn/release transfers.
-- `cross_chain_agnostic_protocols` – Register cross-chain protocols.
-- `data` – Low-level debugging of key/value storage and oracles.
-- `distribution` – Marketplace for paid dataset access.
-- `oracle_management` – Monitor oracle performance and synchronize feeds.
-- `anomaly_detection` – Detect suspicious transactions using the built-in AI.
-- `fault_tolerance` – Simulate network failures and snapshot recovery.
-- `cross_chain_bridge` – Manage cross-chain transfers.
-- `failover` – Manage ledger snapshots and coordinate recovery.
- - `governance` – Create proposals and cast votes.
- - `token_vote` – Cast token weighted votes in governance.
- - `green_technology` – Manage energy tracking and carbon offsets.
 - `governance` – Create proposals and cast votes.
-- `qvote` – Cast weighted quadratic votes on proposals.
-- `polls_management` – Lightweight polls for community feedback.
-- `governance_management` – Register governance contracts and manage them.
-- `timelock` – Delay proposal execution via a queue.
-- `dao` – Create DAOs and manage their members.
-- `green_technology` – Manage energy tracking and carbon offsets.
-- `resource_management` – Track quotas and deduct fees for resource usage.
-- `carbon_credit_system` – Track carbon projects and issue credits.
-- `energy_efficiency` – Measure transaction energy use and compute efficiency scores.
-- `ledger` – Inspect blocks, accounts, and token metrics.
-- `liquidity_pools` – Create pools and provide liquidity.
-- `loanpool` – Submit, vote on, cancel or extend loan proposals before funds are disbursed.
-- `loanpool` – Submit loan requests and disburse funds.
-- `grant_disbursement` – Create and release grants from the loan pool.
-- `loanmgr` – Pause or resume the loan pool and query stats.
-- `loanpool_apply` – Apply for loans with on-chain voting.
-- `network` – Connect peers and view network metrics.
-- `peer` – Discover, connect and advertise peers on the network.
- - `replication` – Replicate and synchronize ledger data across nodes.
- - `high_availability` – Manage standby nodes and automated failover.
- - `rollups` – Manage rollup batches and fraud proofs.
-- `plasma` – Manage Plasma deposits and exits.
-- `replication` – Replicate and synchronize ledger data across nodes.
-- `fork` – Track competing branches and perform safe reorgs.
- - `rollups` – Manage rollup batches, fraud proofs and aggregator state.
-- `synchronization` – Maintain ledger state via a dedicated sync manager.
-- `rollups` – Manage rollup batches and fraud proofs.
-- `security` – Generate keys and sign payloads.
-- `firewall` – Enforce address, token and IP restrictions.
-- `sharding` – Split the ledger into shards and coordinate cross-shard messages.
- - `sidechain` – Launch, manage and interact with auxiliary chains.
-- `state_channel` – Open and settle payment channels.
-- `state_channel_mgmt` – Pause, resume or force-close channels.
-- `swarm` – Coordinate multiple nodes as a cluster.
-- `storage` – Manage off-chain storage deals.
-- `legal` – Register and sign Ricardian contracts.
-- `resource` – Rent compute resources via marketplace.
-- `dao_access` – Control DAO membership roles.
-- `sensor` – Integrate external sensors and trigger webhooks.
-- `real_estate` – Tokenise and trade real-world property.
-- `escrow` – Multi-party escrow management.
-- `marketplace` – General on-chain marketplace for digital goods.
-- `healthcare` – Manage healthcare records and permissions.
-- `tangible` – Track tangible asset ownership on-chain.
-- `tokens` – Issue and manage token contracts.
-- `token_management` – Advanced token lifecycle management.
-- `gaming` – Lightweight on-chain gaming sessions.
-- `transactions` – Build and broadcast transactions manually.
-- `private_tx` – Tools for encrypting data and submitting private transactions.
-- `transactionreversal` – Reverse erroneous payments with authority approval.
-- `devnet` – Spawn an in-memory developer network for rapid testing.
-- `testnet` – Launch a configurable test network from a YAML file.
-- `supply` – Track supply chain assets and logistics.
-- `utility_functions` – Miscellaneous support utilities.
-- `quorum` – Track proposal votes and check thresholds.
-- `virtual_machine` – Execute VM-level operations for debugging.
-- `account` – basic account management and balance queries.
-- `wallet` – Create wallets and sign transfers.
-- `execution` – Manage block execution and transaction pipelines.
-- `system_health` – Monitor runtime metrics and emit logs.
-- `idwallet` – Register ID-token wallets and verify status.
-- `offwallet` – Manage offline wallets and signed transactions.
-- `recovery` – Multi-factor account recovery leveraging SYN900 tokens.
-- `wallet_mgmt` – High level wallet manager for ledger payments.
+- `wallet` – Interact with on-chain accounts and balances.
 Each command group supports a help flag to display the individual sub-commands and options.
 
 Quadratic voting complements standard governance by weighting each vote by the
