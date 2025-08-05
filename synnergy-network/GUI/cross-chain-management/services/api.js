@@ -1,46 +1,35 @@
 const base = "/api";
 
-export async function listBridges() {
-  const r = await fetch(`${base}/bridges`);
-  return r.json();
+async function request(endpoint, options = {}) {
+  const res = await fetch(`${base}${endpoint}`, {
+    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    ...options,
+  });
+  if (!res.ok) {
+    const message = await res.text();
+    throw new Error(`Request failed with ${res.status}: ${message}`);
+  }
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    return res.json();
+  }
+  return res.text();
 }
 
-export async function createBridge(data) {
-  await fetch(`${base}/bridges`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
+export const listBridges = () => request("/bridges");
 
-export async function authorizeRelayer(data) {
-  await fetch(`${base}/relayer/authorize`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
+export const createBridge = (data) =>
+  request("/bridges", { method: "POST", body: JSON.stringify(data) });
 
-export async function revokeRelayer(data) {
-  await fetch(`${base}/relayer/revoke`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
+export const authorizeRelayer = (data) =>
+  request("/relayer/authorize", { method: "POST", body: JSON.stringify(data) });
 
-export async function lockAndMint(data) {
-  await fetch(`${base}/lockmint`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
+export const revokeRelayer = (data) =>
+  request("/relayer/revoke", { method: "POST", body: JSON.stringify(data) });
 
-export async function burnAndRelease(data) {
-  await fetch(`${base}/burnrelease`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
+export const lockAndMint = (data) =>
+  request("/lockmint", { method: "POST", body: JSON.stringify(data) });
+
+export const burnAndRelease = (data) =>
+  request("/burnrelease", { method: "POST", body: JSON.stringify(data) });
+
