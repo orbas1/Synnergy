@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -euo pipefail
-./synnergy ~fault snapshot
+./synnergy '~fault' snapshot
