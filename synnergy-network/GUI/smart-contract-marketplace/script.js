@@ -1,14 +1,25 @@
 async function loadNavbar() {
   const nav = document.getElementById("nav");
-  const res = await fetch("components/navbar.html");
-  nav.innerHTML = await res.text();
+  if (!nav) return;
+  try {
+    const res = await fetch("components/navbar.html");
+    if (!res.ok) throw new Error("navbar fetch failed");
+    nav.innerHTML = await res.text();
+  } catch (err) {
+    console.error("Unable to load navbar", err);
+  }
 }
 
 async function loadFooter() {
   const footer = document.getElementById("footer");
   if (!footer) return;
-  const res = await fetch("components/footer.html");
-  footer.innerHTML = await res.text();
+  try {
+    const res = await fetch("components/footer.html");
+    if (!res.ok) throw new Error("footer fetch failed");
+    footer.innerHTML = await res.text();
+  } catch (err) {
+    console.error("Unable to load footer", err);
+  }
 }
 
 async function loadListings() {
@@ -50,3 +61,11 @@ function bindDeploy() {
     window.location.href = "listings.html";
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadNavbar();
+  loadFooter();
+  loadListings();
+  loadDetail();
+  bindDeploy();
+});
