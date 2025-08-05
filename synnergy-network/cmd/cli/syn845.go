@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -14,7 +15,7 @@ import (
 
 func parseAddr845(s string) (core.Address, error) {
 	var a core.Address
-	b, err := hex.DecodeString(s)
+	b, err := hex.DecodeString(strings.TrimPrefix(s, "0x"))
 	if err != nil || len(b) != len(a) {
 		return a, fmt.Errorf("bad address")
 	}
