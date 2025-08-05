@@ -1,3 +1,14 @@
 #!/usr/bin/env bash
+# Display the current shard leader.
 set -euo pipefail
-./synnergy ~shard leader
+
+# Run relative to this script's directory.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+cd "$SCRIPT_DIR"
+
+# Build the CLI if needed.
+if [[ ! -x synnergy ]]; then
+    GOFLAGS="-trimpath" go build -o synnergy ../synnergy
+fi
+
+./synnergy '~shard' leader
