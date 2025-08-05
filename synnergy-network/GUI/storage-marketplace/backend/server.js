@@ -20,6 +20,13 @@ app.use("/api/listings", listingsRoutes);
 app.use("/api/deals", dealsRoutes);
 app.use("/api/storage", storageRoutes);
 
+// Return a 404 for any routes that weren't matched above. This ensures
+// requests to unknown endpoints receive a consistent JSON error instead of
+// hanging or returning HTML from Express' default handler.
+app.use((req, res) => {
+  res.status(404).json({ error: "Not found" });
+});
+
 app.use(errorHandler);
 
 app.listen(port, () => {
